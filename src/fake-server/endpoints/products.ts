@@ -13,7 +13,7 @@ import {
     GetProductReviewsOptions,
     GetProductsListOptions,
     GetSearchSuggestionsOptions,
-    GetSearchSuggestionsResult,
+    GetSearchSuggestionsResult
 } from '../../app/api/base';
 import { AbstractFilterBuilder } from '../filters/abstract-filter-builder';
 import { CategoryFilterBuilder } from '../filters/category-filter-builder';
@@ -24,21 +24,32 @@ import { RadioFilterBuilder } from '../filters/radio-filter-builder';
 import { RatingFilterBuilder } from '../filters/rating-filter-builder';
 import { ColorFilterBuilder } from '../filters/color-filter-builder';
 
-function getProducts(shift: number, categorySlug: string = null): Product[] {
+function getProducts(
+    shift: number,
+    categorySlug: string | null = null
+): Product[] {
     switch (categorySlug) {
         case 'tires-wheels':
-        case 'power-tools': shift += 5; break;
+        case 'power-tools':
+            shift += 5;
+            break;
         case 'interior-parts':
-        case 'hand-tools': shift += 10; break;
+        case 'hand-tools':
+            shift += 10;
+            break;
         case 'engine-drivetrain':
-        case 'plumbing': shift += 15; break;
+        case 'plumbing':
+            shift += 15;
+            break;
     }
 
     return [...dbProducts.slice(shift), ...dbProducts.slice(0, shift)];
 }
 
-export function getProductsList(options?: GetProductsListOptions): Observable<ProductsList> {
-    const filterValues = options.filters || {};
+export function getProductsList(
+    options?: GetProductsListOptions
+): Observable<ProductsList> {
+    const filterValues = options?.filters || {};
     const filters: AbstractFilterBuilder[] = [
         new CategoryFilterBuilder('category', 'Categories'),
         new VehicleFilterBuilder('vehicle', 'Vehicle'),
@@ -46,22 +57,26 @@ export function getProductsList(options?: GetProductsListOptions): Observable<Pr
         new CheckFilterBuilder('brand', 'Brand'),
         new RadioFilterBuilder('discount', 'With Discount'),
         new RatingFilterBuilder('rating', 'Rating'),
-        new ColorFilterBuilder('color', 'Color'),
+        new ColorFilterBuilder('color', 'Color')
     ];
 
     let products = dbProducts.slice(0);
 
-    filters.forEach(filter => filter.makeItems(products, filterValues[filter.slug]));
+    filters.forEach((filter) =>
+        filter.makeItems(products, filterValues[filter.slug])
+    );
 
     // Calculate items count for filter values.
-    filters.forEach(filter => filter.calc(filters));
+    filters.forEach((filter) => filter.calc(filters));
 
     // Apply filters to products list.
-    products = products.filter(product => filters.reduce((mr, filter) => mr && filter.test(product), true));
+    products = products.filter((product) =>
+        filters.reduce((mr, filter) => mr && filter.test(product), true)
+    );
 
-    const page = options.page || 1;
-    const limit = options.limit || 16;
-    const sort = options.sort || 'default';
+    const page = options?.page ?? 1;
+    const limit = options?.limit ?? 16;
+    const sort = options?.sort ?? 'default';
     const total = products.length;
     const pages = Math.ceil(products.length / limit);
     const from = (page - 1) * limit + 1;
@@ -70,7 +85,7 @@ export function getProductsList(options?: GetProductsListOptions): Observable<Pr
     // Sort items array.
     products = products.sort((a, b) => {
         if (['name_asc', 'name_desc'].includes(sort)) {
-            if ( a.name === b.name ) {
+            if (a.name === b.name) {
                 return 0;
             }
 
@@ -82,30 +97,38 @@ export function getProductsList(options?: GetProductsListOptions): Observable<Pr
 
     const items = products.slice(from - 1, to) as unknown as Array<Product>;
 
-    return delayResponse(of({
-        items,
-        page,
-        limit,
-        sort,
-        total,
-        pages,
-        from,
-        to,
-        filters: filters.map(x => x.build()),
-    }), 350);
+    return delayResponse(
+        of({
+            items,
+            page,
+            limit,
+            sort,
+            total,
+            pages,
+            from,
+            to,
+            filters: filters.map((x) => x.build())
+        }),
+        350
+    );
 }
 
 export function getProductBySlug(slug: string): Observable<Product> {
-    const product = dbProducts.find(x => x.slug === slug);
+    const product = dbProducts.find((x) => x.slug === slug);
 
     if (!product) {
-        return throwError(new HttpErrorResponse({status: 404, statusText: 'Page Not Found'}));
+        return throwError(
+            new HttpErrorResponse({ status: 404, statusText: 'Page Not Found' })
+        );
     }
 
     return of(clone(product));
 }
 
-export function getProductReviews(productId: number, options?: GetProductReviewsOptions): Observable<ReviewsList> {
+export function getProductReviews(
+    productId: number,
+    options?: GetProductReviewsOptions
+): Observable<ReviewsList> {
     let items = reviews.slice(0);
 
     items.sort((a, b) => {
@@ -119,9 +142,9 @@ export function getProductReviews(productId: number, options?: GetProductReviews
         return 0;
     });
 
-    const page = options.page || 1;
-    const limit = options.limit || 8;
-    const sort = options.sort || 'default';
+    const page = options?.page ?? 1;
+    const limit = options?.limit ?? 8;
+    const sort = options?.sort ?? 'default';
     const total = items.length;
     const pages = Math.ceil(items.length / limit);
     const from = (page - 1) * limit + 1;
@@ -137,18 +160,21 @@ export function getProductReviews(productId: number, options?: GetProductReviews
         total,
         pages,
         from,
-        to,
+        to
     });
 }
 
-export function addProductReview(productId: number, data: AddProductReviewData): Observable<Review> {
+export function addProductReview(
+    productId: number,
+    data: AddProductReviewData
+): Observable<Review> {
     const review: Review = {
         id: getNextReviewId(),
-        date: (new Date()).toISOString().substr(0, 10),
+        date: new Date().toISOString().substr(0, 10),
         author: data.author,
         avatar: 'assets/images/avatars/avatar-2.jpg',
         rating: data.rating,
-        content: data.content,
+        content: data.content
     };
 
     reviews.push(review);
@@ -160,35 +186,56 @@ export function getProductAnalogs(productId: number): Observable<Product[]> {
     const slugs: string[] = [
         'sunset-brake-kit',
         'specter-brake-kit',
-        'brake-kit',
+        'brake-kit'
     ];
-    const analogs: Product[] = dbProducts.filter(x => slugs.includes(x.slug));
+    const analogs: Product[] = dbProducts.filter((x) => slugs.includes(x.slug));
 
     return of(clone(analogs));
 }
 
-export function getRelatedProducts(productId: number, limit: number): Observable<Product[]> {
+export function getRelatedProducts(
+    productId: number,
+    limit: number
+): Observable<Product[]> {
     limit = limit || 8;
 
     return of(clone(dbProducts.slice(0, limit)));
 }
 
-export function getFeaturedProducts(categorySlug: string, limit: number): Observable<Product[]> {
+export function getFeaturedProducts(
+    categorySlug: string,
+    limit: number
+): Observable<Product[]> {
     limit = limit || 8;
 
-    return delayResponse(of(clone(getProducts(0, categorySlug).slice(0, limit))), 1000);
+    return delayResponse(
+        of(clone(getProducts(0, categorySlug).slice(0, limit))),
+        1000
+    );
 }
 
-export function getPopularProducts(categorySlug: string, limit: number): Observable<Product[]> {
+export function getPopularProducts(
+    categorySlug: string,
+    limit: number
+): Observable<Product[]> {
     limit = limit || 8;
 
-    return delayResponse(of(clone(getProducts(6, categorySlug).slice(0, limit))), 1000);
+    return delayResponse(
+        of(clone(getProducts(6, categorySlug).slice(0, limit))),
+        1000
+    );
 }
 
-export function getTopRatedProducts(categorySlug: string, limit: number): Observable<Product[]> {
+export function getTopRatedProducts(
+    categorySlug: string,
+    limit: number
+): Observable<Product[]> {
     limit = limit || 8;
 
-    return delayResponse(of(clone(getProducts(12, categorySlug).slice(0, limit))), 1000);
+    return delayResponse(
+        of(clone(getProducts(12, categorySlug).slice(0, limit))),
+        1000
+    );
 }
 
 export function getSpecialOffers(limit: number): Observable<Product[]> {
@@ -203,18 +250,30 @@ export function getLatestProducts(limit: number): Observable<Product[]> {
     return of(clone(dbProducts.slice(0, limit)));
 }
 
-export function getSearchSuggestions(query: string, options?: GetSearchSuggestionsOptions): Observable<GetSearchSuggestionsResult> {
+export function getSearchSuggestions(
+    query: string,
+    options?: GetSearchSuggestionsOptions
+): Observable<GetSearchSuggestionsResult> {
     query = query.toLowerCase();
-    options = Object.assign({
-        limitProducts: 4,
-        limitCategories: 4,
-    }, options);
+    options = Object.assign(
+        {
+            limitProducts: 4,
+            limitCategories: 4
+        },
+        options
+    );
 
-    const resultProducts = dbProducts.filter(x => x.name.toLowerCase().includes(query));
-    const resultCategories = shopCategoriesList.filter(x => x.name.toLowerCase().includes(query));
+    const resultProducts = dbProducts.filter((x) =>
+        x.name.toLowerCase().includes(query)
+    );
+    const resultCategories = shopCategoriesList.filter((x) =>
+        x.name.toLowerCase().includes(query)
+    );
 
     return of({
         products: resultProducts.slice(0, options.limitProducts),
-        categories: resultCategories.slice(0, options.limitCategories).map(x => prepareCategory(x)),
+        categories: resultCategories
+            .slice(0, options.limitCategories)
+            .map((x) => prepareCategory(x))
     });
 }

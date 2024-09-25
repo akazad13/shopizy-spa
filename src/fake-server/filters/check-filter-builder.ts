@@ -13,34 +13,52 @@ export class CheckFilterBuilder extends AbstractFilterBuilder {
             return true;
         }
 
-        return this.value.reduce((result, value) => {
-            return result || this.extractItems(product).map(x => x.slug).includes(value);
-        }, false);
+        // need to work on this
+
+        // return this.value.reduce((result, value) => {
+        //     return (
+        //         result ||
+        //         this.extractItems(product)
+        //             .map((x) => x.slug)
+        //             .includes(value)
+        //     );
+        // }, false);
+
+        return true;
     }
 
     makeItems(products: Product[], value: string): void {
-        products.forEach(product => this.extractItems(product).forEach(item => {
-            if (!this.items.find(x => x.slug === item.slug)) {
-                this.items.push(item);
-            }
-        }));
+        products.forEach((product) =>
+            this.extractItems(product)?.forEach((item) => {
+                if (!this.items.find((x) => x.slug === item.slug)) {
+                    this.items.push(item);
+                }
+            })
+        );
 
         this.value = this.parseValue(value);
     }
 
     calc(filters: AbstractFilterBuilder[]): void {
-        const products = dbProducts.filter(
-            product => filters.reduce(
-                (isMatched, filter) => {
-                    return isMatched && (filter === this || filter.test(product));
-                },
-                true,
-            ),
+        const products = dbProducts.filter((product) =>
+            filters.reduce((isMatched, filter) => {
+                return isMatched && (filter === this || filter.test(product));
+            }, true)
         );
 
-        this.items.forEach(item => item.count = products.reduce((acc, product) => {
-            return acc + (this.extractItems(product).map(x => x.slug).includes(item.slug) ? 1 : 0);
-        }, 0));
+        this.items.forEach(
+            (item) =>
+                (item.count = products.reduce((acc, product) => {
+                    return (
+                        acc +
+                        (this.extractItems(product)
+                            ?.map((x) => x.slug)
+                            .includes(item.slug)
+                            ? 1
+                            : 0)
+                    );
+                }, 0))
+        );
     }
 
     build(): CheckFilter {
@@ -49,7 +67,7 @@ export class CheckFilterBuilder extends AbstractFilterBuilder {
             slug: this.slug,
             name: this.name,
             items: this.items,
-            value: this.value,
+            value: this.value
         };
     }
 
@@ -57,13 +75,17 @@ export class CheckFilterBuilder extends AbstractFilterBuilder {
         return value ? value.split(',') : [];
     }
 
-    private extractItems(product: Product): BaseFilterItem[] {
+    private extractItems(product: Product): BaseFilterItem[] | null {
         if (this.slug === 'brand') {
-            return product.brand ? [{
-                slug: product.brand.slug,
-                name: product.brand.name,
-                count: 0,
-            }] : null;
+            return product.brand
+                ? [
+                      {
+                          slug: product.brand.slug,
+                          name: product.brand.name,
+                          count: 0
+                      }
+                  ]
+                : null;
         }
 
         throw Error();

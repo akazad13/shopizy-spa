@@ -13,14 +13,17 @@ export class RatingFilterBuilder extends AbstractFilterBuilder {
             return true;
         }
 
-        return this.value.reduce((acc, value) => acc || this.extractItem(product).rating === value, false);
+        return this.value.reduce(
+            (acc, value) => acc || this.extractItem(product).rating === value,
+            false
+        );
     }
 
     makeItems(products: Product[], value: string): void {
-        products.forEach(product => {
+        products.forEach((product) => {
             const item = this.extractItem(product);
 
-            if (!this.items.find(x => x.rating === item.rating)) {
+            if (!this.items.find((x) => x.rating === item.rating)) {
                 this.items.push(item);
             }
         });
@@ -30,18 +33,23 @@ export class RatingFilterBuilder extends AbstractFilterBuilder {
     }
 
     calc(filters: AbstractFilterBuilder[]): void {
-        const products = dbProducts.filter(
-            product => filters.reduce(
-                (isMatched, filter) => {
-                    return isMatched && (filter === this || filter.test(product));
-                },
-                true,
-            ),
+        const products = dbProducts.filter((product) =>
+            filters.reduce((isMatched, filter) => {
+                return isMatched && (filter === this || filter.test(product));
+            }, true)
         );
 
-        this.items.forEach(item => item.count = products.reduce((acc, product) => {
-            return acc + (item.rating === this.extractItem(product).rating ? 1 : 0);
-        }, 0));
+        this.items.forEach(
+            (item) =>
+                (item.count = products.reduce((acc, product) => {
+                    return (
+                        acc +
+                        (item.rating === this.extractItem(product).rating
+                            ? 1
+                            : 0)
+                    );
+                }, 0))
+        );
     }
 
     build(): RatingFilter {
@@ -50,18 +58,18 @@ export class RatingFilterBuilder extends AbstractFilterBuilder {
             slug: this.slug,
             name: this.name,
             items: this.items,
-            value: this.value,
+            value: this.value
         };
     }
 
     private parseValue(value: string): number[] {
-        return value ? value.split(',').map(x => parseFloat(x)) : [];
+        return value ? value.split(',').map((x) => parseFloat(x)) : [];
     }
 
     private extractItem(product: Product): RatingFilterItem {
         return {
-            rating: Math.round(product.rating),
-            count: 0,
+            rating: Math.round(product.rating ?? 0),
+            count: 0
         };
     }
 }

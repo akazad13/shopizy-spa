@@ -6,7 +6,7 @@ import { CategoryFilter } from '../../app/interfaces/filter';
 import { AbstractFilterBuilder } from './abstract-filter-builder';
 
 export class CategoryFilterBuilder extends AbstractFilterBuilder {
-    private value: string = null;
+    private value: string | null = null;
 
     private items: ShopCategory[] = [];
 
@@ -17,18 +17,16 @@ export class CategoryFilterBuilder extends AbstractFilterBuilder {
     makeItems(products: Product[], value: string): void {
         this.value = value;
 
-        const category = shopCategoriesList.find(x => x.slug === value);
+        const category = shopCategoriesList.find((x) => x.slug === value);
 
         if (category) {
             this.items = [prepareCategory(category, 1)];
         } else {
-            this.items = shopCategoriesTree.map(x => prepareCategory(x));
+            this.items = shopCategoriesTree.map((x) => prepareCategory(x));
         }
     }
 
-    calc(filters: AbstractFilterBuilder[]): void {
-
-    }
+    calc(filters: AbstractFilterBuilder[]): void {}
 
     build(): CategoryFilter {
         return {
@@ -36,7 +34,7 @@ export class CategoryFilterBuilder extends AbstractFilterBuilder {
             slug: this.slug,
             name: this.name,
             items: this.items,
-            value: this.value,
+            value: this.value
         };
     }
 }

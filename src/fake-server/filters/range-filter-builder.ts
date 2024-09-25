@@ -4,9 +4,9 @@ import { RangeFilter } from '../../app/interfaces/filter';
 import { AbstractFilterBuilder } from './abstract-filter-builder';
 
 export class RangeFilterBuilder extends AbstractFilterBuilder {
-    private min: number;
-    private max: number;
-    private value: [number, number];
+    private min!: number;
+    private max!: number;
+    private value!: [number, number];
 
     test(product: Product): boolean {
         const value = this.extractValue(product);
@@ -15,12 +15,18 @@ export class RangeFilterBuilder extends AbstractFilterBuilder {
     }
 
     parseValue(value: string): [number, number] {
-        return value.split('-').map(x => parseFloat(x)) as [number, number];
+        return value.split('-').map((x) => parseFloat(x)) as [number, number];
     }
 
     makeItems(products: Product[], value: string): void {
-        this.max = dbProducts.reduce((acc, product) => Math.max(acc, this.extractValue(product)), 0);
-        this.min = dbProducts.reduce((acc, product) => Math.min(acc, this.extractValue(product)), this.max);
+        this.max = dbProducts.reduce(
+            (acc, product) => Math.max(acc, this.extractValue(product)),
+            0
+        );
+        this.min = dbProducts.reduce(
+            (acc, product) => Math.min(acc, this.extractValue(product)),
+            this.max
+        );
 
         /** Calculates the number of digits for rounding. */
         let digit = Math.max(Math.ceil(this.max).toString().length - 2, 1);
@@ -36,9 +42,7 @@ export class RangeFilterBuilder extends AbstractFilterBuilder {
         }
     }
 
-    calc(filters: AbstractFilterBuilder[]): void {
-
-    }
+    calc(filters: AbstractFilterBuilder[]): void {}
 
     extractValue(product: Product): number {
         if (this.slug === 'price') {
@@ -55,7 +59,7 @@ export class RangeFilterBuilder extends AbstractFilterBuilder {
             name: this.name,
             min: this.min,
             max: this.max,
-            value: this.value,
+            value: this.value
         };
     }
 }

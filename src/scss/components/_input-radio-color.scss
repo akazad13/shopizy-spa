@@ -60,8 +60,8 @@ $local-item-margin: 2px;
             transition: transform .2s;
         }
         &:after {
-            left: ($local-item-size - $local-item-inner-size) / 2;
-            top: ($local-item-size - $local-item-inner-size) / 2;
+            left: calc(($local-item-size - $local-item-inner-size) / 2);
+            top: calc(($local-item-size - $local-item-inner-size) / 2);
             width: $local-item-inner-size;
             height: $local-item-inner-size;
             background: currentColor;
@@ -71,7 +71,7 @@ $local-item-margin: 2px;
     }
 
     &:hover input:enabled ~ span {
-        transform: scale(#{round(($local-item-size * .875) / 2) / $local-item-size * 2});
+        transform: scale(#{round(calc(($local-item-size * .875) / 2)) / $local-item-size * 2});
     }
 }
 .input-radio-color__item input:enabled:checked {
@@ -89,7 +89,7 @@ $local-item-margin: 2px;
 
         &:before {
             transform: scale(1.33) rotateZ(45deg);
-            left: $local-item-size / 2 - 1px;
+            left: calc($local-item-size / 2) - 1px;
             top: -1px;
             width: 2px;
             height: calc(100% + 2px);
