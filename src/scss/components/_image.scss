@@ -21,11 +21,11 @@
 }
 .image--type--product {
     .image__body {
-        padding-bottom: #{100% * (1 / $product-image-ratio)};
+        padding-bottom: #{100% * calc(1 / $product-image-ratio)};
     }
 }
 .image--type--category {
     .image__body {
-        padding-bottom: #{100% * (1 / $category-image-ratio)};
+        padding-bottom: #{100% * calc(1 / $category-image-ratio)};
     }
 }

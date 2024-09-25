@@ -13,11 +13,11 @@ $local-bottom-decor-height: 24px;
 
 @mixin local-layout($columns, $gutter) {
     .block-categories__list {
-        margin: -($gutter / 2);
+        margin: -calc($gutter / 2);
     }
     .block-categories__item {
         width: calc((100% - #{$columns * $gutter}) / #{$columns});
-        margin: $gutter / 2;
+        margin: calc($gutter / 2);
     }
 }
 

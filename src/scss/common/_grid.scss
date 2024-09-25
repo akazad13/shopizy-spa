@@ -6,8 +6,8 @@
 @for $i from 1 through 5 {
     .col-#{$i}of5 {
         padding: 0 15px;
-        flex: 0 0 (100% / 5 * $i);
-        max-width: (100% / 5 * $i);
+        flex: 0 0 calc(100% / 5 * $i);
+        max-width: calc(100% / 5 * $i);
         position: relative;
         width: 100%;
     }

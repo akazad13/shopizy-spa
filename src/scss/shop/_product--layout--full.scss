@@ -112,7 +112,7 @@
             list-style: none;
             padding: 0;
             color: map_get($card-scheme, opposite-alt);
-            margin: 0 -($local-gutter / 2);
+            margin: 0 - calc($local-gutter / 2);
             display: flex;
             flex-wrap: wrap;
         }

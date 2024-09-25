@@ -21,7 +21,7 @@
             width: calc(100% - #{$padding-x-skew});
 
             @include direction {
-                #{$inset-inline-start}: $padding-x-skew / 2;
+                #{$inset-inline-start}: calc($padding-x-skew / 2);
             }
         }
     }

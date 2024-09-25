@@ -1172,14 +1172,14 @@
    // ----------------------------------------
       $product-image-width:  1                                              !default;
       $product-image-height: 1                                              !default;
-      $product-image-ratio:  ($product-image-width / $product-image-height) !default;
+      $product-image-ratio:  calc($product-image-width / $product-image-height) !default;
 
    // ----------------------------------------
    // -- .category-image
    // ----------------------------------------
       $category-image-width:  1                                                !default;
       $category-image-height: 1                                                !default;
-      $category-image-ratio:  ($category-image-width / $category-image-height) !default;
+      $category-image-ratio:  calc($category-image-width / $category-image-height) !default;
 
 // ----------------------------------------
 // -- other

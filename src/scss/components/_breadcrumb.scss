@@ -95,8 +95,8 @@ $local-title-safe-area-expand: 64px;
         content: '';
 
         @include direction {
-            #{$inset-inline-start}: ($local-padding-x-base / 2);
-            #{$inset-inline-end}: ($local-padding-x-base / 2);
+            #{$inset-inline-start}: calc($local-padding-x-base / 2);
+            #{$inset-inline-end}: calc($local-padding-x-base / 2);
             transform: skewX(#{-30deg * $transform-direction});
         }
     }
