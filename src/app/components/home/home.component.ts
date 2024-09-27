@@ -13,7 +13,7 @@ import {
   styles: ``,
 })
 export class HomeComponent {
-  toProducts: BlockProducts = {
+  topProducts: BlockProducts = {
     title: 'Our Top Products',
     products: [
       {
