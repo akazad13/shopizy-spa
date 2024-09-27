@@ -3,19 +3,19 @@ import { ProductCardComponent } from '../../shared/product-card/product-card.com
 import { Product } from '../../../interfaces/product';
 import { CommonModule } from '@angular/common';
 
-export interface BlockProductsColumnsItem {
+export interface BlockProducts {
   title: string;
   products: Product[];
 }
 
 @Component({
-  selector: 'app-block-products-columns',
+  selector: 'app-block-products',
   standalone: true,
   imports: [ProductCardComponent, CommonModule],
-  templateUrl: './block-products-columns.component.html',
+  templateUrl: './block-products.component.html',
   styles: ``,
 })
-export class BlockProductsColumnsComponent {
-  @Input() column!: BlockProductsColumnsItem;
+export class BlockProductsComponent {
+  @Input() column!: BlockProducts;
   constructor() {}
 }

@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 import { PromotionComponent } from './promotion/promotion.component';
 import {
-  BlockProductsColumnsComponent,
-  BlockProductsColumnsItem,
-} from '../blocks/block-products-columns/block-products-columns.component';
+  BlockProductsComponent,
+  BlockProducts,
+} from '../blocks/block-products/block-products.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PromotionComponent, BlockProductsColumnsComponent],
+  imports: [PromotionComponent, BlockProductsComponent],
   templateUrl: './home.component.html',
   styles: ``,
 })
 export class HomeComponent {
-  toProducts: BlockProductsColumnsItem = {
+  toProducts: BlockProducts = {
     title: 'Our Top Products',
     products: [
       {
@@ -91,7 +91,7 @@ export class HomeComponent {
     ],
   };
 
-  menProducts: BlockProductsColumnsItem = {
+  menProducts: BlockProducts = {
     title: 'Men Collections',
     products: [
       {
@@ -169,7 +169,7 @@ export class HomeComponent {
     ],
   };
 
-  womenProducts: BlockProductsColumnsItem = {
+  womenProducts: BlockProducts = {
     title: 'Women Collections',
     products: [
       {

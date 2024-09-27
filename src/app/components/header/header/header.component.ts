@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +10,18 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
   selected: string = '';
+  hideMobileMenu: boolean = false;
+  selectedMobileMenu: string = 'women';
 
   updateSelection(option: string): void {
     this.selected = option;
+  }
+
+  hideDrawer(val: boolean): void {
+    this.hideMobileMenu = val;
+  }
+
+  updateMobileMenuSelection(option: string): void {
+    this.selectedMobileMenu = option;
   }
 }

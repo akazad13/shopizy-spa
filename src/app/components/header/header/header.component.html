@@ -4,7 +4,11 @@
 
     Off-canvas menu for mobile, show/hide based on off-canvas menu state.
   -->
-  <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
+  <div
+    class="relative z-40 lg:hidden mobile-menu"
+    role="dialog"
+    aria-modal="true"
+  >
     <!--
       Off-canvas menu backdrop, show/hide based on off-canvas menu state.
 
@@ -15,9 +19,24 @@
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div class="fixed inset-0 bg-black bg-opacity-25" aria-hidden="true"></div>
+    <div
+      class="fixed inset-0 bg-black bg-opacity-25"
+      aria-hidden="true"
+      [ngClass]="
+        hideMobileMenu
+          ? 'transition ease-in-out duration-300 transform -translate-x-full'
+          : 'transition ease-in-out duration-300 transform translate-x-0'
+      "
+    ></div>
 
-    <div class="fixed inset-0 z-40 flex">
+    <div
+      class="fixed inset-0 z-40 flex"
+      [ngClass]="
+        hideMobileMenu
+          ? 'transition ease-in-out duration-300 transform -translate-x-full'
+          : 'transition ease-in-out duration-300 transform translate-x-0'
+      "
+    >
       <!--
         Off-canvas menu, show/hide based on off-canvas menu state.
 
@@ -35,6 +54,7 @@
           <button
             type="button"
             class="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+            (click)="hideDrawer(true)"
           >
             <span class="absolute -inset-0.5"></span>
             <span class="sr-only">Close menu</span>
@@ -70,6 +90,12 @@
                 aria-controls="tabs-1-panel-1"
                 role="tab"
                 type="button"
+                [ngClass]="
+                  selectedMobileMenu == 'women'
+                    ? 'border-indigo-600 text-indigo-600'
+                    : 'border-transparent text-gray-900'
+                "
+                (click)="updateMobileMenuSelection('women')"
               >
                 Women
               </button>
@@ -80,6 +106,12 @@
                 aria-controls="tabs-1-panel-2"
                 role="tab"
                 type="button"
+                [ngClass]="
+                  selectedMobileMenu == 'men'
+                    ? 'border-indigo-600 text-indigo-600'
+                    : 'border-transparent text-gray-900'
+                "
+                (click)="updateMobileMenuSelection('men')"
               >
                 Men
               </button>
@@ -93,6 +125,7 @@
             aria-labelledby="tabs-1-tab-1"
             role="tabpanel"
             tabindex="0"
+            *ngIf="selectedMobileMenu == 'women'"
           >
             <div class="grid grid-cols-2 gap-x-4">
               <div class="group relative text-sm">
@@ -252,6 +285,7 @@
             aria-labelledby="tabs-1-tab-2"
             role="tabpanel"
             tabindex="0"
+            *ngIf="selectedMobileMenu == 'men'"
           >
             <div class="grid grid-cols-2 gap-x-4">
               <div class="group relative text-sm">
@@ -451,7 +485,8 @@
           <!-- Mobile menu toggle, controls the 'mobileMenuOpen' state. -->
           <button
             type="button"
-            class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+            class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden mobile-menu-hamburger"
+            (click)="hideDrawer(false)"
           >
             <span class="absolute -inset-0.5"></span>
             <span class="sr-only">Open menu</span>
@@ -493,8 +528,12 @@
                     type="button"
                     class="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
                     aria-expanded="false"
-                    (mouseenter)="updateSelection('women')"
-                    (mouseleave)="updateSelection('')"
+                    (click)="updateSelection('women')"
+                    [ngClass]="
+                      selected == 'women'
+                        ? 'border-indigo-600 text-indigo-600'
+                        : 'border-transparent text-gray-700 hover:text-gray-800'
+                    "
                   >
                     Women
                   </button>
@@ -721,8 +760,12 @@
                     type="button"
                     class="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
                     aria-expanded="false"
-                    (mouseenter)="updateSelection('men')"
-                    (mouseleave)="updateSelection('')"
+                    (click)="updateSelection('men')"
+                    [ngClass]="
+                      selected == 'men'
+                        ? 'border-indigo-600 text-indigo-600'
+                        : 'border-transparent text-gray-700 hover:text-gray-800'
+                    "
                   >
                     Men
                   </button>
