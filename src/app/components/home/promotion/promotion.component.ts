@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-promotion',
   standalone: true,
   imports: [],
-  templateUrl: './home.component.html',
+  templateUrl: './promotion.component.html',
   styles: ``
 })
-export class HomeComponent {
+export class PromotionComponent {
 
 }
