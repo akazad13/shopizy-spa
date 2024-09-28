@@ -3,10 +3,41 @@ import { ShopComponent } from './components/shop/shop/shop.component';
 import { HomeComponent } from './components/home/home.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
+import { RootComponent } from './components/root/root.component';
+import { PageNotFoundComponent } from './components/site/page-not-found/page-not-found.component';
+import { PageFaqComponent } from './components/site/page-faq/page-faq.component';
+import { PageAboutUsComponent } from './components/site/page-about-us/page-about-us.component';
+import { PageContactUsComponent } from './components/site/page-contact-us/page-contact-us.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'shop', component: ShopComponent },
+  {
+    path: '',
+    component: RootComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: HomeComponent,
+      },
+      {
+        path: 'shop',
+        component: ShopComponent,
+      },
+      {
+        path: 'contact-us',
+        component: PageContactUsComponent,
+      },
+      {
+        path: 'about-us',
+        component: PageAboutUsComponent,
+      },
+      {
+        path: 'faq',
+        component: PageFaqComponent,
+      },
+      { path: '**', component: PageNotFoundComponent },
+    ],
+  },
   {
     path: 'auth',
     children: [
@@ -14,5 +45,4 @@ export const routes: Routes = [
       { path: 'signup', component: SignupComponent },
     ],
   },
-  { path: '**', redirectTo: '' },
 ];

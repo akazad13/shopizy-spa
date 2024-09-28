@@ -4,11 +4,22 @@ import {
   BlockProductsComponent,
   BlockProducts,
 } from '../blocks/block-products/block-products.component';
+import { CallToActionComponent } from './call-to-action/call-to-action.component';
+import { ShopFeaturesComponent } from './shop-features/shop-features.component';
+import { ShortStoryComponent } from './short-story/short-story.component';
+import { BrandsComponent } from './brands/brands.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PromotionComponent, BlockProductsComponent],
+  imports: [
+    PromotionComponent,
+    BlockProductsComponent,
+    CallToActionComponent,
+    ShopFeaturesComponent,
+    ShortStoryComponent,
+    BrandsComponent,
+  ],
   templateUrl: './home.component.html',
   styles: ``,
 })
