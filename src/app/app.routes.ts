@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './components/site/page-not-found/page-not
 import { PageFaqComponent } from './components/site/page-faq/page-faq.component';
 import { PageAboutUsComponent } from './components/site/page-about-us/page-about-us.component';
 import { PageContactUsComponent } from './components/site/page-contact-us/page-contact-us.component';
+import { CheckoutComponent } from './components/checkout/checkout/checkout.component';
 
 export const routes: Routes = [
   {
@@ -35,7 +36,10 @@ export const routes: Routes = [
         path: 'faq',
         component: PageFaqComponent,
       },
-      { path: '**', component: PageNotFoundComponent },
+      {
+        path: 'checkout',
+        component: CheckoutComponent,
+      },
     ],
   },
   {
@@ -45,4 +49,5 @@ export const routes: Routes = [
       { path: 'signup', component: SignupComponent },
     ],
   },
+  { path: '**', component: PageNotFoundComponent },
 ];

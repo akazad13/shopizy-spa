@@ -431,7 +431,9 @@
 
         <div class="space-y-6 border-t border-gray-200 px-4 py-6">
           <div class="flow-root">
-            <a href="#" class="-m-2 block p-2 font-medium text-gray-900"
+            <a
+              [routerLink]="['/about-us']"
+              class="-m-2 block p-2 font-medium text-gray-900"
               >Company</a
             >
           </div>
@@ -978,7 +980,7 @@
               </div>
 
               <a
-                [routerLink]="['/company']"
+                [routerLink]="['/about-us']"
                 class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                 >Company</a
               >
@@ -1045,7 +1047,10 @@
 
             <!-- Cart -->
             <div class="ml-4 flow-root lg:ml-6">
-              <a href="#" class="group -m-2 flex items-center p-2">
+              <a
+                (click)="updateDropCartSelection()"
+                class="group -m-2 flex items-center p-2 cursor-pointer"
+              >
                 <svg
                   class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   fill="none"
@@ -1065,6 +1070,9 @@
                   >0</span
                 >
                 <span class="sr-only">items in cart, view bag</span>
+                <app-dropcart
+                  [isDropCartOpened]="isDropCartOpened"
+                ></app-dropcart>
               </a>
             </div>
           </div>

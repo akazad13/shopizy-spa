@@ -1,0 +1,296 @@
+<section class="bg-white">
+  <div class="container px-6 py-10 mx-auto">
+    <div
+      class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 sm:grid-cols-2 lg:grid-cols-2"
+    >
+      <div class="w-full">
+        <form>
+          <div class="space-y-12">
+            <div class="border-b border-gray-900/10 pb-12">
+              <h2 class="text-base font-semibold leading-7 text-gray-900">
+                Contact Information
+              </h2>
+
+              <div class="">
+                <label
+                  for="email"
+                  class="block text-sm font-medium leading-6 text-gray-900"
+                  >Email address</label
+                >
+                <div class="mt-2">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    autocomplete="email"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <hr class="my-8 h-px border-t-0 bg-gray-200" />
+
+              <h2 class="mt-5 text-base font-semibold leading-7 text-gray-900">
+                Shipping information
+              </h2>
+
+              <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                  <label
+                    for="first-name"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >First name</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      name="first-name"
+                      id="first-name"
+                      autocomplete="given-name"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="last-name"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Last name</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      name="last-name"
+                      id="last-name"
+                      autocomplete="family-name"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <label
+                    for="address"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Address</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      autocomplete="address"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="city"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >City</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      id="city"
+                      name="city"
+                      type="text"
+                      autocomplete="city"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                <div class="sm:col-span-3">
+                  <label
+                    for="country"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Country</label
+                  >
+                  <div class="mt-2">
+                    <select
+                      id="country"
+                      name="country"
+                      autocomplete="country-name"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                    >
+                      <option>United States</option>
+                      <option>Canada</option>
+                      <option>Mexico</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="region"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >State / Province</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      name="region"
+                      id="region"
+                      autocomplete="address-level1"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="postal-code"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >ZIP / Postal code</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      name="postal-code"
+                      id="postal-code"
+                      autocomplete="postal-code"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                <div class="col-span-full">
+                  <label
+                    for="phone"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Phone</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      autocomplete="phone"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="w-full">
+        <div class="mt-8">
+          <div class="flow-root">
+            <ul role="list" class="-my-6 divide-y divide-gray-200">
+              <li class="flex py-6">
+                <div
+                  class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200"
+                >
+                  <img
+                    src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg"
+                    alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                    class="h-full w-full object-cover object-center"
+                  />
+                </div>
+
+                <div class="ml-4 flex flex-1 flex-col">
+                  <div>
+                    <div
+                      class="flex justify-between text-base font-medium text-gray-900"
+                    >
+                      <h3>
+                        <a href="#">Throwback Hip Bag</a>
+                      </h3>
+                      <p class="ml-4">$90.00</p>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                  </div>
+                  <div class="flex flex-1 items-end justify-between text-sm">
+                    <p class="text-gray-500">Qty 1</p>
+
+                    <div class="flex">
+                      <button
+                        type="button"
+                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="flex py-6">
+                <div
+                  class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200"
+                >
+                  <img
+                    src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
+                    alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch."
+                    class="h-full w-full object-cover object-center"
+                  />
+                </div>
+
+                <div class="ml-4 flex flex-1 flex-col">
+                  <div>
+                    <div
+                      class="flex justify-between text-base font-medium text-gray-900"
+                    >
+                      <h3>
+                        <a href="#">Medium Stuff Satchel</a>
+                      </h3>
+                      <p class="ml-4">$32.00</p>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">Blue</p>
+                  </div>
+                  <div class="flex flex-1 items-end justify-between text-sm">
+                    <p class="text-gray-500">Qty 1</p>
+
+                    <div class="flex">
+                      <button
+                        type="button"
+                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <!-- More products... -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+          <div class="flex justify-between text-base font-medium text-gray-900">
+            <p>Subtotal</p>
+            <p>$262.00</p>
+          </div>
+          <p class="mt-0.5 text-sm text-gray-500">
+            Shipping and taxes calculated at checkout.
+          </p>
+          <div class="mt-6">
+            <a
+              class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              >Checkout</a
+            >
+          </div>
+          <div
+            class="mt-6 flex justify-center text-center text-sm text-gray-500"
+          >
+            <p>
+              or
+              <button
+                type="button"
+                class="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Continue Shopping
+                <span aria-hidden="true"> &rarr;</span>
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
