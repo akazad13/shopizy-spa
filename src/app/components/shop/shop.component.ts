@@ -1,9 +1,10 @@
-import { BlockProductsComponent } from '../../blocks/block-products/block-products.component';
-import { Product } from './../../../interfaces/product';
+import { BlockProductsComponent } from '../blocks/block-products/block-products.component';
+import { Product } from '../../interfaces/product';
 import { Component } from '@angular/core';
-import { ProductsGridComponent } from '../../shared/products-grid/products-grid.component';
-import { ShopFiltersComponent } from '../shop-filters/shop-filters.component';
-import { MobileFiltersComponent } from '../mobile-filters/mobile-filters.component';
+import { ProductsGridComponent } from '../product/products-grid/products-grid.component';
+import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
+import { MobileFiltersComponent } from './mobile-filters/mobile-filters.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shop',
@@ -13,12 +14,14 @@ import { MobileFiltersComponent } from '../mobile-filters/mobile-filters.compone
     ProductsGridComponent,
     MobileFiltersComponent,
     ShopFiltersComponent,
+    CommonModule,
   ],
   templateUrl: './shop.component.html',
   styles: ``,
 })
 export class ShopComponent {
   hideMobileFilters: boolean = true;
+  hideSortingOptions: boolean = true;
 
   products: Product[] = [
     {
@@ -173,5 +176,9 @@ export class ShopComponent {
     } else {
       this.hideMobileFilters = true;
     }
+  }
+
+  showHideSortingOptions(): void {
+    this.hideSortingOptions = !this.hideSortingOptions;
   }
 }

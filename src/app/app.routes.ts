@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ShopComponent } from './components/shop/shop/shop.component';
+import { ShopComponent } from './components/shop/shop.component';
 import { HomeComponent } from './components/home/home.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
@@ -8,7 +8,7 @@ import { PageNotFoundComponent } from './components/site/page-not-found/page-not
 import { PageFaqComponent } from './components/site/page-faq/page-faq.component';
 import { PageAboutUsComponent } from './components/site/page-about-us/page-about-us.component';
 import { PageContactUsComponent } from './components/site/page-contact-us/page-contact-us.component';
-import { CheckoutComponent } from './components/checkout/checkout/checkout.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 
 export const routes: Routes = [

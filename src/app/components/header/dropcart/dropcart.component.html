@@ -2,10 +2,10 @@
   <div
     [ngClass]="
       isDropCartOpened
-        ? 'transition ease-out duration-100'
-        : 'transition ease-out duration-100 hidden'
+        ? 'transition ease-in duration-200 transform scale-100'
+        : 'transition ease-in duration-200 transform scale-0'
     "
-    class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+    class="absolute right-0 z-20 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="menu-button"

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DropcartComponent } from '../dropcart/dropcart.component';
-import { MobileHeaderComponent } from '../mobile-header/mobile-header.component';
+import { DropcartComponent } from './dropcart/dropcart.component';
+import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
 
 @Component({
   selector: 'app-header',
