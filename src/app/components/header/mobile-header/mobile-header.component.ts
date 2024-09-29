@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-mobile-header',
   standalone: true,
   imports: [RouterLink, CommonModule],
+  providers: [],
   templateUrl: './mobile-header.component.html',
   styles: ``
 })

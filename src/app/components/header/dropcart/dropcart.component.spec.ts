@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DropcartComponent } from './dropcart.component';
+import { provideRouter } from '@angular/router';
 
 describe('DropcartComponent', () => {
   let component: DropcartComponent;
@@ -8,7 +8,8 @@ describe('DropcartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropcartComponent]
+      imports: [DropcartComponent],
+      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(DropcartComponent);

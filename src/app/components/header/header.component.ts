@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
 
@@ -8,6 +8,7 @@ import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterLink, DropcartComponent, MobileHeaderComponent],
+  providers: [],
   templateUrl: './header.component.html',
   styles: ``
 })

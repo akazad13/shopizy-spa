@@ -16,6 +16,6 @@ export interface BlockProducts {
   styles: ``
 })
 export class BlockProductsComponent {
-  @Input() column!: BlockProducts;
+  @Input() column: BlockProducts | null = null;
   constructor() {}
 }
