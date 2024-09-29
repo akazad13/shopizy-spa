@@ -19,40 +19,40 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: HomeComponent,
+        component: HomeComponent
       },
       {
         path: 'shop',
-        component: ShopComponent,
+        component: ShopComponent
       },
       {
         path: 'contact-us',
-        component: PageContactUsComponent,
+        component: PageContactUsComponent
       },
       {
         path: 'about-us',
-        component: PageAboutUsComponent,
+        component: PageAboutUsComponent
       },
       {
         path: 'faq',
-        component: PageFaqComponent,
+        component: PageFaqComponent
       },
       {
         path: 'checkout',
-        component: CheckoutComponent,
+        component: CheckoutComponent
       },
       {
         path: 'products/:productId',
-        component: ProductDetailsComponent,
-      },
-    ],
+        component: ProductDetailsComponent
+      }
+    ]
   },
   {
     path: 'auth',
     children: [
       { path: 'signin', component: SigninComponent },
-      { path: 'signup', component: SignupComponent },
-    ],
+      { path: 'signup', component: SignupComponent }
+    ]
   },
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', component: PageNotFoundComponent }
 ];

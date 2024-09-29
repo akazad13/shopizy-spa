@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './call-to-action.component.html',
   styles: ``
 })
-export class CallToActionComponent {
-
-}
+export class CallToActionComponent {}

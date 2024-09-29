@@ -1,6 +1,6 @@
 export interface Brand {
-    slug: string;
-    name: string;
-    image: string;
-    country: string;
+  slug: string;
+  name: string;
+  image: string;
+  country: string;
 }

@@ -8,7 +8,7 @@ import { Product } from '../../../interfaces/product';
   standalone: true,
   imports: [ProductCardComponent, CommonModule],
   templateUrl: './products-grid.component.html',
-  styles: ``,
+  styles: ``
 })
 export class ProductsGridComponent {
   @Input() products: Product[] = [];

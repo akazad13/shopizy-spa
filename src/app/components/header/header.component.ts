@@ -9,7 +9,7 @@ import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
   standalone: true,
   imports: [CommonModule, RouterLink, DropcartComponent, MobileHeaderComponent],
   templateUrl: './header.component.html',
-  styles: ``,
+  styles: ``
 })
 export class HeaderComponent {
   selected: string = '';

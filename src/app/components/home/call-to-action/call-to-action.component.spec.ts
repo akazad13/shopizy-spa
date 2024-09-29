@@ -9,8 +9,7 @@ describe('CallToActionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CallToActionComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CallToActionComponent);
     component = fixture.componentInstance;

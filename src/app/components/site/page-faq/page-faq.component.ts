@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './page-faq.component.html',
   styles: ``
 })
-export class PageFaqComponent {
-
-}
+export class PageFaqComponent {}

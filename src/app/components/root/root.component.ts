@@ -9,6 +9,6 @@ import { HeaderComponent } from '../header/header.component';
   standalone: true,
   imports: [RouterOutlet, HomeComponent, HeaderComponent, FooterComponent],
   templateUrl: './root.component.html',
-  styles: ``,
+  styles: ``
 })
 export class RootComponent {}

@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './top-categories.component.html',
   styles: ``
 })
-export class TopCategoriesComponent {
-
-}
+export class TopCategoriesComponent {}

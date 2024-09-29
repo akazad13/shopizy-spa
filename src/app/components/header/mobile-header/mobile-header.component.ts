@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './mobile-header.component.html',
-  styles: ``,
+  styles: ``
 })
 export class MobileHeaderComponent {
   selectedMobileMenu: string = 'women';

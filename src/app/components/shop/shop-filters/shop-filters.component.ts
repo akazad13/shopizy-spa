@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './shop-filters.component.html',
   styles: ``
 })
-export class ShopFiltersComponent {
-
-}
+export class ShopFiltersComponent {}

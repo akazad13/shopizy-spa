@@ -13,7 +13,7 @@ export interface BlockProducts {
   standalone: true,
   imports: [ProductCardComponent, CommonModule],
   templateUrl: './block-products.component.html',
-  styles: ``,
+  styles: ``
 })
 export class BlockProductsComponent {
   @Input() column!: BlockProducts;

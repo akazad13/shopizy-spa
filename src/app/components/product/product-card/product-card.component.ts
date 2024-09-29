@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './product-card.component.html',
-  styles: ``,
+  styles: ``
 })
 export class ProductCardComponent implements OnChanges, OnInit, OnDestroy {
   @Input() product!: Product;

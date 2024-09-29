@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './signin.component.html',
   styles: ``
 })
-export class SigninComponent {
-
-}
+export class SigninComponent {}

@@ -9,8 +9,7 @@ describe('DropcartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DropcartComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DropcartComponent);
     component = fixture.componentInstance;

@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './mobile-filters.component.html',
-  styles: ``,
+  styles: ``
 })
 export class MobileFiltersComponent {
   @Input() hideMobileFilters: boolean = false;

@@ -8,7 +8,7 @@ describe('FilterDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MobileFiltersComponent],
+      imports: [MobileFiltersComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MobileFiltersComponent);

@@ -5,8 +5,8 @@
     aria-hidden="true"
     [ngClass]="
       hideMobileFilters
-        ? 'transition ease-in-out duration-300 transform translate-x-full'
-        : 'ttransition ease-in-out duration-300 transform translate-x-0'
+        ? 'translate-x-full transform transition duration-300 ease-in-out'
+        : 'ttransition translate-x-0 transform duration-300 ease-in-out'
     "
   ></div>
 
@@ -14,8 +14,8 @@
     class="fixed inset-0 z-40 flex"
     [ngClass]="
       hideMobileFilters
-        ? 'transition ease-in-out duration-300 transform translate-x-full'
-        : 'transition ease-in-out duration-300 transform translate-x-0'
+        ? 'translate-x-full transform transition duration-300 ease-in-out'
+        : 'translate-x-0 transform transition duration-300 ease-in-out'
     "
   >
     <div

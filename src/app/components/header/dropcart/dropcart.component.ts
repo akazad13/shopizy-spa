@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './dropcart.component.html',
-  styles: ``,
+  styles: ``
 })
 export class DropcartComponent {
   @Input() isDropCartOpened: boolean = false;

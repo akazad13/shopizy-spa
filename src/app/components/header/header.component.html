@@ -17,7 +17,7 @@
           <!-- Mobile menu toggle -->
           <button
             type="button"
-            class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden mobile-menu-hamburger"
+            class="mobile-menu-hamburger relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
             (click)="showHideMobileDrawer('show')"
           >
             <span class="absolute -inset-0.5"></span>
@@ -82,7 +82,7 @@
                     To: "opacity-0"
                 -->
                 <div
-                  class="absolute inset-x-0 top-full text-sm text-gray-500 z-10"
+                  class="absolute inset-x-0 top-full z-10 text-sm text-gray-500"
                   *ngIf="selected == 'women'"
                 >
                   <!-- Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow -->
@@ -314,7 +314,7 @@
                     To: "opacity-0"
                 -->
                 <div
-                  class="absolute inset-x-0 top-full text-sm text-gray-500 z-10"
+                  class="absolute inset-x-0 top-full z-10 text-sm text-gray-500"
                   *ngIf="selected == 'men'"
                 >
                   <!-- Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow -->
@@ -573,7 +573,7 @@
             <div class="ml-4 flow-root lg:ml-6">
               <a
                 (click)="updateDropCartSelection()"
-                class="group -m-2 flex items-center p-2 cursor-pointer"
+                class="group -m-2 flex cursor-pointer items-center p-2"
               >
                 <svg
                   class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"

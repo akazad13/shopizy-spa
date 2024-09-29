@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './checkout.component.html',
   styles: ``
 })
-export class CheckoutComponent {
-
-}
+export class CheckoutComponent {}

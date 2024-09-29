@@ -9,8 +9,7 @@ describe('PromotionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PromotionComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PromotionComponent);
     component = fixture.componentInstance;
