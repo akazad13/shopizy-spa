@@ -2,15 +2,24 @@ import { BlockProductsComponent } from '../../blocks/block-products/block-produc
 import { Product } from './../../../interfaces/product';
 import { Component } from '@angular/core';
 import { ProductsGridComponent } from '../../shared/products-grid/products-grid.component';
+import { ShopFiltersComponent } from '../shop-filters/shop-filters.component';
+import { MobileFiltersComponent } from '../mobile-filters/mobile-filters.component';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [BlockProductsComponent, ProductsGridComponent],
+  imports: [
+    BlockProductsComponent,
+    ProductsGridComponent,
+    MobileFiltersComponent,
+    ShopFiltersComponent,
+  ],
   templateUrl: './shop.component.html',
   styles: ``,
 })
 export class ShopComponent {
+  hideMobileFilters: boolean = true;
+
   products: Product[] = [
     {
       id: 1,
@@ -157,4 +166,12 @@ export class ShopComponent {
       ],
     },
   ];
+
+  showHideMobileFiltersDrawer(val: string): void {
+    if (val == 'show') {
+      this.hideMobileFilters = false;
+    } else {
+      this.hideMobileFilters = true;
+    }
+  }
 }

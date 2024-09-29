@@ -2,8 +2,8 @@
   <div
     [ngClass]="
       isDropCartOpened
-        ? 'transition ease-out duration-100 transform opacity-100 scale-100'
-        : 'transition ease-out duration-100 transform opacity-0 scale-95'
+        ? 'transition ease-out duration-100'
+        : 'transition ease-out duration-100 hidden'
     "
     class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
     role="menu"
@@ -26,6 +26,7 @@
                 <button
                   type="button"
                   class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                  (click)="closeDropCart()"
                 >
                   <span class="absolute -inset-0.5"></span>
                   <span class="sr-only">Close panel</span>

@@ -11,4 +11,8 @@ import { RouterLink } from '@angular/router';
 })
 export class DropcartComponent {
   @Input() isDropCartOpened: boolean = false;
+
+  closeDropCart(): void {
+    this.isDropCartOpened = false;
+  }
 }
