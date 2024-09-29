@@ -12,7 +12,7 @@ import { DropcartComponent } from '../dropcart/dropcart.component';
 })
 export class HeaderComponent {
   selected: string = '';
-  hideMobileMenu: boolean = false;
+  hideMobileMenu: boolean = true;
   selectedMobileMenu: string = 'women';
   isDropCartOpened: boolean = false;
 

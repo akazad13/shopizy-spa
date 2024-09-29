@@ -8,6 +8,7 @@ import { CallToActionComponent } from './call-to-action/call-to-action.component
 import { ShopFeaturesComponent } from './shop-features/shop-features.component';
 import { ShortStoryComponent } from './short-story/short-story.component';
 import { BrandsComponent } from './brands/brands.component';
+import { TopCategoriesComponent } from './top-categories/top-categories.component';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ import { BrandsComponent } from './brands/brands.component';
     ShopFeaturesComponent,
     ShortStoryComponent,
     BrandsComponent,
+    TopCategoriesComponent,
   ],
   templateUrl: './home.component.html',
   styles: ``,

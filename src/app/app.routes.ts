@@ -9,6 +9,7 @@ import { PageFaqComponent } from './components/site/page-faq/page-faq.component'
 import { PageAboutUsComponent } from './components/site/page-about-us/page-about-us.component';
 import { PageContactUsComponent } from './components/site/page-contact-us/page-contact-us.component';
 import { CheckoutComponent } from './components/checkout/checkout/checkout.component';
+import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 
 export const routes: Routes = [
   {
@@ -39,6 +40,10 @@ export const routes: Routes = [
       {
         path: 'checkout',
         component: CheckoutComponent,
+      },
+      {
+        path: 'products/:productId',
+        component: ProductDetailsComponent,
       },
     ],
   },
