@@ -22,76 +22,80 @@
       >
         {{ signinForm.errors?.["server"] }}
       </div>
+      <div>
+        <div class="relative mt-6 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+              />
+            </svg>
+          </span>
 
-      <div class="relative mt-6 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-            />
-          </svg>
-        </span>
-
-        <input
-          type="tel"
-          class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Phone Number"
-          id="phoneNumber"
-          data-format="custom"
-          data-delimiter="-"
-          data-blocks="3 3 4"
-          placeholder="000-000-0000"
-          [class.dark:border-red-500]="formData['phoneNumber'] | isInvalid"
-          formControlName="phoneNumber"
-        />
+          <input
+            type="tel"
+            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Phone Number"
+            id="phoneNumber"
+            data-format="custom"
+            data-delimiter="-"
+            data-blocks="3 3 4"
+            placeholder="000-000-0000"
+            [class.dark:border-red-500]="formData['phoneNumber'] | isInvalid"
+            formControlName="phoneNumber"
+          />
+        </div>
+        <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Phone number is required
+          </p>
+        </div>
       </div>
-      <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-          Phone number is required
-        </p>
-      </div>
 
-      <div class="relative mt-4 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
-        </span>
+      <div>
+        <div class="relative mt-4 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </span>
 
-        <input
-          type="password"
-          class="peer block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Password"
-          [class.dark:border-red-500]="
-            signinForm.controls['password'] | isInvalid
-          "
-          formControlName="password"
-        />
-      </div>
-      <div *ngIf="formData['password'] | hasError: 'required'">
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-          Password is required
-        </p>
+          <input
+            type="password"
+            class="peer block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Password"
+            [class.dark:border-red-500]="
+              signinForm.controls['password'] | isInvalid
+            "
+            formControlName="password"
+          />
+        </div>
+
+        <div *ngIf="formData['password'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Password is required
+          </p>
+        </div>
       </div>
 
       <div class="mt-6">

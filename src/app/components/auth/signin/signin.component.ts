@@ -41,11 +41,8 @@ export class SigninComponent {
 
   ngOnInit() {}
 
-  async signin() {
+  async signin(): Promise<void> {
     this.signinForm.markAllAsTouched();
-
-    var control = this.signinForm.controls.password;
-    const errors = control.errors || {};
 
     if (this.reqInProgress || this.signinForm.invalid) {
       return;

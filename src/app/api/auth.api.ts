@@ -37,11 +37,20 @@ export class AuthApi {
       .pipe(tap((user) => this.setUser(user)));
   }
 
-  signUp(phone: string, password: string): Observable<any> {
-    return this.http.post<any>(this.baseUrl + '/register', {
-      phone,
-      password
-    });
+  signUp(
+    firstName: string,
+    lastName: string,
+    phone: string,
+    password: string
+  ): Observable<any> {
+    return this.http
+      .post<any>(this.baseUrl + '/register', {
+        firstName,
+        lastName,
+        phone,
+        password
+      })
+      .pipe(tap((user) => this.setUser(user)));
   }
 
   resetPassword(newPassword: string, resetToken: string): Observable<any> {

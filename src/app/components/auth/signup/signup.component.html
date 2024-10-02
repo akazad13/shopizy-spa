@@ -2,7 +2,11 @@
   <div
     class="container mx-auto flex min-h-screen items-center justify-center px-6"
   >
-    <form class="w-full max-w-md">
+    <form
+      class="w-full max-w-md"
+      (ngSubmit)="signup()"
+      [formGroup]="signupForm"
+    >
       <div class="mx-auto flex justify-center">
         <img class="m-auto h-16 w-auto" src="/logo.png" alt="" />
       </div>
@@ -15,128 +19,201 @@
         </h1>
       </div>
 
-      <div class="relative mt-8 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-            />
-          </svg>
-        </span>
-
-        <input
-          type="text"
-          class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Username"
-        />
-      </div>
-
-      <label
-        for="dropzone-file"
-        class="mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center dark:border-gray-600 dark:bg-gray-900"
+      <div
+        class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+        role="alert"
+        *ngIf="signupForm.errors?.['server']"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-gray-300 dark:text-gray-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+        {{ signupForm.errors?.["server"] }}
+      </div>
+
+      <div>
+        <div class="relative mt-8 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </span>
+
+          <input
+            type="text"
+            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="First Name"
+            id="firstName"
+            formControlName="firstName"
           />
-        </svg>
+        </div>
 
-        <h2 class="mx-3 text-gray-400">Profile Photo</h2>
-
-        <input id="dropzone-file" type="file" class="hidden" />
-      </label>
-
-      <div class="relative mt-6 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
-        </span>
-
-        <input
-          type="email"
-          class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Email address"
-        />
+        <div *ngIf="formData['firstName'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            First name is required
+          </p>
+        </div>
       </div>
 
-      <div class="relative mt-4 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
-        </span>
+      <div>
+        <div class="relative mt-8 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </span>
 
-        <input
-          type="password"
-          class="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Password"
-        />
+          <input
+            type="text"
+            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Last Name"
+            id="lastName"
+            formControlName="lastName"
+          />
+        </div>
+
+        <div *ngIf="formData['lastName'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Last name is required
+          </p>
+        </div>
       </div>
 
-      <div class="relative mt-4 flex items-center">
-        <span class="absolute">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
-        </span>
+      <div>
+        <div class="relative mt-6 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+              />
+            </svg>
+          </span>
 
-        <input
-          type="password"
-          class="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-          placeholder="Confirm Password"
-        />
+          <input
+            type="tel"
+            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Phone Number"
+            id="phoneNumber"
+            data-format="custom"
+            data-delimiter="-"
+            data-blocks="3 3 4"
+            placeholder="000-000-0000"
+            [class.dark:border-red-500]="formData['phoneNumber'] | isInvalid"
+            formControlName="phoneNumber"
+          />
+        </div>
+
+        <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Phone number is required
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="relative mt-4 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </span>
+
+          <input
+            type="password"
+            class="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Password"
+            [class.dark:border-red-500]="
+              signupForm.controls['password'] | isInvalid
+            "
+            formControlName="password"
+          />
+        </div>
+        <div *ngIf="formData['password'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Password is required
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="relative mt-4 flex items-center">
+          <span class="absolute">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </span>
+
+          <input
+            type="password"
+            class="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            placeholder="Confirm Password"
+            [class.dark:border-red-500]="
+              signupForm.controls['confirmPassword'] | isInvalid
+            "
+            formControlName="confirmPassword"
+          />
+        </div>
+
+        <div *ngIf="formData['confirmPassword'] | hasError: 'required'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Confirm Password is required
+          </p>
+        </div>
+
+        <div *ngIf="formData['confirmPassword'] | hasError: 'mustMatch'">
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            Password didn't match
+          </p>
+        </div>
       </div>
 
       <div class="mt-6">
