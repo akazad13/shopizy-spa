@@ -3,7 +3,8 @@ import { AbstractControl } from '@angular/forms';
 
 @Pipe({
   name: 'isInvalid',
-  standalone: true
+  standalone: true,
+  pure: false
 })
 export class IsInvalidPipe implements PipeTransform {
   transform(control: AbstractControl): any {

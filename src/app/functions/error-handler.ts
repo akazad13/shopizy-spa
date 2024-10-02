@@ -7,9 +7,19 @@ export function handleError(form: FormGroup | null, e: any): void {
     switch (e.status) {
       case 400: {
         if (!!e.error.errors && e.error.errors != null) {
-          errorMessage = e.error.errors.join('\n');
+          for (const [key, value] of Object.entries(e.error.errors)) {
+            errorMessage = value + '\n';
+          }
         } else {
-          errorMessage = e.error.message;
+          errorMessage = e.error.title;
+        }
+        break;
+      }
+      case 401: {
+        if (!!e.error) {
+          errorMessage = e.error.title;
+        } else {
+          errorMessage = e.statusText;
         }
         break;
       }
@@ -20,7 +30,6 @@ export function handleError(form: FormGroup | null, e: any): void {
       }
 
       case 0:
-      case 401:
       case 403:
       case 405: {
         errorMessage = e.statusText;

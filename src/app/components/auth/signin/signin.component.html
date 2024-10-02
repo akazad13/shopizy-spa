@@ -15,7 +15,15 @@
         sign In
       </h1>
 
-      <div class="relative mt-8 flex items-center">
+      <div
+        class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+        role="alert"
+        *ngIf="signinForm.errors?.['server']"
+      >
+        {{ signinForm.errors?.["server"] }}
+      </div>
+
+      <div class="relative mt-6 flex items-center">
         <span class="absolute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -42,14 +50,14 @@
           data-delimiter="-"
           data-blocks="3 3 4"
           placeholder="000-000-0000"
-          [class.is-invalid]="formData['phoneNumber'] | isInvalid"
+          [class.dark:border-red-500]="formData['phoneNumber'] | isInvalid"
           formControlName="phoneNumber"
         />
-        <div class="invalid-feedback">
-          <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
-            Phone number is required
-          </div>
-        </div>
+      </div>
+      <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          Phone number is required
+        </p>
       </div>
 
       <div class="relative mt-4 flex items-center">
@@ -72,16 +80,18 @@
 
         <input
           type="password"
-          class="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+          class="peer block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
           placeholder="Password"
-          [class.is-invalid]="formData['password'] | isInvalid"
+          [class.dark:border-red-500]="
+            signinForm.controls['password'] | isInvalid
+          "
           formControlName="password"
         />
-        <div class="invalid-feedback">
-          <div *ngIf="formData['password'] | hasError: 'required'">
-            Password is required
-          </div>
-        </div>
+      </div>
+      <div *ngIf="formData['password'] | hasError: 'required'">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          Password is required
+        </p>
       </div>
 
       <div class="mt-6">
@@ -124,7 +134,7 @@
 
         <div class="mt-6 text-center">
           <a
-            href="#"
+            [routerLink]="['/auth/signup']"
             class="text-sm text-blue-500 hover:underline dark:text-blue-400"
           >
             Don’t have an account yet? Sign up

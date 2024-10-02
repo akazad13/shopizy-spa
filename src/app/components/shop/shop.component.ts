@@ -29,7 +29,7 @@ export class ShopComponent {
       name: 'Product 1',
       price: 100,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -47,7 +47,7 @@ export class ShopComponent {
       name: 'Product 2',
       price: 200,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -65,7 +65,7 @@ export class ShopComponent {
       name: 'Product 3',
       price: 50,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -83,7 +83,7 @@ export class ShopComponent {
       name: 'Product 4',
       price: 80,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-03.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -101,7 +101,7 @@ export class ShopComponent {
       name: 'Product 1',
       price: 100,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -119,7 +119,7 @@ export class ShopComponent {
       name: 'Product 2',
       price: 200,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -137,7 +137,7 @@ export class ShopComponent {
       name: 'Product 3',
       price: 50,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',
@@ -155,7 +155,7 @@ export class ShopComponent {
       name: 'Product 4',
       price: 80,
       images: [
-        'https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-03.jpg'
+        'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
       ],
       excerpt: 'Product',
       description: 'Product description',

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthApi } from '../../../api/auth.api';
 import {
-  FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators
@@ -16,46 +16,47 @@ import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IsInvalidPipe, HasErrorPipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    IsInvalidPipe,
+    HasErrorPipe
+  ],
   providers: [AuthApi],
   templateUrl: './signin.component.html',
   styles: ``
 })
 export class SigninComponent {
-  signinForm: FormGroup;
+  signinForm = new FormGroup({
+    phoneNumber: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required])
+  });
+
   reqInProgress = false;
   constructor(
-    private fb: FormBuilder,
     private router: Router,
     private authApi: AuthApi
-  ) {
-    this.signinForm = this.fb.group({
-      phoneNumber: ['', [Validators.required]],
-      password: ['', [Validators.required]],
-      remember: [false]
-    });
-  }
+  ) {}
+
+  ngOnInit() {}
 
   async signin() {
-    console.log(
-      this.signinForm.value.phoneNumber,
-      this.signinForm.value.password,
-      this.signinForm.invalid,
-      this.signinForm
-    );
     this.signinForm.markAllAsTouched();
+
+    var control = this.signinForm.controls.password;
+    const errors = control.errors || {};
 
     if (this.reqInProgress || this.signinForm.invalid) {
       return;
     }
     this.reqInProgress = true;
-    console.log(this.reqInProgress);
     try {
       const data = await firstValueFrom(
         this.authApi
           .signIn(
-            this.signinForm.value.phoneNumber,
-            this.signinForm.value.password
+            this.signinForm.value.phoneNumber ?? '',
+            this.signinForm.value.password ?? ''
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       ).then((value) => {
