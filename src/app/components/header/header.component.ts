@@ -3,11 +3,18 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
+import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, DropcartComponent, MobileHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    DropcartComponent,
+    MobileHeaderComponent,
+    IconComponent
+  ],
   providers: [],
   templateUrl: './header.component.html',
   styles: ``

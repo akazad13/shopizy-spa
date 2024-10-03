@@ -12,6 +12,7 @@ import { finalize, firstValueFrom } from 'rxjs';
 import { handleError } from '../../../functions/error-handler';
 import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
 import { HasErrorPipe } from '../../../pipes/has-error.pipe';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-signin',
@@ -21,7 +22,8 @@ import { HasErrorPipe } from '../../../pipes/has-error.pipe';
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
-    HasErrorPipe
+    HasErrorPipe,
+    IconComponent
   ],
   providers: [AuthApi],
   templateUrl: './signin.component.html',
@@ -36,6 +38,7 @@ export class SigninComponent {
   reqInProgress = false;
   constructor(
     private router: Router,
+
     private authApi: AuthApi
   ) {}
 

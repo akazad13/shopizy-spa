@@ -13,6 +13,7 @@ import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { handleError } from '../../../functions/error-handler';
 import { finalize, firstValueFrom } from 'rxjs';
 import { AuthApi } from '../../../api/auth.api';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-signup',
@@ -22,7 +23,8 @@ import { AuthApi } from '../../../api/auth.api';
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
-    HasErrorPipe
+    HasErrorPipe,
+    IconComponent
   ],
   providers: [AuthApi],
   templateUrl: './signup.component.html',

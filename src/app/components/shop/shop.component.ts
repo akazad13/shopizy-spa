@@ -5,6 +5,7 @@ import { ProductsGridComponent } from '../product/products-grid/products-grid.co
 import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
 import { MobileFiltersComponent } from './mobile-filters/mobile-filters.component';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-shop',
@@ -14,7 +15,8 @@ import { CommonModule } from '@angular/common';
     ProductsGridComponent,
     MobileFiltersComponent,
     ShopFiltersComponent,
-    CommonModule
+    CommonModule,
+    IconComponent
   ],
   templateUrl: './shop.component.html',
   styles: ``
