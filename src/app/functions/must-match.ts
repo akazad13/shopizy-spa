@@ -13,9 +13,9 @@ export function mustMatchValidator(first: string, second: string): ValidatorFn {
       ) {
         const errors = secondControl.errors || {};
 
-        secondControl.setErrors(Object.assign({}, errors, { mustMatch: true }));
+        secondControl.setErrors({ ...errors, mustMatch: true });
       } else if (secondControl.errors) {
-        const errors = Object.assign({}, secondControl.errors);
+        const errors = { ...secondControl.errors };
 
         delete errors['mustMatch'];
 

@@ -7,7 +7,7 @@ export function handleError(form: FormGroup | null, e: any): void {
     switch (e.status) {
       case 400: {
         if (!!e.error.errors && e.error.errors != null) {
-          for (const [key, value] of Object.entries(e.error.errors)) {
+          for (const [, value] of Object.entries(e.error.errors)) {
             errorMessage = value + '\n';
           }
         } else {
@@ -16,7 +16,7 @@ export function handleError(form: FormGroup | null, e: any): void {
         break;
       }
       case 401: {
-        if (!!e.error) {
+        if (e.error) {
           errorMessage = e.error.title;
         } else {
           errorMessage = e.statusText;
@@ -51,7 +51,7 @@ export function handleError(form: FormGroup | null, e: any): void {
     errorMessage = e.message;
   }
 
-  if (!!form) {
+  if (form) {
     form.setErrors({
       server: errorMessage?.trim()
     });

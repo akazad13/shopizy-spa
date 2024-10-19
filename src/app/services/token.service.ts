@@ -5,15 +5,40 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class TokenService {
-  constructor(private jwtHelper: JwtHelperService) {}
+  constructor(private readonly jwtHelper: JwtHelperService) {}
 
   getCurrentUserId(): string {
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser == null ? null : JSON.parse(storedUser);
+    const user = this.getStoredUser();
     if (user == null) {
       return user;
     }
     const decodedToken = this.jwtHelper.decodeToken(user.token);
     return decodedToken.Id;
+  }
+
+  getToken(): string {
+    const user = this.getStoredUser();
+    if (user == null) {
+      return user;
+    }
+    return user.token;
+  }
+
+  getDecodedToken(): any {
+    const token = this.getToken();
+    if (token == null) {
+      return token;
+    }
+    return this.jwtHelper.decodeToken(token);
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    return this.jwtHelper.isTokenExpired(token);
+  }
+
+  private getStoredUser() {
+    const storedUser = localStorage.getItem('user');
+    return storedUser == null ? null : JSON.parse(storedUser);
   }
 }

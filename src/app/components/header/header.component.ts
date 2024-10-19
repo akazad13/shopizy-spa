@@ -1,6 +1,7 @@
+import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
 import { IconComponent } from '../shared/icon/icon.component';
@@ -23,6 +24,12 @@ export class HeaderComponent {
   selected: string = '';
   hideMobileMenu: boolean = true;
   isDropCartOpened: boolean = false;
+  isLoggedIn: boolean = false;
+
+  constructor(private readonly AuthService: AuthService) {
+    this.isLoggedIn = this.AuthService.loggedIn();
+    console.log(this.isLoggedIn);
+  }
 
   updateSelection(option: string): void {
     this.selected = option;
