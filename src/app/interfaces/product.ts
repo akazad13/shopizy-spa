@@ -1,64 +1,39 @@
 import { CustomFields } from './custom-fields';
 import { Brand } from './brand';
-import { ShopCategory } from './category';
+import { Category } from './category';
 
-export interface BaseAttributeGroup {
-  name: string;
-  slug: string;
-  customFields?: CustomFields;
-}
-
-export type ProductAttributeGroup = BaseAttributeGroup & {
-  attributes: ProductAttribute[];
-};
-export type ProductTypeAttributeGroup = BaseAttributeGroup & {
-  attributes: string[];
-};
-
-export interface ProductAttribute {
+export interface Productspecification {
   name: string;
   value: string;
 }
 
-export interface ProductOptionValueBase {
-  name: string;
-  slug: string;
-  customFields?: CustomFields;
-}
-
-export interface ProductOptionValueColor extends ProductOptionValueBase {
-  color: string;
-}
-
-export interface ProductOptionBase {
-  type: string;
-  name: string;
-  slug: string;
-  values: ProductOptionValueBase[];
-  customFields?: CustomFields;
+export interface ProductImage {
+  productImageId: string;
+  imageUrl: string;
 }
 
 export type ProductStock = 'in-stock' | 'out-of-stock' | 'on-backorder';
 
-export type ProductCompatibilityResult = 'all' | 'fit' | 'not-fit' | 'unknown';
-
 export interface Product {
-  id: number;
+  productId: number;
   name: string;
-  excerpt: string;
   description: string;
-  slug: string;
-  sku?: string;
-  stock: ProductStock;
+  categoryId?: string;
+  categories?: Category[];
   price: number;
-  images?: string[];
+  discount?: number;
+  sku?: string;
+  brand?: Brand | null;
+  tags?: string[];
+  barcode?: string;
+  slug: string;
+  stock: ProductStock;
+  stockQuantity?: number;
+  specificationIds?: string | null;
+  specifications: Productspecification[];
+  productImages?: ProductImage[];
   badges?: string[];
   rating?: number;
   reviews?: number;
-  availability?: string;
-  brand?: Brand | null;
-  tags?: string[];
-  categories?: ShopCategory[];
-  attributes: ProductAttribute[];
   customFields?: CustomFields;
 }

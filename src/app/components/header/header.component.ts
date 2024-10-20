@@ -1,6 +1,6 @@
 import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
@@ -28,7 +28,6 @@ export class HeaderComponent {
 
   constructor(private readonly AuthService: AuthService) {
     this.isLoggedIn = this.AuthService.loggedIn();
-    console.log(this.isLoggedIn);
   }
 
   updateSelection(option: string): void {

@@ -66,9 +66,8 @@ export class SignupComponent {
             this.signupForm.value.password ?? ''
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
-      ).then((value) => {
-        this.router.navigateByUrl('/');
-      });
+      );
+      this.router.navigateByUrl('/');
     } catch (error) {
       handleError(this.signupForm, error);
     }

@@ -37,9 +37,9 @@ export class SigninComponent {
 
   reqInProgress = false;
   constructor(
-    private router: Router,
+    private readonly router: Router,
 
-    private authApi: AuthApi
+    private readonly authApi: AuthApi
   ) {}
 
   ngOnInit() {}
@@ -59,9 +59,8 @@ export class SigninComponent {
             this.signinForm.value.password ?? ''
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
-      ).then((value) => {
-        this.router.navigateByUrl('/');
-      });
+      );
+      this.router.navigateByUrl('/');
     } catch (error) {
       handleError(this.signinForm, error);
     }

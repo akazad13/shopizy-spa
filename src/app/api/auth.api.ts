@@ -7,7 +7,7 @@ import { TokenService } from '../services/token.service';
 
 @Injectable()
 export class AuthApi {
-  private userSubject: BehaviorSubject<User | null>;
+  private readonly userSubject: BehaviorSubject<User | null>;
   baseUrl = environment.apiUrl + '/api/v1.0/auth';
 
   get user(): User | null {
@@ -17,8 +17,8 @@ export class AuthApi {
   readonly user$: Observable<User | null>;
 
   constructor(
-    private http: HttpClient,
-    private tokenService: TokenService
+    private readonly http: HttpClient,
+    private readonly tokenService: TokenService
   ) {
     const storedUser = localStorage.getItem('user');
 

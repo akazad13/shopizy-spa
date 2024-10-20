@@ -1,6 +1,6 @@
 import { CustomFields } from './custom-fields';
 
-export interface BaseCategory {
+export interface Category {
   id: number;
   type: string;
   name: string;
@@ -11,16 +11,3 @@ export interface BaseCategory {
   children?: this[];
   customFields: CustomFields;
 }
-
-export type ShopCategoryLayout = 'categories' | 'products';
-
-export interface ShopCategory extends BaseCategory {
-  type: 'shop';
-  layout: ShopCategoryLayout;
-}
-
-export interface BlogCategory extends BaseCategory {
-  type: 'blog';
-}
-
-export type Category = ShopCategory | BlogCategory;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PromotionComponent } from './promotion/promotion.component';
 import {
   BlockProductsComponent,
@@ -9,6 +9,9 @@ import { ShopFeaturesComponent } from './shop-features/shop-features.component';
 import { ShortStoryComponent } from './short-story/short-story.component';
 import { BrandsComponent } from './brands/brands.component';
 import { TopCategoriesComponent } from './top-categories/top-categories.component';
+import { ProductApi } from '../../api/product.api';
+import { firstValueFrom } from 'rxjs';
+import { handleError } from '../../functions/error-handler';
 
 @Component({
   selector: 'app-home',
@@ -23,24 +26,28 @@ import { TopCategoriesComponent } from './top-categories/top-categories.componen
     TopCategoriesComponent
   ],
   templateUrl: './home.component.html',
-  styles: ``
+  styles: ``,
+  providers: [ProductApi]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   topProducts: BlockProducts = {
     title: 'Our Top Products',
     products: [
       {
-        id: 1,
+        productId: 1,
         name: 'Product 1',
         price: 100,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
+        productImages: [
+          {
+            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
+            imageUrl:
+              'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
+          }
         ],
-        excerpt: 'Product',
         description: 'Product description',
         slug: 'product',
         stock: 'in-stock',
-        attributes: [
+        specifications: [
           {
             name: 'Color',
             value: 'Black'
@@ -48,17 +55,20 @@ export class HomeComponent {
         ]
       },
       {
-        id: 2,
+        productId: 2,
         name: 'Product 2',
         price: 200,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
+        productImages: [
+          {
+            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
+            imageUrl:
+              'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
+          }
         ],
-        excerpt: 'Product',
         description: 'Product description',
         slug: 'product',
         stock: 'in-stock',
-        attributes: [
+        specifications: [
           {
             name: 'Color',
             value: 'Black'
@@ -66,17 +76,20 @@ export class HomeComponent {
         ]
       },
       {
-        id: 3,
+        productId: 3,
         name: 'Product 3',
         price: 50,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
+        productImages: [
+          {
+            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
+            imageUrl:
+              'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
+          }
         ],
-        excerpt: 'Product',
         description: 'Product description',
         slug: 'product',
         stock: 'in-stock',
-        attributes: [
+        specifications: [
           {
             name: 'Color',
             value: 'Black'
@@ -84,95 +97,20 @@ export class HomeComponent {
         ]
       },
       {
-        id: 4,
+        productId: 4,
         name: 'Product 4',
         price: 80,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
+        productImages: [
           {
-            name: 'Color',
-            value: 'Black'
+            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
+            imageUrl:
+              'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
           }
-        ]
-      }
-    ]
-  };
-
-  menProducts: BlockProducts = {
-    title: 'Men Collections',
-    products: [
-      {
-        id: 1,
-        name: 'Product 1',
-        price: 100,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
         ],
-        excerpt: 'Product',
         description: 'Product description',
         slug: 'product',
         stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Product 2',
-        price: 200,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-02.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 3,
-        name: 'Product 3',
-        price: 50,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-03.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 4,
-        name: 'Product 4',
-        price: 80,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
+        specifications: [
           {
             name: 'Color',
             value: 'Black'
@@ -184,81 +122,38 @@ export class HomeComponent {
 
   womenProducts: BlockProducts = {
     title: 'Women Collections',
-    products: [
-      {
-        id: 1,
-        name: 'Product 1',
-        price: 100,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Product 2',
-        price: 200,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 3,
-        name: 'Product 3',
-        price: 50,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-01.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        id: 4,
-        name: 'Product 4',
-        price: 80,
-        images: [
-          'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-02.jpg'
-        ],
-        excerpt: 'Product',
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        attributes: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      }
-    ]
+    products: []
   };
 
-  constructor() {}
+  menProducts: BlockProducts = {
+    title: 'Men Collections',
+    products: []
+  };
+
+  constructor(private readonly productApi: ProductApi) {}
+  async ngOnInit(): Promise<void> {
+    await this.getMenSection();
+    await this.getWomenSection();
+  }
+
+  async getMenSection() {
+    try {
+      const menCollection = await firstValueFrom(
+        this.productApi.getProducts('men')
+      );
+      this.menProducts.products = menCollection;
+    } catch (error) {
+      handleError(null, error);
+    }
+  }
+  async getWomenSection() {
+    try {
+      const womenCollection = await firstValueFrom(
+        this.productApi.getProducts('women')
+      );
+      this.womenProducts.products = womenCollection;
+    } catch (error) {
+      handleError(null, error);
+    }
+  }
 }
