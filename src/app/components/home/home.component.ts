@@ -8,7 +8,7 @@ import { CallToActionComponent } from './call-to-action/call-to-action.component
 import { ShopFeaturesComponent } from './shop-features/shop-features.component';
 import { ShortStoryComponent } from './short-story/short-story.component';
 import { BrandsComponent } from './brands/brands.component';
-import { TopCategoriesComponent } from './top-categories/top-categories.component';
+import { FeatureProductsComponent } from './feature-products/feature-products.component';
 import { ProductApi } from '../../api/product.api';
 import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
@@ -23,7 +23,7 @@ import { handleError } from '../../functions/error-handler';
     ShopFeaturesComponent,
     ShortStoryComponent,
     BrandsComponent,
-    TopCategoriesComponent
+    FeatureProductsComponent
   ],
   templateUrl: './home.component.html',
   styles: ``,

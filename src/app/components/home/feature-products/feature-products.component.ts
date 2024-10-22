@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-top-categories',
   standalone: true,
   imports: [],
-  templateUrl: './top-categories.component.html',
+  templateUrl: './feature-products.component.html',
   styles: ``
 })
-export class TopCategoriesComponent {}
+export class FeatureProductsComponent {}
