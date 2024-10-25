@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
     title: 'Our Top Products',
     products: [
       {
-        productId: 1,
+        productId: '1',
         name: 'Product 1',
         price: 100,
         productImages: [
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
         ]
       },
       {
-        productId: 2,
+        productId: '2',
         name: 'Product 2',
         price: 200,
         productImages: [
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
         ]
       },
       {
-        productId: 3,
+        productId: '3',
         name: 'Product 3',
         price: 50,
         productImages: [
@@ -97,7 +97,7 @@ export class HomeComponent implements OnInit {
         ]
       },
       {
-        productId: 4,
+        productId: '4',
         name: 'Product 4',
         price: 80,
         productImages: [

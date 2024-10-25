@@ -1,10 +1,15 @@
 import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
 import { IconComponent } from '../shared/icon/icon.component';
+import { CategoryApi } from '../../api/category.api';
+import { CategoryTree } from '../../interfaces/category';
+import { firstValueFrom } from 'rxjs';
+import { handleError } from '../../functions/error-handler';
+import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outside-category-flyout.directive';
 
 @Component({
   selector: 'app-header',
@@ -14,24 +19,42 @@ import { IconComponent } from '../shared/icon/icon.component';
     RouterLink,
     DropcartComponent,
     MobileHeaderComponent,
-    IconComponent
+    IconComponent,
+    ClickOutsideCategoryFlyoutDirective
   ],
-  providers: [],
+  providers: [CategoryApi],
   templateUrl: './header.component.html',
   styles: ``
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   selected: string = '';
   hideMobileMenu: boolean = true;
   isDropCartOpened: boolean = false;
   isLoggedIn: boolean = false;
+  categoriesTree: CategoryTree[] = [];
 
-  constructor(private readonly AuthService: AuthService) {
+  constructor(
+    private readonly AuthService: AuthService,
+    private readonly categoryApi: CategoryApi
+  ) {
     this.isLoggedIn = this.AuthService.loggedIn();
   }
+  async ngOnInit(): Promise<void> {
+    try {
+      this.categoriesTree = await firstValueFrom(
+        this.categoryApi.getCategoriesTree()
+      );
+    } catch (error) {
+      handleError(null, error);
+    }
+  }
 
-  updateSelection(option: string): void {
-    this.selected = option;
+  updateCategorySelection(option: string): void {
+    if (this.selected === option) {
+      this.selected = '';
+    } else {
+      this.selected = option;
+    }
   }
 
   updateDropCartSelection(): void {
@@ -44,5 +67,9 @@ export class HeaderComponent {
     } else {
       this.hideMobileMenu = true;
     }
+  }
+
+  hideCategoryFlyout() {
+    this.selected = '';
   }
 }

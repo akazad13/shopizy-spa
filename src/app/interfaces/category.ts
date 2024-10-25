@@ -11,3 +11,10 @@ export interface Category {
   children?: this[];
   customFields: CustomFields;
 }
+
+export interface CategoryTree {
+  id: string;
+  name: string;
+  parentId: string;
+  children: CategoryTree[];
+}

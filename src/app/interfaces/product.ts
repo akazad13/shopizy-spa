@@ -15,7 +15,7 @@ export interface ProductImage {
 export type ProductStock = 'in-stock' | 'out-of-stock' | 'on-backorder';
 
 export interface Product {
-  productId: number;
+  productId: string;
   name: string;
   description: string;
   categoryId?: string;
