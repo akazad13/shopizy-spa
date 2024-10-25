@@ -16,5 +16,5 @@ export interface CategoryTree {
   id: string;
   name: string;
   parentId: string;
-  children: CategoryTree[];
+  children?: CategoryTree[];
 }

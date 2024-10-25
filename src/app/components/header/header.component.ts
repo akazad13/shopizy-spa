@@ -10,6 +10,7 @@ import { CategoryTree } from '../../interfaces/category';
 import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
 import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outside-category-flyout.directive';
+import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,9 @@ import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outs
     DropcartComponent,
     MobileHeaderComponent,
     IconComponent,
-    ClickOutsideCategoryFlyoutDirective
+    ClickOutsideCategoryFlyoutDirective,
+    CommonModule,
+    ToIterablePipe
   ],
   providers: [CategoryApi],
   templateUrl: './header.component.html',
@@ -28,7 +31,7 @@ import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outs
 })
 export class HeaderComponent implements OnInit {
   selected: string = '';
-  hideMobileMenu: boolean = true;
+  hideMobileMenu: boolean = false;
   isDropCartOpened: boolean = false;
   isLoggedIn: boolean = false;
   categoriesTree: CategoryTree[] = [];
@@ -50,6 +53,7 @@ export class HeaderComponent implements OnInit {
   }
 
   updateCategorySelection(option: string): void {
+    console.log(option, this.selected);
     if (this.selected === option) {
       this.selected = '';
     } else {
