@@ -48,7 +48,7 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts() {
-    this.productApi.getProducts('all').subscribe((products) => {
+    this.productApi.getProducts(null, null, null).subscribe((products) => {
       this.products = products;
     });
   }

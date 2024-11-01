@@ -32,92 +32,7 @@ import { handleError } from '../../functions/error-handler';
 export class HomeComponent implements OnInit {
   topProducts: BlockProducts = {
     title: 'Our Top Products',
-    products: [
-      {
-        productId: '1',
-        name: 'Product 1',
-        price: 100,
-        productImages: [
-          {
-            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
-            imageUrl:
-              'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg'
-          }
-        ],
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        specifications: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        productId: '2',
-        name: 'Product 2',
-        price: 200,
-        productImages: [
-          {
-            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
-            imageUrl:
-              'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg'
-          }
-        ],
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        specifications: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        productId: '3',
-        name: 'Product 3',
-        price: 50,
-        productImages: [
-          {
-            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
-            imageUrl:
-              'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg'
-          }
-        ],
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        specifications: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      },
-      {
-        productId: '4',
-        name: 'Product 4',
-        price: 80,
-        productImages: [
-          {
-            productImageId: 'dfdsfdsdsfdsfdsfdsfds',
-            imageUrl:
-              'https://tailwindui.com/plus/img/ecommerce-images/home-page-03-favorite-03.jpg'
-          }
-        ],
-        description: 'Product description',
-        slug: 'product',
-        stock: 'in-stock',
-        specifications: [
-          {
-            name: 'Color',
-            value: 'Black'
-          }
-        ]
-      }
-    ]
+    products: []
   };
 
   womenProducts: BlockProducts = {
@@ -131,15 +46,25 @@ export class HomeComponent implements OnInit {
   };
 
   constructor(private readonly productApi: ProductApi) {}
-  async ngOnInit(): Promise<void> {
-    await this.getMenSection();
-    await this.getWomenSection();
+  ngOnInit(): void {
+    this.getTopCollection();
+    this.getMenSection();
+    this.getWomenSection();
   }
 
   async getMenSection() {
     try {
       const menCollection = await firstValueFrom(
-        this.productApi.getProducts('men')
+        this.productApi.getProducts(
+          null,
+          [
+            '106f4f94-5e70-4340-b23e-462af5fc7bfc',
+            '124BCF8E-83FB-4B24-A8E1-405A8E45C091',
+            '4A577A76-1884-4F6A-812F-CABDDC6A5A2A',
+            '632DFDA9-CC2E-487B-8C88-608005F124E2'
+          ],
+          null
+        )
       );
       this.menProducts.products = menCollection;
     } catch (error) {
@@ -149,9 +74,29 @@ export class HomeComponent implements OnInit {
   async getWomenSection() {
     try {
       const womenCollection = await firstValueFrom(
-        this.productApi.getProducts('women')
+        this.productApi.getProducts(
+          null,
+          [
+            'BA5FE17F-8977-4034-BEC3-227AA99502CC',
+            '35E6EF59-3419-4A43-9C23-3976722B06F9',
+            'A805A418-2D53-4430-9968-D031C4F39FD4',
+            '050132D0-956A-496F-B9BB-B674E8015A92'
+          ],
+          null
+        )
       );
       this.womenProducts.products = womenCollection;
+    } catch (error) {
+      handleError(null, error);
+    }
+  }
+
+  async getTopCollection() {
+    try {
+      const topCollection = await firstValueFrom(
+        this.productApi.getProducts(null, null, 4.8)
+      );
+      this.topProducts.products = topCollection;
     } catch (error) {
       handleError(null, error);
     }
