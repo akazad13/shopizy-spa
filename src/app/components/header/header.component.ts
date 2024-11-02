@@ -31,10 +31,11 @@ import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
 })
 export class HeaderComponent implements OnInit {
   selected: string = '';
-  hideMobileMenu: boolean = false;
+  hideMobileMenu: boolean = true;
   isDropCartOpened: boolean = false;
   isLoggedIn: boolean = false;
   categoriesTree: CategoryTree[] = [];
+  brands: string[] = [];
 
   constructor(
     private readonly AuthService: AuthService,
@@ -50,10 +51,11 @@ export class HeaderComponent implements OnInit {
     } catch (error) {
       handleError(null, error);
     }
+
+    this.brands = ['Adidas', 'Hugo Boss', 'Zara', 'Gucci', 'H&M', 'Dior'];
   }
 
   updateCategorySelection(option: string): void {
-    console.log(option, this.selected);
     if (this.selected === option) {
       this.selected = '';
     } else {

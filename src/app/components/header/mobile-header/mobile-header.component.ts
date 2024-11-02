@@ -17,6 +17,7 @@ export class MobileHeaderComponent {
   selectedMobileMenu: string = 'Women';
   @Input() hideMobileMenu: boolean = true;
   @Input() categoriesTree: CategoryTree[] = [];
+  @Input() brands: string[] = [];
   @Output() hideMobileMenuOutput = new EventEmitter<string>();
 
   updateMobileMenuSelection(option: string): void {

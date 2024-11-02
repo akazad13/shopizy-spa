@@ -145,28 +145,10 @@
                 aria-labelledby="women-brands-heading-mobile"
                 class="mt-6 flex flex-col space-y-6"
               >
-                <li class="flow-root">
-                  <a href="#" class="-m-2 block p-2 text-gray-500"
-                    >Full Nelson</a
-                  >
-                </li>
-                <li class="flow-root">
-                  <a href="#" class="-m-2 block p-2 text-gray-500">My Way</a>
-                </li>
-                <li class="flow-root">
-                  <a href="#" class="-m-2 block p-2 text-gray-500"
-                    >Re-Arranged</a
-                  >
-                </li>
-                <li class="flow-root">
-                  <a href="#" class="-m-2 block p-2 text-gray-500"
-                    >Counterfeit</a
-                  >
-                </li>
-                <li class="flow-root">
-                  <a href="#" class="-m-2 block p-2 text-gray-500"
-                    >Significant Other</a
-                  >
+                <li class="flow-root" *ngFor="let brand of brands">
+                  <a href="#" class="-m-2 block p-2 text-gray-500">{{
+                    brand
+                  }}</a>
                 </li>
               </ul>
             </div>

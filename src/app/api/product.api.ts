@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../interfaces/product';
+import { ProductQueryFilters } from '../models/ProductQueryFilters';
 
 @Injectable()
 export class ProductApi {
@@ -10,12 +11,10 @@ export class ProductApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  getProducts(
-    name: string | null,
-    categoryIds: string[] | null,
-    averageRating: number | null
-  ): Observable<Product[]> {
+  getProducts(filters: ProductQueryFilters): Observable<Product[]> {
     let params = new HttpParams();
+    const { name, categoryIds, averageRating, pageNumber, pageSize } = filters;
+
     if (name != null) {
       params = params.append('name', name);
     }
@@ -29,6 +28,10 @@ export class ProductApi {
     if (averageRating != null) {
       params = params.append('averageRating', averageRating);
     }
+
+    params = params
+      .append('pageNumber', pageNumber)
+      .append('pageSize', pageSize);
 
     return this.http.get<Product[]>(this.baseUrl, {
       params
