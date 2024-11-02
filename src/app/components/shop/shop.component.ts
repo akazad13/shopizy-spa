@@ -41,11 +41,11 @@ export class ShopComponent implements OnInit {
   ];
 
   filterState: any = {
-    brand: '',
+    selectedBrand: [],
     brandCollapsed: false,
-    category: '',
+    selectedCategory: [],
     categoryCollapsed: false,
-    color: '',
+    selectedColor: [],
     colorCollapsed: false,
     priceRange: '',
     sort: '',

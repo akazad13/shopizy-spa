@@ -59,12 +59,12 @@
           </div>
         </div>
 
-        <div *ngFor="let parentCategory of categoriesTree">
+        <div *ngFor="let category of categoriesTree">
           <div
             id="tabs-1-panel-1"
             class="space-y-10 px-4 pb-8 pt-10"
             role="tabpanel"
-            *ngIf="selectedMobileMenu == parentCategory.name"
+            *ngIf="selectedMobileMenu == category.name"
           >
             <div class="grid grid-cols-2 gap-x-4">
               <div class="group relative text-sm">
@@ -75,14 +75,14 @@
                     src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg"
                     alt="Models sitting back to back, wearing Basic Tee in black and bone."
                     class="object-cover object-center"
-                    *ngIf="parentCategory.name == 'Women'"
+                    *ngIf="category.name == 'Women'"
                   />
 
                   <img
                     src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
                     alt="Models sitting back to back, wearing Basic Tee in black and bone."
                     class="object-cover object-center"
-                    *ngIf="parentCategory.name == 'Men'"
+                    *ngIf="category.name == 'Men'"
                   />
                 </div>
                 <a href="#" class="mt-6 block font-medium text-gray-900">
@@ -108,12 +108,12 @@
                 <p aria-hidden="true" class="mt-1">Shop now</p>
               </div>
             </div>
-            <div *ngFor="let children of parentCategory.children">
+            <div *ngFor="let childCategory of category.children">
               <p
                 id="women-clothing-heading-mobile"
                 class="font-medium text-gray-900"
               >
-                {{ children.name }}
+                {{ childCategory.name }}
               </p>
               <ul
                 aria-labelledby="women-clothing-heading-mobile"
@@ -121,10 +121,15 @@
               >
                 <li
                   class="flow-root"
-                  *ngFor="let grandChildren of children | toIterable"
+                  *ngFor="
+                    let grandChildCategory of childCategory.children?.slice(
+                      0,
+                      2
+                    )
+                  "
                 >
                   <a href="#" class="-m-2 block p-2 text-gray-500">{{
-                    grandChildren.name
+                    grandChildCategory.name
                   }}</a>
                 </li>
                 <li class="flow-root">
@@ -145,10 +150,15 @@
                 aria-labelledby="women-brands-heading-mobile"
                 class="mt-6 flex flex-col space-y-6"
               >
-                <li class="flow-root" *ngFor="let brand of brands">
+                <li class="flow-root" *ngFor="let brand of brands.slice(0, 2)">
                   <a href="#" class="-m-2 block p-2 text-gray-500">{{
                     brand
                   }}</a>
+                </li>
+                <li class="flow-root">
+                  <a href="#" class="-m-2 block p-2 text-gray-500"
+                    >Browse All</a
+                  >
                 </li>
               </ul>
             </div>
@@ -159,16 +169,16 @@
       <div class="space-y-6 border-t border-gray-200 px-4 py-6">
         <div class="flow-root">
           <a
-            [routerLink]="['/about-us']"
+            [routerLink]="['/shop']"
             class="-m-2 block p-2 font-medium text-gray-900"
-            >Company</a
+            >Stores</a
           >
         </div>
         <div class="flow-root">
           <a
-            [routerLink]="['/shop']"
+            [routerLink]="['/about-us']"
             class="-m-2 block p-2 font-medium text-gray-900"
-            >Stores</a
+            >Company</a
           >
         </div>
       </div>

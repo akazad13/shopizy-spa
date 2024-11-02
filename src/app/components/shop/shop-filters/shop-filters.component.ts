@@ -2,12 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { NgFor, NgIf } from '@angular/common';
 import { CategoryTree } from '../../../interfaces/category';
-import { ToIterablePipe } from '../../../pipes/to-iterable.pipe';
 
 @Component({
   selector: 'app-shop-filters',
   standalone: true,
-  imports: [IconComponent, NgIf, NgFor, ToIterablePipe],
+  imports: [IconComponent, NgIf, NgFor],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })

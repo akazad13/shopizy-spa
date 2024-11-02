@@ -31,7 +31,7 @@ export interface Product {
   stockQuantity?: number;
   specificationIds?: string | null;
   specifications: Productspecification[];
-  productImages?: ProductImage[];
+  productImages: ProductImage[] | null;
   badges?: string[];
   rating?: number;
   reviews?: number;

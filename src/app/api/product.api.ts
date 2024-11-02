@@ -37,4 +37,8 @@ export class ProductApi {
       params
     });
   }
+
+  getProduct(productId: string): Observable<Product> {
+    return this.http.get<Product>(this.baseUrl + '/' + productId);
+  }
 }
