@@ -13,7 +13,7 @@ export class TokenService {
       return user;
     }
     const decodedToken = this.jwtHelper.decodeToken(user.token);
-    return decodedToken.Id;
+    return decodedToken.id;
   }
 
   getToken(): string {
