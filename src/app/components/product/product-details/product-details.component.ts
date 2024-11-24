@@ -5,6 +5,7 @@ import { Product } from '../../../interfaces/product';
 import { firstValueFrom } from 'rxjs';
 import { ProductApi } from '../../../api/product.api';
 import { handleError } from '../../../functions/error-handler';
+import { CartItem, CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -20,12 +21,26 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
-    private readonly productApi: ProductApi
+    private readonly productApi: ProductApi,
+    private readonly cartService: CartService
   ) {}
   async ngOnInit(): Promise<void> {
     const productId =
       this.activatedRoute.snapshot.paramMap.get('productId') ?? '0';
     await this.getPost(productId);
+  }
+
+  addProductToCart() {
+    this.cartService.addItem(
+      new CartItem(
+        this.product!.productId,
+        this.product!.productImages?.[0].imageUrl,
+        this.product!.name,
+        this.product!.price,
+        1,
+        this.product!.specifications?.[0]?.value
+      )
+    );
   }
 
   private async getPost(id: string): Promise<void> {

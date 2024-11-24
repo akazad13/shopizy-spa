@@ -1,6 +1,7 @@
 import { CustomFields } from './custom-fields';
 import { Brand } from './brand';
 import { Category } from './category';
+import { Price } from './cart';
 
 export interface Productspecification {
   name: string;

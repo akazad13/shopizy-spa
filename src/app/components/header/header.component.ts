@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
 import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outside-category-flyout.directive';
 import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -39,6 +40,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private readonly AuthService: AuthService,
+    public readonly cartService: CartService,
     private readonly categoryApi: CategoryApi
   ) {
     this.isLoggedIn = this.AuthService.loggedIn();

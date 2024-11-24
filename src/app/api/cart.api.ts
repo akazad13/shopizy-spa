@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from '../services/token.service';
 import { Cart } from '../interfaces/cart';
+import { SuccessResponse } from '../interfaces/SuccessResponse';
 
 @Injectable()
 export class CartApi {
@@ -48,7 +49,7 @@ export class CartApi {
     productId: string,
     quantity: number
   ): Observable<any> {
-    return this.http.patch<any>(
+    return this.http.patch<SuccessResponse>(
       this.baseUrl +
         '/' +
         this.tokenService.getCurrentUserId() +
@@ -63,13 +64,13 @@ export class CartApi {
   }
 
   removeProductFromCart(cartId: string, productId: string): Observable<any> {
-    return this.http.delete<any>(
+    return this.http.delete<SuccessResponse>(
       this.baseUrl +
         '/' +
         this.tokenService.getCurrentUserId() +
         '/carts/' +
         cartId +
-        '/remove-product/' +
+        '/product/' +
         productId
     );
   }

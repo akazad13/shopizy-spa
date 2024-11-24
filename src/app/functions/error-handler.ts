@@ -5,22 +5,22 @@ export function handleError(form: FormGroup | null, e: any): void {
   let errorMessage = '';
   if (e instanceof HttpErrorResponse) {
     switch (e.status) {
-      case 400: {
+      case 400:
+      case 401:
+      case 404:
+      case 409: {
         if (!!e.error.errors && e.error.errors != null) {
           errorMessage = e.error.errors.join('\n');
-        } else {
+        } else if (e.error.message != null) {
           errorMessage = e.error.message;
+        } else {
+          errorMessage =
+            'Failed to find service to process the request. Please contact the administrator.';
         }
-        break;
-      }
-      case 404: {
-        errorMessage =
-          'Failed to find service to process the request. Please contact the administrator.';
         break;
       }
 
       case 0:
-      case 401:
       case 403:
       case 405: {
         errorMessage = e.statusText;

@@ -243,11 +243,11 @@
                   icon="shopping-bag"
                   classNames="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                 ></app-icon>
-
-                <span
-                  class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
-                  >0</span
+                <div
+                  class="translate-x-1/6 bottom-auto z-10 inline-block -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white"
                 >
+                  {{ cartService.cartItemNumber }}
+                </div>
                 <span class="sr-only">items in cart, view bag</span>
               </a>
             </div>

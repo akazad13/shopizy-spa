@@ -27,6 +27,15 @@ export class ProductCardComponent implements OnChanges, OnInit, OnDestroy {
   updateCart(product: Product | null): void {
     if (product == null) return;
 
-    this.cartService.emitData(product);
+    this.cartService.addItem(
+      new CartItem(
+        product.productId,
+        product.productImages?.[0].imageUrl,
+        product.name,
+        product.price,
+        1,
+        product?.specifications?.[0]?.value
+      )
+    );
   }
 }
