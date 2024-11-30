@@ -2,11 +2,12 @@ import { NgFor } from '@angular/common';
 import { CartItem, CartService } from './../../services/cart.service';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, RouterLink, IconComponent],
   templateUrl: './checkout.component.html',
   styles: ``
 })
