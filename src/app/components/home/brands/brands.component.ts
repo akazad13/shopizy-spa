@@ -2,11 +2,10 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-brands',
-  standalone: true,
-  imports: [NgFor],
-  templateUrl: './brands.component.html',
-  styles: ``
+    selector: 'app-brands',
+    imports: [NgFor],
+    templateUrl: './brands.component.html',
+    styles: ``
 })
 export class BrandsComponent implements OnInit {
   imageUrls: string[] = [];

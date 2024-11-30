@@ -4,12 +4,11 @@ import { RouterLink } from '@angular/router';
 import { CartItem, CartService } from '../../../services/cart.service';
 
 @Component({
-  selector: 'app-product-card',
-  standalone: true,
-  imports: [RouterLink],
-  providers: [],
-  templateUrl: './product-card.component.html',
-  styles: ``
+    selector: 'app-product-card',
+    imports: [RouterLink],
+    providers: [],
+    templateUrl: './product-card.component.html',
+    styles: ``
 })
 export class ProductCardComponent implements OnChanges, OnInit, OnDestroy {
   @Input() product: Product | null = null;

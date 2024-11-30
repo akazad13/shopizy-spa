@@ -16,19 +16,18 @@ import { AuthApi } from '../../../api/auth.api';
 import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
-  selector: 'app-signup',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    ReactiveFormsModule,
-    IsInvalidPipe,
-    HasErrorPipe,
-    IconComponent
-  ],
-  providers: [AuthApi],
-  templateUrl: './signup.component.html',
-  styles: ``
+    selector: 'app-signup',
+    imports: [
+        CommonModule,
+        RouterLink,
+        ReactiveFormsModule,
+        IsInvalidPipe,
+        HasErrorPipe,
+        IconComponent
+    ],
+    providers: [AuthApi],
+    templateUrl: './signup.component.html',
+    styles: ``
 })
 export class SignupComponent {
   signupForm = new FormGroup(

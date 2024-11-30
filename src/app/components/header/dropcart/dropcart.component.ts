@@ -9,12 +9,11 @@ import { Cart } from '../../../interfaces/cart';
 import { handleError } from '../../../functions/error-handler';
 
 @Component({
-  selector: 'app-dropcart',
-  standalone: true,
-  imports: [CommonModule, RouterLink, IconComponent, NgFor],
-  templateUrl: './dropcart.component.html',
-  styles: ``,
-  providers: [CartApi]
+    selector: 'app-dropcart',
+    imports: [CommonModule, RouterLink, IconComponent, NgFor],
+    templateUrl: './dropcart.component.html',
+    styles: ``,
+    providers: [CartApi]
 })
 export class DropcartComponent implements OnInit {
   @Input() isDropCartOpened: boolean = false;

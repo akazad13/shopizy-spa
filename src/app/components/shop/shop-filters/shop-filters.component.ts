@@ -4,11 +4,10 @@ import { NgFor, NgIf } from '@angular/common';
 import { CategoryTree } from '../../../interfaces/category';
 
 @Component({
-  selector: 'app-shop-filters',
-  standalone: true,
-  imports: [IconComponent, NgIf, NgFor],
-  templateUrl: './shop-filters.component.html',
-  styles: ``
+    selector: 'app-shop-filters',
+    imports: [IconComponent, NgIf, NgFor],
+    templateUrl: './shop-filters.component.html',
+    styles: ``
 })
 export class ShopFiltersComponent {
   @Input() filterState: any;

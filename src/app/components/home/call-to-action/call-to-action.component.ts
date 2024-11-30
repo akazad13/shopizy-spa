@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-call-to-action',
-  standalone: true,
-  imports: [],
-  templateUrl: './call-to-action.component.html',
-  styles: ``
+    selector: 'app-call-to-action',
+    imports: [],
+    templateUrl: './call-to-action.component.html',
+    styles: ``
 })
 export class CallToActionComponent implements OnInit {
   imageUrls: string[] = [];

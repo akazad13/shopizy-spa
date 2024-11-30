@@ -5,11 +5,10 @@ import { RouterLink } from '@angular/router';
 import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
-  selector: 'app-checkout',
-  standalone: true,
-  imports: [NgFor, RouterLink, IconComponent],
-  templateUrl: './checkout.component.html',
-  styles: ``
+    selector: 'app-checkout',
+    imports: [NgFor, RouterLink, IconComponent],
+    templateUrl: './checkout.component.html',
+    styles: ``
 })
 export class CheckoutComponent {
   constructor(public readonly cartService: CartService) {}

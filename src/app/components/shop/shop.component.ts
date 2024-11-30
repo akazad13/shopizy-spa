@@ -1,4 +1,3 @@
-import { BlockProductsComponent } from '../blocks/block-products/block-products.component';
 import { Product } from '../../interfaces/product';
 import { Component, OnInit } from '@angular/core';
 import { ProductsGridComponent } from '../product/products-grid/products-grid.component';
@@ -15,9 +14,7 @@ import { handleError } from '../../functions/error-handler';
 
 @Component({
   selector: 'app-shop',
-  standalone: true,
   imports: [
-    BlockProductsComponent,
     ProductsGridComponent,
     MobileFiltersComponent,
     ShopFiltersComponent,

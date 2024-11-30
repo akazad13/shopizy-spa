@@ -7,8 +7,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[appClickOutsideCategoryFlyout]',
-  standalone: true
+  selector: '[appClickOutsideCategoryFlyout]'
 })
 export class ClickOutsideCategoryFlyoutDirective {
   @Output() clickOutside = new EventEmitter<void>();

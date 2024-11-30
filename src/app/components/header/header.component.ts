@@ -14,21 +14,20 @@ import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    DropcartComponent,
-    MobileHeaderComponent,
-    IconComponent,
-    ClickOutsideCategoryFlyoutDirective,
-    CommonModule,
-    ToIterablePipe
-  ],
-  providers: [CategoryApi],
-  templateUrl: './header.component.html',
-  styles: ``
+    selector: 'app-header',
+    imports: [
+        CommonModule,
+        RouterLink,
+        DropcartComponent,
+        MobileHeaderComponent,
+        IconComponent,
+        ClickOutsideCategoryFlyoutDirective,
+        CommonModule,
+        ToIterablePipe
+    ],
+    providers: [CategoryApi],
+    templateUrl: './header.component.html',
+    styles: ``
 })
 export class HeaderComponent implements OnInit {
   selected: string = '';

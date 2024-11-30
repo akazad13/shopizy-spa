@@ -9,11 +9,10 @@ export interface BlockProducts {
 }
 
 @Component({
-  selector: 'app-block-products',
-  standalone: true,
-  imports: [ProductCardComponent, CommonModule],
-  templateUrl: './block-products.component.html',
-  styles: ``
+    selector: 'app-block-products',
+    imports: [ProductCardComponent, CommonModule],
+    templateUrl: './block-products.component.html',
+    styles: ``
 })
 export class BlockProductsComponent {
   @Input() column: BlockProducts | null = null;

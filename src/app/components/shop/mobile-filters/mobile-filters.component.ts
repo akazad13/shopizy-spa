@@ -4,11 +4,10 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { CategoryTree } from '../../../interfaces/category';
 
 @Component({
-  selector: 'app-mobile-filters',
-  standalone: true,
-  imports: [CommonModule, IconComponent],
-  templateUrl: './mobile-filters.component.html',
-  styles: ``
+    selector: 'app-mobile-filters',
+    imports: [CommonModule, IconComponent],
+    templateUrl: './mobile-filters.component.html',
+    styles: ``
 })
 export class MobileFiltersComponent {
   @Input() hideMobileFilters: boolean = false;

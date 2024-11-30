@@ -3,7 +3,6 @@ import { AbstractControl } from '@angular/forms';
 
 @Pipe({
   name: 'hasError',
-  standalone: true,
   pure: false
 })
 export class HasErrorPipe implements PipeTransform {

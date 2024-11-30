@@ -8,13 +8,12 @@ import { handleError } from '../../../functions/error-handler';
 import { CartItem, CartService } from '../../../services/cart.service';
 
 @Component({
-  selector: 'app-product-details',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './product-details.component.html',
-  styles: ``,
-  providers: [ProductApi],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'app-product-details',
+    imports: [IconComponent],
+    templateUrl: './product-details.component.html',
+    styles: ``,
+    providers: [ProductApi],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;

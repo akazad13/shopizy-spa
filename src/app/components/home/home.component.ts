@@ -14,19 +14,18 @@ import { handleError } from '../../functions/error-handler';
 import { ProductQueryFilters } from '../../models/ProductQueryFilters';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    PromotionComponent,
-    BlockProductsComponent,
-    CallToActionComponent,
-    ShopFeaturesComponent,
-    BrandsComponent,
-    FeatureProductsComponent
-  ],
-  templateUrl: './home.component.html',
-  styles: ``,
-  providers: [ProductApi]
+    selector: 'app-home',
+    imports: [
+        PromotionComponent,
+        BlockProductsComponent,
+        CallToActionComponent,
+        ShopFeaturesComponent,
+        BrandsComponent,
+        FeatureProductsComponent
+    ],
+    templateUrl: './home.component.html',
+    styles: ``,
+    providers: [ProductApi]
 })
 export class HomeComponent implements OnInit {
   topProducts: BlockProducts = {

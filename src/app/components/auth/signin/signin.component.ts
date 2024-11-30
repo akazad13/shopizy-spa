@@ -15,19 +15,18 @@ import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
-  selector: 'app-signin',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    ReactiveFormsModule,
-    IsInvalidPipe,
-    HasErrorPipe,
-    IconComponent
-  ],
-  providers: [AuthApi],
-  templateUrl: './signin.component.html',
-  styles: ``
+    selector: 'app-signin',
+    imports: [
+        CommonModule,
+        RouterLink,
+        ReactiveFormsModule,
+        IsInvalidPipe,
+        HasErrorPipe,
+        IconComponent
+    ],
+    providers: [AuthApi],
+    templateUrl: './signin.component.html',
+    styles: ``
 })
 export class SigninComponent {
   signinForm = new FormGroup({
