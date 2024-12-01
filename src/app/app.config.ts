@@ -12,6 +12,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi
 } from '@angular/common/http';
+import { provideNgxStripe } from 'ngx-stripe';
 
 export function tokenGetter(): string {
   const storedUser = localStorage.getItem('user');
@@ -38,6 +39,9 @@ export const appConfig: ApplicationConfig = {
           ]
         }
       })
-    ])
+    ]),
+    provideNgxStripe(
+      'pk_test_51Pon5dIcvuL3HXbF7MUfgw1ZFAFrsvKNedI2PnqszqTIKjUdixsu4wufLjcyYMg3GtM4427paWFNe66VJk7dctyd00UbKWebQ6'
+    )
   ]
 };

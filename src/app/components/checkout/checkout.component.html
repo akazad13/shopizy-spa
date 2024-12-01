@@ -34,7 +34,7 @@
                 Payment
               </h2>
 
-              <div class="mb-3 grid grid-cols-2 gap-4">
+              <div class="mb-3 mt-2 grid grid-cols-2 gap-4">
                 <div class="col-span-2 sm:col-span-1">
                   <label
                     for="full_name"
@@ -45,8 +45,8 @@
                   <input
                     type="text"
                     id="full_name"
-                    class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
-                    placeholder="Bonnie Green"
+                    class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-1.5 text-sm text-gray-900"
+                    placeholder=""
                     required
                   />
                 </div>
@@ -58,43 +58,35 @@
                   >
                     Card number*
                   </label>
-                  <input
-                    type="text"
-                    id="card-number-input"
-                    class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-2.5 pe-10 text-sm text-gray-900"
-                    placeholder="xxxx-xxxx-xxxx-xxxx"
-                    pattern="^4[0-9]{12}(?:[0-9]{3})?$"
-                    required
-                  />
+                  <div ngxStripeCardGroup [elementsOptions]="elementsOptions">
+                    <div
+                      class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-1.5 text-sm text-gray-900"
+                    >
+                      <ngx-stripe-card-number
+                        [options]="cardOptions"
+                      ></ngx-stripe-card-number>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
+                <div class="col-span-2 sm:col-span-1">
                   <label
                     for="card-expiration-input"
                     class="mb-2 block text-sm font-medium text-gray-700"
                     >Card expiration*
                   </label>
-                  <div class="relative">
+                  <div ngxStripeCardGroup [elementsOptions]="elementsOptions">
                     <div
-                      class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
+                      class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-1.5 text-sm text-gray-900"
                     >
-                      <app-icon
-                        icon="calendar"
-                        classNames="h-5 w-4 text-gray-300"
-                      ></app-icon>
+                      <ngx-stripe-card-expiry
+                        [options]="cardOptions"
+                      ></ngx-stripe-card-expiry>
                     </div>
-                    <input
-                      datepicker
-                      datepicker-format="mm/yy"
-                      id="card-expiration-input"
-                      type="text"
-                      class="block w-full rounded-lg border border-gray-300 p-2.5 ps-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="12/23"
-                      required
-                    />
                   </div>
                 </div>
-                <div>
+
+                <div class="col-span-2 sm:col-span-1">
                   <label
                     for="cvv-input"
                     class="mb-2 flex items-center gap-1 text-sm font-medium text-gray-700"
@@ -119,14 +111,15 @@
                       <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
                   </label>
-                  <input
-                    type="number"
-                    id="cvv-input"
-                    aria-describedby="helper-text-explanation"
-                    class="focus:border-primary-500 focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
-                    placeholder="•••"
-                    required
-                  />
+                  <div ngxStripeCardGroup [elementsOptions]="elementsOptions">
+                    <div
+                      class="focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-lg border border-gray-300 p-1.5 text-sm text-gray-900"
+                    >
+                      <ngx-stripe-card-cvc
+                        [options]="cardOptions"
+                      ></ngx-stripe-card-cvc>
+                    </div>
+                  </div>
                 </div>
               </div>
 
