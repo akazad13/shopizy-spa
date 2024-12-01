@@ -43,7 +43,7 @@ export const routes: Routes = [
         component: CheckoutComponent
       },
       {
-        path: 'payment',
+        path: 'payment/:orderId',
         component: PaymentComponent
       },
       {

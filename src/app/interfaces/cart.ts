@@ -20,8 +20,3 @@ export interface CartLineItem {
     productImages: string[];
   };
 }
-
-export interface Price {
-  amount: number;
-  currency: string;
-}

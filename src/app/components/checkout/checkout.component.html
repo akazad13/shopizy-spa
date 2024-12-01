@@ -4,11 +4,19 @@
       class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-5 lg:grid-cols-5 xl:mt-12 xl:gap-12"
     >
       <div class="w-full sm:col-span-3 lg:col-span-3">
-        <form>
+        <form [formGroup]="checkoutForm">
           <div class="mb-3 space-y-4">
             <h3 class="text-base font-semibold leading-7 text-gray-900">
               Delivery Methods
             </h3>
+
+            <div
+              class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800"
+              role="alert"
+              *ngIf="checkoutForm.errors?.['server']"
+            >
+              {{ checkoutForm.errors?.["server"] }}
+            </div>
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div
@@ -130,11 +138,17 @@
                 <div class="mt-2">
                   <input
                     type="email"
-                    name="email"
                     id="email"
                     autocomplete="email"
                     class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                    [class.dark:border-red-500]="formData['email'] | isInvalid"
+                    formControlName="email"
                   />
+                </div>
+                <div *ngIf="formData['email'] | hasError: 'required'">
+                  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                    Email is required
+                  </p>
                 </div>
               </div>
 
@@ -154,11 +168,19 @@
                   <div class="mt-2">
                     <input
                       type="text"
-                      name="first-name"
                       id="first-name"
                       autocomplete="given-name"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['firstName'] | isInvalid
+                      "
+                      formControlName="firstName"
                     />
+                  </div>
+                  <div *ngIf="formData['firstName'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Firstname is required
+                    </p>
                   </div>
                 </div>
 
@@ -171,11 +193,19 @@
                   <div class="mt-2">
                     <input
                       type="text"
-                      name="last-name"
                       id="last-name"
                       autocomplete="family-name"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['lastName'] | isInvalid
+                      "
+                      formControlName="lastName"
                     />
+                  </div>
+                  <div *ngIf="formData['lastName'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      LastName is required
+                    </p>
                   </div>
                 </div>
 
@@ -183,15 +213,23 @@
                   <label
                     for="address"
                     class="block text-sm font-medium leading-6 text-gray-700"
-                    >Address</label
+                    >street</label
                   >
                   <div class="mt-2">
                     <input
-                      id="address"
-                      name="address"
+                      id="street"
                       type="text"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['street'] | isInvalid
+                      "
+                      formControlName="street"
                     />
+                  </div>
+                  <div *ngIf="formData['street'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Street is required
+                    </p>
                   </div>
                 </div>
 
@@ -204,10 +242,16 @@
                   <div class="mt-2">
                     <input
                       id="city"
-                      name="city"
                       type="text"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="formData['city'] | isInvalid"
+                      formControlName="city"
                     />
+                  </div>
+                  <div *ngIf="formData['city'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      City is required
+                    </p>
                   </div>
                 </div>
                 <div class="sm:col-span-3">
@@ -219,63 +263,91 @@
                   <div class="mt-2">
                     <select
                       id="country"
-                      name="country"
                       autocomplete="country-name"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm"
+                      formControlName="country"
                     >
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>Mexico</option>
+                      <option value="usa">United States</option>
+                      <option value="can">Canada</option>
+                      <option value="max">Mexico</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="sm:col-span-3">
                   <label
-                    for="region"
+                    for="state"
                     class="block text-sm font-medium leading-6 text-gray-700"
                     >State / Province</label
                   >
                   <div class="mt-2">
                     <input
                       type="text"
-                      name="region"
-                      id="region"
+                      id="state"
                       autocomplete="address-level1"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['state'] | isInvalid
+                      "
+                      formControlName="state"
                     />
+                  </div>
+                  <div *ngIf="formData['state'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      State is required
+                    </p>
                   </div>
                 </div>
 
                 <div class="sm:col-span-3">
                   <label
-                    for="postal-code"
+                    for="zipCode"
                     class="block text-sm font-medium leading-6 text-gray-700"
                     >ZIP / Postal code</label
                   >
                   <div class="mt-2">
                     <input
                       type="text"
-                      name="postal-code"
-                      id="postal-code"
-                      autocomplete="postal-code"
+                      id="zipCode"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['zipCode'] | isInvalid
+                      "
+                      formControlName="zipCode"
                     />
+                  </div>
+                  <div *ngIf="formData['zipCode'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Zip Code is required
+                    </p>
                   </div>
                 </div>
                 <div class="col-span-full">
                   <label
-                    for="phone"
+                    for="phoneNumber"
                     class="block text-sm font-medium leading-6 text-gray-700"
                     >Phone</label
                   >
                   <div class="mt-2">
                     <input
-                      type="text"
-                      name="phone"
-                      id="phone"
+                      type="tel"
+                      placeholder="Phone Number"
+                      id="phoneNumber"
+                      data-format="custom"
+                      data-delimiter="-"
+                      data-blocks="3 3 4"
+                      placeholder="000-000-0000"
+                      [class.dark:border-red-500]="
+                        formData['phoneNumber'] | isInvalid
+                      "
+                      formControlName="phoneNumber"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                     />
+                  </div>
+                  <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Phone number is required
+                    </p>
                   </div>
                 </div>
               </div>
@@ -331,7 +403,7 @@
           </div>
         </div>
 
-        <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+        <div class="mt-5 border-t border-gray-200 px-4 py-6 sm:px-6">
           <div class="flex justify-between text-base font-medium text-gray-900">
             <p>Subtotal</p>
             <p>${{ cartService.subTotal }}</p>
@@ -339,10 +411,12 @@
           <p class="mt-0.5 text-sm text-gray-500">
             Shipping and taxes calculated at checkout.
           </p>
-          <div class="mt-6" [routerLink]="['/', 'payment']">
+          <div class="mt-6">
             <a
-              class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-              >Proceed to Payment</a
+              type="button"
+              class="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              (click)="submitOrder()"
+              >Place Order & Proceed to Payment</a
             >
           </div>
           <div

@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
+  StripeCardComponent,
   StripeCardCvcComponent,
   StripeCardExpiryComponent,
   StripeCardGroupDirective,
-  StripeCardNumberComponent
+  StripeCardNumberComponent,
+  StripeElementsDirective,
+  StripeService
 } from 'ngx-stripe';
 import { IconComponent } from '../shared/icon/icon.component';
 import {
   StripeCardElementOptions,
   StripeElementsOptions
 } from '@stripe/stripe-js';
+import { ActivatedRoute } from '@angular/router';
+import { PaymentApi } from '../../api/payment.api';
+import { finalize, firstValueFrom } from 'rxjs';
+import { handleError } from '../../functions/error-handler';
+import { Price } from '../../interfaces/Price';
 
 @Component({
   selector: 'app-payment',
@@ -29,9 +37,15 @@ import {
         margin-bottom: 20.35%;
       }
     }
-  `
+  `,
+  providers: [PaymentApi]
 })
-export class PaymentComponent {
+export class PaymentComponent implements OnInit {
+  @ViewChild(StripeCardNumberComponent) card!: StripeCardNumberComponent;
+  orderId!: string;
+
+  reqInProgress = false;
+
   cardOptions: StripeCardElementOptions = {
     style: {
       base: {
@@ -55,5 +69,80 @@ export class PaymentComponent {
 
   stripeTest!: FormGroup;
 
-  constructor() {}
+  constructor(
+    private stripeService: StripeService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly paymentApi: PaymentApi
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.orderId = this.activatedRoute.snapshot.paramMap.get('orderId') ?? '0';
+  }
+
+  async pay(): Promise<void> {
+    var payload: any;
+
+    this.stripeService
+      .createPaymentMethod({
+        type: 'card',
+        card: this.card.element,
+        billing_details: {
+          name: 'Test Name'
+        }
+      })
+      .subscribe(async (result) => {
+        if (result.error) {
+          console.log(result.error.message);
+        } else {
+          // The payment has been processed!
+          if (result.paymentMethod) {
+            await this.postPayment(
+              10,
+              'usd',
+              result.paymentMethod.id,
+              'Test Name',
+              result.paymentMethod.card!.exp_month,
+              result.paymentMethod.card!.exp_year,
+              result.paymentMethod.card!.last4
+            );
+          }
+        }
+      });
+  }
+
+  async postPayment(
+    amount: number,
+    currency: string,
+    paymentMethod: string,
+    cardName: string,
+    expMonth: number,
+    expYear: number,
+    lastDigits: string
+  ): Promise<void> {
+    const total: Price = {
+      amount,
+      currency
+    };
+
+    this.reqInProgress = true;
+    try {
+      const data = await firstValueFrom(
+        this.paymentApi
+          .postPayment(
+            this.orderId,
+            total,
+            paymentMethod,
+            cardName,
+            expMonth.toString(),
+            expYear.toString(),
+            lastDigits
+          )
+          .pipe(finalize(() => (this.reqInProgress = false)))
+      );
+      console.log(data);
+      // this.router.navigate(['/', 'payment', data.orderId]);
+    } catch (error) {
+      handleError(null, error);
+    }
+  }
 }
