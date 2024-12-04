@@ -99,6 +99,7 @@ export class PaymentComponent implements OnInit {
             await this.postPayment(
               10,
               'usd',
+              'Card',
               result.paymentMethod.id,
               'Test Name',
               result.paymentMethod.card!.exp_month,
@@ -114,6 +115,7 @@ export class PaymentComponent implements OnInit {
     amount: number,
     currency: string,
     paymentMethod: string,
+    paymentMethodId: string,
     cardName: string,
     expMonth: number,
     expYear: number,
@@ -132,6 +134,7 @@ export class PaymentComponent implements OnInit {
             this.orderId,
             total,
             paymentMethod,
+            paymentMethodId,
             cardName,
             expMonth.toString(),
             expYear.toString(),
