@@ -14,18 +14,18 @@ import { handleError } from '../../functions/error-handler';
 import { ProductQueryFilters } from '../../models/ProductQueryFilters';
 
 @Component({
-    selector: 'app-home',
-    imports: [
-        PromotionComponent,
-        BlockProductsComponent,
-        CallToActionComponent,
-        ShopFeaturesComponent,
-        BrandsComponent,
-        FeatureProductsComponent
-    ],
-    templateUrl: './home.component.html',
-    styles: ``,
-    providers: [ProductApi]
+  selector: 'app-home',
+  imports: [
+    PromotionComponent,
+    BlockProductsComponent,
+    CallToActionComponent,
+    ShopFeaturesComponent,
+    BrandsComponent,
+    FeatureProductsComponent
+  ],
+  templateUrl: './home.component.html',
+  styles: ``,
+  providers: [ProductApi]
 })
 export class HomeComponent implements OnInit {
   topProducts: BlockProducts = {
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
         '632DFDA9-CC2E-487B-8C88-608005F124E2'
       ];
       filters.pageNumber = 1;
-      filters.pageSize = 4;
+      filters.pageSize = 5;
 
       const menCollection = await firstValueFrom(
         this.productApi.getProducts(filters)
@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
         '050132D0-956A-496F-B9BB-B674E8015A92'
       ];
       filters.pageNumber = 1;
-      filters.pageSize = 4;
+      filters.pageSize = 5;
 
       const womenCollection = await firstValueFrom(
         this.productApi.getProducts(filters)
@@ -96,8 +96,8 @@ export class HomeComponent implements OnInit {
     try {
       const filters = new ProductQueryFilters();
       filters.pageNumber = 1;
-      filters.pageSize = 4;
-      filters.averageRating = 4.8;
+      filters.pageSize = 5;
+      filters.averageRating = 4.6;
 
       const topCollection = await firstValueFrom(
         this.productApi.getProducts(filters)

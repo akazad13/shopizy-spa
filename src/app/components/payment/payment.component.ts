@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
-  StripeCardComponent,
   StripeCardCvcComponent,
   StripeCardExpiryComponent,
   StripeCardGroupDirective,
   StripeCardNumberComponent,
-  StripeElementsDirective,
   StripeService
 } from 'ngx-stripe';
 import { IconComponent } from '../shared/icon/icon.component';
@@ -14,7 +12,7 @@ import {
   StripeCardElementOptions,
   StripeElementsOptions
 } from '@stripe/stripe-js';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentApi } from '../../api/payment.api';
 import { finalize, firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
@@ -70,9 +68,10 @@ export class PaymentComponent implements OnInit {
   stripeTest!: FormGroup;
 
   constructor(
-    private stripeService: StripeService,
+    private readonly stripeService: StripeService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly paymentApi: PaymentApi
+    private readonly paymentApi: PaymentApi,
+    private readonly router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -80,8 +79,6 @@ export class PaymentComponent implements OnInit {
   }
 
   async pay(): Promise<void> {
-    var payload: any;
-
     this.stripeService
       .createPaymentMethod({
         type: 'card',
@@ -143,7 +140,7 @@ export class PaymentComponent implements OnInit {
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
       console.log(data);
-      // this.router.navigate(['/', 'payment', data.orderId]);
+      this.router.navigate(['/', 'order-confirmation', data.orderId]);
     } catch (error) {
       handleError(null, error);
     }

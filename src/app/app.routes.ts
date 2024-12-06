@@ -11,6 +11,7 @@ import { PageContactUsComponent } from './components/site/page-contact-us/page-c
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { OrderComfirmationComponent } from './components/order/order-comfirmation/order-comfirmation.component';
 
 export const routes: Routes = [
   {
@@ -49,6 +50,10 @@ export const routes: Routes = [
       {
         path: 'products/:productId',
         component: ProductDetailsComponent
+      },
+      {
+        path: 'order-confirmation/:orderId',
+        component: OrderComfirmationComponent
       }
     ]
   },
