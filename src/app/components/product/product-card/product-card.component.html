@@ -1,9 +1,12 @@
 <div
   class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
 >
-  <a class="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
+  <a
+    class="relative mx-3 mt-3 flex overflow-hidden rounded-xl lg:h-60"
+    [routerLink]="['/', 'product', product?.productId]"
+  >
     <img
-      class="object-cover"
+      class="m-auto object-cover"
       [src]="product?.productImages?.[0]?.imageUrl"
       alt="{{ product?.name }}"
     />
@@ -13,7 +16,7 @@
     >
   </a>
   <div class="mt-4 px-5 pb-5">
-    <a href="#">
+    <a [routerLink]="['/', 'product', product?.productId]">
       <h5 class="text-xl tracking-tight text-slate-900">
         {{ product?.name }}
       </h5>
@@ -88,14 +91,14 @@
               : null
           }}</span
         >
-        <span class="text-sm text-slate-900 line-through"
+        <span class="ps-1 text-sm text-slate-900 line-through"
           >${{ product?.price }}</span
         >
       </p>
     </div>
     <button
       (click)="updateCart(product)"
-      class="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      class="flex w-full items-center justify-center rounded-md bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-700"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

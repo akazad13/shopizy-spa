@@ -48,7 +48,7 @@ export const routes: Routes = [
         component: PaymentComponent
       },
       {
-        path: 'products/:productId',
+        path: 'product/:productId',
         component: ProductDetailsComponent
       },
       {

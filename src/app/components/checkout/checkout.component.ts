@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { CartItem, CartService } from './../../services/cart.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import {
@@ -31,7 +31,7 @@ import { handleError } from '../../functions/error-handler';
   styles: ``,
   providers: [OrderApi]
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent {
   checkoutForm: FormGroup = new FormGroup({
     deliveryMethod: new FormControl('standard', [Validators.required]),
     email: new FormControl('', [Validators.email, Validators.required]),
@@ -52,7 +52,6 @@ export class CheckoutComponent implements OnInit {
     private readonly orderApi: OrderApi,
     private readonly router: Router
   ) {}
-  async ngOnInit(): Promise<void> {}
 
   updateProductQuantity(cartItem: CartItem) {
     this.cartService.addItem(cartItem);
