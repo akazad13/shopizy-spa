@@ -3,26 +3,45 @@
     <div
       class="grid grid-cols-1 gap-8 text-center md:grid-cols-2 lg:grid-cols-3"
     >
-      <div>
-        <h1 class="mt-4 text-xl font-semibold text-gray-800">100% Authentic</h1>
-
-        <p class="mt-1 text-gray-500 dark:text-gray-500">We sell quality</p>
+      <div class="flex items-center justify-center gap-x-5 sm:justify-start">
+        <div class="">
+          <app-icon
+            icon="authentic"
+            classNames="mx-3 h-12 w-12 text-green-500 dark:text-gray-500"
+          ></app-icon>
+        </div>
+        <div class="">
+          <h1 class="text-xl font-semibold text-gray-800">100% Authentic</h1>
+          <p class="mt-1 text-gray-500 dark:text-gray-500">We sell quality</p>
+        </div>
       </div>
 
-      <div>
-        <h1 class="mt-4 text-xl font-semibold text-gray-800">Free shipping</h1>
-
-        <p class="mt-1 text-gray-500 dark:text-gray-500">
-          Find the cheapest one
-        </p>
+      <div class="flex items-center justify-center gap-x-5">
+        <div class="">
+          <app-icon
+            icon="free-shipping"
+            classNames="mx-3 h-20 w-20 text-green-500 dark:text-gray-500"
+          ></app-icon>
+        </div>
+        <div class="">
+          <h1 class="text-xl font-semibold text-gray-800">Free shipping</h1>
+          <p class="mt-1 text-gray-500 dark:text-gray-500">Save Money</p>
+        </div>
       </div>
 
-      <div>
-        <h1 class="mt-4 text-xl font-semibold text-gray-800">
-          Super fast delivery
-        </h1>
-
-        <p class="mt-1 text-gray-500 dark:text-gray-500">3-5 days shipping</p>
+      <div class="flex items-center justify-center gap-x-5 sm:justify-end">
+        <div class="">
+          <app-icon
+            icon="rocket"
+            classNames="mx-3 h-12 w-12 text-green-500 dark:text-gray-500"
+          ></app-icon>
+        </div>
+        <div class="">
+          <h1 class="text-xl font-semibold text-gray-800">
+            Super fast delivery
+          </h1>
+          <p class="mt-1 text-gray-500 dark:text-gray-500">3-5 days shipping</p>
+        </div>
       </div>
     </div>
   </div>

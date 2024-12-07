@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { Product } from '../../../interfaces/product';
 import { RouterLink } from '@angular/router';
 import { CartItem, CartService } from '../../../services/cart.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-product-card',
-  imports: [RouterLink],
+  imports: [RouterLink, IconComponent],
   providers: [],
   templateUrl: './product-card.component.html',
   styles: ``

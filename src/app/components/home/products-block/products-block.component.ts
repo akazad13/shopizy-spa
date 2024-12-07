@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ProductCardComponent } from '../../product/product-card/product-card.component';
-import { Product } from '../../../interfaces/product';
 import { CommonModule } from '@angular/common';
+import { Product } from '../../../interfaces/product';
 
 export interface BlockProducts {
   title: string;
@@ -9,12 +9,12 @@ export interface BlockProducts {
 }
 
 @Component({
-    selector: 'app-block-products',
-    imports: [ProductCardComponent, CommonModule],
-    templateUrl: './block-products.component.html',
-    styles: ``
+  selector: 'app-products-block',
+  imports: [ProductCardComponent, CommonModule],
+  templateUrl: './products-block.component.html',
+  styles: ``
 })
-export class BlockProductsComponent {
+export class ProductsBlockComponent {
   @Input() column: BlockProducts | null = null;
   constructor() {}
 }

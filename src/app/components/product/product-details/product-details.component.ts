@@ -12,7 +12,11 @@ import { NgFor, NgIf } from '@angular/common';
   selector: 'app-product-details',
   imports: [IconComponent, NgIf, NgFor],
   templateUrl: './product-details.component.html',
-  styles: ``,
+  styles: `
+    .text-red-500 {
+      text-color: red;
+    }
+  `,
   providers: [ProductApi],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
