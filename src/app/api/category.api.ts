@@ -10,7 +10,7 @@ export class CategoryApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  getCategoriesTree(): Observable<CategoryTree[]> {
+  getcategoryTree(): Observable<CategoryTree[]> {
     return this.http.get<CategoryTree[]>(this.baseUrl + '/tree');
   }
 }

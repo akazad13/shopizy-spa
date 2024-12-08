@@ -1,0 +1,60 @@
+<div>
+  <div class="" aria-expanded="true" *ngFor="let category of categoryTree">
+    <!-- Accordion Heading -->
+    <div class="flex w-full items-center gap-x-0.5 rounded-md py-1.5">
+      <button
+        class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+        aria-expanded="true"
+        aria-controls="checkbox-tree-collapse-one"
+        (click)="toggleCategory(category)"
+        type="button"
+        *ngIf="category.children != null && category.children.length > 0"
+      >
+        <app-icon
+          icon="{{ category.expanded ? 'minus' : 'plus' }}"
+          classNames="h-5 w-5"
+        ></app-icon>
+      </button>
+
+      <div
+        class="grow cursor-pointer rounded-md px-1.5 {{
+          category.children != null && category.children.length > 0
+            ? ''
+            : 'ml-6'
+        }}"
+      >
+        <span class="text-sm text-gray-800">
+          <label class="flex">
+            <input
+              type="checkbox"
+              class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+              value="assets"
+            />
+            <span class="ms-3">{{ category.name }}</span>
+          </label>
+        </span>
+      </div>
+    </div>
+    <!-- End Accordion Heading -->
+    <div
+      id="checkbox-tree-collapse-one"
+      class="w-full overflow-hidden transition-[height] duration-300"
+      aria-labelledby="checkbox-tree-heading-one"
+    >
+      <div
+        class="relative ps-7 before:absolute before:start-3 before:top-0 before:-ms-px before:h-full before:w-0.5 before:bg-gray-100"
+      >
+        <div
+          class=""
+          aria-expanded="true"
+          id="checkbox-tree-sub-heading-one"
+          *ngIf="category.expanded && category.children"
+        >
+          <app-category-tree
+            [categoryTree]="category.children!"
+          ></app-category-tree>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,7 +41,7 @@
             role="tablist"
           >
             <button
-              *ngFor="let parentCategory of categoriesTree"
+              *ngFor="let parentCategory of categoryTree"
               id="tabs-1-{{ parentCategory.name }}"
               class="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900"
               aria-controls="tabs-1-panel-1"
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div *ngFor="let category of categoriesTree">
+        <div *ngFor="let category of categoryTree">
           <div
             id="tabs-1-panel-1"
             class="space-y-10 px-4 pb-8 pt-10"

@@ -15,13 +15,13 @@
           <app-icon
             icon="plus"
             classNames="h-5 w-5"
-            *ngIf="filterState.categoryCollapsed"
+            *ngIf="shopFilterState.categoryCollapsed"
           ></app-icon>
           <!-- Collapse icon, show/hide based on section open state. -->
           <app-icon
             icon="minus"
             classNames="h-5 w-5"
-            *ngIf="!filterState.categoryCollapsed"
+            *ngIf="!shopFilterState.categoryCollapsed"
           ></app-icon>
         </span>
       </button>
@@ -30,139 +30,15 @@
     <div
       class="pt-6"
       id="filter-section-1"
-      *ngIf="!filterState.categoryCollapsed"
+      *ngIf="!shopFilterState.categoryCollapsed"
     >
-      <div class="space-y-4">
-        <!-- Tree Root -->
-        <div>
-          <!-- 1st Level Accordion Group -->
-          <div>
-            <!-- 1st Level Accordion -->
-            <div
-              class=""
-              aria-expanded="true"
-              *ngFor="let category of categoriesTree"
-            >
-              <!-- 1st Level Accordion Heading -->
-              <div class="flex w-full items-center gap-x-0.5 rounded-md py-0.5">
-                <button
-                  class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  aria-expanded="true"
-                  aria-controls="checkbox-tree-collapse-one"
-                >
-                  <app-icon icon="plus" classNames="h-5 w-5"></app-icon>
-                </button>
-
-                <div class="grow cursor-pointer rounded-md px-1.5">
-                  <span class="text-sm text-gray-800">
-                    <label class="flex">
-                      <input
-                        type="checkbox"
-                        class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                        value="assets"
-                      />
-                      <span class="ms-3">{{ category.name }}</span>
-                    </label>
-                  </span>
-                </div>
-              </div>
-              <!-- End 1st Level Accordion Heading -->
-
-              <!-- 1st Level Collapse -->
-              <div
-                id="checkbox-tree-collapse-one"
-                class="w-full overflow-hidden transition-[height] duration-300"
-                aria-labelledby="checkbox-tree-heading-one"
-              >
-                <!-- 2nd Level Accordion Group -->
-                <div
-                  class="relative ps-7 before:absolute before:start-3 before:top-0 before:-ms-px before:h-full before:w-0.5 before:bg-gray-100"
-                >
-                  <!-- 2nd Level Nested Accordion -->
-                  <div
-                    class=""
-                    aria-expanded="true"
-                    id="checkbox-tree-sub-heading-one"
-                    *ngFor="let childCategory of category.children"
-                  >
-                    <!-- 2nd Level Accordion Heading -->
-                    <div
-                      class="flex w-full items-center gap-x-0.5 rounded-md py-0.5"
-                    >
-                      <button
-                        class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                        aria-expanded="true"
-                        aria-controls="checkbox-tree-sub-collapse-one"
-                      >
-                        <app-icon icon="plus" classNames="h-5 w-5"></app-icon>
-                      </button>
-
-                      <div class="grow cursor-pointer rounded-md px-1.5">
-                        <span class="text-sm text-gray-800">
-                          <label class="flex">
-                            <input
-                              type="checkbox"
-                              class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                              value="css"
-                            />
-                            <span class="ms-3">{{ childCategory.name }}</span>
-                          </label>
-                        </span>
-                      </div>
-                    </div>
-                    <!-- End 2nd Level Accordion Heading -->
-
-                    <!-- 2nd Level Collapse -->
-                    <div
-                      id="checkbox-tree-sub-collapse-one"
-                      class="w-full overflow-hidden transition-[height] duration-300"
-                      aria-labelledby="checkbox-tree-sub-heading-one"
-                    >
-                      <div
-                        class="relative ms-3 ps-8 before:absolute before:start-0 before:top-0 before:-ms-px before:h-full before:w-0.5 before:bg-gray-100"
-                      >
-                        <!-- 3rd Level Item -->
-                        <div
-                          class="nested-2-4 cursor-pointer rounded-md px-2"
-                          *ngFor="
-                            let grandChildCategory of childCategory.children
-                          "
-                        >
-                          <span class="text-sm text-gray-800">
-                            <label class="flex">
-                              <input
-                                type="checkbox"
-                                class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                                value="main.css"
-                              />
-                              <span class="ms-3">{{
-                                grandChildCategory.name
-                              }}</span>
-                            </label>
-                          </span>
-                        </div>
-                        <!-- End 3rd Level Item -->
-                      </div>
-                    </div>
-                    <!-- End 2nd Level Collapse -->
-                  </div>
-                  <!-- End 2nd Level Nested Accordion -->
-                </div>
-                <!-- 2nd Level Accordion Group -->
-              </div>
-              <!-- End 1st Level Collapse -->
-            </div>
-            <!-- End 1st Level Accordion -->
-          </div>
-          <!-- End 1st Level Accordion Group -->
-        </div>
-        <!-- End Tree Root -->
+      <div class="space-y-3">
+        <app-category-tree [categoryTree]="categoryTree"></app-category-tree>
       </div>
     </div>
   </div>
   <div class="border-b border-gray-200 py-6">
     <h3 class="-my-3 flow-root">
-      <!-- Expand/collapse section button -->
       <button
         type="button"
         class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
@@ -172,24 +48,19 @@
       >
         <span class="font-medium text-gray-900">Brand</span>
         <span class="ml-6 flex items-center">
-          <!-- Expand icon, show/hide based on section open state. -->
           <app-icon
-            icon="plus"
+            icon="{{ shopFilterState.brandCollapsed ? 'plus' : 'minus' }}"
             classNames="h-5 w-5"
-            *ngIf="filterState.brandCollapsed"
-          ></app-icon>
-          <!-- Collapse icon, show/hide based on section open state. -->
-          <app-icon
-            icon="minus"
-            classNames="h-5 w-5"
-            *ngIf="!filterState.brandCollapsed"
           ></app-icon>
         </span>
       </button>
     </h3>
-    <!-- Filter section, show/hide based on section state. -->
-    <div class="pt-6" id="filter-section-2" *ngIf="!filterState.brandCollapsed">
-      <div class="space-y-4">
+    <div
+      class="pt-6"
+      id="filter-section-2"
+      *ngIf="!shopFilterState.brandCollapsed"
+    >
+      <div class="space-y-3">
         <div class="flex items-center" *ngFor="let brand of brands">
           <input
             id="filter-size-0"
@@ -217,24 +88,20 @@
       >
         <span class="font-medium text-gray-900">Color</span>
         <span class="ml-6 flex items-center">
-          <!-- Expand icon, show/hide based on section open state. -->
           <app-icon
-            icon="plus"
+            icon="{{ shopFilterState.colorCollapsed ? 'plus' : 'minus' }}"
             classNames="h-5 w-5"
-            *ngIf="filterState.colorCollapsed"
-          ></app-icon>
-          <!-- Collapse icon, show/hide based on section open state. -->
-          <app-icon
-            icon="minus"
-            classNames="h-5 w-5"
-            *ngIf="!filterState.colorCollapsed"
           ></app-icon>
         </span>
       </button>
     </h3>
     <!-- Filter section, show/hide based on section state. -->
-    <div class="pt-6" id="filter-section-0" *ngIf="!filterState.colorCollapsed">
-      <div class="space-y-4">
+    <div
+      class="pt-6"
+      id="filter-section-0"
+      *ngIf="!shopFilterState.colorCollapsed"
+    >
+      <div class="space-y-3">
         <div class="flex items-center" *ngFor="let color of colors">
           <input
             id="filter-color-0"

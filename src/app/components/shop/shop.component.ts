@@ -1,3 +1,4 @@
+import { ShopFilterState } from './../../interfaces/shop';
 import { Product } from '../../interfaces/product';
 import { Component, OnInit } from '@angular/core';
 import { ProductsGridComponent } from '../product/products-grid/products-grid.component';
@@ -26,33 +27,31 @@ import { handleError } from '../../functions/error-handler';
   providers: [ProductApi, CategoryApi]
 })
 export class ShopComponent implements OnInit {
-  hideMobileFilters: boolean = true;
-  hideSortingOptions: boolean = true;
-  categoriesTree: CategoryTree[] = [];
-  sortingOptions: string[] = [
-    'Most Popular',
-    'Best Rating',
-    'newest',
-    'Price: Low to High',
-    'Price: High to Low'
-  ];
+  categoryTree: CategoryTree[] = [];
+  brands: string[] = [];
+  colors: string[] = [];
+  products: Product[] = [];
 
-  filterState: any = {
+  shopFilterState: ShopFilterState = {
+    hideMobileFilters: true,
     selectedBrand: [],
     brandCollapsed: false,
     selectedCategory: [],
     categoryCollapsed: false,
     selectedColor: [],
     colorCollapsed: false,
-    priceRange: '',
+    priceRange: 100,
     sort: '',
-    showAll: false
+    showAll: false,
+    hideSortingOptions: true,
+    sortingOptions: [
+      'Most Popular',
+      'Best Rating',
+      'newest',
+      'Price: Low to High',
+      'Price: High to Low'
+    ]
   };
-
-  brands: string[] = [];
-  colors: string[] = [];
-
-  products: Product[] = [];
 
   constructor(
     private readonly productApi: ProductApi,
@@ -63,19 +62,20 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     this.brands = ['Adidas', 'Hugo Boss', 'Zara', 'Gucci', 'H&M', 'Dior'];
     this.colors = ['White', 'Black', 'Blue', 'Green', 'Purple', 'Brown'];
-    this.getCategoriesTree();
+    this.getcategoryTree();
   }
 
   showHideMobileFiltersDrawer(val: string): void {
     if (val == 'show') {
-      this.hideMobileFilters = false;
+      this.shopFilterState.hideMobileFilters = false;
     } else {
-      this.hideMobileFilters = true;
+      this.shopFilterState.hideMobileFilters = true;
     }
   }
 
   showHideSortingOptions(): void {
-    this.hideSortingOptions = !this.hideSortingOptions;
+    this.shopFilterState.hideSortingOptions =
+      !this.shopFilterState.hideSortingOptions;
   }
 
   getProducts() {
@@ -86,10 +86,10 @@ export class ShopComponent implements OnInit {
     });
   }
 
-  async getCategoriesTree() {
+  async getcategoryTree() {
     try {
-      this.categoriesTree = await firstValueFrom(
-        this.categoryApi.getCategoriesTree()
+      this.categoryTree = await firstValueFrom(
+        this.categoryApi.getcategoryTree()
       );
     } catch (error) {
       handleError(null, error);
@@ -97,6 +97,6 @@ export class ShopComponent implements OnInit {
   }
 
   updateFilterState(filters: any) {
-    this.filterState = { ...this.filterState, ...filters };
+    this.shopFilterState = { ...this.shopFilterState, ...filters };
   }
 }

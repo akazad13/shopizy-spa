@@ -14,27 +14,27 @@ import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-    selector: 'app-header',
-    imports: [
-        CommonModule,
-        RouterLink,
-        DropcartComponent,
-        MobileHeaderComponent,
-        IconComponent,
-        ClickOutsideCategoryFlyoutDirective,
-        CommonModule,
-        ToIterablePipe
-    ],
-    providers: [CategoryApi],
-    templateUrl: './header.component.html',
-    styles: ``
+  selector: 'app-header',
+  imports: [
+    CommonModule,
+    RouterLink,
+    DropcartComponent,
+    MobileHeaderComponent,
+    IconComponent,
+    ClickOutsideCategoryFlyoutDirective,
+    CommonModule,
+    ToIterablePipe
+  ],
+  providers: [CategoryApi],
+  templateUrl: './header.component.html',
+  styles: ``
 })
 export class HeaderComponent implements OnInit {
   selected: string = '';
   hideMobileMenu: boolean = true;
   isDropCartOpened: boolean = false;
   isLoggedIn: boolean = false;
-  categoriesTree: CategoryTree[] = [];
+  categoryTree: CategoryTree[] = [];
   brands: string[] = [];
 
   constructor(
@@ -46,8 +46,8 @@ export class HeaderComponent implements OnInit {
   }
   async ngOnInit(): Promise<void> {
     try {
-      this.categoriesTree = await firstValueFrom(
-        this.categoryApi.getCategoriesTree()
+      this.categoryTree = await firstValueFrom(
+        this.categoryApi.getcategoryTree()
       );
     } catch (error) {
       handleError(null, error);

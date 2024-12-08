@@ -5,16 +5,16 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { CategoryTree } from '../../../interfaces/category';
 
 @Component({
-    selector: 'app-mobile-header',
-    imports: [RouterLink, CommonModule, IconComponent],
-    providers: [],
-    templateUrl: './mobile-header.component.html',
-    styles: ``
+  selector: 'app-mobile-header',
+  imports: [RouterLink, CommonModule, IconComponent],
+  providers: [],
+  templateUrl: './mobile-header.component.html',
+  styles: ``
 })
 export class MobileHeaderComponent {
   selectedMobileMenu: string = 'Women';
   @Input() hideMobileMenu: boolean = true;
-  @Input() categoriesTree: CategoryTree[] = [];
+  @Input() categoryTree: CategoryTree[] = [];
   @Input() brands: string[] = [];
   @Output() hideMobileMenuOutput = new EventEmitter<string>();
 

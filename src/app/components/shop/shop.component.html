@@ -1,18 +1,17 @@
 <div class="bg-white">
   <div>
     <app-mobile-filters
-      [hideMobileFilters]="hideMobileFilters"
       (hideMobileFiltersOutput)="showHideMobileFiltersDrawer($event)"
-      [filterState]="filterState"
+      [shopFilterState]="shopFilterState"
       [brands]="brands"
       [colors]="colors"
-      [categoriesTree]="categoriesTree"
+      [categoryTree]="categoryTree"
       (updateFilterStateOutput)="updateFilterState($event)"
     ></app-mobile-filters>
 
     <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div
-        class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12"
+        class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-6"
       >
         <nav aria-label="Breadcrumb">
           <ol
@@ -64,7 +63,7 @@
               aria-labelledby="menu-button"
               tabindex="-1"
               [ngClass]="
-                hideSortingOptions
+                shopFilterState.hideSortingOptions
                   ? 'scale-0 transform opacity-0 transition duration-75 ease-in'
                   : 'scale-100 transform opacity-100 transition duration-75 ease-in'
               "
@@ -79,20 +78,13 @@
                   href="#"
                   class="block px-4 py-2 text-sm text-gray-500"
                   tabindex="-1"
-                  *ngFor="let sortingOption of sortingOptions"
+                  *ngFor="let sortingOption of shopFilterState.sortingOptions"
                   >{{ sortingOption }}</a
                 >
               </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-          >
-            <span class="sr-only">View grid</span>
-            <app-icon icon="grid" classNames="h-5 w-5"></app-icon>
-          </button>
           <button
             type="button"
             class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -110,10 +102,10 @@
         <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
           <!-- Filters -->
           <app-shop-filters
-            [filterState]="filterState"
+            [shopFilterState]="shopFilterState"
             [brands]="brands"
             [colors]="colors"
-            [categoriesTree]="categoriesTree"
+            [categoryTree]="categoryTree"
             (updateFilterStateOutput)="updateFilterState($event)"
           ></app-shop-filters>
 

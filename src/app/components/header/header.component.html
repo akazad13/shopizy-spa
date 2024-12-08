@@ -1,7 +1,7 @@
 <div class="bg-white">
   <app-mobile-header
     [hideMobileMenu]="hideMobileMenu"
-    [categoriesTree]="categoriesTree"
+    [categoryTree]="categoryTree"
     [brands]="brands"
     (hideMobileMenuOutput)="showHideMobileDrawer($event)"
   ></app-mobile-header>
@@ -38,7 +38,7 @@
           <!-- Flyout menus -->
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
             <div class="flex h-full space-x-8">
-              <div class="flex" *ngFor="let parentCategory of categoriesTree">
+              <div class="flex" *ngFor="let parentCategory of categoryTree">
                 <div class="relative flex">
                   <button
                     type="button"
@@ -204,7 +204,7 @@
 
             <div class="hidden lg:ml-8 lg:flex">
               <a
-                href="#"
+                href="javascript:void(0)"
                 class="flex items-center text-gray-700 hover:text-gray-800"
               >
                 <img
