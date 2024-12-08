@@ -1,5 +1,10 @@
 <div>
-  <div class="" aria-expanded="true" *ngFor="let category of categoryTree">
+  <div
+    class=""
+    aria-expanded="true"
+    *ngFor="let category of categoryTree"
+    #treeItem
+  >
     <!-- Accordion Heading -->
     <div class="flex w-full items-center gap-x-0.5 rounded-md py-1.5">
       <button
@@ -24,14 +29,17 @@
         }}"
       >
         <span class="text-sm text-gray-800">
-          <label class="flex">
+          <div class="flex">
             <input
               type="checkbox"
+              [(ngModel)]="category.checked"
+              id="{{ category.id }}"
               class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-              value="assets"
+              value="{{ category.name }}"
+              (change)="onParentCheckboxChange(category)"
             />
             <span class="ms-3">{{ category.name }}</span>
-          </label>
+          </div>
         </span>
       </div>
     </div>
@@ -52,6 +60,7 @@
         >
           <app-category-tree
             [categoryTree]="category.children!"
+            (updateCategorySelection)="onChildCheckboxChange($event)"
           ></app-category-tree>
         </div>
       </div>

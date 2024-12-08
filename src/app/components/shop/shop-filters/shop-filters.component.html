@@ -33,7 +33,10 @@
       *ngIf="!shopFilterState.categoryCollapsed"
     >
       <div class="space-y-3">
-        <app-category-tree [categoryTree]="categoryTree"></app-category-tree>
+        <app-category-tree
+          [categoryTree]="categoryTree"
+          (updateCategorySelection)="updateCategorySelection($event)"
+        ></app-category-tree>
       </div>
     </div>
   </div>

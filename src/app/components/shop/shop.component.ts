@@ -78,12 +78,18 @@ export class ShopComponent implements OnInit {
       !this.shopFilterState.hideSortingOptions;
   }
 
-  getProducts() {
+  async getProducts(): Promise<void> {
     const filters = new ProductQueryFilters();
-    filters.pageSize = 12;
-    this.productApi.getProducts(filters).subscribe((products) => {
-      this.products = products;
-    });
+    filters.pageSize = 8;
+    filters.categoryIds = this.shopFilterState.selectedCategory;
+
+    try {
+      this.products = await firstValueFrom(
+        this.productApi.getProducts(filters)
+      );
+    } catch (error) {
+      handleError(null, error);
+    }
   }
 
   async getcategoryTree() {
@@ -98,5 +104,10 @@ export class ShopComponent implements OnInit {
 
   updateFilterState(filters: any) {
     this.shopFilterState = { ...this.shopFilterState, ...filters };
+  }
+
+  async updateProductGrid(filters: any): Promise<void> {
+    this.shopFilterState = { ...this.shopFilterState, ...filters };
+    await this.getProducts();
   }
 }

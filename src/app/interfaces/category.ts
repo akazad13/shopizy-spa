@@ -17,5 +17,6 @@ export interface CategoryTree {
   name: string;
   parentId: string;
   children?: CategoryTree[];
-  expanded?: boolean;
+  expanded: boolean;
+  checked: boolean;
 }

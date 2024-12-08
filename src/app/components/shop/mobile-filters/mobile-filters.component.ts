@@ -19,6 +19,8 @@ export class MobileFiltersComponent {
 
   @Output() hideMobileFiltersOutput = new EventEmitter<string>();
   @Output() updateFilterStateOutput = new EventEmitter<ShopFilterState>();
+  @Output() updateProductGridOutput = new EventEmitter<ShopFilterState>();
+
   hideMobileDrawer(): void {
     this.shopFilterState.hideMobileFilters = true;
     this.hideMobileFiltersOutput.emit(
@@ -36,5 +38,29 @@ export class MobileFiltersComponent {
   }
   updateColorCollapsed(): void {
     this.shopFilterState.colorCollapsed = !this.shopFilterState.colorCollapsed;
+  }
+
+  updateCategorySelection(category: CategoryTree) {
+    this.updateSelectedCategory(category);
+    this.updateProductGridOutput.emit(this.shopFilterState);
+  }
+
+  private updateSelectedCategory(category: CategoryTree) {
+    if (category.checked) {
+      this.shopFilterState.selectedCategory.push(category.id);
+      if (category.children) {
+        category.children.forEach((child) => {
+          this.updateSelectedCategory(child);
+        });
+      }
+    } else {
+      this.shopFilterState.selectedCategory =
+        this.shopFilterState.selectedCategory.filter((c) => c !== category.id);
+      if (category.children) {
+        category.children.forEach((child) => {
+          this.updateSelectedCategory(child);
+        });
+      }
+    }
   }
 }

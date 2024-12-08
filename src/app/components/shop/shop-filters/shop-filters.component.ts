@@ -18,6 +18,7 @@ export class ShopFiltersComponent {
   @Input() categoryTree: CategoryTree[] = [];
 
   @Output() updateFilterStateOutput = new EventEmitter<ShopFilterState>();
+  @Output() updateProductGridOutput = new EventEmitter<ShopFilterState>();
 
   updateCategoryCollapsed(): void {
     this.shopFilterState.categoryCollapsed =
@@ -30,5 +31,28 @@ export class ShopFiltersComponent {
   }
   updateColorCollapsed(): void {
     this.shopFilterState.colorCollapsed = !this.shopFilterState.colorCollapsed;
+  }
+  updateCategorySelection(category: CategoryTree) {
+    this.updateSelectedCategory(category);
+    this.updateProductGridOutput.emit(this.shopFilterState);
+  }
+
+  private updateSelectedCategory(category: CategoryTree) {
+    if (category.checked) {
+      this.shopFilterState.selectedCategory.push(category.id);
+      if (category.children) {
+        category.children.forEach((child) => {
+          this.updateSelectedCategory(child);
+        });
+      }
+    } else {
+      this.shopFilterState.selectedCategory =
+        this.shopFilterState.selectedCategory.filter((c) => c !== category.id);
+      if (category.children) {
+        category.children.forEach((child) => {
+          this.updateSelectedCategory(child);
+        });
+      }
+    }
   }
 }
