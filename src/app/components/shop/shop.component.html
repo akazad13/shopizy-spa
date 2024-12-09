@@ -114,6 +114,37 @@
           <!-- Product grid -->
           <div class="lg:col-span-3">
             <app-products-grid [products]="products"></app-products-grid>
+            <div class="mt-10 flex justify-center">
+              <a
+                class="mx-1  rounded-md bg-white px-4 py-2 capitalize  dark:bg-gray-800 dark:text-gray-600 {{
+                  filters.pageNumber == 1
+                    ? 'cursor-not-allowed text-gray-500'
+                    : 'text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer'
+                }}"
+                (click)="previous()"
+              >
+                <div class="-mx-1 flex items-center">
+                  <app-icon
+                    icon="back-arrow"
+                    classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
+                  ></app-icon>
+
+                  <span class="mx-1"> previous </span>
+                </div>
+              </a>
+              <a
+                (click)="next()"
+                class="mx-1 transform cursor-pointer rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+              >
+                <div class="-mx-1 flex items-center">
+                  <span class="mx-1"> Next </span>
+                  <app-icon
+                    icon="forward-arrow"
+                    classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
+                  ></app-icon>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </section>

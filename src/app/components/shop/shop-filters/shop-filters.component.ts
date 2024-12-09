@@ -2,19 +2,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { NgFor, NgIf } from '@angular/common';
 import { CategoryTree } from '../../../interfaces/category';
-import { ShopFilterState } from '../../../interfaces/shop';
+import { Color, ShopFilterState } from '../../../interfaces/shop';
 import { CategoryTreeComponent } from '../category-tree/category-tree.component';
+import { Brand } from '../../../interfaces/brand';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-shop-filters',
-  imports: [IconComponent, NgIf, NgFor, CategoryTreeComponent],
+  imports: [IconComponent, NgIf, NgFor, CategoryTreeComponent, FormsModule],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })
 export class ShopFiltersComponent {
   @Input() shopFilterState!: ShopFilterState;
-  @Input() brands: string[] = [];
-  @Input() colors: string[] = [];
+  @Input() brands: Brand[] = [];
+  @Input() colors: Color[] = [];
   @Input() categoryTree: CategoryTree[] = [];
 
   @Output() updateFilterStateOutput = new EventEmitter<ShopFilterState>();
@@ -34,6 +36,26 @@ export class ShopFiltersComponent {
   }
   updateCategorySelection(category: CategoryTree) {
     this.updateSelectedCategory(category);
+    this.updateProductGridOutput.emit(this.shopFilterState);
+  }
+
+  onBrandCheckboxChange(brand: Brand): void {
+    if (brand.checked) {
+      this.shopFilterState.selectedBrand.push(brand.id);
+    } else {
+      this.shopFilterState.selectedBrand =
+        this.shopFilterState.selectedBrand.filter((b) => b !== brand.id);
+    }
+    this.updateProductGridOutput.emit(this.shopFilterState);
+  }
+
+  onColorCheckboxChange(color: Color): void {
+    if (color.checked) {
+      this.shopFilterState.selectedColor.push(color.name);
+    } else {
+      this.shopFilterState.selectedColor =
+        this.shopFilterState.selectedColor.filter((c) => c !== color.name);
+    }
     this.updateProductGridOutput.emit(this.shopFilterState);
   }
 

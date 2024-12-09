@@ -103,14 +103,16 @@
             <div class="space-y-3">
               <div class="flex items-center" *ngFor="let brand of brands">
                 <input
-                  id="{{ brand }}"
-                  name="size[]"
-                  value="2l"
+                  id="{{ brand.id }}"
+                  [(ngModel)]="brand.checked"
+                  name="{{ brand.name }}"
+                  value="{{ brand.id }}"
                   type="checkbox"
                   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  (change)="onBrandCheckboxChange(brand)"
                 />
                 <label
-                  for="{{ brand }}"
+                  for="{{ brand.id }}"
                   class="ml-3 min-w-0 flex-1 text-gray-500"
                   >{{ brand }}</label
                 >
@@ -146,11 +148,13 @@
             <div class="space-y-3">
               <div class="flex items-center" *ngFor="let color of colors">
                 <input
-                  id="filter-mobile-color-0"
-                  name="color[]"
-                  value="white"
+                  id="{{ color.name }}"
+                  [(ngModel)]="color.checked"
+                  name="{{ color.name }}"
+                  value="{{ color.name }}"
                   type="checkbox"
                   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  (change)="onColorCheckboxChange(color)"
                 />
                 <label
                   for="filter-mobile-color-0"

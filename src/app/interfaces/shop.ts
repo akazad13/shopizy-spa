@@ -12,3 +12,8 @@ export interface ShopFilterState {
   hideSortingOptions: boolean;
   sortingOptions: string[];
 }
+
+export interface Color {
+  name: string;
+  checked?: boolean;
+}
