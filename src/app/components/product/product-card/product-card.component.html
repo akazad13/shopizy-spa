@@ -22,18 +22,15 @@
       </h5>
     </a>
     <div class="mt-2 flex items-center">
-      <app-icon icon="star" classNames="h-5 w-5 text-yellow-300"></app-icon>
-      <app-icon icon="star" classNames="h-5 w-5 text-yellow-300"></app-icon>
-      <app-icon icon="star" classNames="h-5 w-5 text-yellow-300"></app-icon>
       <app-icon
-        icon="half-star"
-        classNames="h-5 w-5 text-yellow-300"
+        *ngFor="let star of starsArray"
+        icon="{{ star }}"
+        classNames="h-5 w-5"
       ></app-icon>
-      <app-icon icon="star" classNames="h-5 w-5 text-gray-400"></app-icon>
 
       <span
         class="ml-3 mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold"
-        >5.0</span
+        >{{ product?.averageRating?.value }}</span
       >
     </div>
     <div class="mb-5 mt-2 flex items-center justify-between">

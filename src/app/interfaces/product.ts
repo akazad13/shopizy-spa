@@ -1,6 +1,5 @@
 import { CustomFields } from './custom-fields';
 import { Brand } from './brand';
-import { Category } from './category';
 
 export interface Productspecification {
   name: string;
@@ -12,28 +11,41 @@ export interface ProductImage {
   imageUrl: string;
 }
 
-export type ProductStock = 'in-stock' | 'out-of-stock' | 'on-backorder';
-
 export interface Product {
   productId: string;
   name: string;
+  shortDescription: string;
   description: string;
-  categoryId?: string;
-  categories?: Category[];
+  categoryId: string;
   price: number;
-  discount?: number;
-  sku?: string;
-  brand?: Brand | null;
-  tags?: string[];
-  barcode?: string;
-  slug: string;
-  stock: ProductStock;
-  stockQuantity?: number;
-  specificationIds?: string | null;
-  specifications: Productspecification[];
+  discount: number;
+  brand: Brand | null;
+  sizes: string;
+  colors: string;
+  tags: string[];
+  barcode: string | null;
+  stockQuantity: number;
+  averageRating: AverageRating;
   productImages: ProductImage[] | null;
-  badges?: string[];
-  rating?: number;
-  reviews?: number;
   customFields?: CustomFields;
+}
+
+export interface ProductDetail extends Product {
+  sku: string | null;
+  favourites: number;
+  specifications: Productspecification[] | null;
+  productReviews: ProductReview[];
+}
+
+export interface AverageRating {
+  value: number;
+  numRatings: number;
+}
+
+export interface ProductReview {
+  productReviewId: string;
+  reviewer: string;
+  comment: string;
+  rating: number;
+  createdOn: Date;
 }

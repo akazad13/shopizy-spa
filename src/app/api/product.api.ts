@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Product } from '../interfaces/product';
+import { Product, ProductDetail } from '../interfaces/product';
 import { ProductQueryFilters } from '../models/ProductQueryFilters';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class ProductApi {
     });
   }
 
-  getProduct(productId: string): Observable<Product> {
-    return this.http.get<Product>(this.baseUrl + '/' + productId);
+  getProduct(productId: string): Observable<ProductDetail> {
+    return this.http.get<ProductDetail>(this.baseUrl + '/' + productId);
   }
 }

@@ -80,7 +80,7 @@
                   icon="heart-outline"
                   classNames="h-3 w-3 me-2"
                 ></app-icon>
-                100
+                {{ product?.favourites }}
               </button>
               <button
                 type="button"
@@ -90,7 +90,7 @@
                   icon="star"
                   classNames="h-5 w-5 text-yellow-300 me-2"
                 ></app-icon>
-                4.8
+                {{ product?.averageRating?.value }}
               </button>
               <button
                 type="button"
@@ -100,7 +100,7 @@
                   icon="review-like"
                   classNames="h-3 w-3 me-2"
                 ></app-icon>
-                87 Reviews
+                {{ product?.averageRating?.numRatings }} Reviews
               </button>
               <button
                 type="button"
@@ -113,7 +113,7 @@
 
           <div class="mt-5">
             <p class="text-sm text-gray-500">
-              {{ product?.description }}
+              {{ product?.shortDescription }}
             </p>
           </div>
 
@@ -163,41 +163,13 @@
             <h3 class="text-xl font-bold text-gray-800">Choose a Size</h3>
             <div class="mt-4 flex flex-wrap gap-4">
               <button
+                *ngFor="let size of availableSizes"
                 type="button"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
               >
-                XS
+                {{ size }}
               </button>
-              <button
-                type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
-              >
-                S
-              </button>
-              <button
-                type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-gray-800 text-sm font-semibold hover:border-gray-800"
-              >
-                M
-              </button>
-              <button
-                type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
-              >
-                L
-              </button>
-              <button
-                type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
-              >
-                XL
-              </button>
-              <button
-                type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
-              >
-                2XL
-              </button>
+              <!-- border-gray-800 -->
             </div>
           </div>
 
@@ -207,20 +179,15 @@
             <h3 class="text-xl font-bold text-gray-800">Choose a Color</h3>
             <div class="mt-4 flex flex-wrap gap-4">
               <button
+                *ngFor="let color of availableColors"
                 type="button"
-                class="h-10 w-10 shrink-0 rounded-md border border-white bg-black hover:border-gray-800"
-              ></button>
-              <button
-                type="button"
-                class="h-10 w-10 shrink-0 rounded-md border border-white bg-gray-400 hover:border-gray-800"
-              ></button>
-              <button
-                type="button"
-                class="h-10 w-10 shrink-0 rounded-md border border-white bg-orange-400 hover:border-gray-800"
-              ></button>
-              <button
-                type="button"
-                class="h-10 w-10 shrink-0 rounded-md border border-white bg-red-400 hover:border-gray-800"
+                class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{
+                  color == 'Black'
+                    ? 'bg-black'
+                    : color == 'While'
+                      ? 'bg-white'
+                      : 'bg-' + color.toLowerCase() + '-500'
+                }}"
               ></button>
             </div>
           </div>
@@ -278,11 +245,7 @@
         <div class="mt-8" *ngIf="selectedTab == 'description'">
           <h3 class="text-xl font-bold text-gray-800">Product Description</h3>
           <p class="mt-4 text-sm text-gray-500">
-            Elevate your casual style with our premium men's t-shirt. Crafted
-            for comfort and designed with a modern fit, this versatile shirt is
-            an essential addition to your wardrobe. The soft and breathable
-            fabric ensures all-day comfort, making it perfect for everyday wear.
-            Its classic crew neck and short sleeves offer a timeless look.
+            {{ product?.description }}
           </p>
           <ul class="mt-6 list-disc space-y-3 pl-4 text-sm text-gray-500">
             <li>
@@ -307,8 +270,13 @@
             class="grid grid-cols-1 gap-11 border-b border-gray-100 pb-11 max-xl:mx-auto max-xl:max-w-2xl xl:grid-cols-2"
           >
             <div class="box flex w-full flex-col gap-y-4">
-              <div class="flex w-full items-center">
-                <p class="mr-0.5 text-lg font-medium text-black">5</p>
+              <div
+                class="flex w-full items-center"
+                *ngFor="let starNum of starNumberArr; let i = index"
+              >
+                <p class="mr-0.5 text-lg font-medium text-black">
+                  {{ 5 - i }}
+                </p>
                 <app-icon
                   icon="star"
                   classNames="h-5 w-5 text-amber-400"
@@ -317,102 +285,34 @@
                   class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 sm:min-w-[278px]"
                 >
                   <span
-                    class="flex h-full w-[30%] rounded-3xl bg-amber-400"
+                    *ngIf="starNum"
+                    class="flex h-full w-[{{
+                      (starNum * 100) / product!.averageRating!.numRatings
+                    }}%] rounded-3xl bg-amber-400"
                   ></span>
                 </p>
-                <p class="mr-0.5 text-lg font-medium text-black">989</p>
-              </div>
-              <div class="flex w-full items-center">
-                <p class="mr-0.5 text-lg font-medium text-black">4</p>
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-amber-400"
-                ></app-icon>
-                <p
-                  class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 xl:min-w-[278px]"
-                >
-                  <span
-                    class="flex h-full w-[40%] rounded-3xl bg-amber-400"
-                  ></span>
+                <p class="mr-0.5 text-lg font-medium text-black">
+                  {{ starNum }}
                 </p>
-                <p class="mr-0.5 text-lg font-medium text-black">4.5K</p>
-              </div>
-              <div class="flex items-center">
-                <p class="mr-0.5 text-lg font-medium text-black">3</p>
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-amber-400"
-                ></app-icon>
-                <p
-                  class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 xl:min-w-[278px]"
-                >
-                  <span
-                    class="flex h-full w-[20%] rounded-3xl bg-amber-400"
-                  ></span>
-                </p>
-                <p class="mr-0.5 text-lg font-medium text-black">50</p>
-              </div>
-              <div class="flex items-center">
-                <p class="mr-0.5 text-lg font-medium text-black">2</p>
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-amber-400"
-                ></app-icon>
-                <p
-                  class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 xl:min-w-[278px]"
-                >
-                  <span
-                    class="flex h-full w-[16%] rounded-3xl bg-amber-400"
-                  ></span>
-                </p>
-                <p class="mr-0.5 text-lg font-medium text-black">16</p>
-              </div>
-              <div class="flex items-center">
-                <p class="mr-1 text-lg font-medium text-black">1</p>
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-amber-400"
-                ></app-icon>
-                <p
-                  class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 xl:min-w-[278px]"
-                >
-                  <span
-                    class="flex h-full w-[8%] rounded-3xl bg-amber-400"
-                  ></span>
-                </p>
-                <p class="mr-0.5 py-[1px] text-lg font-medium text-black">8</p>
               </div>
             </div>
             <div
               class="flex flex-col items-center justify-center rounded-3xl bg-amber-50 p-8"
             >
-              <h2 class="mb-6 text-5xl font-bold text-amber-400">4.3</h2>
+              <h2 class="mb-6 text-5xl font-bold text-amber-300">
+                {{ product?.averageRating?.value }}
+              </h2>
               <div class="mb-4 flex items-center justify-center gap-2 sm:gap-6">
                 <app-icon
-                  icon="star"
-                  classNames="h-14 w-14 text-amber-400"
-                ></app-icon>
-                <app-icon
-                  icon="star"
-                  classNames="h-14 w-14 text-amber-400"
-                ></app-icon>
-                <app-icon
-                  icon="star"
-                  classNames="h-14 w-14 text-amber-400"
-                ></app-icon>
-                <app-icon
-                  icon="star"
-                  classNames="h-14 w-14 text-amber-400"
-                ></app-icon>
-                <app-icon
-                  icon="half-star"
-                  classNames="h-14 w-14 text-amber-400"
+                  *ngFor="let star of starsArray"
+                  icon="{{ star }}"
+                  classNames="h-14 w-14"
                 ></app-icon>
               </div>
               <p
                 class="text-center text-xl font-medium leading-8 text-gray-900"
               >
-                46 Ratings
+                {{ product?.averageRating?.numRatings }} Reviews
               </p>
             </div>
           </div>
