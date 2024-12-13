@@ -1,61 +1,76 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { ActivatedRoute } from '@angular/router';
 import { ProductDetail } from '../../../interfaces/product';
-import { firstValueFrom } from 'rxjs';
-import { ProductApi } from '../../../api/product.api';
-import { handleError } from '../../../functions/error-handler';
 import { CartItem, CartService } from '../../../services/cart.service';
 import { NgFor, NgIf } from '@angular/common';
+import { RatingComponent } from '../rating/rating.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
-  imports: [IconComponent, NgIf, NgFor],
+  imports: [IconComponent, NgIf, NgFor, RatingComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {
       text-color: red;
     }
   `,
-  providers: [ProductApi],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  providers: []
 })
-export class ProductDetailsComponent implements OnInit {
-  product: ProductDetail | null = null;
+export class ProductDetailsComponent implements OnInit, OnDestroy {
+  product!: ProductDetail;
   mainPhotoUrl: string | null = null;
   selectedTab: string = 'description';
   selectedColor: string = 'Black';
+  seletedSize: string = 'XL';
   availableSizes: string[] = [];
   availableColors: string[] = [];
+  colorMap: Map<string, string> = new Map<string, string>();
 
   maxRating = 5.0;
   starsArray: string[] = [];
-  starNumberArr: number[] = [];
+  starNumberArr: { num: number; pct: number }[] = [];
+
+  routeSubscription!: Subscription;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
-    private readonly productApi: ProductApi,
     private readonly cartService: CartService
-  ) {}
+  ) {
+    this.mapColors();
+  }
   async ngOnInit(): Promise<void> {
-    const productId =
-      this.activatedRoute.snapshot.paramMap.get('productId') ?? '0';
-    await this.getProduct(productId);
-    if (this.product != null) {
-      this.calculateStars();
-      this.calculateStarNumberArray();
-    }
+    this.routeSubscription = this.activatedRoute.data.subscribe((data) => {
+      this.product = data['product'];
+      if (this.product != null) {
+        this.mainPhotoUrl =
+          this.product.productImages == null
+            ? null
+            : this.product.productImages[0].imageUrl;
+
+        this.availableSizes = this.product.sizes.split(',');
+        this.availableColors = this.product.colors.split(',');
+        this.calculateStarNumberArray();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
   }
 
   addProductToCart() {
     this.cartService.addItem(
       new CartItem(
-        this.product!.productId,
-        this.product!.productImages?.[0].imageUrl,
-        this.product!.name,
-        this.product!.price,
+        null,
+        this.product.productId,
+        this.product.productImages?.[0].imageUrl,
+        this.product.name,
+        this.product.price,
         1,
-        this.selectedColor
+        this.selectedColor,
+        this.seletedSize
       )
     );
   }
@@ -71,39 +86,33 @@ export class ProductDetailsComponent implements OnInit {
     this.selectedTab = selectedTab;
   }
 
-  private async getProduct(id: string): Promise<void> {
-    try {
-      this.product = await firstValueFrom(this.productApi.getProduct(id));
-      this.mainPhotoUrl =
-        this.product.productImages == null
-          ? null
-          : this.product.productImages[0].imageUrl;
-
-      this.availableSizes = this.product.sizes.split(',');
-      this.availableColors = this.product.colors.split(',');
-    } catch (error) {
-      handleError(null, error);
-    }
-  }
-
-  calculateStars(): void {
-    const fullStars = Math.floor(this.product!.averageRating.value); // Number of full stars
-    const halfStar = this.product!.averageRating.value % 1 >= 0.5 ? 1 : 0; // Half star if fractional part >= 0.5
-    const emptyStars = this.maxRating - fullStars - halfStar; // Remaining stars are empty
-
-    // Fill the starsArray
-    this.starsArray = [
-      ...Array(fullStars).fill('full-star'),
-      ...Array(halfStar).fill('half-star'),
-      ...Array(emptyStars).fill('empty-star')
-    ];
-  }
-
   calculateStarNumberArray(): void {
-    this.starNumberArr = Array(this.maxRating + 1).fill(0);
-    for (let review of this.product!.productReviews) {
-      this.starNumberArr[Math.floor(review.rating)]++;
+    this.starNumberArr = Array.from({ length: 6 }, () => ({
+      ...{ num: 0, pct: 0 }
+    }));
+    for (let review of this.product.productReviews) {
+      this.starNumberArr[Math.floor(review.rating)].num++;
     }
     this.starNumberArr = this.starNumberArr.slice(1, 6).reverse();
+
+    for (const element of this.starNumberArr) {
+      element.pct = (element.num * 100) / this.product.averageRating.numRatings;
+    }
+  }
+
+  mapColors(): void {
+    this.colorMap.set('Black', 'bg-black');
+    this.colorMap.set('White', 'bg-white');
+    this.colorMap.set('Red', 'bg-red-500');
+    this.colorMap.set('Blue', 'bg-blue-500');
+    this.colorMap.set('Green', 'bg-green-600');
+    this.colorMap.set('Purple', 'bg-purple-500');
+    this.colorMap.set('Orange', 'bg-orange-400');
+    this.colorMap.set('Gray', 'bg-gray-500');
+    this.colorMap.set('Pink', 'bg-pink-400');
+    this.colorMap.set('Yellow', 'bg-yellow-400');
+    this.colorMap.set('Brown', 'bg-brown-600');
+    this.colorMap.set('Cyan', 'bg-cyan-500');
+    this.colorMap.set('Magenta', 'bg-magenta-500');
   }
 }

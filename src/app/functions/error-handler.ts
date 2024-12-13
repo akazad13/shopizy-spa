@@ -7,7 +7,6 @@ export function handleError(form: FormGroup | null, e: any): void {
     switch (e.status) {
       case 400:
       case 401:
-      case 404:
       case 409: {
         if (!!e.error.errors && e.error.errors != null) {
           errorMessage = e.error.errors.join('\n');
@@ -20,6 +19,10 @@ export function handleError(form: FormGroup | null, e: any): void {
         break;
       }
 
+      case 404: {
+        errorMessage = 'The requested resource was not found.';
+        break;
+      }
       case 0:
       case 403:
       case 405: {

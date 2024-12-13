@@ -38,11 +38,11 @@ export class HeaderComponent implements OnInit {
   brands: string[] = [];
 
   constructor(
-    private readonly AuthService: AuthService,
+    private readonly authService: AuthService,
     public readonly cartService: CartService,
     private readonly categoryApi: CategoryApi
   ) {
-    this.isLoggedIn = this.AuthService.loggedIn();
+    this.isLoggedIn = this.authService.loggedIn();
   }
   async ngOnInit(): Promise<void> {
     try {

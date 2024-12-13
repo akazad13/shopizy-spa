@@ -30,7 +30,7 @@
             href="#"
             aria-current="page"
             class="font-medium text-gray-500 hover:text-gray-600"
-            >{{ product?.name }}</a
+            >{{ product.name }}</a
           >
         </li>
       </ol>
@@ -67,7 +67,7 @@
           <div class="flex flex-wrap items-start gap-4">
             <div>
               <h2 class="text-2xl font-bold text-gray-800">
-                {{ product?.name }}
+                {{ product.name }}
               </h2>
             </div>
 
@@ -80,7 +80,7 @@
                   icon="heart-outline"
                   classNames="h-3 w-3 me-2"
                 ></app-icon>
-                {{ product?.favourites }}
+                {{ product.favourites }}
               </button>
               <button
                 type="button"
@@ -90,7 +90,7 @@
                   icon="star"
                   classNames="h-5 w-5 text-yellow-300 me-2"
                 ></app-icon>
-                {{ product?.averageRating?.value }}
+                {{ product.averageRating.value }}
               </button>
               <button
                 type="button"
@@ -100,7 +100,7 @@
                   icon="review-like"
                   classNames="h-3 w-3 me-2"
                 ></app-icon>
-                {{ product?.averageRating?.numRatings }} Reviews
+                {{ product.averageRating.numRatings }} Reviews
               </button>
               <button
                 type="button"
@@ -113,7 +113,7 @@
 
           <div class="mt-5">
             <p class="text-sm text-gray-500">
-              {{ product?.shortDescription }}
+              {{ product.shortDescription }}
             </p>
           </div>
 
@@ -127,7 +127,7 @@
                 }}
               </span>
               <span class="text-slate-900 line-through">
-                ${{ product?.price }}
+                ${{ product.price }}
               </span>
             </p>
           </div>
@@ -182,11 +182,7 @@
                 *ngFor="let color of availableColors"
                 type="button"
                 class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{
-                  color == 'Black'
-                    ? 'bg-black'
-                    : color == 'While'
-                      ? 'bg-white'
-                      : 'bg-' + color.toLowerCase() + '-500'
+                  colorMap.get(color)
                 }}"
               ></button>
             </div>
@@ -245,7 +241,7 @@
         <div class="mt-8" *ngIf="selectedTab == 'description'">
           <h3 class="text-xl font-bold text-gray-800">Product Description</h3>
           <p class="mt-4 text-sm text-gray-500">
-            {{ product?.description }}
+            {{ product.description }}
           </p>
           <ul class="mt-6 list-disc space-y-3 pl-4 text-sm text-gray-500">
             <li>
@@ -285,14 +281,14 @@
                   class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 sm:min-w-[278px]"
                 >
                   <span
-                    *ngIf="starNum"
+                    *ngIf="starNum.num > 0"
                     class="flex h-full w-[{{
-                      (starNum * 100) / product!.averageRating!.numRatings
+                      starNum.pct
                     }}%] rounded-3xl bg-amber-400"
                   ></span>
                 </p>
                 <p class="mr-0.5 text-lg font-medium text-black">
-                  {{ starNum }}
+                  {{ starNum.num }}
                 </p>
               </div>
             </div>
@@ -300,70 +296,51 @@
               class="flex flex-col items-center justify-center rounded-3xl bg-amber-50 p-8"
             >
               <h2 class="mb-6 text-5xl font-bold text-amber-300">
-                {{ product?.averageRating?.value }}
+                {{ product.averageRating.value }}
               </h2>
-              <div class="mb-4 flex items-center justify-center gap-2 sm:gap-6">
-                <app-icon
-                  *ngFor="let star of starsArray"
-                  icon="{{ star }}"
-                  classNames="h-14 w-14"
-                ></app-icon>
-              </div>
+              <app-rating
+                [rating]="this.product!.averageRating!.value"
+                [maxRating]="5.0"
+                [classes]="'h-14 w-14'"
+              ></app-rating>
               <p
                 class="text-center text-xl font-medium leading-8 text-gray-900"
               >
-                {{ product?.averageRating?.numRatings }} Reviews
+                {{ product.averageRating.numRatings }} Reviews
               </p>
             </div>
           </div>
 
           <div
+            *ngFor="let review of product.productReviews"
             class="border-b border-gray-100 pb-8 pt-11 max-xl:mx-auto max-xl:max-w-2xl"
           >
-            <div class="mb-4 flex items-center gap-3">
-              <app-icon
-                icon="star"
-                classNames="h-9 w-9 text-amber-400"
-              ></app-icon>
-              <app-icon
-                icon="star"
-                classNames="h-9 w-9 text-amber-400"
-              ></app-icon>
-              <app-icon
-                icon="star"
-                classNames="h-9 w-9 text-amber-400"
-              ></app-icon>
-              <app-icon
-                icon="star"
-                classNames="h-9 w-9 text-amber-400"
-              ></app-icon>
-              <app-icon
-                icon="half-star"
-                classNames="h-9 w-9 text-amber-400"
-              ></app-icon>
-            </div>
-            <h3 class="mb-5 text-lg font-semibold leading-9 text-black">
-              Outstanding Experience!!!
-            </h3>
+            <app-rating
+              [rating]="4.6"
+              [maxRating]="5.0"
+              [classes]="'h-9 w-9'"
+            ></app-rating>
+
             <div
               class="mb-4 flex flex-col justify-between gap-5 min-[400px]:flex-row sm:items-center"
             >
               <div class="flex items-center gap-3">
                 <img
-                  src="https://pagedone.io/asset/uploads/1704349572.png"
-                  alt="John "
+                  src="{{
+                    review.reviewerImageUrl ??
+                      'https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg'
+                  }}"
+                  alt="{{ review.reviewer }} "
                   class="h-8 w-8 rounded-full object-cover"
                 />
-                <h6 class="font-semibold text-indigo-600">John Watson</h6>
+                <h6 class="font-semibold text-indigo-600">
+                  {{ review.reviewer }}
+                </h6>
               </div>
-              <p class="font-normal text-gray-500">Nov 01, 2023</p>
+              <p class="font-normal text-gray-500">{{ review.createdOn }}</p>
             </div>
             <p class="text-sm font-normal text-gray-500 max-xl:text-justify">
-              One of the standout features of Pagedone is its intuitive and
-              user-friendly interface. Navigating through the system feels
-              natural, and the layout makes it easy to locate and utilize
-              various design elements. This is particularly beneficial for
-              designers looking to streamline their workflow.
+              {{ review.comment }}
             </p>
           </div>
         </div>

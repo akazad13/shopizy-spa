@@ -9,7 +9,9 @@ import { Order } from '../interfaces/Order';
 import { Price } from '../interfaces/Price';
 import { Address } from '../interfaces/Address';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OrderApi {
   baseUrl = environment.apiUrl + '/api/v1.0/users';
 
@@ -58,6 +60,7 @@ export class OrderApi {
   createOrder(
     orderItems: { productId: string; quantity: number }[],
     promoCode: string,
+    deliveryMethod: number,
     deliveryCharge: Price,
     shippingAddress: Address
   ): Observable<Order> {
@@ -65,6 +68,7 @@ export class OrderApi {
       this.baseUrl + '/' + this.tokenService.getCurrentUserId() + '/orders/',
       {
         promoCode: promoCode,
+        deliveryMethod: deliveryMethod,
         deliveryCharge: {
           amount: deliveryCharge.amount,
           currency: deliveryCharge.currency

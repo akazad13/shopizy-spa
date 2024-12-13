@@ -6,7 +6,7 @@ import { TokenService } from '../services/token.service';
 import { Cart } from '../interfaces/cart';
 import { SuccessResponse } from '../interfaces/SuccessResponse';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CartApi {
   baseUrl = environment.apiUrl + '/api/v1.0/users';
 
@@ -21,16 +21,27 @@ export class CartApi {
     );
   }
 
-  addCartWithFirstProduct(productId: string): Observable<Cart> {
+  addCartWithFirstProduct(
+    productId: string,
+    color: string,
+    size: string
+  ): Observable<Cart> {
     return this.http.post<Cart>(
       this.baseUrl + '/' + this.tokenService.getCurrentUserId() + '/carts',
       {
-        productId: productId
+        productId: productId,
+        color: color,
+        size: size
       }
     );
   }
 
-  addProductToCart(cartId: string, productId: string): Observable<Cart> {
+  addProductToCart(
+    cartId: string,
+    productId: string,
+    color: string,
+    size: string
+  ): Observable<Cart> {
     return this.http.patch<Cart>(
       this.baseUrl +
         '/' +
@@ -39,13 +50,16 @@ export class CartApi {
         cartId +
         '/add-product',
       {
-        productId: productId
+        productId: productId,
+        color: color,
+        size: size
       }
     );
   }
 
   updateProductQuantityToCart(
     cartId: string,
+    itemId: string,
     productId: string,
     quantity: number
   ): Observable<any> {
@@ -55,7 +69,8 @@ export class CartApi {
         this.tokenService.getCurrentUserId() +
         '/carts/' +
         cartId +
-        '/update-quantity',
+        '/items/' +
+        itemId,
       {
         productId: productId,
         quantity: quantity
@@ -63,15 +78,15 @@ export class CartApi {
     );
   }
 
-  removeProductFromCart(cartId: string, productId: string): Observable<any> {
+  removeProductFromCart(cartId: string, itemId: string): Observable<any> {
     return this.http.delete<SuccessResponse>(
       this.baseUrl +
         '/' +
         this.tokenService.getCurrentUserId() +
         '/carts/' +
         cartId +
-        '/product/' +
-        productId
+        '/items/' +
+        itemId
     );
   }
 }

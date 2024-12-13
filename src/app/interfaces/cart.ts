@@ -3,12 +3,14 @@ export interface Cart {
   userId: string;
   createdOn: Date;
   modifiedOn: Date;
-  lineItems: CartLineItem[];
+  cartItems: CartItem[];
 }
 
-export interface CartLineItem {
-  lineItemId: string;
+export interface CartItem {
+  cartItemId: string;
   productId: string;
+  color: string;
+  size: string;
   quantity: number;
   product: {
     name: string;

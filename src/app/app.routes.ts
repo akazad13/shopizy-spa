@@ -12,6 +12,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { OrderComfirmationComponent } from './components/order/order-comfirmation/order-comfirmation.component';
+import { ProductDetailResolver } from './resolvers/product-details.resolver';
 
 export const routes: Routes = [
   {
@@ -49,7 +50,8 @@ export const routes: Routes = [
       },
       {
         path: 'product/:productId',
-        component: ProductDetailsComponent
+        component: ProductDetailsComponent,
+        resolve: { product: ProductDetailResolver }
       },
       {
         path: 'order-confirmation/:orderId',

@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CategoryTree } from './../interfaces/category';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoryApi {
   baseUrl = environment.apiUrl + '/api/v1.0/categories';
 

@@ -20,8 +20,8 @@ export interface Product {
   price: number;
   discount: number;
   brand: Brand | null;
-  sizes: string;
   colors: string;
+  sizes: string;
   tags: string[];
   barcode: string | null;
   stockQuantity: number;
@@ -45,6 +45,7 @@ export interface AverageRating {
 export interface ProductReview {
   productReviewId: string;
   reviewer: string;
+  reviewerImageUrl: string | null;
   comment: string;
   rating: number;
   createdOn: Date;

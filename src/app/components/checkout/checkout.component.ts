@@ -16,6 +16,8 @@ import { OrderApi } from '../../api/order.api';
 import { Address } from '../../interfaces/Address';
 import { Price } from '../../interfaces/Price';
 import { handleError } from '../../functions/error-handler';
+import { IconComponent } from '../shared/icon/icon.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -25,15 +27,18 @@ import { handleError } from '../../functions/error-handler';
     ReactiveFormsModule,
     IsInvalidPipe,
     NgIf,
-    HasErrorPipe
+    HasErrorPipe,
+    IconComponent
   ],
   templateUrl: './checkout.component.html',
   styles: ``,
-  providers: [OrderApi]
+  providers: []
 })
 export class CheckoutComponent {
+  isLoggedIn: boolean = false;
+
   checkoutForm: FormGroup = new FormGroup({
-    deliveryMethod: new FormControl('standard', [Validators.required]),
+    deliveryMethod: new FormControl('1', [Validators.required]),
     email: new FormControl('', [Validators.email, Validators.required]),
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
@@ -42,16 +47,47 @@ export class CheckoutComponent {
     country: new FormControl('usa', [Validators.required]),
     state: new FormControl('', [Validators.required]),
     zipCode: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required])
+    phoneNumber: new FormControl('')
   });
+
+  deliveryMethods = [
+    {
+      deliveryMethod: 1,
+      label: 'Standard',
+      timeline: 'Get it by 3-5 business days',
+      price: { amount: 9.99, currency: 'usd' }
+    },
+    {
+      deliveryMethod: 2,
+      label: 'Express',
+      timeline: 'Get it by tomorrow',
+      price: { amount: 14.99, currency: 'usd' }
+    },
+    {
+      deliveryMethod: 3,
+      label: 'Premium',
+      timeline: 'Get it by today',
+      price: { amount: 19.99, currency: 'usd' }
+    }
+  ];
 
   reqInProgress = false;
 
   constructor(
     public readonly cartService: CartService,
     private readonly orderApi: OrderApi,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) {
+    this.isLoggedIn = this.authService.loggedIn();
+
+    if (!this.isLoggedIn) {
+      this.checkoutForm
+        .get('phoneNumber')
+        ?.setValidators([Validators.required]);
+      this.checkoutForm.get('phoneNumber')?.updateValueAndValidity();
+    }
+  }
 
   updateProductQuantity(cartItem: CartItem) {
     this.cartService.addItem(cartItem);
@@ -71,10 +107,11 @@ export class CheckoutComponent {
     if (this.reqInProgress || this.checkoutForm.invalid) {
       return;
     }
+
     this.reqInProgress = true;
 
-    let orderItems: { productId: string; quantity: number }[] = [];
-    let shippingAddress: Address = {
+    const orderItems: { productId: string; quantity: number }[] = [];
+    const shippingAddress: Address = {
       street: this.checkoutForm.value.street,
       city: this.checkoutForm.value.city,
       state: this.checkoutForm.value.state,
@@ -82,9 +119,13 @@ export class CheckoutComponent {
       zipCode: this.checkoutForm.value.zipCode
     };
 
-    let deliveryCharge: Price = {
-      amount: 15,
-      currency: 'usd'
+    const seletedDeliveryMethod = this.deliveryMethods.find(
+      (dm) => dm.deliveryMethod == this.checkoutForm.value.deliveryMethod
+    );
+
+    const deliveryCharge: Price = {
+      amount: seletedDeliveryMethod!.price.amount,
+      currency: seletedDeliveryMethod!.price.currency
     };
 
     this.cartService.cartItems.forEach((item) => {
@@ -97,7 +138,13 @@ export class CheckoutComponent {
     try {
       const data = await firstValueFrom(
         this.orderApi
-          .createOrder(orderItems, '', deliveryCharge, shippingAddress)
+          .createOrder(
+            orderItems,
+            '',
+            seletedDeliveryMethod!.deliveryMethod,
+            deliveryCharge,
+            shippingAddress
+          )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
       this.router.navigate(['/', 'payment', data.orderId]);

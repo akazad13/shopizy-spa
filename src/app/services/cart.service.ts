@@ -38,24 +38,30 @@ export class CartService {
 
 export class CartItem {
   constructor(
+    cartItemId: string | null,
     productId: string,
     image: string | undefined,
     name: string,
     price: number,
     quantity: number,
-    color: string | null
+    color: string,
+    size: string
   ) {
+    this.cartItemId = cartItemId;
     this.productId = productId;
     this.image = image;
     this.name = name;
     this.price = price;
     this.quantity = quantity;
-    this.color = color; // Add color property here for each item. For example, 'Red', 'Blue', 'Green', etc.
+    this.color = color;
+    this.size = size;
   }
+  cartItemId: string | null;
   productId: string;
   image: string | undefined;
   name: string;
   price: number;
   quantity: number;
-  color: string | null;
+  color: string;
+  size: string;
 }

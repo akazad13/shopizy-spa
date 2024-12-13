@@ -1,0 +1,12 @@
+<div class="mb-4 flex items-center">
+  <app-icon
+    *ngFor="let star of starsArray"
+    icon="{{ star }}"
+    classNames="{{ classes }}"
+  ></app-icon>
+  <span
+    *ngIf="showRatingNumber"
+    class="ml-3 mr-2 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold"
+    >{{ rating }}</span
+  >
+</div>

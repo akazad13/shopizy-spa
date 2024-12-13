@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from '../services/token.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthApi {
   private readonly userSubject: BehaviorSubject<User | null>;
   baseUrl = environment.apiUrl + '/api/v1.0/auth';

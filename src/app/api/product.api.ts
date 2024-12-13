@@ -5,7 +5,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product, ProductDetail } from '../interfaces/product';
 import { ProductQueryFilters } from '../models/ProductQueryFilters';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductApi {
   baseUrl = environment.apiUrl + '/api/v1.0/products';
 

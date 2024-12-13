@@ -6,7 +6,7 @@ import { Product } from '../interfaces/product';
 import { TokenService } from '../services/token.service';
 import { Price } from '../interfaces/Price';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PaymentApi {
   baseUrl = environment.apiUrl + '/api/v1.0/users';
 

@@ -9,11 +9,11 @@ import { Cart } from '../../../interfaces/cart';
 import { handleError } from '../../../functions/error-handler';
 
 @Component({
-    selector: 'app-dropcart',
-    imports: [CommonModule, RouterLink, IconComponent, NgFor],
-    templateUrl: './dropcart.component.html',
-    styles: ``,
-    providers: [CartApi]
+  selector: 'app-dropcart',
+  imports: [CommonModule, RouterLink, IconComponent, NgFor],
+  templateUrl: './dropcart.component.html',
+  styles: ``,
+  providers: []
 })
 export class DropcartComponent implements OnInit {
   @Input() isDropCartOpened: boolean = false;
@@ -27,17 +27,7 @@ export class DropcartComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.cart = await firstValueFrom(this.cartApi.getCart());
-      this.cartService.cartItems = this.cart?.lineItems.map(
-        (lineItem) =>
-          new CartItem(
-            lineItem.productId,
-            lineItem.product.productImages[0],
-            lineItem.product.name,
-            +lineItem.product.price,
-            lineItem.quantity,
-            ''
-          )
-      );
+      this.syncCartItems();
       this.cartService.calculateSubtotal();
     } catch (error) {
       handleError(null, error);
@@ -50,15 +40,17 @@ export class DropcartComponent implements OnInit {
     this.isDropCartOpened = false;
   }
 
-  async removeProduct(productId: string): Promise<void> {
-    const index = this.cartService.cartItems.findIndex(
-      (item) => item.productId === productId
-    );
-    if (index != -1) {
+  async removeProduct(cartItemId: string | null): Promise<void> {
+    if (cartItemId != null) {
       try {
         const result = await firstValueFrom(
-          this.cartApi.removeProductFromCart(this.cart!.cartId, productId)
+          this.cartApi.removeProductFromCart(this.cart!.cartId, cartItemId)
         );
+
+        const index = this.cartService.cartItems.findIndex(
+          (item) => item.cartItemId === cartItemId
+        );
+
         this.cartService.cartItems.splice(index, 1);
       } catch (error) {
         handleError(null, error);
@@ -72,12 +64,16 @@ export class DropcartComponent implements OnInit {
     this.cartService.addProductSubjectData$.subscribe(
       async (cartItem: CartItem) => {
         let index = this.cartService.cartItems.findIndex(
-          (item) => item.productId === cartItem.productId
+          (item) =>
+            item.productId === cartItem.productId &&
+            item.color === cartItem.color &&
+            item.size === cartItem.size
         );
         if (index != -1) {
           if (
             await this.updateProductQuantity(
               this.cartService.cartItems[index].productId,
+              this.cartService.cartItems[index].cartItemId!,
               this.cartService.cartItems[index].quantity + 1
             )
           ) {
@@ -86,8 +82,15 @@ export class DropcartComponent implements OnInit {
           }
           return;
         }
-        if (await this.addProduct(cartItem.productId)) {
-          this.cartService.cartItems.push(cartItem);
+        if (
+          await this.addProduct(
+            cartItem.productId,
+            cartItem.color,
+            cartItem.size
+          )
+        ) {
+          // this.cartService.cartItems.push(cartItem);
+          this.syncCartItems();
           this.cartService.calculateSubtotal();
         }
       }
@@ -102,16 +105,25 @@ export class DropcartComponent implements OnInit {
     );
   }
 
-  async addProduct(productId: string): Promise<boolean> {
+  async addProduct(
+    productId: string,
+    color: string,
+    size: string
+  ): Promise<boolean> {
     try {
       if (this.cart == null) {
         this.cart = await firstValueFrom(
-          this.cartApi.addCartWithFirstProduct(productId)
+          this.cartApi.addCartWithFirstProduct(productId, color, size)
         );
         return true;
       } else {
         this.cart = await firstValueFrom(
-          this.cartApi.addProductToCart(this.cart.cartId, productId)
+          this.cartApi.addProductToCart(
+            this.cart.cartId,
+            productId,
+            color,
+            size
+          )
         );
         return true;
       }
@@ -123,22 +135,40 @@ export class DropcartComponent implements OnInit {
 
   async updateProductQuantity(
     productId: string,
+    cartItemId: string,
     quantity: number
   ): Promise<boolean> {
     try {
       const result = await firstValueFrom(
         this.cartApi.updateProductQuantityToCart(
           this.cart!.cartId,
+          cartItemId,
           productId,
           quantity
         )
       );
-      this.cart!.lineItems.find((lineItem) => lineItem.productId === productId)!
+      this.cart!.cartItems.find((cartItem) => cartItem.productId === productId)!
         .quantity++;
       return true;
     } catch (error) {
       handleError(null, error);
       return false;
     }
+  }
+
+  syncCartItems(): void {
+    this.cartService.cartItems = this.cart!.cartItems.map(
+      (cartItem) =>
+        new CartItem(
+          cartItem.cartItemId,
+          cartItem.productId,
+          cartItem.product.productImages[0],
+          cartItem.product.name,
+          +cartItem.product.price,
+          cartItem.quantity,
+          cartItem.color,
+          cartItem.size
+        )
+    );
   }
 }
