@@ -165,15 +165,17 @@
               <button
                 *ngFor="let size of availableSizes"
                 type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800 {{
+                  size == selectedSize ? 'border-gray-800' : ''
+                }}"
+                (click)="selectSize(size)"
               >
                 {{ size }}
               </button>
-              <!-- border-gray-800 -->
             </div>
           </div>
 
-          <hr class="my-8" />
+          <hr class="my-6" />
 
           <div>
             <h3 class="text-xl font-bold text-gray-800">Choose a Color</h3>
@@ -183,7 +185,8 @@
                 type="button"
                 class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{
                   colorMap.get(color)
-                }}"
+                }} {{ color == selectedColor ? 'border-gray-800' : '' }}"
+                (click)="selectColor(color)"
               ></button>
             </div>
           </div>

@@ -358,13 +358,47 @@
         </div>
 
         <div class="mt-5 border-t border-gray-200 px-4 py-6 sm:px-6">
-          <div class="flex justify-between text-base font-medium text-gray-900">
-            <p>Subtotal</p>
-            <p>${{ cartService.subTotal }}</p>
+          <div class="flow-root">
+            <div class="-my-3 divide-y divide-gray-200">
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">Subtotal</dt>
+                <dd class="text-base font-medium text-gray-900">
+                  ${{ cartService.subTotal }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">Savings</dt>
+                <dd class="text-base font-medium text-green-500">
+                  ${{ cartService.saving }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">
+                  Delivery Charge
+                </dt>
+                <dd class="text-base font-medium text-gray-900">
+                  ${{
+                    deliveryMethods[checkoutForm.value.deliveryMethod - 1].price
+                      .amount
+                  }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-bold text-gray-900">Total</dt>
+                <dd class="text-base font-bold text-gray-900">
+                  ${{
+                    cartService.subTotal +
+                      deliveryMethods[checkoutForm.value.deliveryMethod - 1]
+                        .price.amount -
+                      cartService.saving
+                  }}
+                </dd>
+              </dl>
+            </div>
           </div>
-          <p class="mt-0.5 text-sm text-gray-500">
-            Shipping and taxes calculated at checkout.
-          </p>
           <div class="mt-6">
             <a
               type="button"

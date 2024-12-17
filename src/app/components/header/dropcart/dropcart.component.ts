@@ -165,6 +165,7 @@ export class DropcartComponent implements OnInit {
           cartItem.product.productImages[0],
           cartItem.product.name,
           +cartItem.product.price,
+          cartItem.product.discount,
           cartItem.quantity,
           cartItem.color,
           cartItem.size

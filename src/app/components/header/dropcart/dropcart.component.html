@@ -62,9 +62,14 @@
                           </h3>
                           <p class="ml-4">${{ cartItem.price }}</p>
                         </div>
-                        <p class="mt-1 text-sm text-gray-500">
-                          {{ cartItem.color }}
-                        </p>
+                        <div class="mt-3 flex justify-between text-sm">
+                          <p class="mt-1 text-sm text-gray-500">
+                            {{ cartItem.color }}
+                          </p>
+                          <p class="mt-1 text-sm text-gray-500">
+                            Size: {{ cartItem.size }}
+                          </p>
+                        </div>
                       </div>
                       <div class="mt-3 flex justify-between text-sm">
                         <p class="text-gray-500">Qty {{ cartItem.quantity }}</p>
@@ -85,12 +90,26 @@
             </div>
           </div>
 
-          <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+          <div class="border-t border-gray-200 px-4 py-4 sm:px-6">
             <div
-              class="flex justify-between text-base font-medium text-gray-900"
+              class="mb-2 flex justify-between text-base font-medium text-gray-900"
             >
               <p>Subtotal</p>
               <p>${{ cartService.subTotal }}</p>
+            </div>
+            <div
+              class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
+            >
+              <p class="mt-2">Saving</p>
+              <p class="mt-2">${{ cartService.saving }}</p>
+            </div>
+            <div
+              class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
+            >
+              <p class="mt-2">Total</p>
+              <p class="mt-2">
+                ${{ cartService.subTotal - cartService.saving }}
+              </p>
             </div>
             <p class="mt-0.5 text-sm text-gray-500">
               Shipping and taxes calculated at checkout.

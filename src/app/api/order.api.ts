@@ -47,8 +47,8 @@ export class OrderApi {
     });
   }
 
-  getOrder(orderId: string): Observable<Product> {
-    return this.http.get<Product>(
+  getOrder(orderId: string): Observable<Order> {
+    return this.http.get<Order>(
       this.baseUrl +
         '/' +
         this.tokenService.getCurrentUserId() +
@@ -58,7 +58,12 @@ export class OrderApi {
   }
 
   createOrder(
-    orderItems: { productId: string; quantity: number }[],
+    orderItems: {
+      productId: string;
+      quantity: number;
+      color: string;
+      size: string;
+    }[],
     promoCode: string,
     deliveryMethod: number,
     deliveryCharge: Price,

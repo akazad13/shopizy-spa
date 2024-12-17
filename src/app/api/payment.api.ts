@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Product } from '../interfaces/product';
 import { TokenService } from '../services/token.service';
 import { Price } from '../interfaces/Price';
+import { CardInfo } from '../interfaces/CardInfo';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentApi {
@@ -23,11 +24,8 @@ export class PaymentApi {
     orderId: string,
     total: Price,
     paymentMethod: string,
-    paymentMethodId: string,
-    cardName: string,
-    cardExpiryMonth: string,
-    cardExpiryYear: string,
-    lastDigits: string
+    paymentMethodId: string | null,
+    cardInfo: CardInfo | null
   ): Observable<any> {
     return this.http.post<any>(
       this.baseUrl + '/' + this.tokenService.getCurrentUserId() + '/payments',
@@ -37,10 +35,7 @@ export class PaymentApi {
         currency: total.currency,
         paymentMethod: paymentMethod,
         paymentMethodId: paymentMethodId,
-        cardName: cardName,
-        cardExpiryMonth: cardExpiryMonth,
-        cardExpiryYear: cardExpiryYear,
-        lastDigits: lastDigits
+        cardInfo: cardInfo
       }
     );
   }

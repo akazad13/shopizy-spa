@@ -15,6 +15,7 @@ export class CartService {
   cartItemNumber: number = 0;
   subTotal: number = 0;
   cartItems: CartItem[] = [];
+  saving: number = 0;
 
   constructor() {}
 
@@ -30,6 +31,7 @@ export class CartService {
     this.subTotal = 0;
     this.cartItems.forEach((item) => {
       this.subTotal += item.price * item.quantity;
+      this.saving += ((item.price * item.discount) / 100) * item.quantity;
     });
 
     this.cartItemNumber = this.cartItems.length;
@@ -43,6 +45,7 @@ export class CartItem {
     image: string | undefined,
     name: string,
     price: number,
+    discount: number,
     quantity: number,
     color: string,
     size: string
@@ -52,6 +55,7 @@ export class CartItem {
     this.image = image;
     this.name = name;
     this.price = price;
+    this.discount = discount;
     this.quantity = quantity;
     this.color = color;
     this.size = size;
@@ -61,6 +65,7 @@ export class CartItem {
   image: string | undefined;
   name: string;
   price: number;
+  discount: number;
   quantity: number;
   color: string;
   size: string;

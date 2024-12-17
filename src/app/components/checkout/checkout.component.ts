@@ -110,7 +110,12 @@ export class CheckoutComponent {
 
     this.reqInProgress = true;
 
-    const orderItems: { productId: string; quantity: number }[] = [];
+    const orderItems: {
+      productId: string;
+      quantity: number;
+      color: string;
+      size: string;
+    }[] = [];
     const shippingAddress: Address = {
       street: this.checkoutForm.value.street,
       city: this.checkoutForm.value.city,
@@ -131,7 +136,9 @@ export class CheckoutComponent {
     this.cartService.cartItems.forEach((item) => {
       orderItems.push({
         productId: item.productId,
-        quantity: item.quantity
+        quantity: item.quantity,
+        color: item.color,
+        size: item.size
       });
     });
 

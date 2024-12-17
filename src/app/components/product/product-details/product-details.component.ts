@@ -22,8 +22,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   product!: ProductDetail;
   mainPhotoUrl: string | null = null;
   selectedTab: string = 'description';
-  selectedColor: string = 'Black';
-  seletedSize: string = 'XL';
+  selectedColor: string = '';
+  selectedSize: string = '';
   availableSizes: string[] = [];
   availableColors: string[] = [];
   colorMap: Map<string, string> = new Map<string, string>();
@@ -51,6 +51,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
         this.availableSizes = this.product.sizes.split(',');
         this.availableColors = this.product.colors.split(',');
+
+        this.selectedColor = this.availableColors[0];
+        this.selectedSize = this.availableSizes[0];
+
         this.calculateStarNumberArray();
       }
     });
@@ -68,11 +72,20 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         this.product.productImages?.[0].imageUrl,
         this.product.name,
         this.product.price,
+        this.product.discount,
         1,
         this.selectedColor,
-        this.seletedSize
+        this.selectedSize
       )
     );
+  }
+
+  selectColor(color: string) {
+    this.selectedColor = color;
+  }
+
+  selectSize(size: string) {
+    this.selectedSize = size;
   }
 
   changeProductImage(productImageUrl: string | undefined) {
