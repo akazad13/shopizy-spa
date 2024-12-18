@@ -9,7 +9,6 @@ import {
 } from 'ngx-stripe';
 import { IconComponent } from '../shared/icon/icon.component';
 import {
-  PaymentMethod,
   StripeCardElementOptions,
   StripeElementsOptions
 } from '@stripe/stripe-js';
@@ -201,7 +200,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
       console.log(data);
-      this.router.navigate(['/', 'order-confirmation', data.orderId]);
+      this.router.navigate(['/', 'order-confirmation', this.orderId]);
     } catch (error) {
       handleError(null, error);
     }
