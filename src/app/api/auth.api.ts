@@ -43,14 +43,12 @@ export class AuthApi {
     phone: string,
     password: string
   ): Observable<any> {
-    return this.http
-      .post<any>(this.baseUrl + '/register', {
-        firstName,
-        lastName,
-        phone,
-        password
-      })
-      .pipe(tap((user) => this.setUser(user)));
+    return this.http.post<any>(this.baseUrl + '/register', {
+      firstName,
+      lastName,
+      phone,
+      password
+    });
   }
 
   resetPassword(newPassword: string, resetToken: string): Observable<any> {

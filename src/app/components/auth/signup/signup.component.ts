@@ -16,18 +16,18 @@ import { AuthApi } from '../../../api/auth.api';
 import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
-    selector: 'app-signup',
-    imports: [
-        CommonModule,
-        RouterLink,
-        ReactiveFormsModule,
-        IsInvalidPipe,
-        HasErrorPipe,
-        IconComponent
-    ],
-    providers: [AuthApi],
-    templateUrl: './signup.component.html',
-    styles: ``
+  selector: 'app-signup',
+  imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    IsInvalidPipe,
+    HasErrorPipe,
+    IconComponent
+  ],
+  providers: [AuthApi],
+  templateUrl: './signup.component.html',
+  styles: ``
 })
 export class SignupComponent {
   signupForm = new FormGroup(
@@ -44,8 +44,8 @@ export class SignupComponent {
   reqInProgress = false;
 
   constructor(
-    private authApi: AuthApi,
-    private router: Router
+    private readonly authApi: AuthApi,
+    private readonly router: Router
   ) {}
 
   async signup(): Promise<void> {
@@ -66,7 +66,7 @@ export class SignupComponent {
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/auth/signin');
     } catch (error) {
       handleError(this.signupForm, error);
     }
