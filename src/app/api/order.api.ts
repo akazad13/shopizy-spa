@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Product } from '../interfaces/product';
-import { ProductQueryFilters } from '../models/ProductQueryFilters';
-import { TokenService } from '../services/token.service';
 import { Order } from '../interfaces/Order';
 import { Price } from '../interfaces/Price';
 import { Address } from '../interfaces/Address';
@@ -13,48 +11,16 @@ import { Address } from '../interfaces/Address';
   providedIn: 'root'
 })
 export class OrderApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/users';
+  baseUrl = environment.apiUrl + '/api/v1.0/orders/';
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly tokenService: TokenService
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
-  getOrders(filters: ProductQueryFilters): Observable<Product[]> {
-    let params = new HttpParams();
-    const { name, categoryIds, averageRating, pageNumber, pageSize } = filters;
-
-    if (name != null) {
-      params = params.append('name', name);
-    }
-
-    if (categoryIds != null) {
-      for (let categoryId of categoryIds) {
-        params = params.append('categoryIds', categoryId);
-      }
-    }
-
-    if (averageRating != null) {
-      params = params.append('averageRating', averageRating);
-    }
-
-    params = params
-      .append('pageNumber', pageNumber)
-      .append('pageSize', pageSize);
-
-    return this.http.get<Product[]>(this.baseUrl, {
-      params
-    });
+  getOrders(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.baseUrl);
   }
 
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(
-      this.baseUrl +
-        '/' +
-        this.tokenService.getCurrentUserId() +
-        '/orders/' +
-        orderId
-    );
+    return this.http.get<Order>(this.baseUrl + orderId);
   }
 
   createOrder(
@@ -69,18 +35,15 @@ export class OrderApi {
     deliveryCharge: Price,
     shippingAddress: Address
   ): Observable<Order> {
-    return this.http.post<Order>(
-      this.baseUrl + '/' + this.tokenService.getCurrentUserId() + '/orders/',
-      {
-        promoCode: promoCode,
-        deliveryMethod: deliveryMethod,
-        deliveryCharge: {
-          amount: deliveryCharge.amount,
-          currency: deliveryCharge.currency
-        },
-        orderItems: orderItems,
-        shippingAddress: shippingAddress
-      }
-    );
+    return this.http.post<Order>(this.baseUrl, {
+      promoCode: promoCode,
+      deliveryMethod: deliveryMethod,
+      deliveryCharge: {
+        amount: deliveryCharge.amount,
+        currency: deliveryCharge.currency
+      },
+      orderItems: orderItems,
+      shippingAddress: shippingAddress
+    });
   }
 }

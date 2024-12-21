@@ -2,23 +2,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Product } from '../interfaces/product';
 import { TokenService } from '../services/token.service';
 import { Price } from '../interfaces/Price';
 import { CardInfo } from '../interfaces/CardInfo';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/users';
+  baseUrl = environment.apiUrl + '/api/v1.0/payments';
 
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
   ) {}
-
-  getProduct(productId: string): Observable<Product> {
-    return this.http.get<Product>(this.baseUrl + '/' + productId);
-  }
 
   postPayment(
     orderId: string,
@@ -27,16 +22,13 @@ export class PaymentApi {
     paymentMethodId: string | null,
     cardInfo: CardInfo | null
   ): Observable<any> {
-    return this.http.post<any>(
-      this.baseUrl + '/' + this.tokenService.getCurrentUserId() + '/payments',
-      {
-        orderId: orderId,
-        amount: total.amount,
-        currency: total.currency,
-        paymentMethod: paymentMethod,
-        paymentMethodId: paymentMethodId,
-        cardInfo: cardInfo
-      }
-    );
+    return this.http.post<any>(this.baseUrl, {
+      orderId: orderId,
+      amount: total.amount,
+      currency: total.currency,
+      paymentMethod: paymentMethod,
+      paymentMethodId: paymentMethodId,
+      cardInfo: cardInfo
+    });
   }
 }
