@@ -65,19 +65,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   addProductToCart() {
-    this.cartService.addItem(
-      new CartItem(
-        null,
-        this.product.productId,
-        this.product.productImages?.[0].imageUrl,
-        this.product.name,
-        this.product.price,
-        this.product.discount,
-        1,
-        this.selectedColor,
-        this.selectedSize
-      )
-    );
+    const cartItem: CartItem = {
+      cartItemId: null,
+      productId: this.product.productId,
+      image: this.product.productImages?.[0].imageUrl,
+      name: this.product.name,
+      price: this.product.price,
+      discount: this.product.discount,
+      quantity: 1,
+      color: this.selectedColor,
+      size: this.selectedSize
+    };
+    this.cartService.addToCart(cartItem);
   }
 
   selectColor(color: string) {

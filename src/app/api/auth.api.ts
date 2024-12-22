@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { User } from '../interfaces/user';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { TokenService } from '../services/token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthApi {
@@ -16,10 +15,7 @@ export class AuthApi {
 
   readonly user$: Observable<User | null>;
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly tokenService: TokenService
-  ) {
+  constructor(private readonly http: HttpClient) {
     const storedUser = localStorage.getItem('user');
 
     this.userSubject = new BehaviorSubject<User | null>(

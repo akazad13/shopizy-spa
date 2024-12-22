@@ -1,6 +1,6 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { CartItem, CartService } from './../../services/cart.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { IsInvalidPipe } from '../../pipes/is-invalid.pipe';
 import { HasErrorPipe } from '../../pipes/has-error.pipe';
-import { finalize, firstValueFrom } from 'rxjs';
+import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { OrderApi } from '../../api/order.api';
 import { Address } from '../../interfaces/Address';
 import { Price } from '../../interfaces/Price';
@@ -28,14 +28,16 @@ import { AuthService } from '../../services/auth.service';
     IsInvalidPipe,
     NgIf,
     HasErrorPipe,
-    IconComponent
+    IconComponent,
+    CommonModule
   ],
   templateUrl: './checkout.component.html',
   styles: ``,
   providers: []
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   isLoggedIn: boolean = false;
+  cart$!: Observable<CartItem[]>;
 
   checkoutForm: FormGroup = new FormGroup({
     deliveryMethod: new FormControl('1', [Validators.required]),
@@ -88,13 +90,16 @@ export class CheckoutComponent {
       this.checkoutForm.get('phoneNumber')?.updateValueAndValidity();
     }
   }
-
-  updateProductQuantity(cartItem: CartItem) {
-    this.cartService.addItem(cartItem);
+  ngOnInit(): void {
+    this.cart$ = this.cartService.getCart();
   }
 
-  async removeProduct(productId: string): Promise<void> {
-    this.cartService.removeItem(productId);
+  updateProductQuantity(cartItem: CartItem) {
+    this.cartService.addToCart(cartItem);
+  }
+
+  async removeProduct(cartItemId: string): Promise<void> {
+    this.cartService.removeFromCart(cartItemId);
   }
 
   get formData() {
@@ -133,13 +138,17 @@ export class CheckoutComponent {
       currency: seletedDeliveryMethod!.price.currency
     };
 
-    this.cartService.cartItems.forEach((item) => {
-      orderItems.push({
-        productId: item.productId,
-        quantity: item.quantity,
-        color: item.color,
-        size: item.size
-      });
+    this.cart$.subscribe((items) => {
+      items
+        .filter((i) => i.quantity > 0) // Filter out items with 0 quantity
+        .forEach((item) => {
+          orderItems.push({
+            productId: item.productId,
+            quantity: item.quantity,
+            color: item.color,
+            size: item.size
+          });
+        });
     });
 
     try {

@@ -38,10 +38,7 @@
             <div class="mt-8">
               <div class="flow-root">
                 <ul class="-my-6 divide-y divide-gray-200">
-                  <li
-                    class="flex py-6"
-                    *ngFor="let cartItem of cartService.cartItems"
-                  >
+                  <li class="flex py-6" *ngFor="let cartItem of cart$ | async">
                     <div
                       class="h-20 w-24 flex-shrink-0 rounded-md border border-gray-200"
                     >
@@ -95,21 +92,19 @@
               class="mb-2 flex justify-between text-base font-medium text-gray-900"
             >
               <p>Subtotal</p>
-              <p>${{ cartService.subTotal }}</p>
+              <p>${{ cartService.cartSummary.subTotal }}</p>
             </div>
             <div
               class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
             >
               <p class="mt-2">Saving</p>
-              <p class="mt-2">${{ cartService.saving }}</p>
+              <p class="mt-2">${{ cartService.cartSummary.saving }}</p>
             </div>
             <div
               class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
             >
               <p class="mt-2">Total</p>
-              <p class="mt-2">
-                ${{ cartService.subTotal - cartService.saving }}
-              </p>
+              <p class="mt-2">${{ cartService.cartSummary.total }}</p>
             </div>
             <p class="mt-0.5 text-sm text-gray-500">
               Shipping and taxes calculated at checkout.

@@ -314,7 +314,7 @@
         <div class="mt-8">
           <div class="flow-root">
             <ul class="-my-6 divide-y divide-gray-200">
-              <li class="flex py-6" *ngFor="let item of cartService.cartItems">
+              <li class="flex py-6" *ngFor="let item of cart$ | async">
                 <div
                   class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200"
                 >
@@ -363,14 +363,14 @@
               <dl class="flex items-center justify-between gap-4 py-3">
                 <dt class="text-base font-normal text-gray-500">Subtotal</dt>
                 <dd class="text-base font-medium text-gray-900">
-                  ${{ cartService.subTotal }}
+                  ${{ cartService.cartSummary.subTotal }}
                 </dd>
               </dl>
 
               <dl class="flex items-center justify-between gap-4 py-3">
                 <dt class="text-base font-normal text-gray-500">Savings</dt>
                 <dd class="text-base font-medium text-green-500">
-                  ${{ cartService.saving }}
+                  ${{ cartService.cartSummary.saving }}
                 </dd>
               </dl>
 
@@ -391,10 +391,9 @@
                 <dd class="text-base font-bold text-gray-900">
                   ${{
                     (
-                      cartService.subTotal +
+                      cartService.cartSummary.total +
                       deliveryMethods[checkoutForm.value.deliveryMethod - 1]
-                        .price.amount -
-                      cartService.saving
+                        .price.amount
                     ).toFixed(2)
                   }}
                 </dd>
