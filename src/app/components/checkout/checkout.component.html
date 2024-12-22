@@ -79,34 +79,62 @@
           </div>
           <div class="space-y-12">
             <div class="border-b border-gray-900/10 pb-12 sm:border-b-0">
-              <h2 class="text-base font-semibold leading-7 text-gray-700">
-                Contact Information
-              </h2>
+              <div *ngIf="!isLoggedIn">
+                <h2 class="text-base font-semibold leading-7 text-gray-700">
+                  Create Account
+                </h2>
 
-              <div class="">
-                <label
-                  for="email"
-                  class="block text-sm font-medium leading-6 text-gray-700"
-                  >Email address</label
-                >
                 <div class="mt-2">
-                  <input
-                    type="email"
-                    id="email"
-                    autocomplete="email"
-                    class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                    [class.dark:border-red-500]="formData['email'] | isInvalid"
-                    formControlName="email"
-                  />
+                  <label
+                    for="email"
+                    class="block text-sm font-medium leading-6 text-gray-700"
+                    >Email address</label
+                  >
+                  <div class="mt-2">
+                    <input
+                      type="email"
+                      id="email"
+                      autocomplete="email"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['email'] | isInvalid
+                      "
+                      formControlName="email"
+                      placeholder="Email"
+                    />
+                  </div>
+                  <div *ngIf="formData['email'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Email is required
+                    </p>
+                  </div>
                 </div>
-                <div *ngIf="formData['email'] | hasError: 'required'">
-                  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                    Email is required
-                  </p>
+                <div class="mt-2">
+                  <label
+                    for="password"
+                    class="block text-sm font-medium leading-6 text-gray-700"
+                    >Password</label
+                  >
+                  <div>
+                    <input
+                      type="password"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Password"
+                      [class.dark:border-red-500]="
+                        formData['password'] | isInvalid
+                      "
+                      formControlName="password"
+                      autocomplete="current-password"
+                    />
+                  </div>
+                  <div *ngIf="formData['password'] | hasError: 'required'">
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Password is required
+                    </p>
+                  </div>
                 </div>
+                <hr class="my-5 h-px border-t-0 bg-gray-200" />
               </div>
-
-              <hr class="my-5 h-px border-t-0 bg-gray-200" />
 
               <h2 class="text-base font-semibold leading-7 text-gray-700">
                 Shipping information
@@ -123,7 +151,6 @@
                     <input
                       type="text"
                       id="first-name"
-                      autocomplete="given-name"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                       [class.dark:border-red-500]="
                         formData['firstName'] | isInvalid
@@ -148,7 +175,6 @@
                     <input
                       type="text"
                       id="last-name"
-                      autocomplete="family-name"
                       class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                       [class.dark:border-red-500]="
                         formData['lastName'] | isInvalid
@@ -276,34 +302,6 @@
                     </p>
                   </div>
                 </div>
-                <div class="col-span-full" *ngIf="!isLoggedIn">
-                  <label
-                    for="phoneNumber"
-                    class="block text-sm font-medium leading-6 text-gray-700"
-                    >Phone</label
-                  >
-                  <div class="mt-2">
-                    <input
-                      type="tel"
-                      placeholder="Phone Number"
-                      id="phoneNumber"
-                      data-format="custom"
-                      data-delimiter="-"
-                      data-blocks="3 3 4"
-                      placeholder="000-000-0000"
-                      [class.dark:border-red-500]="
-                        formData['phoneNumber'] | isInvalid
-                      "
-                      formControlName="phoneNumber"
-                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                    />
-                  </div>
-                  <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                      Phone number is required
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -335,15 +333,23 @@
                       </h3>
                       <p class="ml-4">${{ item.price }}</p>
                     </div>
-                    <p class="mt-1 text-sm text-gray-500">{{ item.color }}</p>
+                    <div
+                      class="mt-3 flex justify-between text-base font-medium text-gray-900"
+                    >
+                      <p class="mt-1 text-sm text-gray-500">{{ item.color }}</p>
+                      <p class="mt-1 text-sm text-gray-500">{{ item.size }}</p>
+                    </div>
                   </div>
-                  <div class="flex flex-1 items-end justify-between text-sm">
+                  <div
+                    class="flex flex-1 items-end justify-between text-sm font-medium"
+                  >
                     <p class="text-gray-500">Qty {{ item.quantity }}</p>
 
                     <div class="flex">
                       <button
                         type="button"
                         class="font-medium text-indigo-600 hover:text-indigo-500"
+                        (click)="removeProduct(item.cartItemId)"
                       >
                         Remove
                       </button>
@@ -363,14 +369,14 @@
               <dl class="flex items-center justify-between gap-4 py-3">
                 <dt class="text-base font-normal text-gray-500">Subtotal</dt>
                 <dd class="text-base font-medium text-gray-900">
-                  ${{ cartService.cartSummary.subTotal }}
+                  ${{ cartService.cartSummary.subTotal.toFixed(2) }}
                 </dd>
               </dl>
 
               <dl class="flex items-center justify-between gap-4 py-3">
                 <dt class="text-base font-normal text-gray-500">Savings</dt>
                 <dd class="text-base font-medium text-green-500">
-                  ${{ cartService.cartSummary.saving }}
+                  ${{ cartService.cartSummary.saving.toFixed(2) }}
                 </dd>
               </dl>
 
@@ -380,8 +386,9 @@
                 </dt>
                 <dd class="text-base font-medium text-gray-900">
                   ${{
-                    deliveryMethods[checkoutForm.value.deliveryMethod - 1].price
-                      .amount
+                    deliveryMethods[
+                      checkoutForm.value.deliveryMethod - 1
+                    ].price.amount.toFixed(2)
                   }}
                 </dd>
               </dl>

@@ -24,10 +24,10 @@ export class AuthApi {
     this.user$ = this.userSubject.asObservable();
   }
 
-  signIn(phone: string, password: string): Observable<User> {
+  signIn(email: string, password: string): Observable<User> {
     return this.http
       .post<User>(this.baseUrl + '/login', {
-        phone,
+        email,
         password
       })
       .pipe(tap((user) => this.setUser(user)));
@@ -36,13 +36,13 @@ export class AuthApi {
   signUp(
     firstName: string,
     lastName: string,
-    phone: string,
+    email: string,
     password: string
   ): Observable<any> {
     return this.http.post<any>(this.baseUrl + '/register', {
       firstName,
       lastName,
-      phone,
+      email,
       password
     });
   }

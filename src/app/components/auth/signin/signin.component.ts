@@ -13,6 +13,7 @@ import { handleError } from '../../../functions/error-handler';
 import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
 import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-signin',
@@ -30,17 +31,16 @@ import { IconComponent } from '../../shared/icon/icon.component';
 })
 export class SigninComponent {
   signinForm = new FormGroup({
-    phoneNumber: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   });
 
   reqInProgress = false;
   constructor(
     private readonly router: Router,
-    private readonly authApi: AuthApi
+    private readonly authApi: AuthApi,
+    private readonly cartService: CartService
   ) {}
-
-  ngOnInit() {}
 
   async signin(): Promise<void> {
     this.signinForm.markAllAsTouched();
@@ -50,14 +50,15 @@ export class SigninComponent {
     }
     this.reqInProgress = true;
     try {
-      const data = await firstValueFrom(
+      await firstValueFrom(
         this.authApi
           .signIn(
-            this.signinForm.value.phoneNumber ?? '',
+            this.signinForm.value.email ?? '',
             this.signinForm.value.password ?? ''
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
+      this.cartService.getCartData();
       this.router.navigateByUrl('/');
     } catch (error) {
       handleError(this.signinForm, error);

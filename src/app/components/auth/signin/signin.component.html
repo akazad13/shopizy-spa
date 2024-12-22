@@ -10,7 +10,7 @@
       <img class="m-auto h-16 w-auto" src="/logo.png" alt="" />
 
       <h1
-        class="mt-3 text-center text-2xl font-semibold capitalize text-gray-800 sm:text-3xl dark:text-white"
+        class="mt-3 text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white sm:text-3xl"
       >
         sign In
       </h1>
@@ -26,27 +26,24 @@
         <div class="relative mt-6 flex items-center">
           <span class="absolute">
             <app-icon
-              icon="device-phone-mobile"
+              icon="envelope"
               classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
             ></app-icon>
           </span>
 
           <input
-            type="tel"
-            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-            placeholder="Phone Number"
-            id="phoneNumber"
-            data-format="custom"
-            data-delimiter="-"
-            data-blocks="3 3 4"
-            placeholder="000-000-0000"
-            [class.dark:border-red-500]="formData['phoneNumber'] | isInvalid"
-            formControlName="phoneNumber"
+            type="email"
+            id="email"
+            autocomplete="email"
+            class="peer block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+            [class.dark:border-red-500]="formData['email'] | isInvalid"
+            formControlName="email"
+            placeholder="Email"
           />
         </div>
-        <div *ngIf="formData['phoneNumber'] | hasError: 'required'">
+        <div *ngIf="formData['email'] | hasError: 'required'">
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Phone number is required
+            Email is required
           </p>
         </div>
       </div>
@@ -64,10 +61,9 @@
             type="password"
             class="peer block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
             placeholder="Password"
-            [class.dark:border-red-500]="
-              signinForm.controls['password'] | isInvalid
-            "
+            [class.dark:border-red-500]="formData['password'] | isInvalid"
             formControlName="password"
+            autocomplete="current-password"
           />
         </div>
 

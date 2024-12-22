@@ -43,22 +43,36 @@ export class CartService {
     private readonly cartApi: CartApi,
     private readonly authService: AuthService
   ) {
+    this.getCartData();
+  }
+
+  getCartData(): void {
     try {
+      this.cartItems = [];
       if (this.authService.loggedIn()) {
-        this.cartApi.getCart().subscribe((cart) => {
+        this.cartApi.getCart().subscribe(async (cart) => {
           this.cart = cart;
-          this.syncCartItems();
-          this.calculateSummary();
+          this.syncCartToCartItems();
+
+          const savedCart = localStorage.getItem('cart');
+          if (savedCart) {
+            const cartItems = JSON.parse(savedCart);
+            for (const cartItem of cartItems) {
+              await this.addToCart(cartItem);
+            }
+            localStorage.removeItem('cart');
+          }
         });
+      } else {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+          this.cartItems = JSON.parse(savedCart);
+          this.calculateSummary();
+          this.cartSubject.next([...this.cartItems]);
+        }
       }
     } catch (error) {
       handleError(null, error);
-    }
-
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      this.cartItems = JSON.parse(savedCart);
-      this.cartSubject.next(this.cartItems);
     }
   }
 
@@ -68,86 +82,122 @@ export class CartService {
 
   async addToCart(item: CartItem): Promise<void> {
     const existingItem = this.cartItems.find(
-      (i) => i.productId === item.productId
+      (cartItem) =>
+        cartItem.productId === item.productId &&
+        cartItem.color === item.color &&
+        cartItem.size === item.size
     );
 
     if (existingItem) {
-      existingItem.quantity += item.quantity;
-      // this.updateQuantityfn(existingItem);
-    } else {
-      try {
-        this.cartItems.push(item);
-        if (this.cart == null) {
-          this.cart = await firstValueFrom(
-            this.cartApi.addCartWithFirstProduct(
-              item.productId,
-              item.color,
-              item.size
-            )
-          );
-        } else {
-          this.cart = await firstValueFrom(
-            this.cartApi.addProductToCart(
-              this.cart.cartId,
-              item.productId,
-              item.color,
-              item.size
-            )
-          );
+      if (this.authService.loggedIn()) {
+        if (
+          await this.updateProductQuantity(
+            existingItem.productId,
+            existingItem.cartItemId!,
+            existingItem.quantity + item.quantity
+          )
+        ) {
+          existingItem.quantity += item.quantity;
+          this.calculateSummary();
+          this.cartSubject.next([...this.cartItems]);
         }
-      } catch (error) {
-        handleError(null, error);
+      } else {
+        existingItem.quantity += item.quantity;
+        localStorage.setItem('cart', JSON.stringify([...this.cartItems]));
+        this.calculateSummary();
+        this.cartSubject.next([...this.cartItems]);
+      }
+    } else {
+      if (this.authService.loggedIn()) {
+        if (await this.addProductToCart(item)) {
+          this.syncCartToCartItems();
+        }
+      } else {
+        item.cartItemId = Date.now().toString();
+        this.cartItems.push(item);
+        localStorage.setItem('cart', JSON.stringify([...this.cartItems]));
+        this.calculateSummary();
+        this.cartSubject.next([...this.cartItems]);
       }
     }
-
-    this.updateCart();
-    this.calculateSummary();
   }
 
   async removeFromCart(cartItemId: string | null): Promise<void> {
     if (cartItemId != null) {
-      try {
-        await firstValueFrom(
-          this.cartApi.removeProductFromCart(this.cart!.cartId, cartItemId)
-        );
-
+      if (await this.removeProductFromCart(cartItemId)) {
         this.cartItems = this.cartItems.filter(
           (item) => item.cartItemId !== cartItemId
         );
-      } catch (error) {
-        handleError(null, error);
+        this.calculateSummary();
+        this.cartSubject.next([...this.cartItems]);
       }
-      this.updateCart();
-      this.calculateSummary();
     }
   }
 
-  updateQuantity(itemId: string, quantity: number): void {
-    const item = this.cartItems.find((i) => i.cartItemId === itemId);
-    if (item) {
-      item.quantity = quantity;
-      this.updateCart();
+  private async removeProductFromCart(cartItemId: string): Promise<boolean> {
+    try {
+      await firstValueFrom(
+        this.cartApi.removeProductFromCart(this.cart!.cartId, cartItemId)
+      );
+      return true;
+    } catch (error) {
+      handleError(null, error);
+      return false;
     }
   }
 
-  clearCart(): void {
-    this.cartItems = [];
-    this.updateCart();
+  private async addProductToCart(item: CartItem): Promise<boolean> {
+    try {
+      this.cartItems.push(item);
+
+      this.cart = await firstValueFrom(
+        this.cartApi.addProductToCart(
+          this.cart!.cartId,
+          item.productId,
+          item.color,
+          item.size,
+          item.quantity
+        )
+      );
+      return true;
+    } catch (error) {
+      handleError(null, error);
+      return false;
+    }
   }
 
-  private updateCart(): void {
-    localStorage.setItem('cart', JSON.stringify(this.cartItems));
+  private async updateProductQuantity(
+    productId: string,
+    cartItemId: string,
+    quantity: number
+  ): Promise<boolean> {
+    try {
+      await firstValueFrom(
+        this.cartApi.updateProductQuantityToCart(
+          this.cart!.cartId,
+          cartItemId,
+          productId,
+          quantity
+        )
+      );
+      this.cart!.cartItems.find((cartItem) => cartItem.productId === productId)!
+        .quantity++;
+      return true;
+    } catch (error) {
+      handleError(null, error);
+      return false;
+    }
+  }
+
+  private syncCartToCartItems(): void {
+    this.cartItems = this.cart!.cartItems.map((cartItem) =>
+      this.mapCartItem(cartItem)
+    );
+    this.calculateSummary();
     this.cartSubject.next([...this.cartItems]);
   }
 
-  getCartTotal(): number {
-    return this.cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-  }
-
-  calculateSummary(): void {
+  private calculateSummary(): void {
     this.cartSummary.subTotal = 0;
     this.cartItems.forEach((item) => {
       this.cartSummary.subTotal += item.price * item.quantity;
@@ -160,15 +210,7 @@ export class CartService {
       this.cartSummary.subTotal - this.cartSummary.saving;
   }
 
-  syncCartItems(): void {
-    this.cartItems = this.cart!.cartItems.map((cartItem) =>
-      this.mapCartItem(cartItem)
-    );
-
-    this.cartSubject.next([...this.cartItems]);
-  }
-
-  mapCartItem(item: any): CartItem {
+  private mapCartItem(item: any): CartItem {
     return {
       cartItemId: item.cartItemId,
       productId: item.productId,

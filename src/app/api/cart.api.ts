@@ -24,28 +24,18 @@ export class CartApi {
     });
   }
 
-  addCartWithFirstProduct(
-    productId: string,
-    color: string,
-    size: string
-  ): Observable<Cart> {
-    return this.http.post<Cart>(this.baseUrl, {
-      productId: productId,
-      color: color,
-      size: size
-    });
-  }
-
   addProductToCart(
     cartId: string,
     productId: string,
     color: string,
-    size: string
+    size: string,
+    quantity: number
   ): Observable<Cart> {
     return this.http.patch<Cart>(this.baseUrl + cartId, {
       productId: productId,
       color: color,
-      size: size
+      size: size,
+      quantity: quantity
     });
   }
 

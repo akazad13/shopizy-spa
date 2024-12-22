@@ -34,7 +34,7 @@ export class SignupComponent {
     {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
       confirmPassword: new FormControl('', [Validators.required])
     },
@@ -56,12 +56,12 @@ export class SignupComponent {
     }
     this.reqInProgress = true;
     try {
-      const data = await firstValueFrom(
+      await firstValueFrom(
         this.authApi
           .signUp(
             this.signupForm.value.firstName ?? '',
             this.signupForm.value.lastName ?? '',
-            this.signupForm.value.phoneNumber ?? '',
+            this.signupForm.value.email ?? '',
             this.signupForm.value.password ?? ''
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
