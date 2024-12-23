@@ -1,7 +1,8 @@
+import { ClickOutsideAccountDirective } from './../../directives/click-outside-account.directive';
 import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DropcartComponent } from './dropcart/dropcart.component';
 import { MobileHeaderComponent } from './mobile-header/mobile-header.component';
 import { IconComponent } from '../shared/icon/icon.component';
@@ -12,6 +13,7 @@ import { handleError } from '../../functions/error-handler';
 import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outside-category-flyout.directive';
 import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
 import { CartService } from '../../services/cart.service';
+import { AuthApi } from '../../api/auth.api';
 
 @Component({
   selector: 'app-header',
@@ -22,7 +24,7 @@ import { CartService } from '../../services/cart.service';
     MobileHeaderComponent,
     IconComponent,
     ClickOutsideCategoryFlyoutDirective,
-    CommonModule,
+    ClickOutsideAccountDirective,
     ToIterablePipe
   ],
   providers: [CategoryApi],
@@ -37,10 +39,28 @@ export class HeaderComponent implements OnInit {
   categoryTree: CategoryTree[] = [];
   brands: string[] = [];
 
+  hideAccountMenu = true;
+  accountMenu = [
+    {
+      label: 'Account settings',
+      navigation: 'account'
+    },
+    {
+      label: 'Order Info',
+      navigation: 'account/orders'
+    },
+    {
+      label: 'Sign out',
+      navigation: 'signout'
+    }
+  ];
+
   constructor(
     private readonly authService: AuthService,
     public readonly cartService: CartService,
-    private readonly categoryApi: CategoryApi
+    private readonly categoryApi: CategoryApi,
+    private readonly authApi: AuthApi,
+    private readonly router: Router
   ) {
     this.isLoggedIn = this.authService.loggedIn();
   }
@@ -78,5 +98,21 @@ export class HeaderComponent implements OnInit {
 
   hideCategoryFlyout() {
     this.selected = '';
+  }
+
+  showHideAccountMenu(val: boolean) {
+    this.hideAccountMenu = val;
+  }
+
+  onAccountMenuItemClick(menuItem: any) {
+    if (menuItem.navigation === 'signout') {
+      this.authApi.setUser(null);
+      this.router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
+    } else {
+      this.router.navigate([menuItem.navigation]);
+      this.hideAccountMenu = true;
+    }
   }
 }

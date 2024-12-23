@@ -186,4 +186,8 @@ export class ShopComponent implements OnInit {
     this.filters.pageNumber++;
     await this.getProducts();
   }
+
+  onSort(sortingOption: string): void {
+    console.log(sortingOption);
+  }
 }

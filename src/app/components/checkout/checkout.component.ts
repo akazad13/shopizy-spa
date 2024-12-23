@@ -131,8 +131,6 @@ export class CheckoutComponent implements OnInit {
       currency: seletedDeliveryMethod!.price.currency
     };
 
-    debugger;
-
     this.cart$.subscribe((items) => {
       items
         .filter((i) => i.quantity > 0) // Filter out items with 0 quantity

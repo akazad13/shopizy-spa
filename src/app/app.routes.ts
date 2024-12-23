@@ -14,6 +14,8 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { OrderComfirmationComponent } from './components/order/order-comfirmation/order-comfirmation.component';
 import { ProductDetailResolver } from './resolvers/product-details.resolver';
 import { OrderDetailResolver } from './resolvers/order-details.resolver';
+import { AccountComponent } from './components/account/account.component';
+import { OrdersComponent } from './components/account/orders/orders.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +60,14 @@ export const routes: Routes = [
       {
         path: 'order-confirmation/:orderId',
         component: OrderComfirmationComponent
+      },
+      {
+        path: 'account',
+        component: AccountComponent
+      },
+      {
+        path: 'account/orders',
+        component: OrdersComponent
       }
     ]
   },

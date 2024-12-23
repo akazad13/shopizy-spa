@@ -67,7 +67,7 @@ export class AuthApi {
   //   });
   // }
 
-  setUser(user: User): void {
+  setUser(user: User | null): void {
     this.userSubject.next(user);
 
     localStorage.setItem('user', JSON.stringify(user));
