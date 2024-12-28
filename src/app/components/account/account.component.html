@@ -1,4 +1,4 @@
-<section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-8">
+<section class="bg-white py-8 antialiased dark:bg-gray-900">
   <div class="container mx-auto px-6">
     <nav class="mb-4 flex" aria-label="Breadcrumb">
       <ol
@@ -27,11 +27,6 @@
         </li>
       </ol>
     </nav>
-    <h2
-      class="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl md:mb-6"
-    >
-      General overview
-    </h2>
     <div
       class="grid grid-cols-2 gap-4 border-b border-t border-gray-200 py-4 dark:border-gray-700 md:py-8 lg:grid-cols-4 xl:gap-24"
     >
@@ -46,7 +41,7 @@
           <h3 class="text-gray-500 dark:text-gray-400">Total Orders</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
-            >24
+            >{{ userDetails?.totalOrders }}
           </span>
         </div>
       </div>
@@ -72,7 +67,7 @@
           <h3 class="text-gray-500 dark:text-gray-400">Reviews added</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
-            >16
+            >{{ userDetails?.totalProductsReviewed }}
           </span>
         </div>
       </div>
@@ -139,24 +134,27 @@
           <div class="flex space-x-4">
             <img
               class="h-36 w-36 rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/helene-engels.png"
-              alt="Helene avatar"
+              src="{{
+                userDetails?.profileImageUrl ??
+                  'https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg'
+              }}"
+              alt="{{ userDetails?.firstName }}"
             />
             <div>
               <h2
                 class="flex items-center text-xl font-bold leading-none text-gray-900 dark:text-white sm:text-2xl"
               >
-                Helene Engels
+                {{ userDetails?.firstName }} {{ userDetails?.lastName }}
               </h2>
               <div
                 class="rounded py-0.5 font-medium text-indigo-800 dark:text-indigo-300"
               >
-                {{ "helene@example.com" }}
+                {{ userDetails?.email }}
               </div>
               <div
                 class="rounded py-0.5 font-medium text-indigo-800 dark:text-indigo-300"
               >
-                +1234 567 890
+                {{ userDetails?.phone }}
               </div>
               <button
                 type="button"
@@ -208,7 +206,11 @@
                   d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"
                 />
               </svg>
-              2 Miles Drive, NJ 071, New York, United States of America
+              {{ userDetails?.address?.street }},
+              {{ userDetails?.address?.city }},
+              {{ userDetails?.address?.state }},
+              {{ userDetails?.address?.country }},
+              {{ userDetails?.address?.zipCode }}
             </dd>
           </dl>
 
