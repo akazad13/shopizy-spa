@@ -3,10 +3,11 @@ import { IconComponent } from '../shared/icon/icon.component';
 import { UserDetails } from '../../interfaces/user';
 import { UserApi } from '../../api/user.api';
 import { TokenService } from '../../services/token.service';
+import { UpdateAccountModalComponent } from './update-account-modal/update-account-modal.component';
 
 @Component({
   selector: 'app-account',
-  imports: [IconComponent],
+  imports: [IconComponent, UpdateAccountModalComponent],
   templateUrl: './account.component.html',
   styles: ``
 })
@@ -28,7 +29,7 @@ export class AccountComponent {
   onEditData() {
     this.isUpdateAccountModelOpened = true;
   }
-  onCloseUpdateAccountModel() {
-    this.isUpdateAccountModelOpened = false;
+  onCloseUpdateAccountModel(val: boolean) {
+    this.isUpdateAccountModelOpened = val;
   }
 }
