@@ -1,3 +1,4 @@
+import { UserApi } from './../../../api/user.api';
 import {
   Component,
   EventEmitter,
@@ -5,7 +6,7 @@ import {
   OnChanges,
   Output
 } from '@angular/core';
-import { UserDetails } from '../../../interfaces/user';
+import { UpdateUser, UserDetails } from '../../../interfaces/user';
 import {
   FormControl,
   FormGroup,
@@ -16,6 +17,9 @@ import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
 import { NgIf } from '@angular/common';
 import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { finalize, firstValueFrom } from 'rxjs';
+import { Address } from '../../../interfaces/Address';
+import { handleError } from '../../../functions/error-handler';
 
 @Component({
   selector: 'app-update-account-modal',
@@ -48,6 +52,8 @@ export class UpdateAccountModalComponent implements OnChanges {
 
   reqInProgress = false;
 
+  constructor(private readonly userApi: UserApi) {}
+
   ngOnChanges(): void {
     if (!this.userDetails) {
       return;
@@ -76,63 +82,37 @@ export class UpdateAccountModalComponent implements OnChanges {
   async updateAccount(): Promise<void> {
     this.updateAccountForm.markAllAsTouched();
 
-    if (this.reqInProgress || this.checkoutForm.invalid) {
+    if (this.reqInProgress || this.updateAccountForm.invalid) {
       return;
     }
 
     this.reqInProgress = true;
 
-    const orderItems: {
-      productId: string;
-      quantity: number;
-      color: string;
-      size: string;
-    }[] = [];
-    const shippingAddress: Address = {
-      street: this.checkoutForm.value.street,
-      city: this.checkoutForm.value.city,
-      state: this.checkoutForm.value.state,
-      country: this.checkoutForm.value.country,
-      zipCode: this.checkoutForm.value.zipCode
+    const address: Address = {
+      street: this.updateAccountForm.value.street,
+      city: this.updateAccountForm.value.city,
+      state: this.updateAccountForm.value.state,
+      country: this.updateAccountForm.value.country,
+      zipCode: this.updateAccountForm.value.zipCode
     };
 
-    const seletedDeliveryMethod = this.deliveryMethods.find(
-      (dm) => dm.deliveryMethod == this.checkoutForm.value.deliveryMethod
-    );
-
-    const deliveryCharge: Price = {
-      amount: seletedDeliveryMethod!.price.amount,
-      currency: seletedDeliveryMethod!.price.currency
+    const updateUser: UpdateUser = {
+      firstName: this.updateAccountForm.value.firstName,
+      lastName: this.updateAccountForm.value.lastName,
+      email: this.updateAccountForm.value.email,
+      phoneNumber: this.updateAccountForm.value.phone,
+      address: address
     };
-
-    this.cart$.subscribe((items) => {
-      items
-        .filter((i) => i.quantity > 0) // Filter out items with 0 quantity
-        .forEach((item) => {
-          orderItems.push({
-            productId: item.productId,
-            quantity: item.quantity,
-            color: item.color,
-            size: item.size
-          });
-        });
-    });
 
     try {
-      const data = await firstValueFrom(
-        this.orderApi
-          .createOrder(
-            orderItems,
-            '',
-            seletedDeliveryMethod!.deliveryMethod,
-            deliveryCharge,
-            shippingAddress
-          )
+      await firstValueFrom(
+        this.userApi
+          .updateUser(updateUser)
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      this.router.navigate(['/', 'payment', data.orderId]);
+      window.location.reload();
     } catch (error) {
-      handleError(this.checkoutForm, error);
+      handleError(this.updateAccountForm, error);
     }
   }
 }

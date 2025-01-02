@@ -22,3 +22,11 @@ export interface UserDetails {
   createdOn: Date;
   modifiedOn: Date | null;
 }
+
+export interface UpdateUser {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  address?: Address;
+}
