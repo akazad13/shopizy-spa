@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../interfaces/product';
 import { Order } from '../interfaces/Order';
 import { Price } from '../interfaces/Price';
 import { Address } from '../interfaces/Address';
+import { OrderQueryFilters } from '../models/QueryFilters';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,34 @@ export class OrderApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  getOrders(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
+  getOrders(filters: OrderQueryFilters): Observable<Order[]> {
+    let params = new HttpParams();
+    const { customerId, startDate, endDate, pageNumber, pageSize, status } =
+      filters;
+
+    if (customerId != null) {
+      params = params.append('customerId', customerId);
+    }
+
+    if (startDate != null) {
+      params = params.append('startDate', startDate);
+    }
+
+    if (endDate != null) {
+      params = params.append('endDate', endDate);
+    }
+
+    if (status != null) {
+      params = params.append('status', status);
+    }
+
+    params = params
+      .append('pageNumber', pageNumber)
+      .append('pageSize', pageSize);
+
+    return this.http.get<Order[]>(this.baseUrl, {
+      params
+    });
   }
 
   getOrder(orderId: string): Observable<Order> {

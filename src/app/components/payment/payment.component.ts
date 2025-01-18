@@ -18,7 +18,7 @@ import { finalize, firstValueFrom, Subscription } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
 import { Price } from '../../interfaces/Price';
 import { CartService } from '../../services/cart.service';
-import { Order } from '../../interfaces/Order';
+import { Order, OrderDetails } from '../../interfaces/Order';
 import { NgFor, NgIf } from '@angular/common';
 import { CardInfo } from '../../interfaces/CardInfo';
 
@@ -48,7 +48,7 @@ import { CardInfo } from '../../interfaces/CardInfo';
 export class PaymentComponent implements OnInit, OnDestroy {
   @ViewChild(StripeCardNumberComponent) card!: StripeCardNumberComponent;
   orderId!: string;
-  order!: Order;
+  order!: OrderDetails;
   orderSummary = {
     totalPrice: { amount: 0, currency: 'usd' },
     deliveryCharge: { amount: 0, currency: 'usd' },

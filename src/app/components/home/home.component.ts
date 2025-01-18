@@ -7,7 +7,7 @@ import { FeatureProductsComponent } from './feature-products/feature-products.co
 import { ProductApi } from '../../api/product.api';
 import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
-import { ProductQueryFilters } from '../../models/ProductQueryFilters';
+import { ProductQueryFilters } from '../../models/QueryFilters';
 import {
   BlockProducts,
   ProductsBlockComponent

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product, ProductDetail } from '../interfaces/product';
-import { ProductQueryFilters } from '../models/ProductQueryFilters';
+import { ProductQueryFilters } from '../models/QueryFilters';
 
 @Injectable({
   providedIn: 'root'

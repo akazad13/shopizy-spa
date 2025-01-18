@@ -7,7 +7,7 @@ import { MobileFiltersComponent } from './mobile-filters/mobile-filters.componen
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../shared/icon/icon.component';
 import { ProductApi } from '../../api/product.api';
-import { ProductQueryFilters } from '../../models/ProductQueryFilters';
+import { ProductQueryFilters } from '../../models/QueryFilters';
 import { CategoryTree } from '../../interfaces/category';
 import { firstValueFrom } from 'rxjs';
 import { CategoryApi } from '../../api/category.api';
