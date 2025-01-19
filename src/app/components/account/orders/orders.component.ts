@@ -7,10 +7,12 @@ import { OrderQueryFilters } from '../../../models/QueryFilters';
 import { TokenService } from '../../../services/token.service';
 import { Order } from '../../../interfaces/Order';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AlertifyService } from '../../../services/alertify.service';
 
 @Component({
   selector: 'app-orders',
-  imports: [IconComponent, NgFor, DatePipe, NgIf],
+  imports: [IconComponent, NgFor, DatePipe, NgIf, RouterLink],
   templateUrl: './orders.component.html',
   styles: ``
 })
@@ -20,7 +22,8 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private readonly orderApi: OrderApi,
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
+    private readonly alertify: AlertifyService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -36,5 +39,16 @@ export class OrdersComponent implements OnInit {
     } catch (error) {
       handleError(null, error);
     }
+  }
+
+  onCancel(): void {
+    this.alertify.confirm(
+      'Cancel Order!',
+      'Are you sure you want to cancel this order?',
+      () => {
+        this.alertify.success('Order cancelled successfully');
+      },
+      () => {}
+    );
   }
 }

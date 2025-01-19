@@ -18,7 +18,7 @@ import { finalize, firstValueFrom, Subscription } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
 import { Price } from '../../interfaces/Price';
 import { CartService } from '../../services/cart.service';
-import { Order, OrderDetails } from '../../interfaces/Order';
+import { OrderDetails } from '../../interfaces/Order';
 import { NgFor, NgIf } from '@angular/common';
 import { CardInfo } from '../../interfaces/CardInfo';
 

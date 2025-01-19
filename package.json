@@ -20,6 +20,7 @@
     "@angular/router": "^19.0.1",
     "@auth0/angular-jwt": "^5.2.0",
     "@stripe/stripe-js": "^5.2.0",
+    "alertifyjs": "^1.14.0",
     "ngx-stripe": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
