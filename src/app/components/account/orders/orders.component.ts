@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { OrderApi } from '../../../api/order.api';
 import { firstValueFrom } from 'rxjs';
@@ -12,9 +12,10 @@ import { AlertifyService } from '../../../services/alertify.service';
 
 @Component({
   selector: 'app-orders',
-  imports: [IconComponent, NgFor, DatePipe, NgIf, RouterLink],
+  imports: [IconComponent, NgFor, NgIf, DatePipe, RouterLink],
   templateUrl: './orders.component.html',
-  styles: ``
+  styles: ``,
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class OrdersComponent implements OnInit {
   filters = new OrderQueryFilters();
@@ -41,14 +42,24 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  onCancel(): void {
+  onCancel(orderId: string): void {
     this.alertify.confirm(
       'Cancel Order!',
       'Are you sure you want to cancel this order?',
-      () => {
-        this.alertify.success('Order cancelled successfully');
+      async () => {
+        await this.cancelOrder(orderId);
       },
       () => {}
     );
+  }
+
+  async cancelOrder(orderId: string): Promise<void> {
+    try {
+      await firstValueFrom(this.orderApi.cancelOrder(orderId, 'Some reason'));
+      this.alertify.success('Order cancelled successfully');
+      await this.getOrders();
+    } catch (error) {
+      handleError(null, error);
+    }
   }
 }

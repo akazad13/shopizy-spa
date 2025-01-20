@@ -19,6 +19,7 @@ import { Price } from '../../interfaces/Price';
 import { handleError } from '../../functions/error-handler';
 import { IconComponent } from '../shared/icon/icon.component';
 import { AuthService } from '../../services/auth.service';
+import { AlertifyService } from '../../services/alertify.service';
 
 @Component({
   selector: 'app-checkout',
@@ -79,7 +80,8 @@ export class CheckoutComponent implements OnInit {
     private readonly orderApi: OrderApi,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly authApi: AuthApi
+    private readonly authApi: AuthApi,
+    private readonly alertifyService: AlertifyService
   ) {
     this.isLoggedIn = this.authService.loggedIn();
   }
@@ -156,6 +158,7 @@ export class CheckoutComponent implements OnInit {
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
+      this.alertifyService.success('Order placed successfully');
       this.router.navigate(['/', 'payment', data.orderId]);
     } catch (error) {
       handleError(this.checkoutForm, error);
