@@ -67,7 +67,7 @@
           <h3 class="text-gray-500 dark:text-gray-400">Reviews added</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
-            >{{ userDetails?.totalProductsReviewed }}
+            >{{ userDetails?.totalReviewed }}
           </span>
         </div>
       </div>
@@ -95,7 +95,8 @@
           <h3 class="text-gray-500 dark:text-gray-400">Favorite products</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
-            >8
+          >
+            {{ userDetails?.totalFavorites }}
           </span>
         </div>
       </div>
@@ -123,7 +124,8 @@
           <h3 class="text-gray-500 dark:text-gray-400">Product returns</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
-            >2
+          >
+            {{ userDetails?.totalReturns }}
           </span>
         </div>
       </div>

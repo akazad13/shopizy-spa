@@ -18,7 +18,9 @@ export interface UserDetails {
   address: Address | null;
   profileImageUrl: string | null;
   totalOrders: number;
-  totalProductsReviewed: number;
+  totalReviewed: number;
+  totalFavorites: number;
+  totalReturns: number;
   createdOn: Date;
   modifiedOn: Date | null;
 }
