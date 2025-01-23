@@ -1,5 +1,4 @@
 export const environment = {
-  apiUrl: '',
-  production: true,
-  portalUrl: ''
+  apiUrl: 'http://shopizy-api.runasp.net',
+  production: true
 };
