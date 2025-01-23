@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { AlertifyService } from '../services/alertify.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard {
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly alertify: AlertifyService
   ) {}
   canActivate(next: ActivatedRouteSnapshot): boolean {
     const authGuardMode = next.data['authGuardMode'] || 'redirectToLogin';
@@ -19,7 +21,7 @@ export class AuthGuard {
         return true;
       } else {
         this.router.navigate(['/']);
-        alert('You are not authorized to access this data');
+        this.alertify.error('You are not authorized to access this data');
       }
     }
 
