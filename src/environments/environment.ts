@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'https://shopizy.somee.com',
+  apiUrl: 'https://shopizy-api.runasp.net',
   production: true
 };
