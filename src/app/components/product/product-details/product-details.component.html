@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="mx-auto mt-4 flex flex-wrap justify-center gap-4">
-                  @for (productImage of product?.productImages; track productImage) {
+                  @for (productImage of product.productImages; track productImage) {
                     <a
                       (click)="changeProductImage(productImage.imageUrl)"
                       ><img
