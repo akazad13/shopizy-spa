@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -18,13 +18,12 @@ import { IconComponent } from '../../shared/icon/icon.component';
 @Component({
   selector: 'app-signup',
   imports: [
-    CommonModule,
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
     HasErrorPipe,
     IconComponent
-  ],
+],
   providers: [AuthApi],
   templateUrl: './signup.component.html',
   styles: ``

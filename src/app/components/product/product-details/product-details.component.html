@@ -3,7 +3,7 @@
     <nav aria-label="Breadcrumb">
       <ol
         class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-      >
+        >
         <li>
           <div class="flex items-center">
             <a href="#" class="mr-2 text-sm font-medium text-gray-900">Home</a>
@@ -17,337 +17,345 @@
           <div class="flex items-center">
             <a href="#" class="mr-2 text-sm font-medium text-gray-900"
               >Clothing</a
-            >
-            <app-icon
-              icon="backslash"
-              classNames="h-5 w-4 text-gray-300"
-            ></app-icon>
-          </div>
-        </li>
+              >
+              <app-icon
+                icon="backslash"
+                classNames="h-5 w-4 text-gray-300"
+              ></app-icon>
+            </div>
+          </li>
 
-        <li class="text-sm">
-          <a
-            href="#"
-            aria-current="page"
-            class="font-medium text-gray-500 hover:text-gray-600"
-            >{{ product.name }}</a
-          >
-        </li>
-      </ol>
-    </nav>
-
-    <div class="max-w-2xl p-4 max-lg:mx-auto lg:max-w-7xl">
-      <div
-        class="grid grid-cols-1 items-start gap-8 max-lg:gap-16 lg:grid-cols-2"
-      >
-        <div class="top-0 w-full text-center lg:sticky">
-          <div class="lg:h-[600px]">
-            <img
-              src="{{ mainPhotoUrl }}"
-              alt="Product"
-              class="h-full w-full rounded-md object-cover object-center lg:w-11/12"
-            />
-          </div>
-
-          <div class="mx-auto mt-4 flex flex-wrap justify-center gap-4">
+          <li class="text-sm">
             <a
-              *ngFor="let productImage of product?.productImages"
-              (click)="changeProductImage(productImage.imageUrl)"
-              ><img
-                src="{{ productImage.imageUrl }}"
-                alt="Product1"
+              href="#"
+              aria-current="page"
+              class="font-medium text-gray-500 hover:text-gray-600"
+              >{{ product.name }}</a
+              >
+            </li>
+          </ol>
+        </nav>
+
+        <div class="max-w-2xl p-4 max-lg:mx-auto lg:max-w-7xl">
+          <div
+            class="grid grid-cols-1 items-start gap-8 max-lg:gap-16 lg:grid-cols-2"
+            >
+            <div class="top-0 w-full text-center lg:sticky">
+              <div class="lg:h-[600px]">
+                <img
+                  src="{{ mainPhotoUrl }}"
+                  alt="Product"
+                  class="h-full w-full rounded-md object-cover object-center lg:w-11/12"
+                  />
+                </div>
+
+                <div class="mx-auto mt-4 flex flex-wrap justify-center gap-4">
+                  @for (productImage of product?.productImages; track productImage) {
+                    <a
+                      (click)="changeProductImage(productImage.imageUrl)"
+                      ><img
+                      src="{{ productImage.imageUrl }}"
+                      alt="Product1"
                 class="w-16 cursor-pointer rounded-md {{
                   productImage.imageUrl == mainPhotoUrl ? 'outline' : ''
                 }}"
-            /></a>
-          </div>
-        </div>
+                    /></a>
+                  }
+                </div>
+              </div>
 
-        <div>
-          <div class="flex flex-wrap items-start gap-4">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800">
-                {{ product.name }}
-              </h2>
-            </div>
+              <div>
+                <div class="flex flex-wrap items-start gap-4">
+                  <div>
+                    <h2 class="text-2xl font-bold text-gray-800">
+                      {{ product.name }}
+                    </h2>
+                  </div>
 
-            <div class="flex flex-wrap gap-3 md:ml-auto">
-              <button
-                type="button"
-                class="flex items-center rounded-md bg-pink-100 px-2.5 py-1.5 text-xs text-pink-600"
-              >
-                <app-icon
-                  icon="heart-outline"
-                  classNames="h-3 w-3 me-2"
-                ></app-icon>
-                {{ product.favourites }}
-              </button>
-              <button
-                type="button"
-                class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
-              >
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-yellow-300 me-2"
-                ></app-icon>
-                {{ product.averageRating.value }}
-              </button>
-              <button
-                type="button"
-                class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
-              >
-                <app-icon
-                  icon="review-like"
-                  classNames="h-3 w-3 me-2"
-                ></app-icon>
-                {{ product.averageRating.numRatings }} Reviews
-              </button>
-              <button
-                type="button"
-                class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
-              >
-                <app-icon icon="share" classNames="h-3 w-3"></app-icon>
-              </button>
-            </div>
-          </div>
+                  <div class="flex flex-wrap gap-3 md:ml-auto">
+                    <button
+                      type="button"
+                      class="flex items-center rounded-md bg-pink-100 px-2.5 py-1.5 text-xs text-pink-600"
+                      >
+                      <app-icon
+                        icon="heart-outline"
+                        classNames="h-3 w-3 me-2"
+                      ></app-icon>
+                      {{ product.favourites }}
+                    </button>
+                    <button
+                      type="button"
+                      class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
+                      >
+                      <app-icon
+                        icon="star"
+                        classNames="h-5 w-5 text-yellow-300 me-2"
+                      ></app-icon>
+                      {{ product.averageRating.value }}
+                    </button>
+                    <button
+                      type="button"
+                      class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
+                      >
+                      <app-icon
+                        icon="review-like"
+                        classNames="h-3 w-3 me-2"
+                      ></app-icon>
+                      {{ product.averageRating.numRatings }} Reviews
+                    </button>
+                    <button
+                      type="button"
+                      class="flex items-center rounded-md bg-gray-100 px-2.5 py-1.5 text-xs text-gray-800"
+                      >
+                      <app-icon icon="share" classNames="h-3 w-3"></app-icon>
+                    </button>
+                  </div>
+                </div>
 
-          <div class="mt-5">
-            <p class="text-sm text-gray-500">
-              {{ product.shortDescription }}
-            </p>
-          </div>
+                <div class="mt-5">
+                  <p class="text-sm text-gray-500">
+                    {{ product.shortDescription }}
+                  </p>
+                </div>
 
-          <div class="mt-5 flex flex-wrap items-center gap-4">
-            <p>
-              <span class="text-3xl font-bold text-gray-800">
-                ${{
-                  product != null
-                    ? product.price - (product.price! * product.discount!) / 100
-                    : null
-                }}
-              </span>
-              <span class="text-slate-900 line-through">
-                ${{ product.price }}
-              </span>
-            </p>
-          </div>
+                <div class="mt-5 flex flex-wrap items-center gap-4">
+                  <p>
+                    <span class="text-3xl font-bold text-gray-800">
+                      ${{
+                      product != null
+                      ? product.price - (product.price! * product.discount!) / 100
+                      : null
+                      }}
+                    </span>
+                    <span class="text-slate-900 line-through">
+                      ${{ product.price }}
+                    </span>
+                  </p>
+                </div>
 
-          <hr class="my-6" />
+                <hr class="my-6" />
 
-          <div class="mt-5">
-            <h3 class="text-sm font-medium text-gray-900">Highlights</h3>
+                <div class="mt-5">
+                  <h3 class="text-sm font-medium text-gray-900">Highlights</h3>
 
-            <div class="mt-4">
-              <ul class="list-disc space-y-2 pl-4 text-sm">
-                <li class="text-gray-400">
-                  <span class="text-gray-600">Hand cut and sewn locally</span>
-                </li>
-                <li class="text-gray-400">
-                  <span class="text-gray-600"
-                    >Dyed with our proprietary colors</span
-                  >
-                </li>
-                <li class="text-gray-400">
-                  <span class="text-gray-600">Pre-washed &amp; pre-shrunk</span>
-                </li>
-                <li class="text-gray-400">
-                  <span class="text-gray-600">Ultra-soft 100% cotton</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+                  <div class="mt-4">
+                    <ul class="list-disc space-y-2 pl-4 text-sm">
+                      <li class="text-gray-400">
+                        <span class="text-gray-600">Hand cut and sewn locally</span>
+                      </li>
+                      <li class="text-gray-400">
+                        <span class="text-gray-600"
+                          >Dyed with our proprietary colors</span
+                          >
+                        </li>
+                        <li class="text-gray-400">
+                          <span class="text-gray-600">Pre-washed &amp; pre-shrunk</span>
+                        </li>
+                        <li class="text-gray-400">
+                          <span class="text-gray-600">Ultra-soft 100% cotton</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
 
-          <hr class="my-6" />
+                  <hr class="my-6" />
 
-          <div>
-            <h3 class="text-xl font-bold text-gray-800">Choose a Size</h3>
-            <div class="mt-4 flex flex-wrap gap-4">
-              <button
-                *ngFor="let size of availableSizes"
-                type="button"
+                  <div>
+                    <h3 class="text-xl font-bold text-gray-800">Choose a Size</h3>
+                    <div class="mt-4 flex flex-wrap gap-4">
+                      @for (size of availableSizes; track size) {
+                        <button
+                          type="button"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800 {{
                   size == selectedSize ? 'border-gray-800' : ''
                 }}"
-                (click)="selectSize(size)"
-              >
-                {{ size }}
-              </button>
-            </div>
-          </div>
+                          (click)="selectSize(size)"
+                          >
+                          {{ size }}
+                        </button>
+                      }
+                    </div>
+                  </div>
 
-          <hr class="my-6" />
+                  <hr class="my-6" />
 
-          <div>
-            <h3 class="text-xl font-bold text-gray-800">Choose a Color</h3>
-            <div class="mt-4 flex flex-wrap gap-4">
-              <button
-                *ngFor="let color of availableColors"
-                type="button"
+                  <div>
+                    <h3 class="text-xl font-bold text-gray-800">Choose a Color</h3>
+                    <div class="mt-4 flex flex-wrap gap-4">
+                      @for (color of availableColors; track color) {
+                        <button
+                          type="button"
                 class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{
                   colorMap.get(color)
                 }} {{ color == selectedColor ? 'border-gray-800' : '' }}"
-                (click)="selectColor(color)"
-              ></button>
-            </div>
-          </div>
+                          (click)="selectColor(color)"
+                        ></button>
+                      }
+                    </div>
+                  </div>
 
-          <hr class="my-8" />
+                  <hr class="my-8" />
 
-          <div class="flex flex-wrap gap-4">
-            <button
-              class="flex min-w-[200px] items-center justify-center rounded-md bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-700"
-              (click)="addProductToCart()"
-            >
-              <app-icon icon="cart" classNames="h-7 w-7 me-2"></app-icon>
-              Add to cart
-            </button>
-            <button
-              type="button"
-              class="flex min-w-[200px] items-center justify-center rounded-md border border-indigo-800 bg-transparent px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-            >
-              <app-icon
-                icon="heart-outline"
-                classNames="h-6 w-6 me-2 text-red-500"
-              ></app-icon>
-              Add to favorite
-            </button>
-          </div>
-        </div>
-      </div>
+                  <div class="flex flex-wrap gap-4">
+                    <button
+                      class="flex min-w-[200px] items-center justify-center rounded-md bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-700"
+                      (click)="addProductToCart()"
+                      >
+                      <app-icon icon="cart" classNames="h-7 w-7 me-2"></app-icon>
+                      Add to cart
+                    </button>
+                    <button
+                      type="button"
+                      class="flex min-w-[200px] items-center justify-center rounded-md border border-indigo-800 bg-transparent px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50"
+                      >
+                      <app-icon
+                        icon="heart-outline"
+                        classNames="h-6 w-6 me-2 text-red-500"
+                      ></app-icon>
+                      Add to favorite
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-      <div class="mb-10 mt-10 max-w-7xl">
-        <ul class="flex border-b">
-          <a (click)="updateTabSelection('description')">
-            <li
+              <div class="mb-10 mt-10 max-w-7xl">
+                <ul class="flex border-b">
+                  <a (click)="updateTabSelection('description')">
+                    <li
               class="cursor-pointer px-8 py-3 text-sm font-semibold  transition-all {{
                 selectedTab == 'description'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
                   : 'text-gray-500 hover:bg-gray-100 '
               }}"
-            >
-              Description
-            </li>
-          </a>
-          <a (click)="updateTabSelection('review')">
-            <li
+                      >
+                      Description
+                    </li>
+                  </a>
+                  <a (click)="updateTabSelection('review')">
+                    <li
               class="cursor-pointer px-8 py-3 text-sm font-semibold transition-all {{
                 selectedTab == 'review'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
                   : 'text-gray-500 hover:bg-gray-100 '
               }}"
-            >
-              Reviews
-            </li>
-          </a>
-        </ul>
+                      >
+                      Reviews
+                    </li>
+                  </a>
+                </ul>
 
-        <div class="mt-8" *ngIf="selectedTab == 'description'">
-          <h3 class="text-xl font-bold text-gray-800">Product Description</h3>
-          <p class="mt-4 text-sm text-gray-500">
-            {{ product.description }}
-          </p>
-          <ul class="mt-6 list-disc space-y-3 pl-4 text-sm text-gray-500">
-            <li>
-              A gray t-shirt is a wardrobe essential because it is so versatile.
-            </li>
-            <li>
-              Available in a wide range of sizes, from extra small to extra
-              large, and even in tall and petite sizes.
-            </li>
-            <li>
-              This is easy to care for. They can usually be machine-washed and
-              dried on low heat.
-            </li>
-            <li>
-              You can add your own designs, paintings, or embroidery to make it
-              your own.
-            </li>
-          </ul>
-        </div>
-        <div class="mt-8" *ngIf="selectedTab == 'review'">
-          <div
-            class="grid grid-cols-1 gap-11 border-b border-gray-100 pb-11 max-xl:mx-auto max-xl:max-w-2xl xl:grid-cols-2"
-          >
-            <div class="box flex w-full flex-col gap-y-4">
-              <div
-                class="flex w-full items-center"
-                *ngFor="let starNum of starNumberArr; let i = index"
-              >
-                <p class="mr-0.5 text-lg font-medium text-black">
-                  {{ 5 - i }}
-                </p>
-                <app-icon
-                  icon="star"
-                  classNames="h-5 w-5 text-amber-400"
-                ></app-icon>
-                <p
-                  class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 sm:min-w-[278px]"
-                >
-                  <span
-                    *ngIf="starNum.num > 0"
+                @if (selectedTab == 'description') {
+                  <div class="mt-8">
+                    <h3 class="text-xl font-bold text-gray-800">Product Description</h3>
+                    <p class="mt-4 text-sm text-gray-500">
+                      {{ product.description }}
+                    </p>
+                    <ul class="mt-6 list-disc space-y-3 pl-4 text-sm text-gray-500">
+                      <li>
+                        A gray t-shirt is a wardrobe essential because it is so versatile.
+                      </li>
+                      <li>
+                        Available in a wide range of sizes, from extra small to extra
+                        large, and even in tall and petite sizes.
+                      </li>
+                      <li>
+                        This is easy to care for. They can usually be machine-washed and
+                        dried on low heat.
+                      </li>
+                      <li>
+                        You can add your own designs, paintings, or embroidery to make it
+                        your own.
+                      </li>
+                    </ul>
+                  </div>
+                }
+                @if (selectedTab == 'review') {
+                  <div class="mt-8">
+                    <div
+                      class="grid grid-cols-1 gap-11 border-b border-gray-100 pb-11 max-xl:mx-auto max-xl:max-w-2xl xl:grid-cols-2"
+                      >
+                      <div class="box flex w-full flex-col gap-y-4">
+                        @for (starNum of starNumberArr; track starNum; let i = $index) {
+                          <div
+                            class="flex w-full items-center"
+                            >
+                            <p class="mr-0.5 text-lg font-medium text-black">
+                              {{ 5 - i }}
+                            </p>
+                            <app-icon
+                              icon="star"
+                              classNames="h-5 w-5 text-amber-400"
+                            ></app-icon>
+                            <p
+                              class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 sm:min-w-[278px]"
+                              >
+                              @if (starNum.num > 0) {
+                                <span
                     class="flex h-full w-[{{
                       starNum.pct
                     }}%] rounded-3xl bg-amber-400"
-                  ></span>
-                </p>
-                <p class="mr-0.5 text-lg font-medium text-black">
-                  {{ starNum.num }}
-                </p>
-              </div>
-            </div>
-            <div
-              class="flex flex-col items-center justify-center rounded-3xl bg-amber-50 p-8"
-            >
-              <h2 class="mb-6 text-5xl font-bold text-amber-300">
-                {{ product.averageRating.value }}
-              </h2>
-              <app-rating
-                [rating]="this.product!.averageRating!.value"
-                [maxRating]="5.0"
-                [classes]="'h-14 w-14'"
-              ></app-rating>
-              <p
-                class="text-center text-xl font-medium leading-8 text-gray-900"
-              >
-                {{ product.averageRating.numRatings }} Reviews
-              </p>
-            </div>
-          </div>
-
-          <div
-            *ngFor="let review of product.productReviews"
-            class="border-b border-gray-100 pb-8 pt-11 max-xl:mx-auto max-xl:max-w-2xl"
-          >
-            <app-rating
-              [rating]="4.6"
-              [maxRating]="5.0"
-              [classes]="'h-9 w-9'"
-            ></app-rating>
-
-            <div
-              class="mb-4 flex flex-col justify-between gap-5 min-[400px]:flex-row sm:items-center"
-            >
-              <div class="flex items-center gap-3">
-                <img
+                                ></span>
+                              }
+                            </p>
+                            <p class="mr-0.5 text-lg font-medium text-black">
+                              {{ starNum.num }}
+                            </p>
+                          </div>
+                        }
+                      </div>
+                      <div
+                        class="flex flex-col items-center justify-center rounded-3xl bg-amber-50 p-8"
+                        >
+                        <h2 class="mb-6 text-5xl font-bold text-amber-300">
+                          {{ product.averageRating.value }}
+                        </h2>
+                        <app-rating
+                          [rating]="this.product!.averageRating!.value"
+                          [maxRating]="5.0"
+                          [classes]="'h-14 w-14'"
+                        ></app-rating>
+                        <p
+                          class="text-center text-xl font-medium leading-8 text-gray-900"
+                          >
+                          {{ product.averageRating.numRatings }} Reviews
+                        </p>
+                      </div>
+                    </div>
+                    @for (review of product.productReviews; track review) {
+                      <div
+                        class="border-b border-gray-100 pb-8 pt-11 max-xl:mx-auto max-xl:max-w-2xl"
+                        >
+                        <app-rating
+                          [rating]="4.6"
+                          [maxRating]="5.0"
+                          [classes]="'h-9 w-9'"
+                        ></app-rating>
+                        <div
+                          class="mb-4 flex flex-col justify-between gap-5 min-[400px]:flex-row sm:items-center"
+                          >
+                          <div class="flex items-center gap-3">
+                            <img
                   src="{{
                     review.reviewerImageUrl ??
                       'https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg'
                   }}"
-                  alt="{{ review.reviewer }} "
-                  class="h-8 w-8 rounded-full object-cover"
-                />
-                <h6 class="font-semibold text-indigo-600">
-                  {{ review.reviewer }}
-                </h6>
+                              alt="{{ review.reviewer }} "
+                              class="h-8 w-8 rounded-full object-cover"
+                              />
+                              <h6 class="font-semibold text-indigo-600">
+                                {{ review.reviewer }}
+                              </h6>
+                            </div>
+                            <p class="font-normal text-gray-500">{{ review.createdOn }}</p>
+                          </div>
+                          <p class="text-sm font-normal text-gray-500 max-xl:text-justify">
+                            {{ review.comment }}
+                          </p>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
               </div>
-              <p class="font-normal text-gray-500">{{ review.createdOn }}</p>
             </div>
-            <p class="text-sm font-normal text-gray-500 max-xl:text-justify">
-              {{ review.comment }}
-            </p>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

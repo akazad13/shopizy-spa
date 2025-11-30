@@ -1,9 +1,11 @@
 <div class="bg-white">
   <div
     class="mt-6 grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-5"
-  >
-    <div *ngFor="let product of products" class="group relative">
-      <app-product-card [product]="product"></app-product-card>
-    </div>
+    >
+    @for (product of products; track product) {
+      <div class="group relative">
+        <app-product-card [product]="product"></app-product-card>
+      </div>
+    }
   </div>
 </div>

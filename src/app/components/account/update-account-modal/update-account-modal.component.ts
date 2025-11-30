@@ -14,7 +14,7 @@ import {
   Validators
 } from '@angular/forms';
 import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
-import { NgIf } from '@angular/common';
+
 import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { finalize, firstValueFrom } from 'rxjs';
@@ -25,11 +25,10 @@ import { handleError } from '../../../functions/error-handler';
   selector: 'app-update-account-modal',
   imports: [
     IsInvalidPipe,
-    NgIf,
     HasErrorPipe,
     ReactiveFormsModule,
     IconComponent
-  ],
+],
   templateUrl: './update-account-modal.component.html',
   styles: ``
 })

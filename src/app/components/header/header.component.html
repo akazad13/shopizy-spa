@@ -9,7 +9,7 @@
   <header class="relative bg-white">
     <p
       class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8"
-    >
+      >
       Get free delivery on orders over $100
     </p>
 
@@ -21,7 +21,7 @@
             type="button"
             class="mobile-menu-hamburger relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
             (click)="showHideMobileDrawer('show')"
-          >
+            >
             <span class="absolute -inset-0.5"></span>
             <span class="sr-only">Open menu</span>
             <app-icon icon="bar-3" classNames="h-6 w-6"></app-icon>
@@ -38,248 +38,261 @@
           <!-- Flyout menus -->
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
             <div class="flex h-full space-x-8">
-              <div class="flex" *ngFor="let parentCategory of categoryTree">
-                <div class="relative flex">
-                  <button
-                    type="button"
-                    class="cat relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
-                    aria-expanded="false"
-                    (click)="updateCategorySelection(parentCategory.name)"
+              @for (parentCategory of categoryTree; track parentCategory) {
+                <div class="flex">
+                  <div class="relative flex">
+                    <button
+                      type="button"
+                      class="cat relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
+                      aria-expanded="false"
+                      (click)="updateCategorySelection(parentCategory.name)"
                     [ngClass]="
                       selected == parentCategory.name
                         ? 'border-indigo-600 text-indigo-600'
                         : 'border-transparent text-gray-700 hover:text-gray-800'
                     "
-                  >
-                    {{ parentCategory.name }}
-                  </button>
-                </div>
-                <div
-                  class="absolute inset-x-0 top-full z-10 text-sm text-gray-500"
-                  *ngIf="selected == parentCategory.name"
-                  appClickOutsideCategoryFlyout
-                  (clickOutside)="hideCategoryFlyout()"
-                >
-                  <div
-                    class="absolute inset-0 top-1/2 bg-white shadow"
-                    aria-hidden="true"
-                  ></div>
-
-                  <div class="relative bg-white">
-                    <div class="mx-auto max-w-7xl px-8">
-                      <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-                        <div class="col-start-2 grid grid-cols-2 gap-x-8">
-                          <div class="group relative text-base sm:text-sm">
-                            <div
-                              class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
-                            >
-                              <img
-                                src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg"
-                                alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                                class="object-cover object-center"
-                                *ngIf="parentCategory.name == 'Women'"
-                              />
-
-                              <img
-                                src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                                alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                                class="object-cover object-center"
-                                *ngIf="parentCategory.name == 'Men'"
-                              />
+                      >
+                      {{ parentCategory.name }}
+                    </button>
+                  </div>
+                  @if (selected == parentCategory.name) {
+                    <div
+                      class="absolute inset-x-0 top-full z-10 text-sm text-gray-500"
+                      appClickOutsideCategoryFlyout
+                      (clickOutside)="hideCategoryFlyout()"
+                      >
+                      <div
+                        class="absolute inset-0 top-1/2 bg-white shadow"
+                        aria-hidden="true"
+                      ></div>
+                      <div class="relative bg-white">
+                        <div class="mx-auto max-w-7xl px-8">
+                          <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                            <div class="col-start-2 grid grid-cols-2 gap-x-8">
+                              <div class="group relative text-base sm:text-sm">
+                                <div
+                                  class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
+                                  >
+                                  @if (parentCategory.name == 'Women') {
+                                    <img
+                                      src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg"
+                                      alt="Models sitting back to back, wearing Basic Tee in black and bone."
+                                      class="object-cover object-center"
+                                      />
+                                  }
+                                  @if (parentCategory.name == 'Men') {
+                                    <img
+                                      src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
+                                      alt="Models sitting back to back, wearing Basic Tee in black and bone."
+                                      class="object-cover object-center"
+                                      />
+                                  }
+                                </div>
+                                <a
+                                  href="#"
+                                  class="mt-6 block font-medium text-gray-900"
+                                  >
+                                  <span
+                                    class="absolute inset-0 z-10"
+                                    aria-hidden="true"
+                                  ></span>
+                                  New Arrivals
+                                </a>
+                                <p aria-hidden="true" class="mt-1">Shop now</p>
+                              </div>
+                              <div class="group relative text-base sm:text-sm">
+                                <div
+                                  class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
+                                  >
+                                  <img
+                                    src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg"
+                                    alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees."
+                                    class="object-cover object-center"
+                                    />
+                                  </div>
+                                  <a
+                                    href="#"
+                                    class="mt-6 block font-medium text-gray-900"
+                                    >
+                                    <span
+                                      class="absolute inset-0 z-10"
+                                      aria-hidden="true"
+                                    ></span>
+                                    Basic Tees
+                                  </a>
+                                  <p aria-hidden="true" class="mt-1">Shop now</p>
+                                </div>
+                              </div>
+                              <div
+                                class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm"
+                                >
+                                @for (children of parentCategory.children; track children) {
+                                  <div>
+                                    <p
+                                      id="{{ children.name }}-heading"
+                                      class="font-medium text-gray-900"
+                                      >
+                                      {{ children.name }}
+                                    </p>
+                                    <ul class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                                      @for (
+                                        grandChildren of children | toIterable
+                                        ; track
+                                        grandChildren) {
+                                        <li
+                                          class="flex"
+                                          >
+                                          <a href="#" class="hover:text-gray-800">{{
+                                            grandChildren.name
+                                          }}</a>
+                                        </li>
+                                      }
+                                    </ul>
+                                  </div>
+                                }
+                                <div>
+                                  <p
+                                    id="Brands-heading"
+                                    class="font-medium text-gray-900"
+                                    >
+                                    Brands
+                                  </p>
+                                  <ul
+                                    aria-labelledby="Brands-heading"
+                                    class="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                    >
+                                    @for (brand of brands; track brand) {
+                                      <li class="flex">
+                                        <a href="#" class="hover:text-gray-800">{{
+                                          brand
+                                        }}</a>
+                                      </li>
+                                    }
+                                  </ul>
+                                </div>
+                              </div>
                             </div>
-                            <a
-                              href="#"
-                              class="mt-6 block font-medium text-gray-900"
-                            >
-                              <span
-                                class="absolute inset-0 z-10"
-                                aria-hidden="true"
-                              ></span>
-                              New Arrivals
-                            </a>
-                            <p aria-hidden="true" class="mt-1">Shop now</p>
-                          </div>
-                          <div class="group relative text-base sm:text-sm">
-                            <div
-                              class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
-                            >
-                              <img
-                                src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg"
-                                alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees."
-                                class="object-cover object-center"
-                              />
-                            </div>
-                            <a
-                              href="#"
-                              class="mt-6 block font-medium text-gray-900"
-                            >
-                              <span
-                                class="absolute inset-0 z-10"
-                                aria-hidden="true"
-                              ></span>
-                              Basic Tees
-                            </a>
-                            <p aria-hidden="true" class="mt-1">Shop now</p>
-                          </div>
-                        </div>
-                        <div
-                          class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm"
-                        >
-                          <div *ngFor="let children of parentCategory.children">
-                            <p
-                              id="{{ children.name }}-heading"
-                              class="font-medium text-gray-900"
-                            >
-                              {{ children.name }}
-                            </p>
-                            <ul class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                              <li
-                                class="flex"
-                                *ngFor="
-                                  let grandChildren of children | toIterable
-                                "
-                              >
-                                <a href="#" class="hover:text-gray-800">{{
-                                  grandChildren.name
-                                }}</a>
-                              </li>
-                            </ul>
-                          </div>
-                          <div>
-                            <p
-                              id="Brands-heading"
-                              class="font-medium text-gray-900"
-                            >
-                              Brands
-                            </p>
-                            <ul
-                              aria-labelledby="Brands-heading"
-                              class="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                            >
-                              <li class="flex" *ngFor="let brand of brands">
-                                <a href="#" class="hover:text-gray-800">{{
-                                  brand
-                                }}</a>
-                              </li>
-                            </ul>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    }
                   </div>
+                }
+                <a
+                  [routerLink]="['/shop']"
+                  class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >Shop</a
+                  >
                 </div>
               </div>
-              <a
-                [routerLink]="['/shop']"
-                class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                >Shop</a
-              >
-            </div>
-          </div>
 
-          <div class="ml-auto flex items-center">
-            <div
-              class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
-              *ngIf="!isLoggedIn"
-            >
-              <a
-                [routerLink]="['auth/signin']"
-                class="text-sm font-medium text-gray-700 hover:text-gray-800"
-                >Sign in</a
-              >
-              <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
-              <a
-                [routerLink]="['auth/signup']"
-                class="text-sm font-medium text-gray-700 hover:text-gray-800"
-                >Create account</a
-              >
-            </div>
-            <div class="relative inline-block text-left" *ngIf="isLoggedIn">
-              <button
-                (click)="showHideAccountMenu(!hideAccountMenu)"
-                class="account-dropdown-btn"
-              >
-                <img
-                  class="account-dropdown-btn inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg"
-                  alt=""
-                />
-              </button>
-              <div
-                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="menu-button"
-                tabindex="-1"
+              <div class="ml-auto flex items-center">
+                @if (!isLoggedIn) {
+                  <div
+                    class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
+                    >
+                    <a
+                      [routerLink]="['auth/signin']"
+                      class="text-sm font-medium text-gray-700 hover:text-gray-800"
+                      >Sign in</a
+                      >
+                      <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
+                      <a
+                        [routerLink]="['auth/signup']"
+                        class="text-sm font-medium text-gray-700 hover:text-gray-800"
+                        >Create account</a
+                        >
+                      </div>
+                    }
+                    @if (isLoggedIn) {
+                      <div class="relative inline-block text-left">
+                        <button
+                          (click)="showHideAccountMenu(!hideAccountMenu)"
+                          class="account-dropdown-btn"
+                          >
+                          <img
+                            class="account-dropdown-btn inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                            src="https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg"
+                            alt=""
+                            />
+                          </button>
+                          <div
+                            class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                            role="menu"
+                            aria-orientation="vertical"
+                            aria-labelledby="menu-button"
+                            tabindex="-1"
                 [ngClass]="
                   hideAccountMenu
                     ? 'scale-0 transform opacity-0 transition duration-75 ease-in'
                     : 'scale-100 transform opacity-100 transition duration-75 ease-in'
                 "
-                appClickOutsideAccount
-                (clickOutside)="showHideAccountMenu(true)"
-              >
-                <div class="cursor-pointer py-1">
-                  <a
-                    class="block px-4 py-2 text-sm text-gray-700"
-                    tabindex="-1"
-                    *ngFor="let menuItem of accountMenu"
-                    (click)="onAccountMenuItemClick(menuItem)"
-                    >{{ menuItem.label }}</a
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="relative inline-block text-left"></div>
+                            appClickOutsideAccount
+                            (clickOutside)="showHideAccountMenu(true)"
+                            >
+                            <div class="cursor-pointer py-1">
+                              @for (menuItem of accountMenu; track menuItem) {
+                                <a
+                                  class="block px-4 py-2 text-sm text-gray-700"
+                                  tabindex="-1"
+                                  (click)="onAccountMenuItemClick(menuItem)"
+                                  >{{ menuItem.label }}</a
+                                  >
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      <div class="relative inline-block text-left"></div>
 
-            <div class="hidden lg:ml-8 lg:flex">
-              <a
-                href="javascript:void(0)"
-                class="flex items-center text-gray-700 hover:text-gray-800"
-              >
-                <img
-                  src="https://tailwindui.com/plus/img/flags/flag-united-states.svg"
-                  alt=""
-                  class="block h-auto w-5 flex-shrink-0"
-                />
-                <span class="ml-3 block text-sm font-medium">USD</span>
-                <span class="sr-only">, change currency</span>
-              </a>
-            </div>
+                      <div class="hidden lg:ml-8 lg:flex">
+                        <a
+                          href="javascript:void(0)"
+                          class="flex items-center text-gray-700 hover:text-gray-800"
+                          >
+                          <img
+                            src="https://tailwindui.com/plus/img/flags/flag-united-states.svg"
+                            alt=""
+                            class="block h-auto w-5 flex-shrink-0"
+                            />
+                            <span class="ml-3 block text-sm font-medium">USD</span>
+                            <span class="sr-only">, change currency</span>
+                          </a>
+                        </div>
 
-            <!-- Search -->
-            <div class="flex lg:ml-6">
-              <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
-                <span class="sr-only">Search</span>
-                <app-icon
-                  icon="magnifying-glass"
-                  classNames="h-6 w-6"
-                ></app-icon>
-              </a>
-            </div>
+                        <!-- Search -->
+                        <div class="flex lg:ml-6">
+                          <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
+                            <span class="sr-only">Search</span>
+                            <app-icon
+                              icon="magnifying-glass"
+                              classNames="h-6 w-6"
+                            ></app-icon>
+                          </a>
+                        </div>
 
-            <!-- Cart -->
-            <div class="ml-4 flow-root lg:ml-6">
-              <a
-                (click)="updateDropCartSelection()"
-                class="group -m-2 flex cursor-pointer items-center p-2"
-              >
-                <app-icon
-                  icon="cart"
-                  classNames="h-7 w-7 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                ></app-icon>
-                <div
-                  class="translate-x-1/6 bottom-auto z-10 inline-block -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white"
-                >
-                  {{ cartService.cartSummary.totalItems }}
-                </div>
-                <span class="sr-only">items in cart, view bag</span>
-              </a>
+                        <!-- Cart -->
+                        <div class="ml-4 flow-root lg:ml-6">
+                          <a
+                            (click)="updateDropCartSelection()"
+                            class="group -m-2 flex cursor-pointer items-center p-2"
+                            >
+                            <app-icon
+                              icon="cart"
+                              classNames="h-7 w-7 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                            ></app-icon>
+                            <div
+                              class="translate-x-1/6 bottom-auto z-10 inline-block -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white"
+                              >
+                              {{ cartService.cartSummary.totalItems }}
+                            </div>
+                            <span class="sr-only">items in cart, view bag</span>
+                          </a>
+                        </div>
+                        <app-dropcart [isDropCartOpened]="isDropCartOpened"></app-dropcart>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </header>
             </div>
-            <app-dropcart [isDropCartOpened]="isDropCartOpened"></app-dropcart>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header>
-</div>

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { OrderDetails } from '../../../interfaces/Order';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgFor } from '@angular/common';
+
 
 @Component({
   selector: 'app-order-details',
-  imports: [NgFor, RouterLink],
+  imports: [RouterLink],
   templateUrl: './order-details.component.html',
   styles: ``
 })

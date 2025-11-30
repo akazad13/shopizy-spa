@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { ProductCardComponent } from '../product-card/product-card.component';
-import { CommonModule } from '@angular/common';
+
 import { Product } from '../../../interfaces/product';
 
 @Component({
     selector: 'app-products-grid',
-    imports: [ProductCardComponent, CommonModule],
+    imports: [ProductCardComponent],
     templateUrl: './products-grid.component.html',
     styles: ``
 })

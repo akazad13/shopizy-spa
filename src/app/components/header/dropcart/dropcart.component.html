@@ -10,7 +10,7 @@
     aria-orientation="vertical"
     aria-labelledby="menu-button"
     tabindex="-1"
-  >
+    >
     <div class="py-1">
       <div class="pointer-events-auto">
         <div class="flex h-full flex-col bg-white shadow-xl">
@@ -19,7 +19,7 @@
               <h2
                 class="text-lg font-medium text-gray-900"
                 id="slide-over-title"
-              >
+                >
                 Shopping cart
               </h2>
               <div class="ml-3 flex h-7 items-center">
@@ -27,7 +27,7 @@
                   type="button"
                   class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
                   (click)="closeDropCart()"
-                >
+                  >
                   <span class="absolute -inset-0.5"></span>
                   <span class="sr-only">Close panel</span>
                   <app-icon icon="x-mark" classNames="h-6 w-6"></app-icon>
@@ -38,107 +38,108 @@
             <div class="mt-8">
               <div class="flow-root">
                 <ul class="-my-6 divide-y divide-gray-200">
-                  <li class="flex py-6" *ngFor="let cartItem of cart$ | async">
-                    <div
-                      class="mt-2 h-20 flex-shrink-0 rounded-md border border-gray-200"
-                    >
-                      <img
-                        src="{{ cartItem.image }}"
-                        alt="{{ cartItem.name }}"
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </div>
-
-                    <div class="ml-4 flex w-60 flex-1 flex-col">
-                      <div>
-                        <div
-                          class="flex justify-between text-base font-medium text-gray-900"
+                  @for (cartItem of cart$ | async; track cartItem) {
+                    <li class="flex py-6">
+                      <div
+                        class="mt-2 h-20 flex-shrink-0 rounded-md border border-gray-200"
                         >
-                          <h3>
-                            <a href="#">{{ cartItem.name }}</a>
-                          </h3>
-                          <p class="ml-4">${{ cartItem.price }}</p>
+                        <img
+                          src="{{ cartItem.image }}"
+                          alt="{{ cartItem.name }}"
+                          class="h-full w-full object-cover object-center"
+                          />
                         </div>
-                        <div class="mt-2 flex justify-between text-sm">
-                          <p class="mt-1 text-sm text-gray-500">
-                            {{ cartItem.color }}
-                          </p>
-                          <p class="mt-1 text-sm text-gray-500">
-                            Size: {{ cartItem.size }}
-                          </p>
+                        <div class="ml-4 flex w-60 flex-1 flex-col">
+                          <div>
+                            <div
+                              class="flex justify-between text-base font-medium text-gray-900"
+                              >
+                              <h3>
+                                <a href="#">{{ cartItem.name }}</a>
+                              </h3>
+                              <p class="ml-4">${{ cartItem.price }}</p>
+                            </div>
+                            <div class="mt-2 flex justify-between text-sm">
+                              <p class="mt-1 text-sm text-gray-500">
+                                {{ cartItem.color }}
+                              </p>
+                              <p class="mt-1 text-sm text-gray-500">
+                                Size: {{ cartItem.size }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="mt-3 flex justify-between text-sm">
+                            <p class="text-gray-500">Qty {{ cartItem.quantity }}</p>
+                            <button
+                              type="button"
+                              class="font-medium text-indigo-600 hover:text-indigo-500"
+                              (click)="removeProduct(cartItem.cartItemId)"
+                              >
+                              Remove
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                      <div class="mt-3 flex justify-between text-sm">
-                        <p class="text-gray-500">Qty {{ cartItem.quantity }}</p>
-                        <button
-                          type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
-                          (click)="removeProduct(cartItem.cartItemId)"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  </li>
+                      </li>
+                    }
 
-                  <!-- More products... -->
-                </ul>
+                    <!-- More products... -->
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="border-t border-gray-200 px-4 py-4 sm:px-6">
-            <div
-              class="mb-2 flex justify-between text-base font-medium text-gray-900"
-            >
-              <p>Subtotal</p>
-              <p>${{ cartService.cartSummary.subTotal.toFixed(2) }}</p>
-            </div>
-            <div
-              class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
-            >
-              <p class="mt-2">Saving</p>
-              <p class="mt-2">
-                ${{ cartService.cartSummary.saving.toFixed(2) }}
-              </p>
-            </div>
-            <div
-              class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
-            >
-              <p class="mt-2">Total</p>
-              <p class="mt-2">
-                ${{ cartService.cartSummary.total.toFixed(2) }}
-              </p>
-            </div>
-            <p class="mt-0.5 text-sm text-gray-500">
-              Shipping and taxes calculated at checkout.
-            </p>
-            <div class="mt-6">
-              <a
-                (click)="checkout()"
-                class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                >Checkout</a
-              >
-            </div>
-            <div
-              class="mt-6 flex justify-center text-center text-sm text-gray-500"
-            >
-              <p>
-                or
-                <button
-                  type="button"
-                  class="font-medium text-indigo-600 hover:text-indigo-500"
-                  [routerLink]="['/', 'shop']"
-                  (click)="closeDropCart()"
+            <div class="border-t border-gray-200 px-4 py-4 sm:px-6">
+              <div
+                class="mb-2 flex justify-between text-base font-medium text-gray-900"
                 >
-                  Continue Shopping
-                  <span aria-hidden="true"> &rarr;</span>
-                </button>
+                <p>Subtotal</p>
+                <p>${{ cartService.cartSummary.subTotal.toFixed(2) }}</p>
+              </div>
+              <div
+                class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
+                >
+                <p class="mt-2">Saving</p>
+                <p class="mt-2">
+                  ${{ cartService.cartSummary.saving.toFixed(2) }}
+                </p>
+              </div>
+              <div
+                class="mb-2 mt-2 flex justify-between border-t text-base font-medium text-gray-900"
+                >
+                <p class="mt-2">Total</p>
+                <p class="mt-2">
+                  ${{ cartService.cartSummary.total.toFixed(2) }}
+                </p>
+              </div>
+              <p class="mt-0.5 text-sm text-gray-500">
+                Shipping and taxes calculated at checkout.
               </p>
+              <div class="mt-6">
+                <a
+                  (click)="checkout()"
+                  class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  >Checkout</a
+                  >
+                </div>
+                <div
+                  class="mt-6 flex justify-center text-center text-sm text-gray-500"
+                  >
+                  <p>
+                    or
+                    <button
+                      type="button"
+                      class="font-medium text-indigo-600 hover:text-indigo-500"
+                      [routerLink]="['/', 'shop']"
+                      (click)="closeDropCart()"
+                      >
+                      Continue Shopping
+                      <span aria-hidden="true"> &rarr;</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>

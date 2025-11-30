@@ -1,12 +1,12 @@
 <section class="bg-white dark:bg-gray-900">
   <div
     class="container mx-auto flex min-h-screen items-center justify-center px-6"
-  >
+    >
     <form
       class="w-full max-w-md"
       (ngSubmit)="signup()"
       [formGroup]="signupForm"
-    >
+      >
       <div class="mx-auto flex justify-center">
         <img class="m-auto h-16 w-auto" src="/logo.png" alt="" />
       </div>
@@ -14,18 +14,19 @@
       <div class="flex items-center justify-center">
         <h1
           class="mt-3 text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white sm:text-3xl"
-        >
+          >
           Sign Up
         </h1>
       </div>
 
-      <div
-        class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-        role="alert"
-        *ngIf="signupForm.errors?.['server']"
-      >
-        {{ signupForm.errors?.["server"] }}
-      </div>
+      @if (signupForm.errors?.['server']) {
+        <div
+          class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+          >
+          {{ signupForm.errors?.["server"] }}
+        </div>
+      }
 
       <div>
         <div class="relative mt-4 flex items-center">
@@ -42,145 +43,157 @@
             placeholder="First Name"
             id="firstName"
             formControlName="firstName"
-          />
+            />
+          </div>
+
+          @if (formData['firstName'] | hasError: 'required') {
+            <div>
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                First name is required
+              </p>
+            </div>
+          }
         </div>
 
-        <div *ngIf="formData['firstName'] | hasError: 'required'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            First name is required
-          </p>
-        </div>
-      </div>
+        <div>
+          <div class="relative mt-4 flex items-center">
+            <span class="absolute">
+              <app-icon
+                icon="user"
+                classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+              ></app-icon>
+            </span>
 
-      <div>
-        <div class="relative mt-4 flex items-center">
-          <span class="absolute">
-            <app-icon
-              icon="user"
-              classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            ></app-icon>
-          </span>
+            <input
+              type="text"
+              class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+              placeholder="Last Name"
+              id="lastName"
+              formControlName="lastName"
+              />
+            </div>
 
-          <input
-            type="text"
-            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-            placeholder="Last Name"
-            id="lastName"
-            formControlName="lastName"
-          />
-        </div>
+            @if (formData['lastName'] | hasError: 'required') {
+              <div>
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                  Last name is required
+                </p>
+              </div>
+            }
+          </div>
 
-        <div *ngIf="formData['lastName'] | hasError: 'required'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Last name is required
-          </p>
-        </div>
-      </div>
+          <div>
+            <div class="relative mt-4 flex items-center">
+              <span class="absolute">
+                <app-icon
+                  icon="device-phone-mobile"
+                  classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+                ></app-icon>
+              </span>
 
-      <div>
-        <div class="relative mt-4 flex items-center">
-          <span class="absolute">
-            <app-icon
-              icon="device-phone-mobile"
-              classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            ></app-icon>
-          </span>
+              <input
+                type="email"
+                id="email"
+                autocomplete="email"
+                class="peer block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+                [class.dark:border-red-500]="formData['email'] | isInvalid"
+                formControlName="email"
+                placeholder="Email"
+                />
+              </div>
 
-          <input
-            type="email"
-            id="email"
-            autocomplete="email"
-            class="peer block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-            [class.dark:border-red-500]="formData['email'] | isInvalid"
-            formControlName="email"
-            placeholder="Email"
-          />
-        </div>
+              @if (formData['email'] | hasError: 'required') {
+                <div>
+                  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                    Email is required
+                  </p>
+                </div>
+              }
+            </div>
 
-        <div *ngIf="formData['email'] | hasError: 'required'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Email is required
-          </p>
-        </div>
-      </div>
+            <div>
+              <div class="relative mt-4 flex items-center">
+                <span class="absolute">
+                  <app-icon
+                    icon="lock-closed"
+                    classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+                  ></app-icon>
+                </span>
 
-      <div>
-        <div class="relative mt-4 flex items-center">
-          <span class="absolute">
-            <app-icon
-              icon="lock-closed"
-              classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            ></app-icon>
-          </span>
-
-          <input
-            type="password"
-            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-            placeholder="Password"
+                <input
+                  type="password"
+                  class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+                  placeholder="Password"
             [class.dark:border-red-500]="
               signupForm.controls['password'] | isInvalid
             "
-            formControlName="password"
-            autocomplete="new-password"
-          />
-        </div>
-        <div *ngIf="formData['password'] | hasError: 'required'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Password is required
-          </p>
-        </div>
-      </div>
+                  formControlName="password"
+                  autocomplete="new-password"
+                  />
+                </div>
+                @if (formData['password'] | hasError: 'required') {
+                  <div>
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Password is required
+                    </p>
+                  </div>
+                }
+              </div>
 
-      <div>
-        <div class="relative mt-4 flex items-center">
-          <span class="absolute">
-            <app-icon
-              icon="lock-closed"
-              classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
-            ></app-icon>
-          </span>
+              <div>
+                <div class="relative mt-4 flex items-center">
+                  <span class="absolute">
+                    <app-icon
+                      icon="lock-closed"
+                      classNames="mx-3 h-6 w-6 text-gray-300 dark:text-gray-500"
+                    ></app-icon>
+                  </span>
 
-          <input
-            type="password"
-            class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
-            placeholder="Confirm Password"
+                  <input
+                    type="password"
+                    class="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+                    placeholder="Confirm Password"
             [class.dark:border-red-500]="
               signupForm.controls['confirmPassword'] | isInvalid
             "
-            formControlName="confirmPassword"
-            autocomplete="new-password"
-          />
-        </div>
+                    formControlName="confirmPassword"
+                    autocomplete="new-password"
+                    />
+                  </div>
 
-        <div *ngIf="formData['confirmPassword'] | hasError: 'required'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Confirm Password is required
-          </p>
-        </div>
+                  @if (formData['confirmPassword'] | hasError: 'required') {
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Confirm Password is required
+                      </p>
+                    </div>
+                  }
 
-        <div *ngIf="formData['confirmPassword'] | hasError: 'mustMatch'">
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            Password didn't match
-          </p>
-        </div>
-      </div>
+                  @if (formData['confirmPassword'] | hasError: 'mustMatch') {
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Password didn't match
+                      </p>
+                    </div>
+                  }
+                </div>
 
-      <div class="mt-6">
-        <button
-          class="w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-        >
-          Sign Up
-        </button>
+                <div class="mt-6">
+                  <button
+                    class="w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                    >
+                    Sign Up
+                  </button>
 
-        <div class="mt-6 text-center">
-          <a
-            [routerLink]="['/auth/signin']"
-            class="text-sm text-blue-500 hover:underline dark:text-blue-400"
-          >
-            Already have an account? Sign in
-          </a>
-        </div>
-      </div>
-    </form>
-  </div>
-</section>
+                  <div class="mt-6 text-center">
+                    <a
+                      [routerLink]="['/auth/signin']"
+                      class="text-sm text-blue-500 hover:underline dark:text-blue-400"
+                      >
+                      Already have an account? Sign in
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>

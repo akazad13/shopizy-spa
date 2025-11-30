@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { NgFor, NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-rating',
-  imports: [IconComponent, NgFor, NgIf],
+  imports: [IconComponent],
   templateUrl: './rating.component.html',
   styles: ``
 })

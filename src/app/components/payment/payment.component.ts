@@ -19,7 +19,7 @@ import { handleError } from '../../functions/error-handler';
 import { Price } from '../../interfaces/Price';
 import { CartService } from '../../services/cart.service';
 import { OrderDetails } from '../../interfaces/Order';
-import { NgFor, NgIf } from '@angular/common';
+
 import { CardInfo } from '../../interfaces/CardInfo';
 
 @Component({
@@ -31,10 +31,8 @@ import { CardInfo } from '../../interfaces/CardInfo';
     StripeCardGroupDirective,
     ReactiveFormsModule,
     IconComponent,
-    FormsModule,
-    NgFor,
-    NgIf
-  ],
+    FormsModule
+],
   templateUrl: './payment.component.html',
   styles: `
     @media screen and (min-width: 1600px) {

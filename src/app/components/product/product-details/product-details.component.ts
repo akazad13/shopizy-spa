@@ -3,13 +3,13 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { ActivatedRoute } from '@angular/router';
 import { ProductDetail } from '../../../interfaces/product';
 import { CartItem, CartService } from '../../../services/cart.service';
-import { NgFor, NgIf } from '@angular/common';
+
 import { RatingComponent } from '../rating/rating.component';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
-  imports: [IconComponent, NgIf, NgFor, RatingComponent],
+  imports: [IconComponent, RatingComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {

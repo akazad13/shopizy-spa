@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ProductCardComponent } from '../../product/product-card/product-card.component';
-import { CommonModule } from '@angular/common';
+
 import { Product } from '../../../interfaces/product';
 
 export interface BlockProducts {
@@ -10,7 +10,7 @@ export interface BlockProducts {
 
 @Component({
   selector: 'app-products-block',
-  imports: [ProductCardComponent, CommonModule],
+  imports: [ProductCardComponent],
   templateUrl: './products-block.component.html',
   styles: ``
 })

@@ -13,141 +13,142 @@
     <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div
         class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-6"
-      >
+        >
         <nav aria-label="Breadcrumb">
           <ol
             class="mx-auto flex max-w-2xl items-center space-x-2 lg:max-w-7xl"
-          >
+            >
             <li>
               <div class="flex items-center">
                 <a href="/" class="mr-2 text-sm font-medium text-gray-900"
                   >Home</a
-                >
-                <app-icon
-                  icon="backslash"
-                  classNames="h-5 w-4 text-gray-300"
-                ></app-icon>
-              </div>
-            </li>
-            <li class="text-sm">
-              <a
-                aria-current="page"
-                class="font-medium text-gray-500 hover:text-gray-600"
-                >Shop</a
-              >
-            </li>
-          </ol>
-        </nav>
+                  >
+                  <app-icon
+                    icon="backslash"
+                    classNames="h-5 w-4 text-gray-300"
+                  ></app-icon>
+                </div>
+              </li>
+              <li class="text-sm">
+                <a
+                  aria-current="page"
+                  class="font-medium text-gray-500 hover:text-gray-600"
+                  >Shop</a
+                  >
+                </li>
+              </ol>
+            </nav>
 
-        <div class="flex items-center">
-          <div class="relative inline-block text-left">
-            <div>
-              <button
-                type="button"
-                class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                id="menu-button"
-                aria-expanded="false"
-                aria-haspopup="true"
-                (click)="showHideSortingOptions()"
-              >
-                Sort
-                <app-icon
-                  icon="chevron-down"
-                  classNames="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                ></app-icon>
-              </button>
-            </div>
+            <div class="flex items-center">
+              <div class="relative inline-block text-left">
+                <div>
+                  <button
+                    type="button"
+                    class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
+                    id="menu-button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    (click)="showHideSortingOptions()"
+                    >
+                    Sort
+                    <app-icon
+                      icon="chevron-down"
+                      classNames="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    ></app-icon>
+                  </button>
+                </div>
 
-            <div
-              class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-              aria-orientation="vertical"
-              aria-labelledby="menu-button"
-              tabindex="-1"
+                <div
+                  class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  aria-orientation="vertical"
+                  aria-labelledby="menu-button"
+                  tabindex="-1"
               [ngClass]="
                 shopFilterState.hideSortingOptions
                   ? 'scale-0 transform opacity-0 transition duration-75 ease-in'
                   : 'scale-100 transform opacity-100 transition duration-75 ease-in'
               "
-            >
-              <div class="py-1">
-                <!--
-                  Active: "bg-gray-100", Not Active: ""
+                  >
+                  <div class="py-1">
+                    <!--
+                    Active: "bg-gray-100", Not Active: ""
 
-                  Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
-                -->
-                <a
-                  class="block px-4 py-2 text-sm text-gray-500"
-                  tabindex="-1"
-                  *ngFor="let sortingOption of shopFilterState.sortingOptions"
-                  (click)="onSort(sortingOption)"
-                  >{{ sortingOption }}</a
-                >
+                    Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
+                    -->
+                    @for (sortingOption of shopFilterState.sortingOptions; track sortingOption) {
+                      <a
+                        class="block px-4 py-2 text-sm text-gray-500"
+                        tabindex="-1"
+                        (click)="onSort(sortingOption)"
+                        >{{ sortingOption }}</a
+                        >
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                  (click)="showHideMobileFiltersDrawer('show')"
+                  >
+                  <span class="sr-only">Filters</span>
+                  <app-icon icon="funnel-solid" classNames="h-5 w-5"></app-icon>
+                </button>
               </div>
             </div>
-          </div>
 
-          <button
-            type="button"
-            class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-            (click)="showHideMobileFiltersDrawer('show')"
-          >
-            <span class="sr-only">Filters</span>
-            <app-icon icon="funnel-solid" classNames="h-5 w-5"></app-icon>
-          </button>
-        </div>
-      </div>
+            <section aria-labelledby="products-heading" class="pb-24 pt-6">
+              <h2 id="products-heading" class="sr-only">Products</h2>
 
-      <section aria-labelledby="products-heading" class="pb-24 pt-6">
-        <h2 id="products-heading" class="sr-only">Products</h2>
+              <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                <!-- Filters -->
+                <app-shop-filters
+                  [shopFilterState]="shopFilterState"
+                  [brands]="brands"
+                  [colors]="colors"
+                  [categoryTree]="categoryTree"
+                  (updateFilterStateOutput)="updateFilterState($event)"
+                  (updateProductGridOutput)="updateProductGrid($event)"
+                ></app-shop-filters>
 
-        <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-          <!-- Filters -->
-          <app-shop-filters
-            [shopFilterState]="shopFilterState"
-            [brands]="brands"
-            [colors]="colors"
-            [categoryTree]="categoryTree"
-            (updateFilterStateOutput)="updateFilterState($event)"
-            (updateProductGridOutput)="updateProductGrid($event)"
-          ></app-shop-filters>
-
-          <!-- Product grid -->
-          <div class="lg:col-span-3">
-            <app-products-grid [products]="products"></app-products-grid>
-            <div class="mt-10 flex justify-center">
-              <a
+                <!-- Product grid -->
+                <div class="lg:col-span-3">
+                  <app-products-grid [products]="products"></app-products-grid>
+                  <div class="mt-10 flex justify-center">
+                    <a
                 class="mx-1  rounded-md bg-white px-4 py-2 capitalize  dark:bg-gray-800 dark:text-gray-600 {{
                   filters.pageNumber == 1
                     ? 'cursor-not-allowed text-gray-500'
                     : 'text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer'
                 }}"
-                (click)="previous()"
-              >
-                <div class="-mx-1 flex items-center">
-                  <app-icon
-                    icon="back-arrow"
-                    classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
-                  ></app-icon>
+                      (click)="previous()"
+                      >
+                      <div class="-mx-1 flex items-center">
+                        <app-icon
+                          icon="back-arrow"
+                          classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
+                        ></app-icon>
 
-                  <span class="mx-1"> previous </span>
+                        <span class="mx-1"> previous </span>
+                      </div>
+                    </a>
+                    <a
+                      (click)="next()"
+                      class="mx-1 transform cursor-pointer rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
+                      >
+                      <div class="-mx-1 flex items-center">
+                        <span class="mx-1"> Next </span>
+                        <app-icon
+                          icon="forward-arrow"
+                          classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
+                        ></app-icon>
+                      </div>
+                    </a>
+                  </div>
                 </div>
-              </a>
-              <a
-                (click)="next()"
-                class="mx-1 transform cursor-pointer rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
-              >
-                <div class="-mx-1 flex items-center">
-                  <span class="mx-1"> Next </span>
-                  <app-icon
-                    icon="forward-arrow"
-                    classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
-                  ></app-icon>
-                </div>
-              </a>
-            </div>
-          </div>
+              </div>
+            </section>
+          </main>
         </div>
-      </section>
-    </main>
-  </div>
-</div>
+      </div>

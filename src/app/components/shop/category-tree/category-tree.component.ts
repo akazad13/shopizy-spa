@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CategoryTree } from '../../../interfaces/category';
-import { NgFor, NgIf } from '@angular/common';
+
 import { IconComponent } from '../../shared/icon/icon.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-category-tree',
-  imports: [NgFor, NgIf, IconComponent, FormsModule],
+  imports: [IconComponent, FormsModule],
   templateUrl: './category-tree.component.html',
   styles: ``
 })

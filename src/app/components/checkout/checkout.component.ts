@@ -1,5 +1,5 @@
 import { AuthApi } from './../../api/auth.api';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CartItem, CartService } from './../../services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -24,15 +24,13 @@ import { AlertifyService } from '../../services/alertify.service';
 @Component({
   selector: 'app-checkout',
   imports: [
-    NgFor,
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
-    NgIf,
     HasErrorPipe,
     IconComponent,
     CommonModule
-  ],
+],
   templateUrl: './checkout.component.html',
   styles: ``,
   providers: []

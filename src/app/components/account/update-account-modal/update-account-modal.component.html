@@ -6,14 +6,14 @@
   class="{{
     isUpdateAccountModelOpened ? 'backdrop-brightness-50' : 'hidden'
   }} max-h-auto fixed left-0 right-0 top-0 z-50 flex h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden antialiased  md:inset-0"
->
+  >
   <div class="max-h-auto relative max-h-full w-full max-w-lg p-4">
     <!-- Modal content -->
     <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
       <!-- Modal header -->
       <div
         class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5"
-      >
+        >
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           Update Information
         </h3>
@@ -21,7 +21,7 @@
           type="button"
           class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
           (click)="onCloseUpdateAccountModel()"
-        >
+          >
           <app-icon icon="x-mark" classNames="h-6 w-6"></app-icon>
           <span class="sr-only">Close modal</span>
         </button>
@@ -33,7 +33,7 @@
             <label
               for="firstName"
               class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
+              >
               Your First Name*
             </label>
             <input
@@ -43,179 +43,193 @@
               placeholder="Enter your first name"
               [class.dark:border-red-500]="formData['firstName'] | isInvalid"
               formControlName="firstName"
-            />
-            <div *ngIf="formData['firstName'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                Firstname is required
-              </p>
+              />
+              @if (formData['firstName'] | hasError: 'required') {
+                <div>
+                  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                    Firstname is required
+                  </p>
+                </div>
+              }
             </div>
-          </div>
 
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="lastName"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your Last Name*
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              placeholder="Enter your last name"
-              [class.dark:border-red-500]="formData['lastName'] | isInvalid"
-              formControlName="lastName"
-            />
-            <div *ngIf="formData['lastName'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                Lastname is required
-              </p>
-            </div>
-          </div>
-
-          <div class="col-span-2">
-            <label
-              for="email"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your Email*
-            </label>
-            <input
-              type="text"
-              id="email"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              placeholder="Enter your email here"
-              [class.dark:border-red-500]="formData['email'] | isInvalid"
-              formControlName="email"
-            />
-            <div *ngIf="formData['email'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                Email is required
-              </p>
-            </div>
-          </div>
-
-          <div class="col-span-2">
-            <label
-              for="streetAddress"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Street*
-            </label>
-            <input
-              type="text"
-              id="streetAddress"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              [class.dark:border-red-500]="formData['street'] | isInvalid"
-              formControlName="street"
-            />
-            <div *ngIf="formData['street'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                Street is required
-              </p>
-            </div>
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="cityAddress"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              City*
-            </label>
-            <input
-              type="text"
-              id="cityAddress"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              [class.dark:border-red-500]="formData['city'] | isInvalid"
-              formControlName="city"
-            />
-            <div *ngIf="formData['city'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                City is required
-              </p>
-            </div>
-          </div>
-
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="StateAddress"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              State
-            </label>
-            <input
-              type="text"
-              id="StateAddress"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              [class.dark:border-red-500]="formData['state'] | isInvalid"
-              formControlName="state"
-            />
-          </div>
-
-          <div class="col-span-2 sm:col-span-1">
-            <div class="mb-2 flex items-center gap-2">
+            <div class="col-span-2 sm:col-span-1">
               <label
-                for="countryAddress"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Country*
+                for="lastName"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                Your Last Name*
               </label>
-            </div>
-            <select
-              id="countryAddress"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              formControlName="country"
-              [class.dark:border-red-500]="formData['country'] | isInvalid"
-            >
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="MX">Mexico</option>
-            </select>
-            <div *ngIf="formData['country'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                Country is required
-              </p>
-            </div>
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="zipCodeAddress"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-            >
-              ZipCode*
-            </label>
-            <input
-              type="text"
-              id="zipCodeAddress"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              [class.dark:border-red-500]="formData['zipCode'] | isInvalid"
-              formControlName="zipCode"
-            />
-            <div *ngIf="formData['zipCode'] | hasError: 'required'">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                ZipCode is required
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="border-t border-gray-200 pt-4 dark:border-gray-700 md:pt-5">
-          <button
-            type="submit"
-            class="me-2 inline-flex items-center rounded-lg bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
-            (click)="updateAccount()"
-          >
-            Save information
-          </button>
-          <button
-            type="button"
-            data-modal-toggle="accountInformationModal2"
-            class="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
-            (click)="onCloseUpdateAccountModel()"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+              <input
+                type="text"
+                id="lastName"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                placeholder="Enter your last name"
+                [class.dark:border-red-500]="formData['lastName'] | isInvalid"
+                formControlName="lastName"
+                />
+                @if (formData['lastName'] | hasError: 'required') {
+                  <div>
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                      Lastname is required
+                    </p>
+                  </div>
+                }
+              </div>
+
+              <div class="col-span-2">
+                <label
+                  for="email"
+                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                  Your Email*
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                  placeholder="Enter your email here"
+                  [class.dark:border-red-500]="formData['email'] | isInvalid"
+                  formControlName="email"
+                  />
+                  @if (formData['email'] | hasError: 'required') {
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Email is required
+                      </p>
+                    </div>
+                  }
+                </div>
+
+                <div class="col-span-2">
+                  <label
+                    for="streetAddress"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                    Street*
+                  </label>
+                  <input
+                    type="text"
+                    id="streetAddress"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    [class.dark:border-red-500]="formData['street'] | isInvalid"
+                    formControlName="street"
+                    />
+                    @if (formData['street'] | hasError: 'required') {
+                      <div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                          Street is required
+                        </p>
+                      </div>
+                    }
+                  </div>
+                  <div class="col-span-2 sm:col-span-1">
+                    <label
+                      for="cityAddress"
+                      class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                      City*
+                    </label>
+                    <input
+                      type="text"
+                      id="cityAddress"
+                      class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                      [class.dark:border-red-500]="formData['city'] | isInvalid"
+                      formControlName="city"
+                      />
+                      @if (formData['city'] | hasError: 'required') {
+                        <div>
+                          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                            City is required
+                          </p>
+                        </div>
+                      }
+                    </div>
+
+                    <div class="col-span-2 sm:col-span-1">
+                      <label
+                        for="StateAddress"
+                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        id="StateAddress"
+                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                        [class.dark:border-red-500]="formData['state'] | isInvalid"
+                        formControlName="state"
+                        />
+                      </div>
+
+                      <div class="col-span-2 sm:col-span-1">
+                        <div class="mb-2 flex items-center gap-2">
+                          <label
+                            for="countryAddress"
+                            class="block text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                            Country*
+                          </label>
+                        </div>
+                        <select
+                          id="countryAddress"
+                          class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                          formControlName="country"
+                          [class.dark:border-red-500]="formData['country'] | isInvalid"
+                          >
+                          <option value="US">United States</option>
+                          <option value="CA">Canada</option>
+                          <option value="MX">Mexico</option>
+                        </select>
+                        @if (formData['country'] | hasError: 'required') {
+                          <div>
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                              Country is required
+                            </p>
+                          </div>
+                        }
+                      </div>
+                      <div class="col-span-2 sm:col-span-1">
+                        <label
+                          for="zipCodeAddress"
+                          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                          ZipCode*
+                        </label>
+                        <input
+                          type="text"
+                          id="zipCodeAddress"
+                          class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                          [class.dark:border-red-500]="formData['zipCode'] | isInvalid"
+                          formControlName="zipCode"
+                          />
+                          @if (formData['zipCode'] | hasError: 'required') {
+                            <div>
+                              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                                ZipCode is required
+                              </p>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                      <div class="border-t border-gray-200 pt-4 dark:border-gray-700 md:pt-5">
+                        <button
+                          type="submit"
+                          class="me-2 inline-flex items-center rounded-lg bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+                          (click)="updateAccount()"
+                          >
+                          Save information
+                        </button>
+                        <button
+                          type="button"
+                          data-modal-toggle="accountInformationModal2"
+                          class="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+                          (click)="onCloseUpdateAccountModel()"
+                          >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>

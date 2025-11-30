@@ -16,17 +16,17 @@
         ? 'translate-x-full transform transition duration-300 ease-in-out'
         : 'translate-x-0 transform transition duration-300 ease-in-out'
     "
-  >
+    >
     <div
       class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl"
-    >
+      >
       <div class="flex items-center justify-between px-4">
         <h2 class="text-lg font-medium text-gray-900">Filters</h2>
         <button
           type="button"
           class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
           (click)="hideMobileDrawer()"
-        >
+          >
           <span class="sr-only">Close menu</span>
           <app-icon icon="x-mark" classNames="h-6 w-6"></app-icon>
         </button>
@@ -43,37 +43,40 @@
               aria-controls="filter-section-mobile-1"
               aria-expanded="false"
               (click)="updateCategoryCollapsed()"
-            >
+              >
               <span class="font-medium text-gray-900">Category</span>
               <span class="ml-6 flex items-center">
                 <!-- Expand icon, show/hide based on section open state. -->
-                <app-icon
-                  icon="plus"
-                  classNames="h-5 w-5"
-                  *ngIf="shopFilterState.categoryCollapsed"
-                ></app-icon>
+                @if (shopFilterState.categoryCollapsed) {
+                  <app-icon
+                    icon="plus"
+                    classNames="h-5 w-5"
+                  ></app-icon>
+                }
                 <!-- Collapse icon, show/hide based on section open state. -->
-                <app-icon
-                  icon="minus"
-                  classNames="h-5 w-5"
-                  *ngIf="!shopFilterState.categoryCollapsed"
-                ></app-icon>
+                @if (!shopFilterState.categoryCollapsed) {
+                  <app-icon
+                    icon="minus"
+                    classNames="h-5 w-5"
+                  ></app-icon>
+                }
               </span>
             </button>
           </h3>
           <!-- Filter section, show/hide based on section state. -->
-          <div
-            class="pt-6"
-            id="filter-section-mobile-1"
-            *ngIf="!shopFilterState.categoryCollapsed"
-          >
-            <div class="space-y-6">
-              <app-category-tree
-                [categoryTree]="categoryTree"
-                (updateCategorySelection)="updateCategorySelection($event)"
-              ></app-category-tree>
+          @if (!shopFilterState.categoryCollapsed) {
+            <div
+              class="pt-6"
+              id="filter-section-mobile-1"
+              >
+              <div class="space-y-6">
+                <app-category-tree
+                  [categoryTree]="categoryTree"
+                  (updateCategorySelection)="updateCategorySelection($event)"
+                ></app-category-tree>
+              </div>
             </div>
-          </div>
+          }
         </div>
         <div class="border-t border-gray-200 px-4 py-6">
           <h3 class="-mx-2 -my-3 flow-root">
@@ -84,7 +87,7 @@
               aria-controls="filter-section-mobile-2"
               aria-expanded="false"
               (click)="updateBrandCollapsed()"
-            >
+              >
               <span class="font-medium text-gray-900">Brand</span>
               <span class="ml-6 flex items-center">
                 <app-icon
@@ -95,77 +98,83 @@
             </button>
           </h3>
           <!-- Filter section, show/hide based on section state. -->
-          <div
-            class="pt-6"
-            id="filter-section-mobile-2"
-            *ngIf="!shopFilterState.brandCollapsed"
-          >
-            <div class="space-y-3">
-              <div class="flex items-center" *ngFor="let brand of brands">
-                <input
-                  id="{{ brand.id }}"
-                  [(ngModel)]="brand.checked"
-                  name="{{ brand.name }}"
-                  value="{{ brand.id }}"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  (change)="onBrandCheckboxChange(brand)"
-                />
-                <label
-                  for="{{ brand.id }}"
-                  class="ml-3 min-w-0 flex-1 text-gray-500"
-                  >{{ brand }}</label
-                >
-              </div>
+          @if (!shopFilterState.brandCollapsed) {
+            <div
+              class="pt-6"
+              id="filter-section-mobile-2"
+              >
+              <div class="space-y-3">
+                @for (brand of brands; track brand) {
+                  <div class="flex items-center">
+                    <input
+                      id="{{ brand.id }}"
+                      [(ngModel)]="brand.checked"
+                      name="{{ brand.name }}"
+                      value="{{ brand.id }}"
+                      type="checkbox"
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      (change)="onBrandCheckboxChange(brand)"
+                      />
+                      <label
+                        for="{{ brand.id }}"
+                        class="ml-3 min-w-0 flex-1 text-gray-500"
+                        >{{ brand }}</label
+                        >
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="border-t border-gray-200 px-4 py-6">
+              <h3 class="-mx-2 -my-3 flow-root">
+                <!-- Expand/collapse section button -->
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
+                  aria-controls="filter-section-mobile-0"
+                  aria-expanded="false"
+                  (click)="updateColorCollapsed()"
+                  >
+                  <span class="font-medium text-gray-900">Color</span>
+                  <span class="ml-6 flex items-center">
+                    <app-icon
+                      icon="{{ shopFilterState.colorCollapsed ? 'plus' : 'minus' }}"
+                      classNames="h-5 w-5"
+                    ></app-icon>
+                  </span>
+                </button>
+              </h3>
+              <!-- Filter section, show/hide based on section state. -->
+              @if (!shopFilterState.colorCollapsed) {
+                <div
+                  class="pt-6"
+                  id="filter-section-mobile-0"
+                  >
+                  <div class="space-y-3">
+                    @for (color of colors; track color) {
+                      <div class="flex items-center">
+                        <input
+                          id="{{ color.name }}"
+                          [(ngModel)]="color.checked"
+                          name="{{ color.name }}"
+                          value="{{ color.name }}"
+                          type="checkbox"
+                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          (change)="onColorCheckboxChange(color)"
+                          />
+                          <label
+                            for="filter-mobile-color-0"
+                            class="ml-3 min-w-0 flex-1 text-gray-500"
+                            >{{ color }}</label
+                            >
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <div class="border-t border-gray-200 px-4 py-6">
-          <h3 class="-mx-2 -my-3 flow-root">
-            <!-- Expand/collapse section button -->
-            <button
-              type="button"
-              class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-              aria-controls="filter-section-mobile-0"
-              aria-expanded="false"
-              (click)="updateColorCollapsed()"
-            >
-              <span class="font-medium text-gray-900">Color</span>
-              <span class="ml-6 flex items-center">
-                <app-icon
-                  icon="{{ shopFilterState.colorCollapsed ? 'plus' : 'minus' }}"
-                  classNames="h-5 w-5"
-                ></app-icon>
-              </span>
-            </button>
-          </h3>
-          <!-- Filter section, show/hide based on section state. -->
-          <div
-            class="pt-6"
-            id="filter-section-mobile-0"
-            *ngIf="!shopFilterState.colorCollapsed"
-          >
-            <div class="space-y-3">
-              <div class="flex items-center" *ngFor="let color of colors">
-                <input
-                  id="{{ color.name }}"
-                  [(ngModel)]="color.checked"
-                  name="{{ color.name }}"
-                  value="{{ color.name }}"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  (change)="onColorCheckboxChange(color)"
-                />
-                <label
-                  for="filter-mobile-color-0"
-                  class="ml-3 min-w-0 flex-1 text-gray-500"
-                  >{{ color }}</label
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>

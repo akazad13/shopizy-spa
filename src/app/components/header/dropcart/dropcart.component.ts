@@ -1,4 +1,4 @@
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dropcart',
-  imports: [CommonModule, RouterLink, IconComponent, NgFor],
+  imports: [CommonModule, RouterLink, IconComponent],
   templateUrl: './dropcart.component.html',
   styles: ``,
   providers: []

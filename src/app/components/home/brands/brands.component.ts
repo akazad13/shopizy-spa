@@ -1,9 +1,9 @@
-import { NgFor } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-brands',
-    imports: [NgFor],
+    imports: [],
     templateUrl: './brands.component.html',
     styles: ``
 })

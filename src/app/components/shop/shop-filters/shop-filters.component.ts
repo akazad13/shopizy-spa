@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { NgFor, NgIf } from '@angular/common';
+
 import { CategoryTree } from '../../../interfaces/category';
 import { Color, ShopFilterState } from '../../../interfaces/shop';
 import { CategoryTreeComponent } from '../category-tree/category-tree.component';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-shop-filters',
-  imports: [IconComponent, NgIf, NgFor, CategoryTreeComponent, FormsModule],
+  imports: [IconComponent, CategoryTreeComponent, FormsModule],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })
