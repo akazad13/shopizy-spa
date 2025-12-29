@@ -1,71 +1,27 @@
 <div>
-  @for (category of categoryTree; track category) {
-    <div
-      class=""
-      aria-expanded="true"
-      #treeItem
-      >
+  <ng-container *ngFor="let category of categoryTree">
+    <div aria-expanded="true" #treeItem>
       <!-- Accordion Heading -->
       <div class="flex w-full items-center gap-x-0.5 rounded-md py-1.5">
-        @if (category.children != null && category.children.length > 0) {
-          <button
-            class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-            aria-expanded="true"
-            aria-controls="checkbox-tree-collapse-one"
-            (click)="toggleCategory(category)"
-            type="button"
-            >
-            <app-icon
-              icon="{{ category.expanded ? 'minus' : 'plus' }}"
-              classNames="h-5 w-5"
-            ></app-icon>
-          </button>
-        }
-        <div
-        class="grow cursor-pointer rounded-md px-1.5 {{
-          category.children != null && category.children.length > 0
-            ? ''
-            : 'ml-6'
-        }}"
-          >
+        <button *ngIf="category.children != null && category.children.length > 0" class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50" aria-expanded="true" aria-controls="checkbox-tree-collapse-one" (click)="toggleCategory(category)" type="button">
+          <app-icon icon="{{ category.expanded ? 'minus' : 'plus' }}" classNames="h-5 w-5"></app-icon>
+        </button>
+        <div class="grow cursor-pointer rounded-md px-1.5 {{ category.children != null && category.children.length > 0 ? '' : 'ml-6' }}">
           <span class="text-sm text-gray-800">
             <div class="flex">
-              <input
-                type="checkbox"
-                [(ngModel)]="category.checked"
-                id="{{ category.id }}"
-                class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                value="{{ category.name }}"
-                (change)="onParentCheckboxChange(category)"
-                />
-                <span class="ms-3">{{ category.name }}</span>
-              </div>
-            </span>
-          </div>
+              <input type="checkbox" [(ngModel)]="category.checked" id="{{ category.id }}" class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50" value="{{ category.name }}" (change)="onParentCheckboxChange(category)" />
+              <span class="ms-3">{{ category.name }}</span>
+            </div>
+          </span>
         </div>
-        <!-- End Accordion Heading -->
-        <div
-          id="checkbox-tree-collapse-one"
-          class="w-full overflow-hidden transition-[height] duration-300"
-          aria-labelledby="checkbox-tree-heading-one"
-          >
-          <div
-            class="relative ps-7 before:absolute before:start-3 before:top-0 before:-ms-px before:h-full before:w-0.5 before:bg-gray-100"
-            >
-            @if (category.expanded && category.children) {
-              <div
-                class=""
-                aria-expanded="true"
-                id="checkbox-tree-sub-heading-one"
-                >
-                <app-category-tree
-                  [categoryTree]="category.children!"
-                  (updateCategorySelection)="onChildCheckboxChange($event)"
-                ></app-category-tree>
-              </div>
-            }
+      </div>
+      <!-- End Accordion Heading -->
+      <div id="checkbox-tree-collapse-one" class="w-full overflow-hidden transition-[height] duration-300" aria-labelledby="checkbox-tree-heading-one">
+        <div class="relative ps-7 before:absolute before:start-3 before:top-0 before:-ms-px before:h-full before:w-0.5 before:bg-gray-100">
+          <div *ngIf="category.expanded && category.children" aria-expanded="true" id="checkbox-tree-sub-heading-one">
+            <app-category-tree [categoryTree]="category.children!" (updateCategorySelection)="onChildCheckboxChange($event)"></app-category-tree>
           </div>
         </div>
       </div>
-    }
-  </div>
+    </div>
+  </ng-container>

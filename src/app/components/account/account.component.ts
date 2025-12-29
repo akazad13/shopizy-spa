@@ -20,11 +20,12 @@ export class AccountComponent {
     private readonly tokenService: TokenService
   ) {
     // Fetch user data
-    this.userApi
-      .getUser(this.tokenService.getCurrentUserId())
-      .subscribe((user: UserDetails) => {
+    const userId = this.tokenService.getCurrentUserId();
+    if (userId) {
+      this.userApi.getUser(userId).subscribe((user: UserDetails) => {
         this.userDetails = user;
       });
+    }
   }
   onEditData() {
     this.isUpdateAccountModelOpened = true;

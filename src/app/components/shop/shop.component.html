@@ -75,14 +75,9 @@
 
                     Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
                     -->
-                    @for (sortingOption of shopFilterState.sortingOptions; track sortingOption) {
-                      <a
-                        class="block px-4 py-2 text-sm text-gray-500"
-                        tabindex="-1"
-                        (click)="onSort(sortingOption)"
-                        >{{ sortingOption }}</a
-                        >
-                      }
+                    <ng-container *ngFor="let sortingOption of shopFilterState.sortingOptions">
+                      <a class="block px-4 py-2 text-sm text-gray-500" tabindex="-1" (click)="onSort(sortingOption)">{{ sortingOption }}</a>
+                    </ng-container>
                     </div>
                   </div>
                 </div>

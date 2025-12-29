@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rating',
-  imports: [IconComponent],
+  imports: [CommonModule, IconComponent],
   templateUrl: './rating.component.html',
   styles: ``
 })
@@ -31,5 +31,9 @@ export class RatingComponent implements OnInit {
       ...Array(halfStar).fill('half-star'),
       ...Array(emptyStars).fill('empty-star')
     ];
+  }
+
+  trackByIndex(index: number, _item: string) {
+    return index;
   }
 }

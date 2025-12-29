@@ -37,55 +37,35 @@
                 Delivery Methods
               </h3>
 
-              @if (checkoutForm.errors?.['server']) {
+              <ng-container *ngIf="checkoutForm.errors?.['server']">
                 <div
                   class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800"
                   role="alert"
                   >
                   {{ checkoutForm.errors?.["server"] }}
                 </div>
-              }
+              </ng-container>
 
               <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                @for (method of deliveryMethods; track method) {
-                  <div
-                    class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4"
-                    >
+                <ng-container *ngFor="let method of deliveryMethods">
+                  <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4">
                     <div class="flex items-center">
                       <div class="flex h-5 items-center">
-                        <input
-                          id="{{ method.deliveryMethod }}"
-                          type="radio"
-                          value="{{ method.deliveryMethod }}"
-                          class="text-primary-600 focus:ring-primary-600 dark:focus:ring-primary-600 h-4 w-4 border-gray-300 bg-white focus:ring-2"
-                          formControlName="deliveryMethod"
-                          />
-                        </div>
-                        <div class="ms-4 text-sm">
-                          <label
-                            for="{{ method.deliveryMethod }}"
-                            class="font-medium leading-none text-gray-900"
-                            >
-                            {{ method.label }}
-                          </label>
-                          <p id="dhl-text" class="mt-1 font-normal text-gray-900">
-                            ${{ method.price.amount }}
-                          </p>
-                          <p
-                            id="dhl-text"
-                            class="mt-1 text-xs font-normal text-gray-500"
-                            >
-                            {{ method.timeline }}
-                          </p>
-                        </div>
+                        <input id="{{ method.deliveryMethod }}" type="radio" value="{{ method.deliveryMethod }}" class="text-primary-600 focus:ring-primary-600 dark:focus:ring-primary-600 h-4 w-4 border-gray-300 bg-white focus:ring-2" formControlName="deliveryMethod" />
+                      </div>
+                      <div class="ms-4 text-sm">
+                        <label for="{{ method.deliveryMethod }}" class="font-medium leading-none text-gray-900">{{ method.label }}</label>
+                        <p id="dhl-text" class="mt-1 font-normal text-gray-900">${{ method.price.amount }}</p>
+                        <p id="dhl-text" class="mt-1 text-xs font-normal text-gray-500">{{ method.timeline }}</p>
                       </div>
                     </div>
-                  }
+                  </div>
+                </ng-container>
                 </div>
               </div>
               <div class="space-y-12">
                 <div class="border-b border-gray-900/10 pb-12 sm:border-b-0">
-                  @if (!isLoggedIn) {
+                  <ng-container *ngIf="!isLoggedIn">
                     <div>
                       <h2 class="text-base font-semibold leading-7 text-gray-700">
                         Create Account
@@ -109,13 +89,13 @@
                               placeholder="Email"
                               />
                             </div>
-                            @if (formData['email'] | hasError: 'required') {
+                            <ng-container *ngIf="formData['email'] | hasError: 'required'">
                               <div>
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                   Email is required
                                 </p>
                               </div>
-                            }
+                            </ng-container>
                           </div>
                           <div class="mt-2">
                             <label
@@ -135,17 +115,17 @@
                                   autocomplete="current-password"
                                   />
                                 </div>
-                                @if (formData['password'] | hasError: 'required') {
+                                <ng-container *ngIf="formData['password'] | hasError: 'required'">
                                   <div>
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                       Password is required
                                     </p>
                                   </div>
-                                }
+                                </ng-container>
                               </div>
                               <hr class="my-5 h-px border-t-0 bg-gray-200" />
                             </div>
-                          }
+                          </ng-container>
 
                           <h2 class="text-base font-semibold leading-7 text-gray-700">
                             Shipping information
@@ -169,13 +149,13 @@
                                     formControlName="firstName"
                                     />
                                   </div>
-                                  @if (formData['firstName'] | hasError: 'required') {
+                                  <ng-container *ngIf="formData['firstName'] | hasError: 'required'">
                                     <div>
                                       <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                         Firstname is required
                                       </p>
                                     </div>
-                                  }
+                                  </ng-container>
                                 </div>
 
                                 <div class="sm:col-span-3">
@@ -195,13 +175,13 @@
                                         formControlName="lastName"
                                         />
                                       </div>
-                                      @if (formData['lastName'] | hasError: 'required') {
+                                      <ng-container *ngIf="formData['lastName'] | hasError: 'required'">
                                         <div>
                                           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                             LastName is required
                                           </p>
                                         </div>
-                                      }
+                                      </ng-container>
                                     </div>
 
                                     <div class="sm:col-span-6">
@@ -221,13 +201,13 @@
                                             formControlName="street"
                                             />
                                           </div>
-                                          @if (formData['street'] | hasError: 'required') {
+                                          <ng-container *ngIf="formData['street'] | hasError: 'required'">
                                             <div>
                                               <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                                 Street is required
                                               </p>
                                             </div>
-                                          }
+                                          </ng-container>
                                         </div>
 
                                         <div class="sm:col-span-3">
@@ -245,13 +225,13 @@
                                                 formControlName="city"
                                                 />
                                               </div>
-                                              @if (formData['city'] | hasError: 'required') {
+                                              <ng-container *ngIf="formData['city'] | hasError: 'required'">
                                                 <div>
                                                   <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                                     City is required
                                                   </p>
                                                 </div>
-                                              }
+                                              </ng-container>
                                             </div>
                                             <div class="sm:col-span-3">
                                               <label
@@ -291,13 +271,13 @@
                                                       formControlName="state"
                                                       />
                                                     </div>
-                                                    @if (formData['state'] | hasError: 'required') {
+                                                    <ng-container *ngIf="formData['state'] | hasError: 'required'">
                                                       <div>
                                                         <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                                           State is required
                                                         </p>
                                                       </div>
-                                                    }
+                                                    </ng-container>
                                                   </div>
 
                                                   <div class="sm:col-span-3">
@@ -317,13 +297,13 @@
                                                           formControlName="zipCode"
                                                           />
                                                         </div>
-                                                        @if (formData['zipCode'] | hasError: 'required') {
+                                                        <ng-container *ngIf="formData['zipCode'] | hasError: 'required'">
                                                           <div>
                                                             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                                                               Zip Code is required
                                                             </p>
                                                           </div>
-                                                        }
+                                                      </ng-container>
                                                       </div>
                                                     </div>
                                                   </div>
@@ -335,29 +315,18 @@
                                               <div class="mt-8">
                                                 <div class="flow-root">
                                                   <ul class="-my-6 divide-y divide-gray-200">
-                                                    @for (item of cart$ | async; track item) {
+                                                    <ng-container *ngFor="let item of (cart$ | async) || []">
                                                       <li class="flex py-6">
-                                                        <div
-                                                          class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200"
-                                                          >
-                                                          <img
-                                                            src="{{ item.image }}"
-                                                            alt=""
-                                                            class="h-full w-full object-cover object-center"
-                                                            />
-                                                          </div>
-                                                          <div class="ml-4 flex flex-1 flex-col">
-                                                            <div>
-                                                              <div
-                                                                class="flex justify-between text-base font-medium text-gray-900"
-                                                                >
-                                                                <h3>
-                                                                  <a href="#">{{ item.name }}</a>
-                                                                </h3>
-                                                                <p class="ml-4">${{ item.price }}</p>
-                                                              </div>
-                                                              <div
-                                                                class="mt-3 flex justify-between text-base font-medium text-gray-900"
+                                                        <div class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200">
+                                                          <img src="{{ item.image }}" alt="" class="h-full w-full object-cover object-center" />
+                                                        </div>
+                                                        <div class="ml-4 flex flex-1 flex-col">
+                                                          <div>
+                                                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                                              <h3><a href="#">{{ item.name }}</a></h3>
+                                                              <p class="ml-4">${{ item.price }}</p>
+                                                            </div>
+                                                            <div class="mt-3 flex justify-between text-base font-medium text-gray-900"
                                                                 >
                                                                 <p class="mt-1 text-sm text-gray-500">{{ item.color }}</p>
                                                                 <p class="mt-1 text-sm text-gray-500">{{ item.size }}</p>
@@ -379,7 +348,7 @@
                                                             </div>
                                                           </div>
                                                         </li>
-                                                      }
+                                                      </ng-container>
 
                                                       <!-- More products... -->
                                                     </ul>

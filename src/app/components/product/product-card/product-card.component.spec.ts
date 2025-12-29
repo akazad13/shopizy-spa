@@ -15,6 +15,24 @@ describe('ProductCardComponent', () => {
 
     fixture = TestBed.createComponent(ProductCardComponent);
     component = fixture.componentInstance;
+    // Provide minimal product input to avoid undefined accesses in template
+    component.product = {
+      productId: '1',
+      name: 'Test',
+      shortDescription: '',
+      description: '',
+      categoryId: '',
+      price: 0,
+      discount: 0,
+      brand: null,
+      colors: '',
+      sizes: '',
+      tags: [],
+      barcode: null,
+      stockQuantity: 0,
+      averageRating: { value: 0, numRatings: 0 },
+      productImages: null
+    };
     fixture.detectChanges();
   });
 

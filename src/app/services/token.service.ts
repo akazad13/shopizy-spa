@@ -1,40 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
-  constructor(private readonly jwtHelper: JwtHelperService) {}
+  constructor(@Optional() private readonly jwtHelper?: JwtHelperService) {}
 
-  getCurrentUserId(): string {
-    const user = this.getStoredUser();
-    if (user == null) {
-      return user;
-    }
-    const decodedToken = this.jwtHelper.decodeToken(user.token);
-    return decodedToken.id;
+  private get helper(): JwtHelperService {
+    return this.jwtHelper ?? new JwtHelperService();
   }
 
-  getToken(): string {
+  getCurrentUserId(): string | null {
     const user = this.getStoredUser();
     if (user == null) {
-      return user;
+      return null;
+    }
+    const decodedToken = this.helper.decodeToken(user.token);
+    return decodedToken?.id ?? null;
+  }
+
+  getToken(): string | null {
+    const user = this.getStoredUser();
+    if (user == null) {
+      return null;
     }
     return user.token;
   }
 
-  getDecodedToken(): any {
+  getDecodedToken(): any | null {
     const token = this.getToken();
     if (token == null) {
-      return token;
+      return null;
     }
-    return this.jwtHelper.decodeToken(token);
+    return this.helper.decodeToken(token);
   }
 
   isTokenExpired(): boolean {
     const token = this.getToken();
-    return this.jwtHelper.isTokenExpired(token);
+    return !!token && this.helper.isTokenExpired(token);
   }
 
   private getStoredUser() {

@@ -11,37 +11,17 @@
         >
         <span class="font-medium text-gray-900">Category</span>
         <span class="ml-6 flex items-center">
-          <!-- Expand icon, show/hide based on section open state. -->
-          @if (shopFilterState.categoryCollapsed) {
-            <app-icon
-              icon="plus"
-              classNames="h-5 w-5"
-            ></app-icon>
-          }
-          <!-- Collapse icon, show/hide based on section open state. -->
-          @if (!shopFilterState.categoryCollapsed) {
-            <app-icon
-              icon="minus"
-              classNames="h-5 w-5"
-            ></app-icon>
-          }
+          <app-icon *ngIf="shopFilterState.categoryCollapsed" icon="plus" classNames="h-5 w-5"></app-icon>
+          <app-icon *ngIf="!shopFilterState.categoryCollapsed" icon="minus" classNames="h-5 w-5"></app-icon>
         </span>
       </button>
     </h3>
     <!-- Filter section, show/hide based on section state. -->
-    @if (!shopFilterState.categoryCollapsed) {
-      <div
-        class="pt-6"
-        id="filter-section-1"
-        >
-        <div class="space-y-3">
-          <app-category-tree
-            [categoryTree]="categoryTree"
-            (updateCategorySelection)="updateCategorySelection($event)"
-          ></app-category-tree>
-        </div>
+    <div *ngIf="!shopFilterState.categoryCollapsed" class="pt-6" id="filter-section-1">
+      <div class="space-y-3">
+        <app-category-tree [categoryTree]="categoryTree" (updateCategorySelection)="updateCategorySelection($event)"></app-category-tree>
       </div>
-    }
+    </div>
   </div>
   <div class="border-b border-gray-200 py-6">
     <h3 class="-my-3 flow-root">
@@ -61,31 +41,16 @@
         </span>
       </button>
     </h3>
-    @if (!shopFilterState.brandCollapsed) {
-      <div
-        class="pt-6"
-        id="filter-section-2"
-        >
-        <div class="space-y-3">
-          @for (brand of brands; track brand) {
-            <div class="flex items-center">
-              <input
-                id="{{ brand.id }}"
-                [(ngModel)]="brand.checked"
-                name="{{ brand.name }}"
-                value="{{ brand.id }}"
-                type="checkbox"
-                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                (change)="onBrandCheckboxChange(brand)"
-                />
-                <label for="{{ brand.id }}" class="ml-3 text-sm text-gray-600">{{
-                  brand.name
-                }}</label>
-              </div>
-            }
+    <div *ngIf="!shopFilterState.brandCollapsed" class="pt-6" id="filter-section-2">
+      <div class="space-y-3">
+        <ng-container *ngFor="let brand of brands">
+          <div class="flex items-center">
+            <input id="{{ brand.id }}" [(ngModel)]="brand.checked" name="{{ brand.name }}" value="{{ brand.id }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" (change)="onBrandCheckboxChange(brand)" />
+            <label for="{{ brand.id }}" class="ml-3 text-sm text-gray-600">{{ brand.name || brand }}</label>
           </div>
-        </div>
-      }
+        </ng-container>
+      </div>
+    </div>
     </div>
     <div class="border-b border-gray-200 py-6">
       <h3 class="-my-3 flow-root">
@@ -106,31 +71,15 @@
           </span>
         </button>
       </h3>
-      <!-- Filter section, show/hide based on section state. -->
-      @if (!shopFilterState.colorCollapsed) {
-        <div
-          class="pt-6"
-          id="filter-section-0"
-          >
-          <div class="space-y-3">
-            @for (color of colors; track color) {
-              <div class="flex items-center">
-                <input
-                  id="{{ color.name }}"
-                  [(ngModel)]="color.checked"
-                  name="{{ color.name }}"
-                  value="{{ color.name }}"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  (change)="onColorCheckboxChange(color)"
-                  />
-                  <label for="filter-color-0" class="ml-3 text-sm text-gray-600">{{
-                    color.name
-                  }}</label>
-                </div>
-              }
+      <div *ngIf="!shopFilterState.colorCollapsed" class="pt-6" id="filter-section-0">
+        <div class="space-y-3">
+          <ng-container *ngFor="let color of colors">
+            <div class="flex items-center">
+              <input id="{{ color.name }}" [(ngModel)]="color.checked" name="{{ color.name }}" value="{{ color.name }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" (change)="onColorCheckboxChange(color)" />
+              <label for="filter-color-0" class="ml-3 text-sm text-gray-600">{{ color.name || color }}</label>
             </div>
-          </div>
-        }
+          </ng-container>
+        </div>
+      </div>
       </div>
     </form>

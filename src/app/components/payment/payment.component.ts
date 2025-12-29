@@ -8,6 +8,7 @@ import {
   StripeService
 } from 'ngx-stripe';
 import { IconComponent } from '../shared/icon/icon.component';
+import { CommonModule } from '@angular/common';
 import {
   StripeCardElementOptions,
   StripeElementsOptions
@@ -24,7 +25,9 @@ import { CardInfo } from '../../interfaces/CardInfo';
 
 @Component({
   selector: 'app-payment',
+  standalone: true,
   imports: [
+    CommonModule,
     StripeCardNumberComponent,
     StripeCardCvcComponent,
     StripeCardExpiryComponent,
@@ -32,7 +35,7 @@ import { CardInfo } from '../../interfaces/CardInfo';
     ReactiveFormsModule,
     IconComponent,
     FormsModule
-],
+  ],
   templateUrl: './payment.component.html',
   styles: `
     @media screen and (min-width: 1600px) {

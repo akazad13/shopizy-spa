@@ -30,7 +30,7 @@ import { AlertifyService } from '../../services/alertify.service';
     HasErrorPipe,
     IconComponent,
     CommonModule
-],
+  ],
   templateUrl: './checkout.component.html',
   styles: ``,
   providers: []
@@ -41,6 +41,8 @@ export class CheckoutComponent implements OnInit {
 
   checkoutForm: FormGroup = new FormGroup({
     deliveryMethod: new FormControl('1', [Validators.required]),
+    email: new FormControl('', []),
+    password: new FormControl('', []),
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
     street: new FormControl('', [Validators.required]),

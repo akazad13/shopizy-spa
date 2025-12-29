@@ -6,10 +6,16 @@ import { AbstractControl } from '@angular/forms';
   pure: false
 })
 export class HasErrorPipe implements PipeTransform {
-  transform(control: AbstractControl, errorName: string): any {
+  transform(
+    control: AbstractControl | null | undefined,
+    errorName: string
+  ): any {
+    if (!control) return false;
     const errors = control.errors || {};
     return (
-      control.invalid && (control.dirty || control.touched) && errors[errorName]
+      control.invalid &&
+      (control.dirty || control.touched) &&
+      !!errors[errorName]
     );
   }
 }

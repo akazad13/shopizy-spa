@@ -26,36 +26,21 @@
             <th></th>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-            @for (item of order.orderItems; track item) {
+            <ng-container *ngFor="let item of order.orderItems">
               <tr>
                 <td class="whitespace-nowrap py-4 md:w-[384px]">
                   <div class="flex items-center gap-4">
-                    <a
-                      href="#"
-                      class="aspect-square flex h-10 w-10 shrink-0 items-center"
-                      >
-                      <img
-                        class="h-auto max-h-full w-full dark:hidden"
-                        src="{{ item.pictureUrl }}"
-                        alt="{{ item.name }}"
-                        />
-                      </a>
-                      <a href="#" class="hover:underline">{{ item.name }}</a>
-                    </div>
-                  </td>
-                  <td
-                    class="p-4 text-base font-normal text-gray-900 dark:text-white"
-                    >
-                    x{{ item.quantity }}
-                  </td>
-                  <td
-                    class="p-4 text-right text-base font-bold text-gray-900 dark:text-white"
-                    >
-                    ${{ item.unitPrice.amount * item.quantity }}
-                  </td>
-                </tr>
-              }
-            </tbody>
+                    <a href="#" class="aspect-square flex h-10 w-10 shrink-0 items-center">
+                      <img class="h-auto max-h-full w-full dark:hidden" src="{{ item.pictureUrl }}" alt="{{ item.name }}" />
+                    </a>
+                    <a href="#" class="hover:underline">{{ item.name }}</a>
+                  </div>
+                </td>
+                <td class="p-4 text-base font-normal text-gray-900 dark:text-white">x{{ item.quantity }}</td>
+                <td class="p-4 text-right text-base font-bold text-gray-900 dark:text-white">${{ item.unitPrice.amount * item.quantity }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
           </table>
         </div>
 

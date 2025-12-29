@@ -14,7 +14,20 @@ import { FormsModule } from '@angular/forms';
   styles: ``
 })
 export class MobileFiltersComponent {
-  @Input() shopFilterState!: ShopFilterState;
+  @Input() shopFilterState: ShopFilterState = {
+    hideMobileFilters: true,
+    selectedBrand: [],
+    brandCollapsed: true,
+    selectedCategory: [],
+    categoryCollapsed: true,
+    selectedColor: [],
+    colorCollapsed: true,
+    priceRange: 0,
+    sort: '',
+    showAll: false,
+    hideSortingOptions: false,
+    sortingOptions: []
+  };
   @Input() brands: Brand[] = [];
   @Input() colors: Color[] = [];
   @Input() categoryTree: CategoryTree[] = [];

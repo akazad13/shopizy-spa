@@ -7,8 +7,9 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   constructor(private readonly tokenService: TokenService) {}
 
-  loggedIn() {
-    return !this.tokenService.isTokenExpired();
+  loggedIn(): boolean {
+    const token = this.tokenService.getToken();
+    return token != null && !this.tokenService.isTokenExpired();
   }
 
   roleMatch(allowedRoles: string[]): boolean {

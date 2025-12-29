@@ -38,136 +38,49 @@
           <!-- Flyout menus -->
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
             <div class="flex h-full space-x-8">
-              @for (parentCategory of categoryTree; track parentCategory) {
+              <ng-container *ngFor="let parentCategory of categoryTree">
                 <div class="flex">
                   <div class="relative flex">
-                    <button
-                      type="button"
-                      class="cat relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
-                      aria-expanded="false"
-                      (click)="updateCategorySelection(parentCategory.name)"
-                    [ngClass]="
-                      selected == parentCategory.name
-                        ? 'border-indigo-600 text-indigo-600'
-                        : 'border-transparent text-gray-700 hover:text-gray-800'
-                    "
-                      >
-                      {{ parentCategory.name }}
-                    </button>
+                    <button type="button" class="cat relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800" aria-expanded="false" (click)="updateCategorySelection(parentCategory.name)" [ngClass]="selected == parentCategory.name ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800'">{{ parentCategory.name }}</button>
                   </div>
-                  @if (selected == parentCategory.name) {
-                    <div
-                      class="absolute inset-x-0 top-full z-10 text-sm text-gray-500"
-                      appClickOutsideCategoryFlyout
-                      (clickOutside)="hideCategoryFlyout()"
-                      >
-                      <div
-                        class="absolute inset-0 top-1/2 bg-white shadow"
-                        aria-hidden="true"
-                      ></div>
-                      <div class="relative bg-white">
-                        <div class="mx-auto max-w-7xl px-8">
-                          <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-                            <div class="col-start-2 grid grid-cols-2 gap-x-8">
-                              <div class="group relative text-base sm:text-sm">
-                                <div
-                                  class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
-                                  >
-                                  @if (parentCategory.name == 'Women') {
-                                    <img
-                                      src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg"
-                                      alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                                      class="object-cover object-center"
-                                      />
-                                  }
-                                  @if (parentCategory.name == 'Men') {
-                                    <img
-                                      src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                                      alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                                      class="object-cover object-center"
-                                      />
-                                  }
-                                </div>
-                                <a
-                                  href="#"
-                                  class="mt-6 block font-medium text-gray-900"
-                                  >
-                                  <span
-                                    class="absolute inset-0 z-10"
-                                    aria-hidden="true"
-                                  ></span>
-                                  New Arrivals
-                                </a>
-                                <p aria-hidden="true" class="mt-1">Shop now</p>
+                  <div *ngIf="selected == parentCategory.name" class="absolute inset-x-0 top-full z-10 text-sm text-gray-500" appClickOutsideCategoryFlyout (clickOutside)="hideCategoryFlyout()">
+                    <div class="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true"></div>
+                    <div class="relative bg-white">
+                      <div class="mx-auto max-w-7xl px-8">
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                          <div class="col-start-2 grid grid-cols-2 gap-x-8">
+                            <div class="group relative text-base sm:text-sm">
+                              <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                <img *ngIf="parentCategory.name == 'Women'" src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
+                                <img *ngIf="parentCategory.name == 'Men'" src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
                               </div>
-                              <div class="group relative text-base sm:text-sm">
-                                <div
-                                  class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
-                                  >
-                                  <img
-                                    src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg"
-                                    alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees."
-                                    class="object-cover object-center"
-                                    />
-                                  </div>
-                                  <a
-                                    href="#"
-                                    class="mt-6 block font-medium text-gray-900"
-                                    >
-                                    <span
-                                      class="absolute inset-0 z-10"
-                                      aria-hidden="true"
-                                    ></span>
-                                    Basic Tees
-                                  </a>
-                                  <p aria-hidden="true" class="mt-1">Shop now</p>
-                                </div>
+                              <a href="#" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>New Arrivals</a>
+                              <p aria-hidden="true" class="mt-1">Shop now</p>
+                            </div>
+                            <div class="group relative text-base sm:text-sm">
+                              <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                <img src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg" alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees." class="object-cover object-center" />
                               </div>
-                              <div
-                                class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm"
-                                >
-                                @for (children of parentCategory.children; track children) {
+                              <a href="#" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>Basic Tees</a>
+                              <p aria-hidden="true" class="mt-1">Shop now</p>
+                            </div>
+                            <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                                <ng-container *ngFor="let children of parentCategory.children">
                                   <div>
-                                    <p
-                                      id="{{ children.name }}-heading"
-                                      class="font-medium text-gray-900"
-                                      >
-                                      {{ children.name }}
-                                    </p>
+                                    <p id="{{ children.name }}-heading" class="font-medium text-gray-900">{{ children.name }}</p>
                                     <ul class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                      @for (
-                                        grandChildren of children | toIterable
-                                        ; track
-                                        grandChildren) {
-                                        <li
-                                          class="flex"
-                                          >
-                                          <a href="#" class="hover:text-gray-800">{{
-                                            grandChildren.name
-                                          }}</a>
-                                        </li>
-                                      }
+                                      <ng-container *ngFor="let grandChildren of (children | toIterable)">
+                                        <li class="flex"><a href="#" class="hover:text-gray-800">{{ grandChildren.name }}</a></li>
+                                      </ng-container>
                                     </ul>
                                   </div>
-                                }
+                                </ng-container>
                                 <div>
-                                  <p
-                                    id="Brands-heading"
-                                    class="font-medium text-gray-900"
-                                    >
-                                    Brands
-                                  </p>
-                                  <ul
-                                    aria-labelledby="Brands-heading"
-                                    class="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                    >
-                                    @for (brand of brands; track brand) {
-                                      <li class="flex">
-                                        <a href="#" class="hover:text-gray-800">{{
-                                          brand
-                                        }}</a>
-                                      </li>
-                                    }
+                                  <p id="Brands-heading" class="font-medium text-gray-900">Brands</p>
+                                  <ul aria-labelledby="Brands-heading" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                                    <ng-container *ngFor="let brand of brands">
+                                      <li class="flex"><a href="#" class="hover:text-gray-800">{{ brand }}</a></li>
+                                    </ng-container>
                                   </ul>
                                 </div>
                               </div>
@@ -175,9 +88,9 @@
                           </div>
                         </div>
                       </div>
-                    }
+                    </div>
                   </div>
-                }
+                </ng-container>
                 <a
                   [routerLink]="['/shop']"
                   class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
@@ -231,14 +144,9 @@
                             (clickOutside)="showHideAccountMenu(true)"
                             >
                             <div class="cursor-pointer py-1">
-                              @for (menuItem of accountMenu; track menuItem) {
-                                <a
-                                  class="block px-4 py-2 text-sm text-gray-700"
-                                  tabindex="-1"
-                                  (click)="onAccountMenuItemClick(menuItem)"
-                                  >{{ menuItem.label }}</a
-                                  >
-                              }
+                              <ng-container *ngFor="let menuItem of accountMenu">
+                                <a class="block px-4 py-2 text-sm text-gray-700" tabindex="-1" (click)="onAccountMenuItemClick(menuItem)">{{ menuItem.label }}</a>
+                              </ng-container>
                             </div>
                           </div>
                         </div>

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { CommonModule } from '@angular/common';
 
 import { CategoryTree } from '../../../interfaces/category';
 import { Color, ShopFilterState } from '../../../interfaces/shop';
@@ -9,12 +10,25 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-shop-filters',
-  imports: [IconComponent, CategoryTreeComponent, FormsModule],
+  imports: [CommonModule, IconComponent, CategoryTreeComponent, FormsModule],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })
 export class ShopFiltersComponent {
-  @Input() shopFilterState!: ShopFilterState;
+  @Input() shopFilterState: ShopFilterState = {
+    hideMobileFilters: true,
+    selectedBrand: [],
+    brandCollapsed: true,
+    selectedCategory: [],
+    categoryCollapsed: true,
+    selectedColor: [],
+    colorCollapsed: true,
+    priceRange: 0,
+    sort: '',
+    showAll: false,
+    hideSortingOptions: false,
+    sortingOptions: []
+  };
   @Input() brands: Brand[] = [];
   @Input() colors: Color[] = [];
   @Input() categoryTree: CategoryTree[] = [];

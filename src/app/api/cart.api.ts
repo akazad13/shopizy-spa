@@ -17,7 +17,10 @@ export class CartApi {
 
   getCart(): Observable<Cart> {
     let params = new HttpParams();
-    params = params.append('userId', this.tokenService.getCurrentUserId());
+    const userId = this.tokenService.getCurrentUserId();
+    if (userId) {
+      params = params.append('userId', userId);
+    }
 
     return this.http.get<Cart>(this.baseUrl, {
       params

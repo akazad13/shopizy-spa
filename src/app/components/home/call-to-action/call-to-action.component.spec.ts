@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CallToActionComponent } from './call-to-action.component';
 
@@ -8,7 +9,7 @@ describe('CallToActionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CallToActionComponent]
+      imports: [CallToActionComponent, RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CallToActionComponent);

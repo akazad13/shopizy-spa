@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OrderDetails } from '../../../interfaces/Order';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-order-details',
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './order-details.component.html',
   styles: ``
 })

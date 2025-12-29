@@ -3,10 +3,11 @@ import { CategoryTree } from '../../../interfaces/category';
 
 import { IconComponent } from '../../shared/icon/icon.component';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-category-tree',
-  imports: [IconComponent, FormsModule],
+  imports: [CommonModule, IconComponent, FormsModule],
   templateUrl: './category-tree.component.html',
   styles: ``
 })

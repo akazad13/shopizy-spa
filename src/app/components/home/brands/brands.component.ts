@@ -1,11 +1,11 @@
-
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-brands',
-    imports: [],
-    templateUrl: './brands.component.html',
-    styles: ``
+  selector: 'app-brands',
+  imports: [CommonModule],
+  templateUrl: './brands.component.html',
+  styles: ``
 })
 export class BrandsComponent implements OnInit {
   imageUrls: string[] = [];
