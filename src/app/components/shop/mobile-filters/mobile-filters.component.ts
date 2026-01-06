@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mobile-filters',
+  standalone: true,
   imports: [CommonModule, IconComponent, CategoryTreeComponent, FormsModule],
   templateUrl: './mobile-filters.component.html',
   styles: ``

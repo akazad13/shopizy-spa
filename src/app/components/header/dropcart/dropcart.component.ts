@@ -8,13 +8,14 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dropcart',
+  standalone: true,
   imports: [CommonModule, RouterLink, IconComponent],
   templateUrl: './dropcart.component.html',
   styles: ``,
   providers: []
 })
 export class DropcartComponent implements OnInit {
-  @Input() isDropCartOpened: boolean = false;
+  @Input() isDropCartOpened = false;
   cart$!: Observable<CartItem[]>;
 
   constructor(

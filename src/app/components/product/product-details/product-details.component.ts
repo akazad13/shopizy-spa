@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
+  standalone: true,
   imports: [CommonModule, IconComponent, RatingComponent],
   templateUrl: './product-details.component.html',
   styles: `
@@ -22,9 +23,9 @@ import { Subscription } from 'rxjs';
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product!: ProductDetail;
   mainPhotoUrl: string | null = null;
-  selectedTab: string = 'description';
-  selectedColor: string = '';
-  selectedSize: string = '';
+  selectedTab = 'description';
+  selectedColor = '';
+  selectedSize = '';
   availableSizes: string[] = [];
   availableColors: string[] = [];
   colorMap: Map<string, string> = new Map<string, string>();
@@ -103,7 +104,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.starNumberArr = Array.from({ length: 6 }, () => ({
       ...{ num: 0, pct: 0 }
     }));
-    for (let review of this.product.productReviews) {
+    for (const review of this.product.productReviews) {
       this.starNumberArr[Math.floor(review.rating)].num++;
     }
     this.starNumberArr = this.starNumberArr.slice(1, 6).reverse();

@@ -23,19 +23,14 @@ import { handleError } from '../../../functions/error-handler';
 
 @Component({
   selector: 'app-update-account-modal',
-  imports: [
-    IsInvalidPipe,
-    HasErrorPipe,
-    ReactiveFormsModule,
-    IconComponent
-],
+  imports: [IsInvalidPipe, HasErrorPipe, ReactiveFormsModule, IconComponent],
   templateUrl: './update-account-modal.component.html',
   styles: ``
 })
 export class UpdateAccountModalComponent implements OnChanges {
   @Input() isUpdateAccountModelOpened = false;
   @Input() userDetails: UserDetails | null = null;
-  @Output() onCloseModal = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter<boolean>();
 
   updateAccountForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -71,7 +66,7 @@ export class UpdateAccountModalComponent implements OnChanges {
   }
 
   onCloseUpdateAccountModel() {
-    this.onCloseModal.emit(false);
+    this.closed.emit(false);
   }
 
   get formData() {

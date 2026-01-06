@@ -3,10 +3,10 @@
     <div aria-expanded="true" #treeItem>
       <!-- Accordion Heading -->
       <div class="flex w-full items-center gap-x-0.5 rounded-md py-1.5">
-        <button *ngIf="category.children != null && category.children.length > 0" class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50" aria-expanded="true" aria-controls="checkbox-tree-collapse-one" (click)="toggleCategory(category)" type="button">
+        <button *ngIf="category.children !== undefined && category.children.length > 0" class="flex size-6 items-center justify-center rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50" aria-expanded="true" aria-controls="checkbox-tree-collapse-one" (click)="toggleCategory(category)" type="button">
           <app-icon icon="{{ category.expanded ? 'minus' : 'plus' }}" classNames="h-5 w-5"></app-icon>
         </button>
-        <div class="grow cursor-pointer rounded-md px-1.5 {{ category.children != null && category.children.length > 0 ? '' : 'ml-6' }}">
+        <div class="grow cursor-pointer rounded-md px-1.5 {{ category.children !== undefined && category.children.length > 0 ? '' : 'ml-6' }}">
           <span class="text-sm text-gray-800">
             <div class="flex">
               <input type="checkbox" [(ngModel)]="category.checked" id="{{ category.id }}" class="mt-0.5 shrink-0 rounded border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50" value="{{ category.name }}" (change)="onParentCheckboxChange(category)" />

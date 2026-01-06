@@ -20,12 +20,14 @@ export class OrderDetailResolver implements Resolve<Order> {
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    _state: RouterStateSnapshot
   ): Observable<any> {
+    void _state;
     const orderId = route.paramMap.get('orderId');
     if (orderId) {
       return this.orderApi.getOrder(orderId).pipe(
         catchError((error) => {
+          void error;
           this.router.navigate(['/404']);
           return of(null);
         })

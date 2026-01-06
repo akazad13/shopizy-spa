@@ -15,6 +15,7 @@ import {
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
     PromotionComponent,
     ProductsBlockComponent,

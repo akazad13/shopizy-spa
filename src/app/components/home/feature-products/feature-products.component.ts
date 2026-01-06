@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-top-categories',
-    imports: [],
-    templateUrl: './feature-products.component.html',
-    styles: ``
+  selector: 'app-top-categories',
+  imports: [],
+  templateUrl: './feature-products.component.html',
+  styles: ``
 })
 export class FeatureProductsComponent implements OnInit {
   imageUrls: string[] = [];
-
-  constructor() {}
 
   ngOnInit(): void {
     this.imageUrls = [

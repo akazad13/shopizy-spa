@@ -6,13 +6,14 @@ import { handleError } from '../../../functions/error-handler';
 import { OrderQueryFilters } from '../../../models/QueryFilters';
 import { TokenService } from '../../../services/token.service';
 import { Order } from '../../../interfaces/Order';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AlertifyService } from '../../../services/alertify.service';
 
 @Component({
   selector: 'app-orders',
-  imports: [IconComponent, DatePipe, RouterLink],
+  standalone: true,
+  imports: [CommonModule, IconComponent, DatePipe, RouterLink],
   templateUrl: './orders.component.html',
   styles: ``,
   schemas: [NO_ERRORS_SCHEMA]
@@ -49,7 +50,7 @@ export class OrdersComponent implements OnInit {
       async () => {
         await this.cancelOrder(orderId);
       },
-      () => {}
+      () => undefined
     );
   }
 

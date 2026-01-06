@@ -6,14 +6,15 @@ import { CategoryTree } from '../../../interfaces/category';
 
 @Component({
   selector: 'app-mobile-header',
+  standalone: true,
   imports: [RouterLink, CommonModule, IconComponent],
   providers: [],
   templateUrl: './mobile-header.component.html',
   styles: ``
 })
 export class MobileHeaderComponent {
-  selectedMobileMenu: string = 'Women';
-  @Input() hideMobileMenu: boolean = true;
+  selectedMobileMenu = 'Women';
+  @Input() hideMobileMenu = true;
   @Input() categoryTree: CategoryTree[] = [];
   @Input() brands: string[] = [];
   @Output() hideMobileMenuOutput = new EventEmitter<string>();

@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -17,13 +16,14 @@ import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-signup',
+  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
     HasErrorPipe,
     IconComponent
-],
+  ],
   providers: [AuthApi],
   templateUrl: './signup.component.html',
   styles: ``

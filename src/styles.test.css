@@ -1,0 +1,6 @@
+/* Minimal styles for unit tests (avoid Tailwind processing) */
+@import "../node_modules/alertifyjs/build/css/alertify.min.css";
+@import "../node_modules/alertifyjs/build/css/themes/default.min.css";
+
+/* Add any global rules needed for tests here */
+body { font-family: Arial, sans-serif; }

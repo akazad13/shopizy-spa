@@ -23,6 +23,7 @@ import { AlertifyService } from '../../services/alertify.service';
 
 @Component({
   selector: 'app-checkout',
+  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,
@@ -36,7 +37,7 @@ import { AlertifyService } from '../../services/alertify.service';
   providers: []
 })
 export class CheckoutComponent implements OnInit {
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   cart$!: Observable<CartItem[]>;
 
   checkoutForm: FormGroup = new FormGroup({

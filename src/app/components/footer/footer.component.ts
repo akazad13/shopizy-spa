@@ -4,6 +4,7 @@ import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-footer',
+  standalone: true,
   imports: [RouterLink, IconComponent],
   templateUrl: './footer.component.html',
   styles: ``

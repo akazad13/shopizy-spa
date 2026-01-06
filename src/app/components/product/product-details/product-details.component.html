@@ -30,7 +30,7 @@
               href="#"
               aria-current="page"
               class="font-medium text-gray-500 hover:text-gray-600"
-              >{{ product?.name }}</a
+              >{{ product.name }}</a
               >
             </li>
           </ol>
@@ -50,12 +50,12 @@
                 </div>
 
                 <div class="mx-auto mt-4 flex flex-wrap justify-center gap-4">
-                  <ng-container *ngFor="let productImage of product?.productImages ?? []">
+                  <ng-container *ngFor="let productImage of product.productImages ?? []">
                     <a (click)="changeProductImage(productImage.imageUrl)">
                       <img
                         src="{{ productImage.imageUrl }}"
                         alt="Product1"
-                        class="w-16 cursor-pointer rounded-md {{ productImage.imageUrl == mainPhotoUrl ? 'outline' : '' }}"
+                        class="w-16 cursor-pointer rounded-md {{ productImage.imageUrl === mainPhotoUrl ? 'outline' : '' }}"
                       />
                     </a>
                   </ng-container>
@@ -66,7 +66,7 @@
                 <div class="flex flex-wrap items-start gap-4">
                   <div>
                     <h2 class="text-2xl font-bold text-gray-800">
-                      {{ product?.name }}
+                      {{ product.name }}
                     </h2>
                   </div>
 
@@ -79,7 +79,7 @@
                         icon="heart-outline"
                         classNames="h-3 w-3 me-2"
                       ></app-icon>
-                      {{ product?.favourites }}
+                      {{ product.favourites }}
                     </button>
                     <button
                       type="button"
@@ -89,7 +89,7 @@
                         icon="star"
                         classNames="h-5 w-5 text-yellow-300 me-2"
                       ></app-icon>
-                      {{ product?.averageRating?.value }}
+                      {{ product.averageRating.value }}
                     </button>
                     <button
                       type="button"
@@ -99,7 +99,7 @@
                         icon="review-like"
                         classNames="h-3 w-3 me-2"
                       ></app-icon>
-                      {{ product?.averageRating?.numRatings }} Reviews
+                      {{ product.averageRating.numRatings }} Reviews
                     </button>
                     <button
                       type="button"
@@ -112,7 +112,7 @@
 
                 <div class="mt-5">
                   <p class="text-sm text-gray-500">
-                    {{ product?.shortDescription }}
+                    {{ product.shortDescription }}
                   </p>
                 </div>
 
@@ -120,13 +120,13 @@
                   <p>
                     <span class="text-3xl font-bold text-gray-800">
                       ${{
-                      product != null
+                      product !== null
                       ? product.price - (product.price! * product.discount!) / 100
                       : null
                       }}
                     </span>
                     <span class="text-slate-900 line-through">
-                      ${{ product?.price }}
+                      ${{ product.price }}
                     </span>
                   </p>
                 </div>
@@ -164,7 +164,7 @@
                       <div *ngFor="let size of availableSizes">
                         <button
                           type="button"
-                          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800 {{ size == selectedSize ? 'border-gray-800' : '' }}"
+                          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-sm font-semibold hover:border-gray-800 {{ size === selectedSize ? 'border-gray-800' : '' }}"
                           (click)="selectSize(size)"
                         >
                           {{ size }}
@@ -181,7 +181,7 @@
                       <div *ngFor="let color of availableColors">
                         <button
                           type="button"
-                          class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{ colorMap.get(color) }} {{ color == selectedColor ? 'border-gray-800' : '' }}"
+                          class="h-10 w-10 shrink-0 rounded-md border  border-gray-400 hover:border-gray-900 {{ colorMap.get(color) }} {{ color === selectedColor ? 'border-gray-800' : '' }}"
                           (click)="selectColor(color)">
                         </button>
                       </div>
@@ -217,7 +217,7 @@
                   <a (click)="updateTabSelection('description')">
                     <li
               class="cursor-pointer px-8 py-3 text-sm font-semibold  transition-all {{
-                selectedTab == 'description'
+                selectedTab === 'description'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
                   : 'text-gray-500 hover:bg-gray-100 '
               }}"
@@ -228,7 +228,7 @@
                   <a (click)="updateTabSelection('review')">
                     <li
               class="cursor-pointer px-8 py-3 text-sm font-semibold transition-all {{
-                selectedTab == 'review'
+                selectedTab === 'review'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
                   : 'text-gray-500 hover:bg-gray-100 '
               }}"
@@ -241,7 +241,7 @@
                 <div *ngIf="selectedTab === 'description'" class="mt-8">
                     <h3 class="text-xl font-bold text-gray-800">Product Description</h3>
                     <p class="mt-4 text-sm text-gray-500">
-                      {{ product?.description }}
+                      {{ product.description }}
                     </p>
                     <ul class="mt-6 list-disc space-y-3 pl-4 text-sm text-gray-500">
                       <li>
@@ -276,12 +276,12 @@
                         </div>
                       </div>
                       <div class="flex flex-col items-center justify-center rounded-3xl bg-amber-50 p-8">
-                        <h2 class="mb-6 text-5xl font-bold text-amber-300">{{ product?.averageRating?.value }}</h2>
-                        <app-rating [rating]="product?.averageRating?.value?? 0" [maxRating]="5.0" [classes]="'h-14 w-14'"></app-rating>
-                        <p class="text-center text-xl font-medium leading-8 text-gray-900">{{ product?.averageRating?.numRatings }} Reviews</p>
+                        <h2 class="mb-6 text-5xl font-bold text-amber-300">{{ product.averageRating.value }}</h2>
+                        <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-14 w-14'"></app-rating>
+                        <p class="text-center text-xl font-medium leading-8 text-gray-900">{{ product.averageRating.numRatings }} Reviews</p>
                       </div>
                     </div>
-                    <div *ngFor="let review of product?.productReviews ?? []" class="border-b border-gray-100 pb-8 pt-11 max-xl:mx-auto max-xl:max-w-2xl">
+                    <div *ngFor="let review of product.productReviews" class="border-b border-gray-100 pb-8 pt-11 max-xl:mx-auto max-xl:max-w-2xl">
                       <app-rating [rating]="4.6" [maxRating]="5.0" [classes]="'h-9 w-9'"></app-rating>
                       <div class="mb-4 flex flex-col justify-between gap-5 min-[400px]:flex-row sm:items-center">
                         <div class="flex items-center gap-3">

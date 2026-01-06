@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { CartService } from '../../../services/cart.service';
+import {
+  COMMON_TEST_IMPORTS,
+  createCartServiceStub
+} from '../../../testing/test-helpers';
 
 import { ProductDetailsComponent } from './product-details.component';
 
@@ -10,9 +14,12 @@ describe('ProductDetailsComponent', () => {
   let fixture: ComponentFixture<ProductDetailsComponent>;
 
   beforeEach(async () => {
+    const cartServiceStub = createCartServiceStub();
+
     await TestBed.configureTestingModule({
-      imports: [ProductDetailsComponent, HttpClientTestingModule],
+      imports: [ProductDetailsComponent, ...COMMON_TEST_IMPORTS],
       providers: [
+        { provide: CartService, useValue: cartServiceStub },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -42,7 +49,11 @@ describe('ProductDetailsComponent', () => {
                     productReviews: []
                   }
                 });
-                return { unsubscribe() {} };
+                return {
+                  unsubscribe() {
+                    return undefined;
+                  }
+                };
               }
             }
           }

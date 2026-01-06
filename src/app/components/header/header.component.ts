@@ -17,6 +17,7 @@ import { AuthApi } from '../../api/auth.api';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
@@ -32,10 +33,10 @@ import { AuthApi } from '../../api/auth.api';
   styles: ``
 })
 export class HeaderComponent implements OnInit {
-  selected: string = '';
-  hideMobileMenu: boolean = true;
-  isDropCartOpened: boolean = false;
-  isLoggedIn: boolean = false;
+  selected = '';
+  hideMobileMenu = true;
+  isDropCartOpened = false;
+  isLoggedIn = false;
   categoryTree: CategoryTree[] = [];
   brands: string[] = [];
 

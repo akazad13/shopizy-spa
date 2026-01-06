@@ -58,7 +58,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     subtotal: { amount: 0, currency: 'usd' },
     fee: { amount: 0, currency: 'usd' }
   };
-  cardHolderName: string = '';
+  cardHolderName = '';
 
   reqInProgress = false;
 

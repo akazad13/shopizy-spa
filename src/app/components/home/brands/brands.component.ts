@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-brands',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './brands.component.html',
   styles: ``
 })
 export class BrandsComponent implements OnInit {
   imageUrls: string[] = [];
-
-  constructor() {}
 
   ngOnInit(): void {
     this.imageUrls = [

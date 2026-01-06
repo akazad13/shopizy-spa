@@ -7,6 +7,11 @@ import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { OrderApi } from '../../api/order.api';
 import { AlertifyService } from '../../services/alertify.service';
+import {
+  COMMON_TEST_IMPORTS,
+  createOrderApiSpy,
+  provideSpy
+} from '../../testing/test-helpers';
 
 describe('CheckoutComponent', () => {
   let component: CheckoutComponent;
@@ -20,17 +25,18 @@ describe('CheckoutComponent', () => {
 
     const authServiceStub = { loggedIn: () => false } as Partial<AuthService>;
 
-    const orderApiSpy = jasmine.createSpyObj('OrderApi', ['createOrder']);
-    orderApiSpy.createOrder.and.returnValue(of({ orderId: '1' }));
+    const orderApiSpy = createOrderApiSpy();
 
-    const alertifyStub = { success: jasmine.createSpy('success') } as Partial<AlertifyService>;
+    const alertifyStub = {
+      success: jasmine.createSpy('success')
+    } as Partial<AlertifyService>;
 
     await TestBed.configureTestingModule({
-      imports: [CheckoutComponent, RouterTestingModule],
+      imports: [CheckoutComponent, RouterTestingModule, ...COMMON_TEST_IMPORTS],
       providers: [
         { provide: CartService, useValue: cartServiceStub },
         { provide: AuthService, useValue: authServiceStub },
-        { provide: OrderApi, useValue: orderApiSpy },
+        provideSpy(OrderApi, orderApiSpy),
         { provide: AlertifyService, useValue: alertifyStub }
       ]
     }).compileComponents();

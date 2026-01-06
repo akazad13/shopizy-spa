@@ -12,7 +12,7 @@ import { UpdateAccountModalComponent } from './update-account-modal/update-accou
   styles: ``
 })
 export class AccountComponent {
-  isUpdateAccountModelOpened: boolean = false;
+  isUpdateAccountModelOpened = false;
   userDetails: UserDetails | null = null;
 
   constructor(

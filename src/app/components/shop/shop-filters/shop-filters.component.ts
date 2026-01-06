@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-shop-filters',
+  standalone: true,
   imports: [CommonModule, IconComponent, CategoryTreeComponent, FormsModule],
   templateUrl: './shop-filters.component.html',
   styles: ``

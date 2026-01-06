@@ -41,19 +41,19 @@
             role="tablist"
             >
             <ng-container *ngFor="let parentCategory of categoryTree">
-              <button id="tabs-1-{{ parentCategory.name }}" class="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900" aria-controls="tabs-1-panel-1" role="tab" type="button" [ngClass]="selectedMobileMenu == parentCategory.name ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-900'" (click)="updateMobileMenuSelection(parentCategory.name)">{{ parentCategory.name }}</button>
+              <button id="tabs-1-{{ parentCategory.name }}" class="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900" aria-controls="tabs-1-panel-1" role="tab" type="button" [ngClass]="selectedMobileMenu === parentCategory.name ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-900'" (click)="updateMobileMenuSelection(parentCategory.name)">{{ parentCategory.name }}</button>
             </ng-container>
           </div>
         </div>
 
         <ng-container *ngFor="let category of categoryTree">
           <div>
-            <div *ngIf="selectedMobileMenu == category.name" id="tabs-1-panel-1" class="space-y-10 px-4 pb-8 pt-10" role="tabpanel">
+            <div *ngIf="selectedMobileMenu === category.name" id="tabs-1-panel-1" class="space-y-10 px-4 pb-8 pt-10" role="tabpanel">
               <div class="grid grid-cols-2 gap-x-4">
                 <div class="group relative text-sm">
                   <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                    <img *ngIf="category.name == 'Women'" src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
-                    <img *ngIf="category.name == 'Men'" src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
+                    <img *ngIf="category.name === 'Women'" src="https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
+                    <img *ngIf="category.name === 'Men'" src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
                   </div>
                   <a href="#" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>New Arrivals</a>
                   <p aria-hidden="true" class="mt-1">Shop now</p>

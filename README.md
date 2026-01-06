@@ -25,3 +25,18 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+---
+
+## Testing & Linting 🔧
+
+- A shared test helper was added at `src/app/testing/test-helpers.ts` to centralize common test imports and factory spies (e.g., `COMMON_TEST_IMPORTS`, `createProductApiSpy`, `provideSpy`). Use these helpers in specs to avoid live HTTP calls and reduce duplication.
+- Prefer `HttpClientTestingModule` and Jasmine spies instead of real API providers in unit tests.
+- A `karma.conf.js` was added to stabilize CI runs (headless Chrome with safer flags and increased timeouts). Use it when running tests in CI.
+- ESLint config (`.eslintrc.json`) and a `lint` script were added to `package.json`. To run lint locally:
+  - Install dev dependencies: `npm install` (or `npm i`)
+  - Run `npm run lint`
+  - If you encounter dependency issues installing ESLint packages, run `npm install --legacy-peer-deps`.
+
+If you'd like, I can open a PR that adds ESLint to CI and fixes the remaining stylistic issues.
+

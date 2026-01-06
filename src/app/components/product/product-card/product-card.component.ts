@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { RatingComponent } from '../rating/rating.component';
 @Component({
   selector: 'app-product-card',
+  standalone: true,
   imports: [RouterLink, RatingComponent],
   providers: [],
   templateUrl: './product-card.component.html',
@@ -13,6 +14,4 @@ export class ProductCardComponent {
   @Input() product!: Product;
   maxRating = 5.0;
   starsArray: string[] = [];
-
-  constructor() {}
 }

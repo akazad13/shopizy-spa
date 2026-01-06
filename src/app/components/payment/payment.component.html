@@ -21,7 +21,7 @@
               </div>
             </form>
           </div>
-          <div *ngIf="selectedPaymentOption == '1'" class="mb-3 mt-2 grid grid-cols-1 gap-4">
+          <div *ngIf="selectedPaymentOption === '1'" class="mb-3 mt-2 grid grid-cols-1 gap-4">
               <div class="col-span-2 sm:col-span-1">
                 <label for="full_name" class="mb-3 block text-sm font-medium text-gray-700">Card Name*</label>
                 <input type="text" id="full_name" class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm" placeholder="Card holder name" required [(ngModel)]="cardHolderName" />
@@ -84,7 +84,7 @@
                   </dd>
                 </dl>
 
-                @if (selectedPaymentOption == '2') {
+                <ng-container *ngIf="selectedPaymentOption === '2'">
                   <dl
                     class="flex items-center justify-between gap-4 py-3"
                     >
@@ -95,7 +95,7 @@
                       ${{ paymentOptions[1].price.amount }}
                     </dd>
                   </dl>
-                }
+                </ng-container>
 
                 <dl class="flex items-center justify-between gap-4 py-3">
                   <dt class="text-base font-bold text-gray-900">Total</dt>

@@ -22,7 +22,7 @@ export class ProductApi {
     }
 
     if (categoryIds != null) {
-      for (let categoryId of categoryIds) {
+      for (const categoryId of categoryIds) {
         params = params.append('categoryIds', categoryId);
       }
     }

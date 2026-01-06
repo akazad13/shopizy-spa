@@ -14,10 +14,10 @@ export class AlertifyService {
     alertify.confirm(
       title,
       message,
-      (e: any) => {
+      () => {
         okCallback();
       },
-      (e: any) => {
+      () => {
         cancalCallback();
       }
     );

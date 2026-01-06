@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-category-tree',
+  standalone: true,
   imports: [CommonModule, IconComponent, FormsModule],
   templateUrl: './category-tree.component.html',
   styles: ``

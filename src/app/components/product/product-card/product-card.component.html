@@ -27,7 +27,7 @@
       <p>
         <span class="text-2xl font-bold text-slate-900"
           >${{
-            product != null
+            product !== null
               ? product.price - (product.price! * product.discount!) / 100
               : null
           }}</span

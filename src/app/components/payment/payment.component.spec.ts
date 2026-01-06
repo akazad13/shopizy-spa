@@ -1,18 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+
 import { NgxStripeModule } from 'ngx-stripe';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PaymentApi } from '../../api/payment.api';
 import { PaymentComponent } from './payment.component';
+import {
+  COMMON_TEST_IMPORTS,
+  createPaymentApiSpy,
+  provideSpy
+} from '../../testing/test-helpers';
 
 describe('PaymentComponent', () => {
   let component: PaymentComponent;
   let fixture: ComponentFixture<PaymentComponent>;
 
   beforeEach(async () => {
+    const paymentApiSpy = createPaymentApiSpy();
+
     await TestBed.configureTestingModule({
-      imports: [PaymentComponent, NgxStripeModule.forRoot('pk_test'), HttpClientTestingModule],
+      imports: [
+        PaymentComponent,
+        NgxStripeModule.forRoot('pk_test'),
+        ...COMMON_TEST_IMPORTS
+      ],
       providers: [
+        provideSpy(PaymentApi, paymentApiSpy),
         {
           provide: ActivatedRoute,
           useValue: {

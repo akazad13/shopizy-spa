@@ -4,15 +4,16 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rating',
+  standalone: true,
   imports: [CommonModule, IconComponent],
   templateUrl: './rating.component.html',
   styles: ``
 })
 export class RatingComponent implements OnInit {
-  @Input() rating: number = 5.0;
-  @Input() maxRating: number = 5.0;
-  @Input() classes: string = 'h-9 w-9';
-  @Input() showRatingNumber: boolean = false;
+  @Input() rating = 5.0;
+  @Input() maxRating = 5.0;
+  @Input() classes = 'h-9 w-9';
+  @Input() showRatingNumber = false;
 
   starsArray: string[] = [];
 
@@ -33,7 +34,7 @@ export class RatingComponent implements OnInit {
     ];
   }
 
-  trackByIndex(index: number, _item: string) {
+  trackByIndex(index: number) {
     return index;
   }
 }

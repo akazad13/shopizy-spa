@@ -6,11 +6,11 @@ import { Product } from '../../../interfaces/product';
 
 @Component({
   selector: 'app-products-grid',
+  standalone: true,
   imports: [CommonModule, ProductCardComponent],
   templateUrl: './products-grid.component.html',
   styles: ``
 })
 export class ProductsGridComponent {
   @Input() products: Product[] = [];
-  constructor() {}
 }

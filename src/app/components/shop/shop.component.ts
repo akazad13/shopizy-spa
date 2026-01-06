@@ -16,6 +16,7 @@ import { Brand } from '../../interfaces/brand';
 
 @Component({
   selector: 'app-shop',
+  standalone: true,
   imports: [
     ProductsGridComponent,
     MobileFiltersComponent,

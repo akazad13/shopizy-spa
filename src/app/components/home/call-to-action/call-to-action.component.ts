@@ -10,8 +10,6 @@ import { RouterLink } from '@angular/router';
 export class CallToActionComponent implements OnInit {
   imageUrls: string[] = [];
 
-  constructor() {}
-
   ngOnInit(): void {
     this.imageUrls = [
       'https://res.cloudinary.com/akazad13/image/upload/v1733585800/shopizy/hero-image1_x7g7g3.jpg',

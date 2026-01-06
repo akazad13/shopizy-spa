@@ -20,12 +20,14 @@ export class ProductDetailResolver implements Resolve<ProductDetail> {
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    _state: RouterStateSnapshot
   ): Observable<any> {
+    void _state;
     const productId = route.paramMap.get('productId');
     if (productId) {
       return this.productApi.getProduct(productId).pipe(
-        catchError((error) => {
+        catchError((_error) => {
+          void _error;
           this.router.navigate(['/404']);
           return of(null);
         })

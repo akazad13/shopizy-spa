@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { OrderDetails } from '../../../interfaces/Order';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-details',
+  standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './order-details.component.html',
   styles: ``
 })
-export class OrderDetailsComponent {
+export class OrderDetailsComponent implements OnInit {
   orderId!: string;
   order!: OrderDetails;
   routeSubscription!: Subscription;

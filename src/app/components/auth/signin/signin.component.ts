@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthApi } from '../../../api/auth.api';
@@ -17,13 +16,14 @@ import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-signin',
+  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,
     IsInvalidPipe,
     HasErrorPipe,
     IconComponent
-],
+  ],
   providers: [AuthApi],
   templateUrl: './signin.component.html',
   styles: ``
