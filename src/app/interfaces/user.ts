@@ -1,12 +1,14 @@
 import { Address } from './Address';
 
 export interface User {
+  id?: string;
   email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
-  avatar: string;
-  token: string;
+  phone?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  avatar?: string | null;
+  token?: string | null;
+  accessToken?: string | null;
 }
 
 export interface UserDetails {

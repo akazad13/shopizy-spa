@@ -5,6 +5,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class TokenService {
+  private readonly userStorageKey = 'user';
+
   constructor(@Optional() private readonly jwtHelper?: JwtHelperService) {}
 
   private get helper(): JwtHelperService {
@@ -12,12 +14,18 @@ export class TokenService {
   }
 
   getCurrentUserId(): string | null {
-    const user = this.getStoredUser();
-    if (user == null) {
-      return null;
-    }
-    const decodedToken = this.helper.decodeToken(user.token);
-    return decodedToken?.id ?? null;
+    const decodedToken = this.getDecodedToken();
+
+    return (
+      this.getStoredUserId() ??
+      decodedToken?.id ??
+      decodedToken?.sub ??
+      decodedToken?.nameid ??
+      decodedToken?.[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+      ] ??
+      null
+    );
   }
 
   getToken(): string | null {
@@ -25,7 +33,8 @@ export class TokenService {
     if (user == null) {
       return null;
     }
-    return user.token;
+
+    return this.extractToken(user);
   }
 
   getDecodedToken(): any | null {
@@ -41,8 +50,68 @@ export class TokenService {
     return !!token && this.helper.isTokenExpired(token);
   }
 
-  private getStoredUser() {
-    const storedUser = localStorage.getItem('user');
-    return storedUser == null ? null : JSON.parse(storedUser);
+  private getStoredUserId(): string | null {
+    const user = this.getStoredUser();
+
+    return (
+      user?.id ??
+      user?.userId ??
+      user?.data?.id ??
+      user?.data?.userId ??
+      user?.result?.id ??
+      user?.result?.userId ??
+      null
+    );
+  }
+
+  private extractToken(user: any): string | null {
+    const tokenCandidates = [
+      user,
+      user?.token,
+      user?.accessToken,
+      user?.jwt,
+      user?.data,
+      user?.data?.token,
+      user?.data?.accessToken,
+      user?.data?.jwt,
+      user?.result,
+      user?.result?.token,
+      user?.result?.accessToken,
+      user?.result?.jwt
+    ];
+
+    for (const candidate of tokenCandidates) {
+      const token = this.normalizeToken(candidate);
+
+      if (token != null) {
+        return token;
+      }
+    }
+
+    return null;
+  }
+
+  private normalizeToken(value: unknown): string | null {
+    if (typeof value !== 'string') {
+      return null;
+    }
+
+    const normalizedToken = value.replace(/^Bearer\s+/i, '').trim();
+
+    return normalizedToken === '' ? null : normalizedToken;
+  }
+
+  private getStoredUser(): any | null {
+    const storedUser = localStorage.getItem(this.userStorageKey);
+
+    if (storedUser == null || storedUser === '') {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser);
+    } catch {
+      return null;
+    }
   }
 }

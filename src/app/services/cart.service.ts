@@ -88,6 +88,8 @@ export class CartService {
         cartItem.size === item.size
     );
 
+    debugger;
+
     if (existingItem) {
       if (this.authService.loggedIn()) {
         if (
@@ -190,9 +192,9 @@ export class CartService {
   }
 
   private syncCartToCartItems(): void {
-    this.cartItems = this.cart!.cartItems.map((cartItem) =>
-      this.mapCartItem(cartItem)
-    );
+    this.cartItems = this.cart!.cartItems
+      .filter((cartItem) => cartItem.product != null)
+      .map((cartItem) => this.mapCartItem(cartItem));
     this.calculateSummary();
     this.cartSubject.next([...this.cartItems]);
   }
@@ -214,7 +216,7 @@ export class CartService {
     return {
       cartItemId: item.cartItemId,
       productId: item.productId,
-      image: item.product.productImages[0],
+      image: item.product.productImages?.[0],
       name: item.product.name,
       price: item.product.price,
       discount: item.product.discount,

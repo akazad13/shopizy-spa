@@ -1,30 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { TokenService } from '../services/token.service';
 import { Cart } from '../interfaces/cart';
 import { SuccessResponse } from '../interfaces/SuccessResponse';
 
 @Injectable({ providedIn: 'root' })
 export class CartApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/carts/';
+  baseUrl = environment.apiUrl + '/api/v1.0/users/';
 
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
   getCart(): Observable<Cart> {
-    let params = new HttpParams();
-    const userId = this.tokenService.getCurrentUserId();
-    if (userId) {
-      params = params.append('userId', userId);
-    }
-
-    return this.http.get<Cart>(this.baseUrl, {
-      params
-    });
+    return this.http.get<Cart>(
+      this.baseUrl + this.tokenService.getCurrentUserId() + '/carts'
+    );
   }
 
   addProductToCart(
@@ -34,12 +28,15 @@ export class CartApi {
     size: string,
     quantity: number
   ): Observable<Cart> {
-    return this.http.patch<Cart>(this.baseUrl + cartId, {
-      productId: productId,
-      color: color,
-      size: size,
-      quantity: quantity
-    });
+    return this.http.patch<Cart>(
+      this.baseUrl + this.tokenService.getCurrentUserId() + '/carts/' + cartId,
+      {
+        productId: productId,
+        color: color,
+        size: size,
+        quantity: quantity
+      }
+    );
   }
 
   updateProductQuantityToCart(
@@ -49,7 +46,12 @@ export class CartApi {
     quantity: number
   ): Observable<any> {
     return this.http.patch<SuccessResponse>(
-      this.baseUrl + cartId + '/items/' + itemId,
+      this.baseUrl +
+      this.tokenService.getCurrentUserId() +
+      '/carts/' +
+      cartId +
+      '/items/' +
+      itemId,
       {
         productId: productId,
         quantity: quantity
@@ -59,7 +61,12 @@ export class CartApi {
 
   removeProductFromCart(cartId: string, itemId: string): Observable<any> {
     return this.http.delete<SuccessResponse>(
-      this.baseUrl + cartId + '/items/' + itemId
+      this.baseUrl +
+      this.tokenService.getCurrentUserId() +
+      '/carts/' +
+      cartId +
+      '/items/' +
+      itemId
     );
   }
 }
