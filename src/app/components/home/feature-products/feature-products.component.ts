@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-top-categories',
+  selector: 'app-feature-products',
   imports: [],
   templateUrl: './feature-products.component.html',
   styles: ``

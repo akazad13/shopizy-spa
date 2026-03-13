@@ -88,8 +88,6 @@ export class CartService {
         cartItem.size === item.size
     );
 
-    debugger;
-
     if (existingItem) {
       if (this.authService.loggedIn()) {
         if (
