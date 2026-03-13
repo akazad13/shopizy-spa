@@ -12,7 +12,8 @@ import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../functions/error-handler';
 import { ClickOutsideCategoryFlyoutDirective } from '../../directives/click-outside-category-flyout.directive';
 import { ToIterablePipe } from '../../pipes/to-iterable.pipe';
-import { CartService } from '../../services/cart.service';
+import { CartService, CartSummary } from '../../services/cart.service';
+import { Observable } from 'rxjs';
 import { AuthApi } from '../../api/auth.api';
 
 @Component({
@@ -39,6 +40,7 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   categoryTree: CategoryTree[] = [];
   brands: string[] = [];
+  cartSummary$!: Observable<CartSummary>;
 
   hideAccountMenu = true;
   accountMenu = [
@@ -66,6 +68,7 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn = this.authService.loggedIn();
   }
   async ngOnInit(): Promise<void> {
+    this.cartSummary$ = this.cartService.cartSummary$;
     try {
       this.categoryTree = await firstValueFrom(
         this.categoryApi.getcategoryTree()

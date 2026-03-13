@@ -183,7 +183,7 @@
                             <div
                               class="translate-x-1/6 bottom-auto z-10 inline-block -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white"
                               >
-                              {{ cartService.cartSummary.totalItems }}
+                              {{ (cartSummary$ | async)?.totalItems }}
                             </div>
                             <span class="sr-only">items in cart, view bag</span>
                           </a>

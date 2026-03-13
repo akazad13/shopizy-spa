@@ -1,6 +1,6 @@
 import { AuthApi } from './../../api/auth.api';
 import { CommonModule } from '@angular/common';
-import { CartItem, CartService } from './../../services/cart.service';
+import { CartItem, CartService, CartSummary } from './../../services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
@@ -10,27 +10,27 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { IsInvalidPipe } from '../../pipes/is-invalid.pipe';
-import { HasErrorPipe } from '../../pipes/has-error.pipe';
 import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { OrderApi } from '../../api/order.api';
 import { Address } from '../../interfaces/Address';
 import { Price } from '../../interfaces/Price';
 import { handleError } from '../../functions/error-handler';
-import { IconComponent } from '../shared/icon/icon.component';
 import { AuthService } from '../../services/auth.service';
 import { AlertifyService } from '../../services/alertify.service';
+import { IsInvalidPipe } from '../../pipes/is-invalid.pipe';
+import { HasErrorPipe } from '../../pipes/has-error.pipe';
+import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
   imports: [
-    RouterLink,
     ReactiveFormsModule,
+    CommonModule,
+    RouterLink,
     IsInvalidPipe,
     HasErrorPipe,
-    IconComponent,
-    CommonModule
+    IconComponent
   ],
   templateUrl: './checkout.component.html',
   styles: ``,
@@ -39,6 +39,7 @@ import { AlertifyService } from '../../services/alertify.service';
 export class CheckoutComponent implements OnInit {
   isLoggedIn = false;
   cart$!: Observable<CartItem[]>;
+  cartSummary$!: Observable<CartSummary>;
 
   checkoutForm: FormGroup = new FormGroup({
     deliveryMethod: new FormControl('1', [Validators.required]),
@@ -88,6 +89,7 @@ export class CheckoutComponent implements OnInit {
   }
   ngOnInit(): void {
     this.cart$ = this.cartService.getCart();
+    this.cartSummary$ = this.cartService.cartSummary$;
   }
 
   updateProductQuantity(cartItem: CartItem) {

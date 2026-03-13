@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { CartItem, CartService } from '../../../services/cart.service';
+import { CartItem, CartService, CartSummary } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 export class DropcartComponent implements OnInit {
   @Input() isDropCartOpened = false;
   cart$!: Observable<CartItem[]>;
+  cartSummary$!: Observable<CartSummary>;
 
   constructor(
     public readonly cartService: CartService,
@@ -26,6 +27,7 @@ export class DropcartComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.cart$ = this.cartService.getCart();
+    this.cartSummary$ = this.cartService.cartSummary$;
   }
 
   closeDropCart(): void {

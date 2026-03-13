@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { CartApi } from '../api/cart.api';
 import { Cart } from '../interfaces/cart';
 import { handleError } from '../functions/error-handler';
@@ -29,15 +29,15 @@ export interface CartSummary {
 })
 export class CartService {
   private cartItems: CartItem[] = [];
-  private cart: Cart | null = null;
   private readonly cartSubject = new BehaviorSubject<CartItem[]>([]);
 
-  cartSummary: CartSummary = {
-    totalItems: 0,
-    subTotal: 0,
-    saving: 0,
-    total: 0
-  };
+  readonly cartSummary$ = this.cartSubject.pipe(
+    map(items => {
+      const subTotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
+      const saving = items.reduce((s, i) => s + (i.price * i.discount / 100) * i.quantity, 0);
+      return { totalItems: items.length, subTotal, saving, total: subTotal - saving } as CartSummary;
+    })
+  );
 
   constructor(
     private readonly cartApi: CartApi,
@@ -47,32 +47,25 @@ export class CartService {
   }
 
   getCartData(): void {
-    try {
-      this.cartItems = [];
-      if (this.authService.loggedIn()) {
-        this.cartApi.getCart().subscribe(async (cart) => {
-          this.cart = cart;
-          this.syncCartToCartItems();
-
-          const savedCart = localStorage.getItem('cart');
-          if (savedCart) {
-            const cartItems = JSON.parse(savedCart);
-            for (const cartItem of cartItems) {
-              await this.addToCart(cartItem);
-            }
-            localStorage.removeItem('cart');
-          }
-        });
-      } else {
+    this.cartItems = [];
+    if (this.authService.loggedIn()) {
+      this.cartApi.getCart().subscribe(async cart => {
+        this.applyServerCart(cart);
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
-          this.cartItems = JSON.parse(savedCart);
-          this.calculateSummary();
-          this.cartSubject.next([...this.cartItems]);
+          const guestItems: CartItem[] = JSON.parse(savedCart);
+          for (const item of guestItems) {
+            await this.addToCart(item);
+          }
+          localStorage.removeItem('cart');
         }
+      });
+    } else {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        this.cartItems = JSON.parse(savedCart);
+        this.emit();
       }
-    } catch (error) {
-      handleError(null, error);
     }
   }
 
@@ -81,146 +74,100 @@ export class CartService {
   }
 
   async addToCart(item: CartItem): Promise<void> {
-    const existingItem = this.cartItems.find(
-      (cartItem) =>
-        cartItem.productId === item.productId &&
-        cartItem.color === item.color &&
-        cartItem.size === item.size
+    const existing = this.cartItems.find(
+      c => c.productId === item.productId && c.color === item.color && c.size === item.size
     );
 
-    if (existingItem) {
+    if (existing) {
       if (this.authService.loggedIn()) {
-        if (
-          await this.updateProductQuantity(
-            existingItem.productId,
-            existingItem.cartItemId!,
-            existingItem.quantity + item.quantity
-          )
-        ) {
-          existingItem.quantity += item.quantity;
-          this.calculateSummary();
-          this.cartSubject.next([...this.cartItems]);
+        if (existing.cartItemId === null) return;
+        const prevQty = existing.quantity;
+        existing.quantity += item.quantity;
+        this.emit();
+        try {
+          const cart = await firstValueFrom(
+            this.cartApi.updateItemQuantity(existing.cartItemId, existing.quantity)
+          );
+          this.applyServerCart(cart);
+        } catch (error) {
+          existing.quantity = prevQty;
+          this.emit();
+          handleError(null, error);
         }
       } else {
-        existingItem.quantity += item.quantity;
-        localStorage.setItem('cart', JSON.stringify([...this.cartItems]));
-        this.calculateSummary();
-        this.cartSubject.next([...this.cartItems]);
+        existing.quantity += item.quantity;
+        this.saveToLocalStorage();
+        this.emit();
       }
     } else {
       if (this.authService.loggedIn()) {
-        if (await this.addProductToCart(item)) {
-          this.syncCartToCartItems();
+        this.cartItems.push(item);
+        this.emit();
+        try {
+          const cart = await firstValueFrom(
+            this.cartApi.addItem(item.productId, item.color, item.size, item.quantity)
+          );
+          this.applyServerCart(cart);
+        } catch (error) {
+          this.cartItems = this.cartItems.filter(
+            c => !(c.productId === item.productId && c.color === item.color && c.size === item.size)
+          );
+          this.emit();
+          handleError(null, error);
         }
       } else {
         item.cartItemId = Date.now().toString();
         this.cartItems.push(item);
-        localStorage.setItem('cart', JSON.stringify([...this.cartItems]));
-        this.calculateSummary();
-        this.cartSubject.next([...this.cartItems]);
+        this.saveToLocalStorage();
+        this.emit();
       }
     }
   }
 
   async removeFromCart(cartItemId: string | null): Promise<void> {
-    if (cartItemId != null) {
-      if (await this.removeProductFromCart(cartItemId)) {
-        this.cartItems = this.cartItems.filter(
-          (item) => item.cartItemId !== cartItemId
-        );
-        this.calculateSummary();
-        this.cartSubject.next([...this.cartItems]);
-      }
-    }
-  }
+    if (cartItemId === null) return;
 
-  private async removeProductFromCart(cartItemId: string): Promise<boolean> {
+    const snapshot = [...this.cartItems];
+    this.cartItems = this.cartItems.filter(i => i.cartItemId !== cartItemId);
+    this.emit();
+
+    if (!this.authService.loggedIn()) {
+      this.saveToLocalStorage();
+      return;
+    }
+
     try {
-      await firstValueFrom(
-        this.cartApi.removeProductFromCart(this.cart!.cartId, cartItemId)
-      );
-      return true;
+      const cart = await firstValueFrom(this.cartApi.removeItem(cartItemId));
+      this.applyServerCart(cart);
     } catch (error) {
+      this.cartItems = snapshot;
+      this.emit();
       handleError(null, error);
-      return false;
     }
   }
 
-  private async addProductToCart(item: CartItem): Promise<boolean> {
-    try {
-      this.cartItems.push(item);
-
-      this.cart = await firstValueFrom(
-        this.cartApi.addProductToCart(
-          this.cart!.cartId,
-          item.productId,
-          item.color,
-          item.size,
-          item.quantity
-        )
-      );
-      return true;
-    } catch (error) {
-      handleError(null, error);
-      return false;
-    }
+  private applyServerCart(cart: Cart): void {
+    this.cartItems = cart.cartItems
+      .filter(i => i.product != null)
+      .map(i => ({
+        cartItemId: i.cartItemId,
+        productId: i.productId,
+        image: i.product.productImages?.[0],
+        name: i.product.name,
+        price: i.product.price,
+        discount: i.product.discount,
+        quantity: i.quantity,
+        color: i.color,
+        size: i.size
+      }));
+    this.emit();
   }
 
-  private async updateProductQuantity(
-    productId: string,
-    cartItemId: string,
-    quantity: number
-  ): Promise<boolean> {
-    try {
-      await firstValueFrom(
-        this.cartApi.updateProductQuantityToCart(
-          this.cart!.cartId,
-          cartItemId,
-          productId,
-          quantity
-        )
-      );
-      this.cart!.cartItems.find((cartItem) => cartItem.productId === productId)!
-        .quantity++;
-      return true;
-    } catch (error) {
-      handleError(null, error);
-      return false;
-    }
+  private saveToLocalStorage(): void {
+    localStorage.setItem('cart', JSON.stringify(this.cartItems));
   }
 
-  private syncCartToCartItems(): void {
-    this.cartItems = this.cart!.cartItems
-      .filter((cartItem) => cartItem.product != null)
-      .map((cartItem) => this.mapCartItem(cartItem));
-    this.calculateSummary();
+  private emit(): void {
     this.cartSubject.next([...this.cartItems]);
-  }
-
-  private calculateSummary(): void {
-    this.cartSummary.subTotal = 0;
-    this.cartItems.forEach((item) => {
-      this.cartSummary.subTotal += item.price * item.quantity;
-      this.cartSummary.saving +=
-        ((item.price * item.discount) / 100) * item.quantity;
-    });
-
-    this.cartSummary.totalItems = this.cartItems.length;
-    this.cartSummary.total =
-      this.cartSummary.subTotal - this.cartSummary.saving;
-  }
-
-  private mapCartItem(item: any): CartItem {
-    return {
-      cartItemId: item.cartItemId,
-      productId: item.productId,
-      image: item.product.productImages?.[0],
-      name: item.product.name,
-      price: item.product.price,
-      discount: item.product.discount,
-      quantity: item.quantity,
-      color: item.color,
-      size: item.size
-    };
   }
 }

@@ -20,7 +20,7 @@ describe('CheckoutComponent', () => {
   beforeEach(async () => {
     const cartServiceStub = {
       getCart: () => of([]),
-      cartSummary: { subTotal: 0, saving: 0, total: 0, totalItems: 0 }
+      cartSummary$: of({ subTotal: 0, saving: 0, total: 0, totalItems: 0 })
     } as Partial<CartService>;
 
     const authServiceStub = { loggedIn: () => false } as Partial<AuthService>;

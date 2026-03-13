@@ -1,429 +1,329 @@
 <section class="bg-white py-8">
   <div class="container mx-auto px-6">
     <nav class="mb-4 flex" aria-label="Breadcrumb">
-      <ol
-        class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
-        >
+      <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li class="inline-flex items-center">
-          <a
-            [routerLink]="['/']"
-            class="hover:text-primary-600 inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 dark:hover:text-white"
-            >
+          <a [routerLink]="['/']"
+            class="hover:text-primary-600 inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 dark:hover:text-white">
             <app-icon classNames="me-2 h-4 w-4" icon="home"></app-icon>
             Home
           </a>
         </li>
         <li aria-current="page">
           <div class="flex items-center">
-            <app-icon
-              classNames="mx-1 h-4 w-4 text-gray-400 rtl:rotate-180"
-              icon="greaterThan"
-            ></app-icon>
-            <span
-              class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2"
-              >Checkout</span
-              >
-            </div>
-          </li>
-        </ol>
-      </nav>
-      <div
-        class="mt-5 grid grid-cols-1 gap-8 sm:grid-cols-5 lg:grid-cols-5 xl:mt-8 xl:gap-12"
-        >
-        <div class="w-full sm:col-span-3 lg:col-span-3">
-          <form [formGroup]="checkoutForm">
-            <div class="mb-3 space-y-4">
-              <h3 class="text-base font-semibold leading-7 text-gray-900">
-                Delivery Methods
-              </h3>
+            <app-icon classNames="mx-1 h-4 w-4 text-gray-400 rtl:rotate-180" icon="greaterThan"></app-icon>
+            <span class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2">Checkout</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+    <div class="mt-5 grid grid-cols-1 gap-8 sm:grid-cols-5 lg:grid-cols-5 xl:mt-8 xl:gap-12">
+      <div class="w-full sm:col-span-3 lg:col-span-3">
+        <form [formGroup]="checkoutForm">
+          <div class="mb-3 space-y-4">
+            <h3 class="text-base font-semibold leading-7 text-gray-900">
+              Delivery Methods
+            </h3>
 
-              <ng-container *ngIf="checkoutForm.errors?.['server']">
-                <div
-                  class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800"
-                  role="alert"
-                  >
-                  {{ checkoutForm.errors?.["server"] }}
+            <ng-container *ngIf="checkoutForm.errors?.['server']">
+              <div class="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800" role="alert">
+                {{ checkoutForm.errors?.["server"] }}
+              </div>
+            </ng-container>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <ng-container *ngFor="let method of deliveryMethods">
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4">
+                  <div class="flex items-center">
+                    <div class="flex h-5 items-center">
+                      <input id="{{ method.deliveryMethod }}" type="radio" value="{{ method.deliveryMethod }}"
+                        class="text-primary-600 focus:ring-primary-600 dark:focus:ring-primary-600 h-4 w-4 border-gray-300 bg-white focus:ring-2"
+                        formControlName="deliveryMethod" />
+                    </div>
+                    <div class="ms-4 text-sm">
+                      <label for="{{ method.deliveryMethod }}" class="font-medium leading-none text-gray-900">{{
+                        method.label }}</label>
+                      <p id="dhl-text" class="mt-1 font-normal text-gray-900">${{ method.price.amount }}</p>
+                      <p id="dhl-text" class="mt-1 text-xs font-normal text-gray-500">{{ method.timeline }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="space-y-12">
+            <div class="border-b border-gray-900/10 pb-12 sm:border-b-0">
+              <ng-container *ngIf="!isLoggedIn">
+                <div>
+                  <h2 class="text-base font-semibold leading-7 text-gray-700">
+                    Create Account
+                  </h2>
+                  <div class="mt-2">
+                    <label for="email" class="block text-sm font-medium leading-6 text-gray-700">Email address</label>
+                    <div class="mt-2">
+                      <input type="email" id="email" autocomplete="email"
+                        class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                        [class.dark:border-red-500]="
+                        formData['email'] | isInvalid
+                      " formControlName="email" placeholder="Email" />
+                    </div>
+                    <ng-container *ngIf="formData['email'] | hasError: 'required'">
+                      <div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                          Email is required
+                        </p>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div class="mt-2">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-700">Password</label>
+                    <div>
+                      <input type="password"
+                        class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                        placeholder="Password" [class.dark:border-red-500]="
+                        formData['password'] | isInvalid
+                      " formControlName="password" autocomplete="current-password" />
+                    </div>
+                    <ng-container *ngIf="formData['password'] | hasError: 'required'">
+                      <div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                          Password is required
+                        </p>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <hr class="my-5 h-px border-t-0 bg-gray-200" />
                 </div>
               </ng-container>
 
-              <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <ng-container *ngFor="let method of deliveryMethods">
-                  <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4">
-                    <div class="flex items-center">
-                      <div class="flex h-5 items-center">
-                        <input id="{{ method.deliveryMethod }}" type="radio" value="{{ method.deliveryMethod }}" class="text-primary-600 focus:ring-primary-600 dark:focus:ring-primary-600 h-4 w-4 border-gray-300 bg-white focus:ring-2" formControlName="deliveryMethod" />
+              <h2 class="text-base font-semibold leading-7 text-gray-700">
+                Shipping information
+              </h2>
+
+              <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                  <label for="first-name" class="block text-sm font-medium leading-6 text-gray-700">First name</label>
+                  <div class="mt-2">
+                    <input type="text" id="first-name"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['firstName'] | isInvalid
+                      " formControlName="firstName" />
+                  </div>
+                  <ng-container *ngIf="formData['firstName'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Firstname is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label for="last-name" class="block text-sm font-medium leading-6 text-gray-700">Last name</label>
+                  <div class="mt-2">
+                    <input type="text" id="last-name"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['lastName'] | isInvalid
+                      " formControlName="lastName" />
+                  </div>
+                  <ng-container *ngIf="formData['lastName'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        LastName is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <label for="address" class="block text-sm font-medium leading-6 text-gray-700">street</label>
+                  <div class="mt-2">
+                    <input id="street" type="text"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['street'] | isInvalid
+                      " formControlName="street" />
+                  </div>
+                  <ng-container *ngIf="formData['street'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Street is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label for="city" class="block text-sm font-medium leading-6 text-gray-700">City</label>
+                  <div class="mt-2">
+                    <input id="city" type="text"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="formData['city'] | isInvalid" formControlName="city" />
+                  </div>
+                  <ng-container *ngIf="formData['city'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        City is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="sm:col-span-3">
+                  <label for="country" class="block text-sm font-medium leading-6 text-gray-700">Country</label>
+                  <div class="mt-2">
+                    <select id="country" autocomplete="country-name"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm"
+                      formControlName="country">
+                      <option value="US">United States</option>
+                      <option value="CA">Canada</option>
+                      <option value="MX">Mexico</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label for="state" class="block text-sm font-medium leading-6 text-gray-700">State / Province</label>
+                  <div class="mt-2">
+                    <input type="text" id="state" autocomplete="address-level1"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['state'] | isInvalid
+                      " formControlName="state" />
+                  </div>
+                  <ng-container *ngIf="formData['state'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        State is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label for="zipCode" class="block text-sm font-medium leading-6 text-gray-700">ZIP / Postal
+                    code</label>
+                  <div class="mt-2">
+                    <input type="text" id="zipCode"
+                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                      [class.dark:border-red-500]="
+                        formData['zipCode'] | isInvalid
+                      " formControlName="zipCode" />
+                  </div>
+                  <ng-container *ngIf="formData['zipCode'] | hasError: 'required'">
+                    <div>
+                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        Zip Code is required
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="w-full sm:col-span-2 lg:col-span-2">
+        <div class="mt-8">
+          <div class="flow-root">
+            <ul class="-my-6 divide-y divide-gray-200">
+              <ng-container *ngFor="let item of (cart$ | async) || []">
+                <li class="flex py-6">
+                  <div class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200">
+                    <img src="{{ item.image }}" alt="" class="h-full w-full object-cover object-center" />
+                  </div>
+                  <div class="ml-4 flex flex-1 flex-col">
+                    <div>
+                      <div class="flex justify-between text-base font-medium text-gray-900">
+                        <h3><span>{{ item.name }}</span></h3>
+                        <p class="ml-4">${{ item.price }}</p>
                       </div>
-                      <div class="ms-4 text-sm">
-                        <label for="{{ method.deliveryMethod }}" class="font-medium leading-none text-gray-900">{{ method.label }}</label>
-                        <p id="dhl-text" class="mt-1 font-normal text-gray-900">${{ method.price.amount }}</p>
-                        <p id="dhl-text" class="mt-1 text-xs font-normal text-gray-500">{{ method.timeline }}</p>
+                      <div class="mt-3 flex justify-between text-base font-medium text-gray-900">
+                        <p class="mt-1 text-sm text-gray-500">{{ item.color }}</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ item.size }}</p>
+                      </div>
+                    </div>
+                    <div class="flex flex-1 items-end justify-between text-sm font-medium">
+                      <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                      <div class="flex">
+                        <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                          (click)="removeProduct(item.cartItemId)">
+                          Remove
+                        </button>
                       </div>
                     </div>
                   </div>
-                </ng-container>
-                </div>
-              </div>
-              <div class="space-y-12">
-                <div class="border-b border-gray-900/10 pb-12 sm:border-b-0">
-                  <ng-container *ngIf="!isLoggedIn">
-                    <div>
-                      <h2 class="text-base font-semibold leading-7 text-gray-700">
-                        Create Account
-                      </h2>
-                      <div class="mt-2">
-                        <label
-                          for="email"
-                          class="block text-sm font-medium leading-6 text-gray-700"
-                          >Email address</label
-                          >
-                          <div class="mt-2">
-                            <input
-                              type="email"
-                              id="email"
-                              autocomplete="email"
-                              class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['email'] | isInvalid
-                      "
-                              formControlName="email"
-                              placeholder="Email"
-                              />
-                            </div>
-                            <ng-container *ngIf="formData['email'] | hasError: 'required'">
-                              <div>
-                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                  Email is required
-                                </p>
-                              </div>
-                            </ng-container>
-                          </div>
-                          <div class="mt-2">
-                            <label
-                              for="password"
-                              class="block text-sm font-medium leading-6 text-gray-700"
-                              >Password</label
-                              >
-                              <div>
-                                <input
-                                  type="password"
-                                  class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                                  placeholder="Password"
-                      [class.dark:border-red-500]="
-                        formData['password'] | isInvalid
-                      "
-                                  formControlName="password"
-                                  autocomplete="current-password"
-                                  />
-                                </div>
-                                <ng-container *ngIf="formData['password'] | hasError: 'required'">
-                                  <div>
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                      Password is required
-                                    </p>
-                                  </div>
-                                </ng-container>
-                              </div>
-                              <hr class="my-5 h-px border-t-0 bg-gray-200" />
-                            </div>
-                          </ng-container>
+                </li>
+              </ng-container>
 
-                          <h2 class="text-base font-semibold leading-7 text-gray-700">
-                            Shipping information
-                          </h2>
+              <!-- More products... -->
+            </ul>
+          </div>
+        </div>
 
-                          <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
-                            <div class="sm:col-span-3">
-                              <label
-                                for="first-name"
-                                class="block text-sm font-medium leading-6 text-gray-700"
-                                >First name</label
-                                >
-                                <div class="mt-2">
-                                  <input
-                                    type="text"
-                                    id="first-name"
-                                    class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['firstName'] | isInvalid
-                      "
-                                    formControlName="firstName"
-                                    />
-                                  </div>
-                                  <ng-container *ngIf="formData['firstName'] | hasError: 'required'">
-                                    <div>
-                                      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                        Firstname is required
-                                      </p>
-                                    </div>
-                                  </ng-container>
-                                </div>
+        <div class="mt-5 border-t border-gray-200 py-6">
+          <div class="flow-root">
+            <div class="-my-3 divide-y divide-gray-200">
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">Subtotal</dt>
+                <dd class="text-base font-medium text-gray-900">
+                  ${{ ((cartSummary$ | async)?.subTotal ?? 0).toFixed(2) }}
+                </dd>
+              </dl>
 
-                                <div class="sm:col-span-3">
-                                  <label
-                                    for="last-name"
-                                    class="block text-sm font-medium leading-6 text-gray-700"
-                                    >Last name</label
-                                    >
-                                    <div class="mt-2">
-                                      <input
-                                        type="text"
-                                        id="last-name"
-                                        class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['lastName'] | isInvalid
-                      "
-                                        formControlName="lastName"
-                                        />
-                                      </div>
-                                      <ng-container *ngIf="formData['lastName'] | hasError: 'required'">
-                                        <div>
-                                          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                            LastName is required
-                                          </p>
-                                        </div>
-                                      </ng-container>
-                                    </div>
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">Savings</dt>
+                <dd class="text-base font-medium text-green-500">
+                  ${{ ((cartSummary$ | async)?.saving ?? 0).toFixed(2) }}
+                </dd>
+              </dl>
 
-                                    <div class="sm:col-span-6">
-                                      <label
-                                        for="address"
-                                        class="block text-sm font-medium leading-6 text-gray-700"
-                                        >street</label
-                                        >
-                                        <div class="mt-2">
-                                          <input
-                                            id="street"
-                                            type="text"
-                                            class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['street'] | isInvalid
-                      "
-                                            formControlName="street"
-                                            />
-                                          </div>
-                                          <ng-container *ngIf="formData['street'] | hasError: 'required'">
-                                            <div>
-                                              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                                Street is required
-                                              </p>
-                                            </div>
-                                          </ng-container>
-                                        </div>
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-normal text-gray-500">
+                  Delivery Charge
+                </dt>
+                <dd class="text-base font-medium text-gray-900">
+                  ${{
+                  deliveryMethods[
+                  checkoutForm.value.deliveryMethod - 1
+                  ].price.amount.toFixed(2)
+                  }}
+                </dd>
+              </dl>
 
-                                        <div class="sm:col-span-3">
-                                          <label
-                                            for="city"
-                                            class="block text-sm font-medium leading-6 text-gray-700"
-                                            >City</label
-                                            >
-                                            <div class="mt-2">
-                                              <input
-                                                id="city"
-                                                type="text"
-                                                class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                                                [class.dark:border-red-500]="formData['city'] | isInvalid"
-                                                formControlName="city"
-                                                />
-                                              </div>
-                                              <ng-container *ngIf="formData['city'] | hasError: 'required'">
-                                                <div>
-                                                  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                                    City is required
-                                                  </p>
-                                                </div>
-                                              </ng-container>
-                                            </div>
-                                            <div class="sm:col-span-3">
-                                              <label
-                                                for="country"
-                                                class="block text-sm font-medium leading-6 text-gray-700"
-                                                >Country</label
-                                                >
-                                                <div class="mt-2">
-                                                  <select
-                                                    id="country"
-                                                    autocomplete="country-name"
-                                                    class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm"
-                                                    formControlName="country"
-                                                    >
-                                                    <option value="US">United States</option>
-                                                    <option value="CA">Canada</option>
-                                                    <option value="MX">Mexico</option>
-                                                  </select>
-                                                </div>
-                                              </div>
-
-                                              <div class="sm:col-span-3">
-                                                <label
-                                                  for="state"
-                                                  class="block text-sm font-medium leading-6 text-gray-700"
-                                                  >State / Province</label
-                                                  >
-                                                  <div class="mt-2">
-                                                    <input
-                                                      type="text"
-                                                      id="state"
-                                                      autocomplete="address-level1"
-                                                      class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['state'] | isInvalid
-                      "
-                                                      formControlName="state"
-                                                      />
-                                                    </div>
-                                                    <ng-container *ngIf="formData['state'] | hasError: 'required'">
-                                                      <div>
-                                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                                          State is required
-                                                        </p>
-                                                      </div>
-                                                    </ng-container>
-                                                  </div>
-
-                                                  <div class="sm:col-span-3">
-                                                    <label
-                                                      for="zipCode"
-                                                      class="block text-sm font-medium leading-6 text-gray-700"
-                                                      >ZIP / Postal code</label
-                                                      >
-                                                      <div class="mt-2">
-                                                        <input
-                                                          type="text"
-                                                          id="zipCode"
-                                                          class="block w-full rounded-md border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                      [class.dark:border-red-500]="
-                        formData['zipCode'] | isInvalid
-                      "
-                                                          formControlName="zipCode"
-                                                          />
-                                                        </div>
-                                                        <ng-container *ngIf="formData['zipCode'] | hasError: 'required'">
-                                                          <div>
-                                                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                                                              Zip Code is required
-                                                            </p>
-                                                          </div>
-                                                      </ng-container>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </form>
-                                            </div>
-
-                                            <div class="w-full sm:col-span-2 lg:col-span-2">
-                                              <div class="mt-8">
-                                                <div class="flow-root">
-                                                  <ul class="-my-6 divide-y divide-gray-200">
-                                                    <ng-container *ngFor="let item of (cart$ | async) || []">
-                                                      <li class="flex py-6">
-                                                        <div class="h-24 w-24 flex-shrink-0 rounded-md border border-gray-200">
-                                                          <img src="{{ item.image }}" alt="" class="h-full w-full object-cover object-center" />
-                                                        </div>
-                                                        <div class="ml-4 flex flex-1 flex-col">
-                                                          <div>
-                                                            <div class="flex justify-between text-base font-medium text-gray-900">
-                                                              <h3><span>{{ item.name }}</span></h3>
-                                                              <p class="ml-4">${{ item.price }}</p>
-                                                            </div>
-                                                            <div class="mt-3 flex justify-between text-base font-medium text-gray-900"
-                                                                >
-                                                                <p class="mt-1 text-sm text-gray-500">{{ item.color }}</p>
-                                                                <p class="mt-1 text-sm text-gray-500">{{ item.size }}</p>
-                                                              </div>
-                                                            </div>
-                                                            <div
-                                                              class="flex flex-1 items-end justify-between text-sm font-medium"
-                                                              >
-                                                              <p class="text-gray-500">Qty {{ item.quantity }}</p>
-                                                              <div class="flex">
-                                                                <button
-                                                                  type="button"
-                                                                  class="font-medium text-indigo-600 hover:text-indigo-500"
-                                                                  (click)="removeProduct(item.cartItemId)"
-                                                                  >
-                                                                  Remove
-                                                                </button>
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </li>
-                                                      </ng-container>
-
-                                                      <!-- More products... -->
-                                                    </ul>
-                                                  </div>
-                                                </div>
-
-                                                <div class="mt-5 border-t border-gray-200 py-6">
-                                                  <div class="flow-root">
-                                                    <div class="-my-3 divide-y divide-gray-200">
-                                                      <dl class="flex items-center justify-between gap-4 py-3">
-                                                        <dt class="text-base font-normal text-gray-500">Subtotal</dt>
-                                                        <dd class="text-base font-medium text-gray-900">
-                                                          ${{ cartService.cartSummary.subTotal.toFixed(2) }}
-                                                        </dd>
-                                                      </dl>
-
-                                                      <dl class="flex items-center justify-between gap-4 py-3">
-                                                        <dt class="text-base font-normal text-gray-500">Savings</dt>
-                                                        <dd class="text-base font-medium text-green-500">
-                                                          ${{ cartService.cartSummary.saving.toFixed(2) }}
-                                                        </dd>
-                                                      </dl>
-
-                                                      <dl class="flex items-center justify-between gap-4 py-3">
-                                                        <dt class="text-base font-normal text-gray-500">
-                                                          Delivery Charge
-                                                        </dt>
-                                                        <dd class="text-base font-medium text-gray-900">
-                                                          ${{
-                                                          deliveryMethods[
-                                                          checkoutForm.value.deliveryMethod - 1
-                                                          ].price.amount.toFixed(2)
-                                                          }}
-                                                        </dd>
-                                                      </dl>
-
-                                                      <dl class="flex items-center justify-between gap-4 py-3">
-                                                        <dt class="text-base font-bold text-gray-900">Total</dt>
-                                                        <dd class="text-base font-bold text-gray-900">
-                                                          ${{
-                                                          (
-                                                          cartService.cartSummary.total +
-                                                          deliveryMethods[checkoutForm.value.deliveryMethod - 1]
-                                                          .price.amount
-                                                          ).toFixed(2)
-                                                          }}
-                                                        </dd>
-                                                      </dl>
-                                                    </div>
-                                                  </div>
-                                                  <div class="mt-6">
-                                                    <a
-                                                      type="button"
-                                                      class="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                                                      (click)="submitOrder()"
-                                                      >Place Order & Proceed to Payment</a
-                                                      >
-                                                    </div>
-                                                    <div
-                                                      class="mt-6 flex justify-center text-center text-sm text-gray-500"
-                                                      >
-                                                      <p>
-                                                        or
-                                                        <button
-                                                          type="button"
-                                                          class="font-medium text-indigo-600 hover:text-indigo-500"
-                                                          [routerLink]="['/', 'shop']"
-                                                          >
-                                                          Continue Shopping
-                                                          <span aria-hidden="true"> &rarr;</span>
-                                                        </button>
-                                                      </p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </section>
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-bold text-gray-900">Total</dt>
+                <dd class="text-base font-bold text-gray-900">
+                  ${{
+                  (
+                  ((cartSummary$ | async)?.total ?? 0) +
+                  deliveryMethods[checkoutForm.value.deliveryMethod - 1]
+                  .price.amount
+                  ).toFixed(2)
+                  }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="mt-6">
+            <a type="button"
+              class="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              (click)="submitOrder()">Place Order & Proceed to Payment</a>
+          </div>
+          <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+            <p>
+              or
+              <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                [routerLink]="['/', 'shop']">
+                Continue Shopping
+                <span aria-hidden="true"> &rarr;</span>
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
