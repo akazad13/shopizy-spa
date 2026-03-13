@@ -76,7 +76,7 @@
           <ng-container *ngFor="let color of colors">
             <div class="flex items-center">
               <input id="{{ color.name }}" [(ngModel)]="color.checked" name="{{ color.name }}" value="{{ color.name }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" (change)="onColorCheckboxChange(color)" />
-              <label for="filter-color-0" class="ml-3 text-sm text-gray-600">{{ color.name || color }}</label>
+              <label for="{{ color.name }}" class="ml-3 text-sm text-gray-600">{{ color.name || color }}</label>
             </div>
           </ng-container>
         </div>

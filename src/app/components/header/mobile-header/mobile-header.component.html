@@ -52,17 +52,17 @@
               <div class="grid grid-cols-2 gap-x-4">
                 <div class="group relative text-sm">
                   <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                    <img *ngIf="category.name === 'Women'" src="" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
+                    <img *ngIf="category.name === 'Women'" src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="New arrivals for women" class="object-cover object-center" />
                     <img *ngIf="category.name === 'Men'" src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="Models sitting back to back, wearing Basic Tee in black and bone." class="object-cover object-center" />
                   </div>
-                  <a href="#" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>New Arrivals</a>
+                  <a [routerLink]="['/shop']" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>New Arrivals</a>
                   <p aria-hidden="true" class="mt-1">Shop now</p>
                 </div>
                 <div class="group relative text-sm">
                   <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                    <img src="" alt="Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees." class="object-cover object-center" />
+                    <img src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg" alt="Basic Tee collection" class="object-cover object-center" />
                   </div>
-                  <a href="#" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>Basic Tees</a>
+                  <a [routerLink]="['/shop']" class="mt-6 block font-medium text-gray-900"><span class="absolute inset-0 z-10" aria-hidden="true"></span>Basic Tees</a>
                   <p aria-hidden="true" class="mt-1">Shop now</p>
                 </div>
               </div>
@@ -71,9 +71,9 @@
                   <p id="women-clothing-heading-mobile" class="font-medium text-gray-900">{{ childCategory.name }}</p>
                   <ul aria-labelledby="women-clothing-heading-mobile" class="mt-6 flex flex-col space-y-6">
                     <ng-container *ngFor="let grandChildCategory of (childCategory.children?.slice(0,2) || [])">
-                      <li class="flow-root"><a href="#" class="-m-2 block p-2 text-gray-500">{{ grandChildCategory.name }}</a></li>
+                      <li class="flow-root"><a [routerLink]="['/shop']" class="-m-2 block p-2 text-gray-500">{{ grandChildCategory.name }}</a></li>
                     </ng-container>
-                    <li class="flow-root"><a href="#" class="-m-2 block p-2 text-gray-500">Browse All</a></li>
+                    <li class="flow-root"><a [routerLink]="['/shop']" class="-m-2 block p-2 text-gray-500">Browse All</a></li>
                   </ul>
                 </div>
               </ng-container>
@@ -81,9 +81,9 @@
                 <p id="women-brands-heading-mobile" class="font-medium text-gray-900">Brands</p>
                 <ul aria-labelledby="women-brands-heading-mobile" class="mt-6 flex flex-col space-y-6">
                   <ng-container *ngFor="let brand of (brands.slice(0,2) || [])">
-                    <li class="flow-root"><a href="#" class="-m-2 block p-2 text-gray-500">{{ brand }}</a></li>
+                    <li class="flow-root"><a [routerLink]="['/shop']" class="-m-2 block p-2 text-gray-500">{{ brand }}</a></li>
                   </ng-container>
-                  <li class="flow-root"><a href="#" class="-m-2 block p-2 text-gray-500">Browse All</a></li>
+                  <li class="flow-root"><a [routerLink]="['/shop']" class="-m-2 block p-2 text-gray-500">Browse All</a></li>
                 </ul>
               </div>
             </div>
@@ -118,17 +118,9 @@
                   </div>
 
                   <div class="border-t border-gray-200 px-4 py-6">
-                    <a href="#" class="-m-2 flex items-center p-2">
-                      <img
-                        src=""
-                        alt=""
-                        class="block h-auto w-5 flex-shrink-0"
-                        />
-                        <span class="ml-3 block text-base font-medium text-gray-900"
-                          >USD</span
-                          >
-                          <span class="sr-only">, change currency</span>
-                        </a>
+                    <span class="-m-2 flex items-center p-2">
+                        <span class="block text-base font-medium text-gray-900">USD</span>
+                      </span>
                       </div>
                     </div>
                   </div>
