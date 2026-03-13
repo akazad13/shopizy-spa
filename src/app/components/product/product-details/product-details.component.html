@@ -6,7 +6,7 @@
         >
         <li>
           <div class="flex items-center">
-            <a href="#" class="mr-2 text-sm font-medium text-gray-900">Home</a>
+            <a [routerLink]="['/']" class="mr-2 text-sm font-medium text-gray-900">Home</a>
             <app-icon
               icon="backslash"
               classNames="h-5 w-4 text-gray-300"
@@ -15,7 +15,7 @@
         </li>
         <li>
           <div class="flex items-center">
-            <a href="#" class="mr-2 text-sm font-medium text-gray-900"
+            <a [routerLink]="['/shop']" class="mr-2 text-sm font-medium text-gray-900"
               >Clothing</a
               >
               <app-icon
@@ -26,11 +26,10 @@
           </li>
 
           <li class="text-sm">
-            <a
-              href="#"
+            <span
               aria-current="page"
-              class="font-medium text-gray-500 hover:text-gray-600"
-              >{{ product.name }}</a
+              class="font-medium text-gray-500"
+              >{{ product.name }}</span
               >
             </li>
           </ol>
@@ -214,28 +213,28 @@
 
               <div class="mb-10 mt-10 max-w-7xl">
                 <ul class="flex border-b">
-                  <a (click)="updateTabSelection('description')">
-                    <li
-              class="cursor-pointer px-8 py-3 text-sm font-semibold  transition-all {{
+                  <li>
+                    <button type="button"
+              class="cursor-pointer px-8 py-3 text-sm font-semibold transition-all {{
                 selectedTab === 'description'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
-                  : 'text-gray-500 hover:bg-gray-100 '
+                  : 'text-gray-500 hover:bg-gray-100'
               }}"
-                      >
+                      (click)="updateTabSelection('description')">
                       Description
-                    </li>
-                  </a>
-                  <a (click)="updateTabSelection('review')">
-                    <li
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button"
               class="cursor-pointer px-8 py-3 text-sm font-semibold transition-all {{
                 selectedTab === 'review'
                   ? 'border-b-2 border-gray-800 bg-gray-100 text-gray-800'
-                  : 'text-gray-500 hover:bg-gray-100 '
+                  : 'text-gray-500 hover:bg-gray-100'
               }}"
-                      >
+                      (click)="updateTabSelection('review')">
                       Reviews
-                    </li>
-                  </a>
+                    </button>
+                  </li>
                 </ul>
 
                 <div *ngIf="selectedTab === 'description'" class="mt-8">
@@ -269,7 +268,7 @@
                           <app-icon icon="star" classNames="h-5 w-5 text-amber-400"></app-icon>
                           <p class="ml-5 mr-3 h-2 w-full rounded-3xl bg-amber-50 sm:min-w-[278px]">
                             <ng-container *ngIf="starNum.num > 0">
-                              <span class="flex h-full" [style.width.%]="starNum.pct" class="rounded-3xl bg-amber-400"></span>
+                              <span class="flex h-full rounded-3xl bg-amber-400" [style.width.%]="starNum.pct"></span>
                             </ng-container>
                           </p>
                           <p class="mr-0.5 text-lg font-medium text-black">{{ starNum.num }}</p>

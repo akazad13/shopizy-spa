@@ -1,0 +1,21 @@
+<section class="my-12">
+  <h2 class="text-2xl font-bold tracking-tight text-gray-900">Shop by Category</h2>
+  <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-4">
+    @for (category of categories; track category.name) {
+      <a [routerLink]="['/shop']" class="group relative overflow-hidden rounded-lg">
+        <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-lg font-semibold text-white">{{ category.name }}</h3>
+            <p class="mt-1 text-sm text-gray-200">Shop now</p>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</section>

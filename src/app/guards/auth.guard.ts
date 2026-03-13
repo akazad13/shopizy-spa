@@ -27,7 +27,7 @@ export class AuthGuard {
 
     if (authGuardMode === 'redirectToLogin') {
       if (!this.authService.loggedIn()) {
-        this.router.navigate(['auth/login']);
+        this.router.navigate(['auth/signin']);
         return false;
       }
     } else if (authGuardMode === 'redirectToDashboard') {

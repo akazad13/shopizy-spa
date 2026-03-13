@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm outdated:*)",
+      "Bash(cd D:/Practice/Projects/shopizy-app && npx npm-check-updates 2>&1 || npm outdated --json 2>&1 || echo \"both failed\")",
+      "WebSearch",
+      "Bash(npx ng:*)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(node -e \"console.log\\(process.cwd\\(\\)\\)\")",
+      "Bash(npm --version)",
+      "Bash(where node:*)",
+      "Bash(where npm:*)",
+      "Bash(echo \"PATH: $PATH\")"
+    ]
+  }
+}
