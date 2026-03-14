@@ -3,6 +3,7 @@ import { ProductCardComponent } from '../../product/product-card/product-card.co
 import { CommonModule } from '@angular/common';
 
 import { Product } from '../../../interfaces/product';
+import { RouterLink } from '@angular/router';
 
 export interface BlockProducts {
   title: string;
@@ -12,7 +13,7 @@ export interface BlockProducts {
 @Component({
   selector: 'app-products-block',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, RouterLink],
   templateUrl: './products-block.component.html',
   styles: ``
 })

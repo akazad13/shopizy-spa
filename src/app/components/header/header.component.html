@@ -1,173 +1,196 @@
-<div class="bg-white">
+<div class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm">
   <app-mobile-header [hideMobileMenu]="hideMobileMenu" [categoryTree]="categoryTree" [brands]="brands"
     (hideMobileMenuOutput)="showHideMobileDrawer($event)"></app-mobile-header>
 
-  <header class="relative bg-white">
-    <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-      Get free delivery on orders over $100
-    </p>
+  <header class="relative">
 
+    <!-- Announcement bar -->
+    <div class="flex h-9 items-center justify-center bg-indigo-600 px-4 text-xs font-medium text-white sm:px-6 lg:px-8">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+        class="mr-2 h-4 w-4 text-indigo-300">
+        <path
+          d="M6.5 3c-1.051 0-2.093.04-3.125.117A1.49 1.49 0 002 4.607V10.5h9V4.606c0-.771-.59-1.43-1.375-1.489A41.35 41.35 0 006.5 3zM2 12v2.5A1.5 1.5 0 003.5 16h.041a3 3 0 015.918 0h.791a.75.75 0 00.75-.75V12H2z" />
+        <path
+          d="M6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM13.25 5a.75.75 0 00-.75.75v8.514a3.001 3.001 0 014.893 1.44c.37-.275.607-.714.607-1.204v-1a4 4 0 00-4-4h-.75V6.25a.75.75 0 00-.75-.75h-1.5a.75.75 0 000 1.5H13v5.75a.75.75 0 001.5 0V6.5h.75a2.5 2.5 0 012.5 2.5v1a.253.253 0 01-.094.197 3.01 3.01 0 00-3.93-.197V5.75A.75.75 0 0013.25 5z" />
+      </svg>
+      Free delivery on orders over $100 — Limited time offer
+    </div>
+
+    <!-- Main nav -->
     <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="border-b border-gray-200">
-        <div class="flex h-16 items-center">
-          <!-- Mobile menu toggle -->
-          <button type="button" class="mobile-menu-hamburger relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
-            (click)="showHideMobileDrawer('show')">
-            <span class="absolute -inset-0.5"></span>
-            <span class="sr-only">Open menu</span>
-            <app-icon icon="bar-3" classNames="h-6 w-6"></app-icon>
-          </button>
+      <div class="flex h-16 items-center gap-x-4 border-b border-gray-100">
 
-          <!-- Logo -->
-          <div class="ml-4 flex lg:ml-0">
-            <a [routerLink]="['']">
-              <span class="sr-only">Shopizy</span>
-              <img class="h-10 w-auto" src="logo.png" alt="" />
-            </a>
-          </div>
+        <!-- Hamburger (mobile) -->
+        <button type="button"
+          class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 lg:hidden"
+          (click)="showHideMobileDrawer('show')">
+          <span class="sr-only">Open menu</span>
+          <app-icon icon="bar-3" classNames="h-6 w-6"></app-icon>
+        </button>
 
-          <!-- Flyout menus -->
-          <div class="hidden lg:ml-8 lg:block lg:self-stretch">
-            <div class="flex h-full space-x-8">
-              <ng-container *ngFor="let parentCategory of categoryTree">
-                <div class="flex">
-                  <div class="relative flex">
-                    <button type="button"
-                      class="cat relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
-                      aria-expanded="false" (click)="updateCategorySelection(parentCategory.name)"
-                      [ngClass]="selected === parentCategory.name ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800'">{{
-                      parentCategory.name }}</button>
-                  </div>
-                  <div *ngIf="selected === parentCategory.name"
-                    class="absolute inset-x-0 top-full z-10 text-sm text-gray-500" appClickOutsideCategoryFlyout
-                    (clickOutside)="hideCategoryFlyout()">
-                    <div class="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true"></div>
-                    <div class="relative bg-white">
-                      <div class="mx-auto max-w-7xl px-8">
-                        <div class="grid grid-cols-3 gap-x-8 gap-y-10 py-16">
-                          <div class="group relative text-base sm:text-sm">
-                            <div
-                              class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                              <img *ngIf="parentCategory.name === 'Women'"
-                                src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                                alt="New arrivals for women" class="object-cover object-center" />
-                              <img *ngIf="parentCategory.name === 'Men'"
-                                src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                                alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                                class="object-cover object-center" />
-                            </div>
-                            <a [routerLink]="['/shop']" class="mt-6 block font-medium text-gray-900"><span
-                                class="absolute inset-0 z-10" aria-hidden="true"></span>New Arrivals</a>
-                            <p aria-hidden="true" class="mt-1">Shop now</p>
+        <!-- Logo -->
+        <a [routerLink]="['']" class="mr-4 flex-shrink-0">
+          <span class="sr-only">Shopizy</span>
+          <img class="h-9 w-auto" src="logo.png" alt="Shopizy" />
+        </a>
+
+        <!-- Category flyout nav -->
+        <div class="hidden lg:flex lg:h-full lg:flex-1 lg:items-stretch lg:gap-x-6">
+          <ng-container *ngFor="let parentCategory of categoryTree">
+            <div class="relative flex items-stretch">
+              <button type="button"
+                class="flex items-center gap-x-1 border-b-2 pt-px text-sm font-medium transition-colors duration-150"
+                [class.border-indigo-600]="selected === parentCategory.name"
+                [class.text-indigo-600]="selected === parentCategory.name"
+                [class.border-transparent]="selected !== parentCategory.name"
+                [class.text-gray-600]="selected !== parentCategory.name"
+                [class.hover:text-gray-900]="selected !== parentCategory.name"
+                (click)="updateCategorySelection(parentCategory.name)">
+                {{ parentCategory.name }}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                  class="h-3.5 w-3.5 transition-transform duration-200"
+                  [class.rotate-180]="selected === parentCategory.name">
+                  <path fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+
+              <!-- Mega flyout panel -->
+              <div *ngIf="selected === parentCategory.name" class="absolute inset-x-[-8rem] top-full z-20 mt-px"
+                appClickOutsideCategoryFlyout (clickOutside)="hideCategoryFlyout()">
+                <div class="rounded-2xl bg-white shadow-xl ring-1 ring-gray-100">
+                  <div class="mx-auto max-w-7xl px-8 py-8">
+                    <div class="grid grid-cols-3 gap-x-10 gap-y-8">
+                      <!-- Featured images -->
+                      <div class="col-span-1 space-y-4">
+                        <div class="group overflow-hidden rounded-xl bg-gray-100">
+                          <img
+                            src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
+                            alt="New arrivals"
+                            class="h-36 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
+                        </div>
+                        <a [routerLink]="['/shop']"
+                          class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">
+                          New Arrivals <span class="text-gray-400">→</span>
+                        </a>
+                        <div class="group overflow-hidden rounded-xl bg-gray-100">
+                          <img
+                            src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
+                            alt="Basic Tees"
+                            class="h-36 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
+                        </div>
+                        <a [routerLink]="['/shop']"
+                          class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">
+                          Basic Tees <span class="text-gray-400">→</span>
+                        </a>
+                      </div>
+
+                      <!-- Category links -->
+                      <div class="col-span-2 grid grid-cols-3 gap-x-8 gap-y-6 text-sm">
+                        <ng-container *ngFor="let children of parentCategory.children">
+                          <div>
+                            <p class="mb-3 font-semibold text-gray-900">{{ children.name }}</p>
+                            <ul class="space-y-2.5">
+                              <ng-container *ngFor="let grandChildren of (children | toIterable)">
+                                <li>
+                                  <a [routerLink]="['/shop']" class="text-gray-500 transition hover:text-indigo-600">
+                                    {{ grandChildren.name }}
+                                  </a>
+                                </li>
+                              </ng-container>
+                            </ul>
                           </div>
-                          <div class="group relative text-base sm:text-sm">
-                            <div
-                              class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                              <img
-                                src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                                alt="Basic Tee collection" class="object-cover object-center" />
-                            </div>
-                            <a [routerLink]="['/shop']" class="mt-6 block font-medium text-gray-900"><span
-                                class="absolute inset-0 z-10" aria-hidden="true"></span>Basic Tees</a>
-                            <p aria-hidden="true" class="mt-1">Shop now</p>
-                          </div>
-                          <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-                            <ng-container *ngFor="let children of parentCategory.children">
-                              <div>
-                                <p id="{{ children.name }}-heading" class="font-medium text-gray-900">{{ children.name
-                                  }}</p>
-                                <ul class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                  <ng-container *ngFor="let grandChildren of (children | toIterable)">
-                                    <li class="flex"><a [routerLink]="['/shop']" class="hover:text-gray-800">{{
-                                        grandChildren.name }}</a></li>
-                                  </ng-container>
-                                </ul>
-                              </div>
+                        </ng-container>
+                        <div>
+                          <p class="mb-3 font-semibold text-gray-900">Brands</p>
+                          <ul class="space-y-2.5">
+                            <ng-container *ngFor="let brand of brands">
+                              <li>
+                                <a [routerLink]="['/shop']" class="text-gray-500 transition hover:text-indigo-600">{{
+                                  brand }}</a>
+                              </li>
                             </ng-container>
-                            <div>
-                              <p id="Brands-heading" class="font-medium text-gray-900">Brands</p>
-                              <ul aria-labelledby="Brands-heading" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                <ng-container *ngFor="let brand of brands">
-                                  <li class="flex"><a [routerLink]="['/shop']" class="hover:text-gray-800">{{ brand
-                                      }}</a></li>
-                                </ng-container>
-                              </ul>
-                            </div>
-                          </div>
+                          </ul>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </ng-container>
-              <a [routerLink]="['/shop']"
-                class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Shop</a>
-            </div>
-          </div>
-
-          <div class="ml-auto flex items-center">
-            @if (!isLoggedIn) {
-            <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-              <a [routerLink]="['auth/signin']" class="text-sm font-medium text-gray-700 hover:text-gray-800">Sign
-                in</a>
-              <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
-              <a [routerLink]="['auth/signup']" class="text-sm font-medium text-gray-700 hover:text-gray-800">Create
-                account</a>
-            </div>
-            }
-            @if (isLoggedIn) {
-            <div class="relative inline-block text-left">
-              <button (click)="showHideAccountMenu(!hideAccountMenu)" class="account-dropdown-btn">
-                <img class="account-dropdown-btn inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                  src="https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg"
-                  alt="" />
-              </button>
-              <div
-                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
-                role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" [ngClass]="
-                  hideAccountMenu
-                    ? 'scale-0 transform opacity-0 transition duration-75 ease-in'
-                    : 'scale-100 transform opacity-100 transition duration-75 ease-in'
-                " appClickOutsideAccount (clickOutside)="showHideAccountMenu(true)">
-                <div class="cursor-pointer py-1">
-                  <ng-container *ngFor="let menuItem of accountMenu">
-                    <a class="block px-4 py-2 text-sm text-gray-700" tabindex="-1"
-                      (click)="onAccountMenuItemClick(menuItem)">{{ menuItem.label }}</a>
-                  </ng-container>
-                </div>
               </div>
             </div>
-            }
-            <div class="relative inline-block text-left"></div>
+          </ng-container>
 
-            <div class="hidden lg:ml-8 lg:flex">
-              <span class="flex items-center text-gray-700">
-                <span class="block text-sm font-medium">USD</span>
-              </span>
-            </div>
+          <!-- Shop link -->
+          <a [routerLink]="['/shop']"
+            class="flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-600 transition hover:text-gray-900">Shop</a>
+        </div>
 
-            <!-- Search -->
-            <div class="flex lg:ml-6">
-              <button type="button" class="p-2 text-gray-400 hover:text-gray-500">
-                <span class="sr-only">Search</span>
-                <app-icon icon="magnifying-glass" classNames="h-6 w-6"></app-icon>
-              </button>
-            </div>
+        <!-- Right side actions -->
+        <div class="ml-auto flex items-center gap-x-1 sm:gap-x-2">
 
-            <!-- Cart -->
-            <div class="ml-4 flow-root lg:ml-6">
-              <a (click)="updateDropCartSelection()" class="group -m-2 flex cursor-pointer items-center p-2">
-                <app-icon icon="cart"
-                  classNames="h-7 w-7 flex-shrink-0 text-gray-400 group-hover:text-gray-500"></app-icon>
-                <div
-                  class="translate-x-1/6 bottom-auto z-10 inline-block -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white">
-                  {{ (cartSummary$ | async)?.totalItems }}
-                </div>
-                <span class="sr-only">items in cart, view bag</span>
-              </a>
+          <!-- Auth links (logged out) -->
+          @if (!isLoggedIn) {
+          <div class="hidden items-center gap-x-4 lg:flex">
+            <a [routerLink]="['auth/signin']"
+              class="text-sm font-medium text-gray-600 transition hover:text-gray-900">Sign in</a>
+            <a [routerLink]="['auth/signup']"
+              class="rounded-lg bg-indigo-600 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-indigo-700">Create
+              account</a>
+          </div>
+          }
+
+          <!-- Account avatar (logged in) -->
+          @if (isLoggedIn) {
+          <div class="relative">
+            <button
+              class="account-dropdown-btn flex h-9 w-9 items-center justify-center rounded-full ring-2 ring-indigo-100 transition hover:ring-indigo-300"
+              (click)="showHideAccountMenu(!hideAccountMenu)">
+              <img class="account-dropdown-btn h-9 w-9 rounded-full object-cover"
+                src="https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg"
+                alt="Account" />
+            </button>
+            <div
+              class="absolute right-0 z-20 mt-2 w-52 origin-top-right rounded-xl bg-white py-1.5 shadow-xl ring-1 ring-gray-100"
+              role="menu" appClickOutsideAccount (clickOutside)="showHideAccountMenu(true)" [ngClass]="
+                  hideAccountMenu
+                    ? 'pointer-events-none scale-95 opacity-0 transition duration-100 ease-in'
+                    : 'pointer-events-auto scale-100 opacity-100 transition duration-150 ease-out'
+                ">
+              <ng-container *ngFor="let menuItem of accountMenu">
+                <button
+                  class="block w-full px-4 py-2 text-left text-sm text-gray-700 transition hover:bg-indigo-50 hover:text-indigo-700"
+                  (click)="onAccountMenuItemClick(menuItem)">{{ menuItem.label }}</button>
+              </ng-container>
             </div>
+          </div>
+          }
+
+          <!-- Currency -->
+          <span
+            class="hidden rounded-lg px-2 py-1.5 text-xs font-semibold text-gray-500 ring-1 ring-gray-200 lg:block">USD</span>
+
+          <!-- Search -->
+          <button type="button"
+            class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100">
+            <span class="sr-only">Search</span>
+            <app-icon icon="magnifying-glass" classNames="h-5 w-5"></app-icon>
+          </button>
+
+          <!-- Cart -->
+          <div class="relative flex items-center">
+            <button type="button"
+              class="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100"
+              (click)="updateDropCartSelection()">
+              <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
+            </button>
+            <!-- Badge: positioned on the outer div so it sits on the top-right corner of the button -->
+            <span *ngIf="(cartSummary$ | async)?.totalItems"
+              class="pointer-events-none absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold leading-none text-white ring-2 ring-white">{{
+              (cartSummary$ | async)?.totalItems }}</span>
             <app-dropcart [isDropCartOpened]="isDropCartOpened"></app-dropcart>
           </div>
+
         </div>
       </div>
     </nav>

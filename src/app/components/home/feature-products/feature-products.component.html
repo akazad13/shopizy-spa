@@ -1,41 +1,42 @@
-<section class="">
-  <div
-    class="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8"
-  >
-    <h2 class="text-center text-4xl font-bold tracking-tight text-gray-900">
-      New Hot products
-    </h2>
-    <div class="container mx-auto mt-10">
-      <!-- Image gallery -->
-      <div
-        class="mx-auto grid max-w-2xl lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8"
-      >
-        <div
-          class="col-span-2 mb-5 overflow-hidden rounded-lg lg:mb-0 lg:block"
-        >
-          <img
-            src="{{ imageUrls[0] }}"
-            alt="Model wearing plain white basic tee."
-            class="h-full w-full object-cover object-center"
-          />
+<section class="bg-white py-14 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+    <!-- Section header -->
+    <div class="flex items-end justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-indigo-500">Trending Now</p>
+        <h2 class="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">New Hot Products</h2>
+      </div>
+      <a [routerLink]="['/shop']"
+        class="hidden items-center gap-x-1 text-sm font-medium text-indigo-600 hover:text-indigo-700 sm:flex">
+        Shop all
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+          <path fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Image mosaic -->
+    <div class="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <!-- Large featured -->
+      <div class="group col-span-2 overflow-hidden rounded-2xl shadow-sm" style="aspect-ratio: 9/9;">
+        <img [src]="imageUrls[0]" alt="Featured product"
+          class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+      </div>
+      <!-- Small stacked -->
+      <div class="grid grid-rows-2 gap-5">
+        <div class="group overflow-hidden rounded-2xl shadow-sm">
+          <img [src]="imageUrls[1]" alt="Product"
+            class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105" />
         </div>
-        <div class="col-span-1 lg:grid lg:grid-cols-1 lg:gap-y-8">
-          <div class="mb-5 overflow-hidden rounded-lg lg:mb-0">
-            <img
-              src="{{ imageUrls[1] }}"
-              alt="Model wearing plain black basic tee."
-              class="h-full w-full object-cover object-center"
-            />
-          </div>
-          <div class="overflow-hidden rounded-lg">
-            <img
-              src="{{ imageUrls[2] }}"
-              alt="Model wearing plain gray basic tee."
-              class="h-full w-full object-cover object-center"
-            />
-          </div>
+        <div class="group overflow-hidden rounded-2xl shadow-sm">
+          <img [src]="imageUrls[2]" alt="Product"
+            class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105" />
         </div>
       </div>
     </div>
+
   </div>
 </section>
