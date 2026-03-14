@@ -1,7 +1,7 @@
-<div class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm">
-  <app-mobile-header [hideMobileMenu]="hideMobileMenu" [categoryTree]="categoryTree" [brands]="brands"
-    (hideMobileMenuOutput)="showHideMobileDrawer($event)"></app-mobile-header>
+<app-mobile-header [hideMobileMenu]="hideMobileMenu" [categoryTree]="categoryTree" [brands]="brands"
+  (hideMobileMenuOutput)="showHideMobileDrawer($event)"></app-mobile-header>
 
+<div class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm">
   <header class="relative">
 
     <!-- Announcement bar -->
@@ -37,7 +37,7 @@
         <!-- Category flyout nav -->
         <div class="hidden lg:flex lg:h-full lg:flex-1 lg:items-stretch lg:gap-x-6">
           <ng-container *ngFor="let parentCategory of categoryTree">
-            <div class="relative flex items-stretch">
+            <div class="flex items-stretch">
               <button type="button"
                 class="flex items-center gap-x-1 border-b-2 pt-px text-sm font-medium transition-colors duration-150"
                 [class.border-indigo-600]="selected === parentCategory.name"
@@ -57,10 +57,10 @@
               </button>
 
               <!-- Mega flyout panel -->
-              <div *ngIf="selected === parentCategory.name" class="absolute inset-x-[-8rem] top-full z-20 mt-px"
+              <div *ngIf="selected === parentCategory.name" class="absolute inset-x-0 top-full z-20"
                 appClickOutsideCategoryFlyout (clickOutside)="hideCategoryFlyout()">
-                <div class="rounded-2xl bg-white shadow-xl ring-1 ring-gray-100">
-                  <div class="mx-auto max-w-7xl px-8 py-8">
+                <div class="border-t border-gray-100 bg-white shadow-xl">
+                  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-3 gap-x-10 gap-y-8">
                       <!-- Featured images -->
                       <div class="col-span-1 space-y-4">
@@ -68,22 +68,8 @@
                           <img
                             src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
                             alt="New arrivals"
-                            class="h-36 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
+                            class="h-56 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
                         </div>
-                        <a [routerLink]="['/shop']"
-                          class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">
-                          New Arrivals <span class="text-gray-400">→</span>
-                        </a>
-                        <div class="group overflow-hidden rounded-xl bg-gray-100">
-                          <img
-                            src="https://res.cloudinary.com/akazad13/image/upload/v1729420811/shopizy/soy4l9t0xba9dz2aq3li.jpg"
-                            alt="Basic Tees"
-                            class="h-36 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
-                        </div>
-                        <a [routerLink]="['/shop']"
-                          class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">
-                          Basic Tees <span class="text-gray-400">→</span>
-                        </a>
                       </div>
 
                       <!-- Category links -->
