@@ -6,11 +6,11 @@ import { CategoryTree } from './../interfaces/category';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/categories/';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
 
   constructor(private readonly http: HttpClient) {}
 
   getcategoryTree(): Observable<CategoryTree[]> {
-    return this.http.get<CategoryTree[]>(this.baseUrl + 'tree');
+    return this.http.get<CategoryTree[]>(`${this.url}/categories/tree`);
   }
 }

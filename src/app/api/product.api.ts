@@ -9,7 +9,7 @@ import { ProductQueryFilters } from '../models/QueryFilters';
   providedIn: 'root'
 })
 export class ProductApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/products';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -35,12 +35,12 @@ export class ProductApi {
       .append('pageNumber', pageNumber)
       .append('pageSize', pageSize);
 
-    return this.http.get<Product[]>(this.baseUrl, {
+    return this.http.get<Product[]>(`${this.url}/products`, {
       params
     });
   }
 
   getProduct(productId: string): Observable<ProductDetail> {
-    return this.http.get<ProductDetail>(this.baseUrl + '/' + productId);
+    return this.http.get<ProductDetail>(`${this.url}/products/productId`);
   }
 }

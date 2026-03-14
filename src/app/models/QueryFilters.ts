@@ -9,7 +9,6 @@ export class ProductQueryFilters {
 }
 
 export class OrderQueryFilters {
-  customerId: string | null = null;
   startDate: string | null = null;
   endDate: string | null = null;
   pageNumber = 1;

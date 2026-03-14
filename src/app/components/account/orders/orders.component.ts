@@ -34,7 +34,6 @@ export class OrdersComponent implements OnInit {
 
   async getOrders() {
     try {
-      this.filters.customerId = this.tokenService.getCurrentUserId();
       this.filters.startDate = '2021-01-01';
       this.filters.endDate = '2024-12-31';
       this.orders = await firstValueFrom(this.orderApi.getOrders(this.filters));

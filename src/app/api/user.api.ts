@@ -9,21 +9,29 @@ import { TokenService } from '../services/token.service';
   providedIn: 'root'
 })
 export class UserApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/users/';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
+  private get userId(): string { return this.tokenService.getCurrentUserId()!; }
 
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
   getUser(userId: string): Observable<UserDetails> {
-    return this.http.get<UserDetails>(this.baseUrl + userId);
+    return this.http.get<UserDetails>(`${this.url}/users/${userId}`);
   }
 
   updateUser(data: UpdateUser): Observable<any> {
     return this.http.put<any>(
-      this.baseUrl + this.tokenService.getCurrentUserId(),
+      `${this.url}/users/${this.userId}`,
       data
     );
+  }
+
+  updatePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${this.userId}/password`, {
+      oldPassword,
+      newPassword
+    });
   }
 }

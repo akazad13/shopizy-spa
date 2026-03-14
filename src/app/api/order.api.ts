@@ -7,23 +7,21 @@ import { Price } from '../interfaces/Price';
 import { Address } from '../interfaces/Address';
 import { OrderQueryFilters } from '../models/QueryFilters';
 import { SuccessResponse } from '../interfaces/SuccessResponse';
+import { TokenService } from '../services/token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/orders/';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
+  private get userId(): string { return this.tokenService.getCurrentUserId()!; }
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) { }
 
   getOrders(filters: OrderQueryFilters): Observable<Order[]> {
     let params = new HttpParams();
-    const { customerId, startDate, endDate, pageNumber, pageSize, status } =
+    const { startDate, endDate, pageNumber, pageSize, status } =
       filters;
-
-    if (customerId != null) {
-      params = params.append('customerId', customerId);
-    }
 
     if (startDate != null) {
       params = params.append('startDate', startDate);
@@ -41,13 +39,13 @@ export class OrderApi {
       .append('pageNumber', pageNumber)
       .append('pageSize', pageSize);
 
-    return this.http.get<Order[]>(this.baseUrl, {
+    return this.http.get<Order[]>(`${this.url}/users/${this.userId}/orders`, {
       params
     });
   }
 
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(this.baseUrl + orderId);
+    return this.http.get<Order>(`${this.url}/users/${this.userId}/orders/${orderId}`);
   }
 
   createOrder(
@@ -62,7 +60,7 @@ export class OrderApi {
     deliveryCharge: Price,
     shippingAddress: Address
   ): Observable<Order> {
-    return this.http.post<Order>(this.baseUrl, {
+    return this.http.post<Order>(`${this.url}/users/${this.userId}/orders`, {
       promoCode: promoCode,
       deliveryMethod: deliveryMethod,
       deliveryCharge: {
@@ -76,7 +74,7 @@ export class OrderApi {
 
   cancelOrder(orderId: string, reason: string): Observable<SuccessResponse> {
     return this.http.patch<SuccessResponse>(
-      this.baseUrl + orderId + '/cancel',
+      `${this.url}/users/${this.userId}/orders/${orderId}/cancel`,
       {
         reason: reason
       }

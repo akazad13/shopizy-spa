@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class AuthApi {
   private readonly userSubject: BehaviorSubject<User | null>;
-  baseUrl = environment.apiUrl + '/api/v1.0/auth';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
 
   get user(): User | null {
     return this.userSubject.value;
@@ -26,7 +26,7 @@ export class AuthApi {
 
   signIn(email: string, password: string): Observable<User> {
     return this.http
-      .post<User>(this.baseUrl + '/login', {
+      .post<User>(`${this.url}/auth/login`, {
         email,
         password
       })
@@ -39,7 +39,7 @@ export class AuthApi {
     email: string,
     password: string
   ): Observable<any> {
-    return this.http.post<any>(this.baseUrl + '/register', {
+    return this.http.post<any>(`${this.url}/auth/register`, {
       firstName,
       lastName,
       email,
@@ -48,24 +48,17 @@ export class AuthApi {
   }
 
   resetPassword(newPassword: string, resetToken: string): Observable<any> {
-    return this.http.post<any>(this.baseUrl + '/reset-password', {
+    return this.http.post<any>(`${this.url}/auth/reset-password`, {
       newPassword,
       resetToken
     });
   }
 
   forgetPassword(email: string): Observable<any> {
-    return this.http.post<any>(this.baseUrl + '/forgot-password', {
+    return this.http.post<any>(`${this.url}/auth/forgot-password`, {
       email
     });
   }
-
-  // updatePassword(oldPassword: string, newPassword: string): Observable<any> {
-  //   return this.http.post<any>(this.baseUrl + '/update-password', {
-  //     oldPassword,
-  //     newPassword
-  //   });
-  // }
 
   setUser(user: User | null): void {
     this.userSubject.next(user);

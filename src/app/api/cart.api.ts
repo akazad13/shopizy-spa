@@ -7,7 +7,7 @@ import { Cart } from '../interfaces/cart';
 
 @Injectable({ providedIn: 'root' })
 export class CartApi {
-  private readonly base = environment.apiUrl + '/api/v1.0/users/';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
   private get userId(): string { return this.tokenService.getCurrentUserId()!; }
 
   constructor(
@@ -16,18 +16,18 @@ export class CartApi {
   ) {}
 
   getCart(): Observable<Cart> {
-    return this.http.get<Cart>(`${this.base}${this.userId}/cart`);
+    return this.http.get<Cart>(`${this.url}/users/${this.userId}/cart`);
   }
 
   addItem(productId: string, color: string, size: string, quantity: number): Observable<Cart> {
-    return this.http.patch<Cart>(`${this.base}${this.userId}/cart/items`, { productId, color, size, quantity });
+    return this.http.patch<Cart>(`${this.url}/users/${this.userId}/cart/items`, { productId, color, size, quantity });
   }
 
   updateItemQuantity(itemId: string, quantity: number): Observable<Cart> {
-    return this.http.patch<Cart>(`${this.base}${this.userId}/cart/items/${itemId}`, { quantity });
+    return this.http.patch<Cart>(`${this.url}/users/${this.userId}/cart/items/${itemId}`, { quantity });
   }
 
   removeItem(itemId: string): Observable<Cart> {
-    return this.http.delete<Cart>(`${this.base}${this.userId}/cart/items/${itemId}`);
+    return this.http.delete<Cart>(`${this.url}/users/${this.userId}/cart/items/${itemId}`);
   }
 }

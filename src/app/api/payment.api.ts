@@ -8,12 +8,13 @@ import { CardInfo } from '../interfaces/CardInfo';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentApi {
-  baseUrl = environment.apiUrl + '/api/v1.0/payments';
+  private readonly url = `${environment.apiUrl}/api/v1.0`;
+  private get userId(): string { return this.tokenService.getCurrentUserId()!; }
 
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
   postPayment(
     orderId: string,
@@ -22,7 +23,7 @@ export class PaymentApi {
     paymentMethodId: string | null,
     cardInfo: CardInfo | null
   ): Observable<any> {
-    return this.http.post<any>(this.baseUrl, {
+    return this.http.post<any>(`${this.url}/users/${this.userId}/payments`, {
       orderId: orderId,
       amount: total.amount,
       currency: total.currency,
