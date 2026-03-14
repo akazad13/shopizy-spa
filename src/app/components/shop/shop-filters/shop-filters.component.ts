@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IconComponent } from '../../shared/icon/icon.component';
 import { CommonModule } from '@angular/common';
 
 import { CategoryTree } from '../../../interfaces/category';
@@ -11,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-shop-filters',
   standalone: true,
-  imports: [CommonModule, IconComponent, CategoryTreeComponent, FormsModule],
+  imports: [CommonModule, CategoryTreeComponent, FormsModule],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })

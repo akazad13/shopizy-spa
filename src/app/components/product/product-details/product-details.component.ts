@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDetail } from '../../../interfaces/product';
 import { CartItem, CartService } from '../../../services/cart.service';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, IconComponent, RatingComponent],
+  imports: [CommonModule, DecimalPipe, RouterLink, IconComponent, RatingComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {

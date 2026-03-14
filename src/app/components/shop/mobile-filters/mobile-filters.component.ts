@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IconComponent } from '../../shared/icon/icon.component';
 import { CategoryTree } from '../../../interfaces/category';
 import { Color, ShopFilterState } from '../../../interfaces/shop';
 import { CategoryTreeComponent } from '../category-tree/category-tree.component';
@@ -10,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-mobile-filters',
   standalone: true,
-  imports: [CommonModule, IconComponent, CategoryTreeComponent, FormsModule],
+  imports: [CommonModule, CategoryTreeComponent, FormsModule],
   templateUrl: './mobile-filters.component.html',
   styles: ``
 })

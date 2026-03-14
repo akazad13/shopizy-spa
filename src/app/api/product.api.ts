@@ -11,7 +11,7 @@ import { ProductQueryFilters } from '../models/QueryFilters';
 export class ProductApi {
   private readonly url = `${environment.apiUrl}/api/v1.0`;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   getProducts(filters: ProductQueryFilters): Observable<Product[]> {
     let params = new HttpParams();
@@ -41,6 +41,6 @@ export class ProductApi {
   }
 
   getProduct(productId: string): Observable<ProductDetail> {
-    return this.http.get<ProductDetail>(`${this.url}/products/productId`);
+    return this.http.get<ProductDetail>(`${this.url}/products/${productId}`);
   }
 }

@@ -5,7 +5,6 @@ import { ProductsGridComponent } from '../product/products-grid/products-grid.co
 import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
 import { MobileFiltersComponent } from './mobile-filters/mobile-filters.component';
 import { CommonModule } from '@angular/common';
-import { IconComponent } from '../shared/icon/icon.component';
 import { ProductApi } from '../../api/product.api';
 import { ProductQueryFilters } from '../../models/QueryFilters';
 import { CategoryTree } from '../../interfaces/category';
@@ -21,8 +20,7 @@ import { Brand } from '../../interfaces/brand';
     ProductsGridComponent,
     MobileFiltersComponent,
     ShopFiltersComponent,
-    CommonModule,
-    IconComponent
+    CommonModule
   ],
   templateUrl: './shop.component.html',
   styles: ``,

@@ -1,149 +1,147 @@
-<div class="bg-white">
-  <div>
-    <app-mobile-filters
-      (hideMobileFiltersOutput)="showHideMobileFiltersDrawer($event)"
-      [shopFilterState]="shopFilterState"
-      [brands]="brands"
-      [colors]="colors"
-      [categoryTree]="categoryTree"
-      (updateFilterStateOutput)="updateFilterState($event)"
-      (updateProductGridOutput)="updateProductGrid($event)"
-    ></app-mobile-filters>
+<div class="min-h-screen bg-gray-50">
 
-    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div
-        class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-6"
-        >
-        <nav aria-label="Breadcrumb">
-          <ol
-            class="mx-auto flex max-w-2xl items-center space-x-2 lg:max-w-7xl"
-            >
-            <li>
-              <div class="flex items-center">
-                <a href="/" class="mr-2 text-sm font-medium text-gray-900"
-                  >Home</a
-                  >
-                  <app-icon
-                    icon="backslash"
-                    classNames="h-5 w-4 text-gray-300"
-                  ></app-icon>
-                </div>
-              </li>
-              <li class="text-sm">
-                <a
-                  aria-current="page"
-                  class="font-medium text-gray-500 hover:text-gray-600"
-                  >Shop</a
-                  >
-                </li>
-              </ol>
-            </nav>
+  <!-- Mobile filter drawer -->
+  <app-mobile-filters (hideMobileFiltersOutput)="showHideMobileFiltersDrawer($event)"
+    [shopFilterState]="shopFilterState" [brands]="brands" [colors]="colors" [categoryTree]="categoryTree"
+    (updateFilterStateOutput)="updateFilterState($event)"
+    (updateProductGridOutput)="updateProductGrid($event)"></app-mobile-filters>
 
-            <div class="flex items-center">
-              <div class="relative inline-block text-left">
-                <div>
-                  <button
-                    type="button"
-                    class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                    id="menu-button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                    (click)="showHideSortingOptions()"
-                    >
-                    Sort
-                    <app-icon
-                      icon="chevron-down"
-                      classNames="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    ></app-icon>
-                  </button>
-                </div>
+  <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                <div
-                  class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabindex="-1"
-              [ngClass]="
-                shopFilterState.hideSortingOptions
-                  ? 'scale-0 transform opacity-0 transition duration-75 ease-in'
-                  : 'scale-100 transform opacity-100 transition duration-75 ease-in'
-              "
-                  >
-                  <div class="py-1">
-                    <!--
-                    Active: "bg-gray-100", Not Active: ""
+    <!-- ── Top bar: breadcrumb + sort/filter controls ── -->
+    <div class="flex items-center justify-between border-b border-gray-200 pb-5 pt-6">
 
-                    Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
-                    -->
-                    <ng-container *ngFor="let sortingOption of shopFilterState.sortingOptions">
-                      <a class="block px-4 py-2 text-sm text-gray-500" tabindex="-1" (click)="onSort(sortingOption)">{{ sortingOption }}</a>
-                    </ng-container>
-                    </div>
-                  </div>
-                </div>
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb">
+        <ol class="flex items-center gap-x-1.5">
+          <li>
+            <a href="/" class="flex items-center gap-x-1 text-sm text-gray-500 transition-colors hover:text-gray-800">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                class="h-4 w-4 text-gray-400">
+                <path fill-rule="evenodd"
+                  d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
+                  clip-rule="evenodd" />
+              </svg>
+              Home
+            </a>
+          </li>
+          <li class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+              class="h-4 w-4 text-gray-300">
+              <path fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd" />
+            </svg>
+          </li>
+          <li>
+            <span aria-current="page" class="text-sm font-medium text-gray-800">Shop</span>
+          </li>
+        </ol>
+      </nav>
 
-                <button
-                  type="button"
-                  class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-                  (click)="showHideMobileFiltersDrawer('show')"
-                  >
-                  <span class="sr-only">Filters</span>
-                  <app-icon icon="funnel-solid" classNames="h-5 w-5"></app-icon>
-                </button>
-              </div>
-            </div>
+      <!-- Right controls -->
+      <div class="flex items-center gap-x-3">
 
-            <section aria-labelledby="products-heading" class="pb-24 pt-6">
-              <h2 id="products-heading" class="sr-only">Products</h2>
+        <!-- Sort dropdown -->
+        <div class="relative inline-block text-left">
+          <button id="sort-menu-button" type="button" aria-haspopup="true"
+            [attr.aria-expanded]="!shopFilterState.hideSortingOptions" (click)="showHideSortingOptions()"
+            class="inline-flex items-center gap-x-1.5 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors duration-150 hover:bg-gray-50 hover:border-gray-300 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+              class="h-4 w-4 text-gray-400">
+              <path
+                d="M2 4.5A1.5 1.5 0 013.5 3h13A1.5 1.5 0 0118 4.5v.75a1.5 1.5 0 01-.44 1.06L13 10.88V17.5l-6-2.5V10.88L2.44 6.31A1.5 1.5 0 012 5.25V4.5z" />
+            </svg>
+            Sort
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+              class="h-4 w-4 text-gray-400 transition-transform duration-200"
+              [class.rotate-180]="!shopFilterState.hideSortingOptions">
+              <path fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
 
-              <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                <!-- Filters -->
-                <app-shop-filters
-                  [shopFilterState]="shopFilterState"
-                  [brands]="brands"
-                  [colors]="colors"
-                  [categoryTree]="categoryTree"
-                  (updateFilterStateOutput)="updateFilterState($event)"
-                  (updateProductGridOutput)="updateProductGrid($event)"
-                ></app-shop-filters>
-
-                <!-- Product grid -->
-                <div class="lg:col-span-3">
-                  <app-products-grid [products]="products"></app-products-grid>
-                  <div class="mt-10 flex justify-center">
-                    <a
-                class="mx-1  rounded-md bg-white px-4 py-2 capitalize  dark:bg-gray-800 dark:text-gray-600 {{
-                  filters.pageNumber === 1
-                    ? 'cursor-not-allowed text-gray-500'
-                    : 'text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer'
-                }}"
-                      (click)="previous()"
-                      >
-                      <div class="-mx-1 flex items-center">
-                        <app-icon
-                          icon="back-arrow"
-                          classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
-                        ></app-icon>
-
-                        <span class="mx-1"> previous </span>
-                      </div>
-                    </a>
-                    <a
-                      (click)="next()"
-                      class="mx-1 transform cursor-pointer rounded-md bg-white px-4 py-2 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200"
-                      >
-                      <div class="-mx-1 flex items-center">
-                        <span class="mx-1"> Next </span>
-                        <app-icon
-                          icon="forward-arrow"
-                          classNames="mx-1 h-6 w-6 rtl:-scale-x-100"
-                        ></app-icon>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
+          <!-- Dropdown menu -->
+          <div aria-labelledby="sort-menu-button" [ngClass]="
+              shopFilterState.hideSortingOptions
+                ? 'pointer-events-none scale-95 opacity-0 transition duration-100 ease-in'
+                : 'pointer-events-auto scale-100 opacity-100 transition duration-150 ease-out'
+            "
+            class="absolute right-0 z-20 mt-2 w-44 origin-top-right rounded-xl bg-white py-1 shadow-xl ring-1 ring-gray-100">
+            <ng-container *ngFor="let sortingOption of shopFilterState.sortingOptions">
+              <button type="button"
+                class="block w-full px-4 py-2 text-left text-sm text-gray-600 transition-colors duration-100 hover:bg-indigo-50 hover:text-indigo-700"
+                (click)="onSort(sortingOption)">{{ sortingOption }}</button>
+            </ng-container>
+          </div>
         </div>
+
+        <!-- Mobile filter toggle -->
+        <button type="button"
+          class="inline-flex items-center gap-x-1.5 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors duration-150 hover:bg-gray-50 hover:border-gray-300 lg:hidden"
+          (click)="showHideMobileFiltersDrawer('show')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="h-4 w-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+          </svg>
+          <span>Filters</span>
+        </button>
       </div>
+    </div>
+
+    <!-- ── Body: sidebar + product grid ── -->
+    <section aria-labelledby="products-heading" class="pb-24 pt-6">
+      <h2 id="products-heading" class="sr-only">Products</h2>
+
+      <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+
+        <!-- Filters sidebar -->
+        <aside class="hidden lg:block">
+          <!-- Sidebar card -->
+          <div class="rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
+            <h3 class="mb-3 text-sm font-semibold text-gray-900">Filter By</h3>
+            <app-shop-filters [shopFilterState]="shopFilterState" [brands]="brands" [colors]="colors"
+              [categoryTree]="categoryTree" (updateFilterStateOutput)="updateFilterState($event)"
+              (updateProductGridOutput)="updateProductGrid($event)"></app-shop-filters>
+          </div>
+        </aside>
+
+        <!-- Product grid -->
+        <div class="lg:col-span-3">
+          <app-products-grid [products]="products"></app-products-grid>
+
+          <!-- Pagination -->
+          <div class="mt-10 flex items-center justify-center gap-x-2">
+            <button type="button" (click)="previous()" [disabled]="filters.pageNumber === 1"
+              class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                <path fill-rule="evenodd"
+                  d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                  clip-rule="evenodd" />
+              </svg>
+              Previous
+            </button>
+
+            <span
+              class="rounded-lg bg-white border border-gray-200 px-3.5 py-2 text-sm font-medium text-gray-500 shadow-sm">
+              Page {{ filters.pageNumber }}
+            </span>
+
+            <button type="button" (click)="next()"
+              class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700">
+              Next
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                <path fill-rule="evenodd"
+                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</div>
