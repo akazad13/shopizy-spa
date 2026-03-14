@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CategoryTree } from '../../../interfaces/category';
 
-import { IconComponent } from '../../shared/icon/icon.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-category-tree',
   standalone: true,
-  imports: [CommonModule, IconComponent, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './category-tree.component.html',
   styles: ``
 })
