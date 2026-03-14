@@ -147,19 +147,26 @@ export class CartService {
   }
 
   private applyServerCart(cart: Cart): void {
+    const previous = this.cartItems;
     this.cartItems = cart.cartItems
-      .filter(i => i.product != null)
-      .map(i => ({
-        cartItemId: i.cartItemId,
-        productId: i.productId,
-        image: i.product.productImages?.[0],
-        name: i.product.name,
-        price: i.product.price,
-        discount: i.product.discount,
-        quantity: i.quantity,
-        color: i.color,
-        size: i.size
-      }));
+      .map(i => {
+        const fallback = previous.find(
+          c => c.productId === i.productId && c.color === i.color && c.size === i.size
+        );
+        if (!i.product && !fallback) return null;
+        return {
+          cartItemId: i.cartItemId,
+          productId: i.productId,
+          image: i.product?.productImages?.[0] ?? fallback?.image,
+          name: i.product?.name ?? fallback?.name ?? '',
+          price: i.product?.price ?? fallback?.price ?? 0,
+          discount: i.product?.discount ?? fallback?.discount ?? 0,
+          quantity: i.quantity,
+          color: i.color,
+          size: i.size
+        } as CartItem;
+      })
+      .filter((i): i is CartItem => i !== null);
     this.emit();
   }
 
