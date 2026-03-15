@@ -6,12 +6,11 @@ import { UserApi } from '../../api/user.api';
 import { TokenService } from '../../services/token.service';
 import { UpdateAccountModalComponent } from './update-account-modal/update-account-modal.component';
 import { ChangePasswordModalComponent } from './change-password-modal/change-password-modal.component';
-import { AddressManagementComponent } from './address-management/address-management.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-account',
-  imports: [IconComponent, UpdateAccountModalComponent, ChangePasswordModalComponent, AddressManagementComponent, CommonModule, RouterLink],
+  imports: [IconComponent, UpdateAccountModalComponent, ChangePasswordModalComponent, CommonModule, RouterLink],
   templateUrl: './account.component.html',
   styles: ``
 })
@@ -23,7 +22,7 @@ export class AccountComponent implements OnInit {
   constructor(
     private readonly userApi: UserApi,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getUserDetails();

@@ -52,7 +52,7 @@ export class UpdateAccountModalComponent implements OnChanges {
   constructor(
     private readonly userApi: UserApi,
     private readonly toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnChanges(): void {
     if (!this.userDetails) {
@@ -99,7 +99,6 @@ export class UpdateAccountModalComponent implements OnChanges {
     const updateUser: UpdateUser = {
       firstName: this.updateAccountForm.value.firstName,
       lastName: this.updateAccountForm.value.lastName,
-      email: this.updateAccountForm.value.email,
       phoneNumber: this.updateAccountForm.value.phone,
       address: address
     };
