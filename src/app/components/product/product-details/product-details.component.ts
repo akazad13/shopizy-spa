@@ -3,6 +3,10 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDetail } from '../../../interfaces/product';
 import { CartItem, CartService } from '../../../services/cart.service';
+import { ProductApi } from '../../../api/product.api';
+import { AuthService } from '../../../services/auth.service';
+import { firstValueFrom } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 import { RatingComponent } from '../rating/rating.component';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -11,14 +15,14 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent],
+  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent, FormsModule],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {
       text-color: red;
     }
   `,
-  providers: []
+  providers: [ProductApi]
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product!: ProductDetail;
@@ -29,6 +33,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   availableSizes: string[] = [];
   availableColors: string[] = [];
   colorMap: Map<string, string> = new Map<string, string>();
+  isLightboxOpen = false;
+
+  reviewRating = 0;
+  reviewComment = '';
+  isSubmittingReview = false;
+  isLoggedIn = false;
 
   maxRating = 5.0;
   starsArray: string[] = [];
@@ -38,9 +48,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
-    private readonly cartService: CartService
+    private readonly cartService: CartService,
+    private readonly productApi: ProductApi,
+    private readonly authService: AuthService
   ) {
     this.mapColors();
+    this.isLoggedIn = this.authService.loggedIn();
   }
   async ngOnInit(): Promise<void> {
     this.routeSubscription = this.activatedRoute.data.subscribe((data) => {
@@ -128,5 +141,49 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.colorMap.set('Brown', 'bg-brown-600');
     this.colorMap.set('Cyan', 'bg-cyan-500');
     this.colorMap.set('Magenta', 'bg-magenta-500');
+  }
+
+  openLightbox() {
+    this.isLightboxOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeLightbox() {
+    this.isLightboxOpen = false;
+    document.body.style.overflow = 'auto';
+  }
+
+  setReviewRating(rating: number) {
+    this.reviewRating = rating;
+  }
+
+  async onSubmitReview() {
+    if (this.reviewRating === 0 || !this.reviewComment.trim()) {
+      return;
+    }
+
+    this.isSubmittingReview = true;
+    try {
+      await firstValueFrom(
+        this.productApi.submitReview(
+          this.product.productId,
+          this.reviewRating,
+          this.reviewComment
+        )
+      );
+      // Reset form on success
+      this.reviewRating = 0;
+      this.reviewComment = '';
+      // Refresh product to see new review
+      const updatedProduct = await firstValueFrom(
+        this.productApi.getProduct(this.product.productId)
+      );
+      this.product = updatedProduct;
+      this.calculateStarNumberArray();
+    } catch (error) {
+      console.error('Failed to submit review', error);
+    } finally {
+      this.isSubmittingReview = false;
+    }
   }
 }

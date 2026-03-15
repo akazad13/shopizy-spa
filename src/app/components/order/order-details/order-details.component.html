@@ -15,6 +15,68 @@
       </dl>
     </div>
 
+    <!-- ── Order Tracking ── -->
+    <div class="py-10">
+      <div class="relative">
+        <!-- Background Track -->
+        <div class="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-gray-100"></div>
+        <!-- Progress Fill -->
+        <div class="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-indigo-600 transition-all duration-1000"
+          [style.width.%]="(getStatusStep() - 1) * 33.33"></div>
+
+        <!-- Steps -->
+        <div class="relative flex justify-between">
+          <!-- Step 1: Pending -->
+          <div class="flex flex-col items-center">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white transition-colors duration-300"
+              [class.border-indigo-600]="getStatusStep() >= 1" [class.text-indigo-600]="getStatusStep() >= 1"
+              [class.border-gray-200]="getStatusStep() < 1" [class.text-gray-400]="getStatusStep() < 1">
+              <app-icon icon="clock" classNames="h-5 w-5"></app-icon>
+            </div>
+            <span class="mt-2 text-xs font-semibold uppercase tracking-wider"
+              [class.text-indigo-600]="getStatusStep() >= 1" [class.text-gray-400]="getStatusStep() < 1">Pending</span>
+          </div>
+
+          <!-- Step 2: Processing -->
+          <div class="flex flex-col items-center">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white transition-colors duration-300"
+              [class.border-indigo-600]="getStatusStep() >= 2" [class.text-indigo-600]="getStatusStep() >= 2"
+              [class.border-gray-200]="getStatusStep() < 2" [class.text-gray-400]="getStatusStep() < 2">
+              <app-icon icon="cog" classNames="h-5 w-5"></app-icon>
+            </div>
+            <span class="mt-2 text-xs font-semibold uppercase tracking-wider"
+              [class.text-indigo-600]="getStatusStep() >= 2" [class.text-gray-400]="getStatusStep() < 2">Processing</span>
+          </div>
+
+          <!-- Step 3: Shipped -->
+          <div class="flex flex-col items-center">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white transition-colors duration-300"
+              [class.border-indigo-600]="getStatusStep() >= 3" [class.text-indigo-600]="getStatusStep() >= 3"
+              [class.border-gray-200]="getStatusStep() < 3" [class.text-gray-400]="getStatusStep() < 3">
+              <app-icon icon="truck" classNames="h-5 w-5"></app-icon>
+            </div>
+            <span class="mt-2 text-xs font-semibold uppercase tracking-wider"
+              [class.text-indigo-600]="getStatusStep() >= 3" [class.text-gray-400]="getStatusStep() < 3">Shipped</span>
+          </div>
+
+          <!-- Step 4: Delivered -->
+          <div class="flex flex-col items-center">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white transition-colors duration-300"
+              [class.border-indigo-600]="getStatusStep() >= 4" [class.text-indigo-600]="getStatusStep() >= 4"
+              [class.border-gray-200]="getStatusStep() < 4" [class.text-gray-400]="getStatusStep() < 4">
+              <app-icon icon="check-solid" classNames="h-5 w-5"></app-icon>
+            </div>
+            <span class="mt-2 text-xs font-semibold uppercase tracking-wider"
+              [class.text-indigo-600]="getStatusStep() >= 4" [class.text-gray-400]="getStatusStep() < 4">Delivered</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="mt-6 sm:mt-8">
       <div
         class="relative overflow-x-auto border-b border-gray-200 dark:border-gray-800"

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { OrderStatus } from '../../../interfaces/Order';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 import { OrderDetails } from '../../../interfaces/Order';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -8,7 +10,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, IconComponent],
   templateUrl: './order-details.component.html',
   styles: ``
 })
@@ -53,5 +55,20 @@ export class OrderDetailsComponent implements OnInit {
 
     this.orderSummary.totalPrice.currency = this.orderSummary.subtotal.currency;
     this.orderSummary.deliveryCharge = this.order.deliveryCharge;
+  }
+
+  getStatusStep(): number {
+    switch (this.order.orderStatus) {
+      case 'Pending':
+        return 1;
+      case 'Processing':
+        return 2;
+      case 'Shipping':
+        return 3;
+      case 'Delivered':
+        return 4;
+      default:
+        return 0;
+    }
   }
 }

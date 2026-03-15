@@ -15,7 +15,18 @@ export class ProductApi {
 
   getProducts(filters: ProductQueryFilters): Observable<Product[]> {
     let params = new HttpParams();
-    const { name, categoryIds, averageRating, pageNumber, pageSize } = filters;
+    const {
+      name,
+      categoryIds,
+      brandIds,
+      colors,
+      minPrice,
+      maxPrice,
+      sortBy,
+      averageRating,
+      pageNumber,
+      pageSize
+    } = filters;
 
     if (name != null) {
       params = params.append('name', name);
@@ -25,6 +36,30 @@ export class ProductApi {
       for (const categoryId of categoryIds) {
         params = params.append('categoryIds', categoryId);
       }
+    }
+
+    if (brandIds != null) {
+      for (const brandId of brandIds) {
+        params = params.append('brandIds', brandId);
+      }
+    }
+
+    if (colors != null) {
+      for (const color of colors) {
+        params = params.append('colors', color);
+      }
+    }
+
+    if (minPrice != null) {
+      params = params.append('minPrice', minPrice);
+    }
+
+    if (maxPrice != null) {
+      params = params.append('maxPrice', maxPrice);
+    }
+
+    if (sortBy != null) {
+      params = params.append('sortBy', sortBy);
     }
 
     if (averageRating != null) {
@@ -42,5 +77,16 @@ export class ProductApi {
 
   getProduct(productId: string): Observable<ProductDetail> {
     return this.http.get<ProductDetail>(`${this.url}/products/${productId}`);
+  }
+
+  submitReview(
+    productId: string,
+    rating: number,
+    comment: string
+  ): Observable<any> {
+    return this.http.post<any>(`${this.url}/products/${productId}/reviews`, {
+      rating,
+      comment
+    });
   }
 }

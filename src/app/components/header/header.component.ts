@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { ClickOutsideAccountDirective } from './../../directives/click-outside-account.directive';
 import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -27,7 +28,8 @@ import { AuthApi } from '../../api/auth.api';
     IconComponent,
     ClickOutsideCategoryFlyoutDirective,
     ClickOutsideAccountDirective,
-    ToIterablePipe
+    ToIterablePipe,
+    FormsModule
   ],
   providers: [CategoryApi],
   templateUrl: './header.component.html',
@@ -58,6 +60,8 @@ export class HeaderComponent implements OnInit {
     }
   ];
 
+  searchTerm = '';
+
   constructor(
     private readonly authService: AuthService,
     public readonly cartService: CartService,
@@ -66,6 +70,14 @@ export class HeaderComponent implements OnInit {
     private readonly router: Router
   ) {
     this.isLoggedIn = this.authService.loggedIn();
+  }
+
+  onSearch(): void {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/shop'], {
+        queryParams: { search: this.searchTerm.trim() }
+      });
+    }
   }
   async ngOnInit(): Promise<void> {
     this.cartSummary$ = this.cartService.cartSummary$;

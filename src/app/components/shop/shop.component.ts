@@ -1,6 +1,7 @@
 import { Color, ShopFilterState } from './../../interfaces/shop';
 import { Product } from '../../interfaces/product';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ProductsGridComponent } from '../product/products-grid/products-grid.component';
 import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
 import { MobileFiltersComponent } from './mobile-filters/mobile-filters.component';
@@ -58,11 +59,20 @@ export class ShopComponent implements OnInit {
 
   constructor(
     private readonly productApi: ProductApi,
-    private readonly categoryApi: CategoryApi
+    private readonly categoryApi: CategoryApi,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.getProducts();
+    this.route.queryParams.subscribe((params: Params) => {
+      if (params['search']) {
+        this.filters.name = params['search'];
+      } else {
+        this.filters.name = null;
+      }
+      this.getProducts();
+    });
+
     this.brands = [
       {
         id: 'brand1',
@@ -146,6 +156,10 @@ export class ShopComponent implements OnInit {
   async getProducts(): Promise<void> {
     this.filters.pageSize = 8;
     this.filters.categoryIds = this.shopFilterState.selectedCategory;
+    this.filters.brandIds = this.shopFilterState.selectedBrand;
+    this.filters.colors = this.shopFilterState.selectedColor;
+    this.filters.maxPrice = this.shopFilterState.priceRange;
+    this.filters.sortBy = this.shopFilterState.sort;
 
     try {
       this.products = await firstValueFrom(
@@ -189,6 +203,8 @@ export class ShopComponent implements OnInit {
   }
 
   onSort(sortingOption: string): void {
-    console.log(sortingOption);
+    this.shopFilterState.sort = sortingOption;
+    this.shopFilterState.hideSortingOptions = true;
+    this.getProducts();
   }
 }
