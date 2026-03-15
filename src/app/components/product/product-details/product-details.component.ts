@@ -7,6 +7,7 @@ import { ProductApi } from '../../../api/product.api';
 import { AuthService } from '../../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { WishlistService } from '../../../services/wishlist.service';
 
 import { RatingComponent } from '../rating/rating.component';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -50,7 +51,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     private readonly activatedRoute: ActivatedRoute,
     private readonly cartService: CartService,
     private readonly productApi: ProductApi,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly wishlistService: WishlistService
   ) {
     this.mapColors();
     this.isLoggedIn = this.authService.loggedIn();
@@ -185,5 +187,13 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     } finally {
       this.isSubmittingReview = false;
     }
+  }
+
+  toggleWishlist(): void {
+    this.wishlistService.toggleWishlist(this.product);
+  }
+
+  isInWishlist(): boolean {
+    return this.wishlistService.isInWishlist(this.product.productId);
   }
 }

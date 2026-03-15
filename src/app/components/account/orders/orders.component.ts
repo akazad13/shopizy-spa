@@ -8,12 +8,13 @@ import { TokenService } from '../../../services/token.service';
 import { Order } from '../../../interfaces/Order';
 import { DatePipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AlertifyService } from '../../../services/alertify.service';
+import { ToastService } from '../../../services/toast.service';
+import { PaginationComponent } from '../../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, IconComponent, DatePipe, RouterLink],
+  imports: [CommonModule, IconComponent, DatePipe, RouterLink, PaginationComponent],
   templateUrl: './orders.component.html',
   styles: ``,
   schemas: [NO_ERRORS_SCHEMA]
@@ -21,11 +22,12 @@ import { AlertifyService } from '../../../services/alertify.service';
 export class OrdersComponent implements OnInit {
   filters = new OrderQueryFilters();
   orders: Order[] = [];
+  totalPages = 1;
 
   constructor(
     private readonly orderApi: OrderApi,
     private readonly tokenService: TokenService,
-    private readonly alertify: AlertifyService
+    private readonly toastService: ToastService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -43,23 +45,24 @@ export class OrdersComponent implements OnInit {
   }
 
   onCancel(orderId: string): void {
-    this.alertify.confirm(
-      'Cancel Order!',
-      'Are you sure you want to cancel this order?',
-      async () => {
-        await this.cancelOrder(orderId);
-      },
-      () => undefined
-    );
+    if (window.confirm('Are you sure you want to cancel this order?')) {
+      this.cancelOrder(orderId);
+    }
   }
 
   async cancelOrder(orderId: string): Promise<void> {
     try {
       await firstValueFrom(this.orderApi.cancelOrder(orderId, 'Some reason'));
-      this.alertify.success('Order cancelled successfully');
+      this.toastService.success('Order cancelled successfully');
       await this.getOrders();
     } catch (error) {
       handleError(null, error);
     }
+  }
+
+  async onPageChange(page: number): Promise<void> {
+    this.filters.pageNumber = page;
+    await this.getOrders();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

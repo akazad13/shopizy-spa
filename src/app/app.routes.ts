@@ -17,6 +17,7 @@ import { OrderDetailResolver } from './resolvers/order-details.resolver';
 import { AccountComponent } from './components/account/account.component';
 import { OrdersComponent } from './components/account/orders/orders.component';
 import { OrderDetailsComponent } from './components/order/order-details/order-details.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,10 @@ export const routes: Routes = [
         path: 'orders/:orderId',
         component: OrderDetailsComponent,
         resolve: { order: OrderDetailResolver }
+      },
+      {
+        path: 'wishlist',
+        component: WishlistComponent
       }
     ]
   },

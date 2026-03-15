@@ -1,4 +1,11 @@
 <form class="hidden lg:block">
+  <div class="mb-4 flex items-center justify-between">
+    <h3 class="text-sm font-semibold text-gray-900">Filters</h3>
+    <button type="button" (click)="clearFilters()" 
+      class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">
+      Clear all
+    </button>
+  </div>
 
   <!-- ── Category ────────────────────────────────── -->
   <div class="border-b border-gray-100 py-5">

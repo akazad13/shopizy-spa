@@ -6,7 +6,7 @@ import { CheckoutComponent } from './checkout.component';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { OrderApi } from '../../api/order.api';
-import { AlertifyService } from '../../services/alertify.service';
+import { ToastService } from '../../services/toast.service';
 import {
   COMMON_TEST_IMPORTS,
   createOrderApiSpy,
@@ -27,9 +27,9 @@ describe('CheckoutComponent', () => {
 
     const orderApiSpy = createOrderApiSpy();
 
-    const alertifyStub = {
+    const toastStub = {
       success: jasmine.createSpy('success')
-    } as Partial<AlertifyService>;
+    } as Partial<ToastService>;
 
     await TestBed.configureTestingModule({
       imports: [CheckoutComponent, RouterTestingModule, ...COMMON_TEST_IMPORTS],
@@ -37,7 +37,7 @@ describe('CheckoutComponent', () => {
         { provide: CartService, useValue: cartServiceStub },
         { provide: AuthService, useValue: authServiceStub },
         provideSpy(OrderApi, orderApiSpy),
-        { provide: AlertifyService, useValue: alertifyStub }
+        { provide: ToastService, useValue: toastStub }
       ]
     }).compileComponents();
 

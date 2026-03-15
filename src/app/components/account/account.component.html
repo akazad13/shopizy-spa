@@ -57,12 +57,12 @@
           </span>
         </div>
       </div>
-      <div class="grid grid-cols-3 items-center">
+      <div [routerLink]="['/wishlist']" class="grid grid-cols-3 cursor-pointer items-center rounded-xl p-2 transition-colors hover:bg-gray-50">
         <div class="col-span-1">
-          <app-icon icon="heart-outline-2" classNames="h-8 w-8 text-gray-400 dark:text-gray-500"></app-icon>
+          <app-icon icon="heart-outline-2" classNames="h-8 w-8 text-rose-500"></app-icon>
         </div>
         <div class="col-span-2">
-          <h3 class="text-gray-500 dark:text-gray-400">Favorite products</h3>
+          <h3 class="text-gray-500 dark:text-gray-400">Wishlist</h3>
           <span
             class="flex items-center text-2xl font-bold text-gray-900 dark:text-white"
           >
@@ -112,14 +112,24 @@
               >
                 {{ userDetails?.phone }}
               </div>
-              <button
-                type="button"
-                class="mt-2 flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-3 py-1.5 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                (click)="onEditData()"
-              >
-                <app-icon icon="pencil-square" classNames="-ms-0.5 me-1.5 h-4 w-4"></app-icon>
-                Edit your data
-              </button>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  class="flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-95"
+                  (click)="onEditData()"
+                >
+                  <app-icon icon="pencil-square" classNames="-ms-0.5 me-1.5 h-4 w-4"></app-icon>
+                  Edit Profile
+                </button>
+                <button
+                  type="button"
+                  class="flex cursor-pointer items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 active:scale-95"
+                  (click)="onToggleChangePasswordModal(true)"
+                >
+                  <app-icon icon="lock" classNames="-ms-0.5 me-1.5 h-4 w-4"></app-icon>
+                  Change Password
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -172,6 +182,8 @@
             </dd>
           </dl>
         </div>
+      <div class="mt-12">
+        <app-address-management></app-address-management>
       </div>
     </div>
   </div>
@@ -179,5 +191,11 @@
     [isUpdateAccountModelOpened]="isUpdateAccountModelOpened"
     [userDetails]="userDetails"
     (closed)="onCloseUpdateAccountModel($event)"
+    (updated)="getUserDetails()"
   ></app-update-account-modal>
+  <app-change-password-modal
+    [isModalOpened]="isChangePasswordModalOpened"
+    (closed)="onToggleChangePasswordModal($event)"
+  ></app-change-password-modal>
+</div>
 </section>

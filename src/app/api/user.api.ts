@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UpdateUser, UserDetails } from '../interfaces/user';
 import { TokenService } from '../services/token.service';
 
@@ -24,7 +24,8 @@ export class UserApi {
   updateUser(data: UpdateUser): Observable<any> {
     return this.http.put<any>(
       `${this.url}/users/${this.userId}`,
-      data
+      data,
+      { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) }
     );
   }
 
@@ -32,6 +33,6 @@ export class UserApi {
     return this.http.post<any>(`${this.url}/users/${this.userId}/password`, {
       oldPassword,
       newPassword
-    });
+    }, { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) });
   }
 }

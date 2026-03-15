@@ -14,6 +14,7 @@ import { CategoryApi } from '../../api/category.api';
 import { handleError } from '../../functions/error-handler';
 import { Brand } from '../../interfaces/brand';
 import { IconComponent } from '../shared/icon/icon.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-shop',
@@ -23,7 +24,8 @@ import { IconComponent } from '../shared/icon/icon.component';
     MobileFiltersComponent,
     ShopFiltersComponent,
     CommonModule,
-    IconComponent
+    IconComponent,
+    PaginationComponent
   ],
   templateUrl: './shop.component.html',
   styles: ``,
@@ -35,6 +37,7 @@ export class ShopComponent implements OnInit {
   colors: Color[] = [];
   products: Product[] = [];
   filters = new ProductQueryFilters();
+  totalPages = 5; // Placeholder since API doesn't return count
 
   shopFilterState: ShopFilterState = {
     hideMobileFilters: true,
@@ -44,16 +47,16 @@ export class ShopComponent implements OnInit {
     categoryCollapsed: false,
     selectedColor: [],
     colorCollapsed: false,
-    priceRange: 100,
+    priceRange: 500,
     sort: '',
     showAll: false,
     hideSortingOptions: true,
     sortingOptions: [
-      'Most Popular',
-      'Best Rating',
-      'newest',
+      'Newest Arrivals',
       'Price: Low to High',
-      'Price: High to Low'
+      'Price: High to Low',
+      'Most Popular',
+      'Rating: High to Low'
     ]
   };
 
@@ -189,21 +192,36 @@ export class ShopComponent implements OnInit {
     await this.getProducts();
   }
 
-  async previous(): Promise<void> {
-    if (this.filters.pageNumber === 0) {
-      return;
-    }
-    this.filters.pageNumber--;
+  async onPageChange(page: number): Promise<void> {
+    this.filters.pageNumber = page;
     await this.getProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async previous(): Promise<void> {
+    if (this.filters.pageNumber > 1) {
+      await this.onPageChange(this.filters.pageNumber - 1);
+    }
   }
 
   async next(): Promise<void> {
-    this.filters.pageNumber++;
-    await this.getProducts();
+    if (this.products.length >= this.filters.pageSize) {
+      await this.onPageChange(this.filters.pageNumber + 1);
+    }
   }
 
   onSort(sortingOption: string): void {
-    this.shopFilterState.sort = sortingOption;
+    let sortValue = '';
+    switch (sortingOption) {
+      case 'Newest Arrivals': sortValue = 'newest'; break;
+      case 'Price: Low to High': sortValue = 'price-asc'; break;
+      case 'Price: High to Low': sortValue = 'price-desc'; break;
+      case 'Most Popular': sortValue = 'popular'; break;
+      case 'Rating: High to Low': sortValue = 'rating-desc'; break;
+      default: sortValue = '';
+    }
+    
+    this.shopFilterState.sort = sortValue;
     this.shopFilterState.hideSortingOptions = true;
     this.getProducts();
   }

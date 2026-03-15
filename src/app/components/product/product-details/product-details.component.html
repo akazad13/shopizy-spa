@@ -147,10 +147,12 @@
             <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
             Add to Cart
           </button>
-          <button type="button"
-            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 border-rose-200 bg-white px-6 py-3 text-sm font-semibold text-rose-500 shadow-sm transition-all duration-150 hover:bg-rose-50 active:scale-95">
-            <app-icon icon="heart-outline" classNames="h-5 w-5"></app-icon>
-            Wishlist
+          <button type="button" (click)="toggleWishlist()"
+            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-150 active:scale-95"
+            [class.border-rose-200]="!isInWishlist()" [class.bg-white]="!isInWishlist()" [class.text-rose-500]="!isInWishlist()"
+            [class.border-rose-500]="isInWishlist()" [class.bg-rose-500]="isInWishlist()" [class.text-white]="isInWishlist()">
+            <app-icon [icon]="isInWishlist() ? 'heart-solid' : 'heart-outline'" classNames="h-5 w-5"></app-icon>
+            {{ isInWishlist() ? 'In Wishlist' : 'Add to Wishlist' }}
           </button>
         </div>
 
