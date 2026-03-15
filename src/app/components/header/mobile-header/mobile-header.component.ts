@@ -18,6 +18,7 @@ export class MobileHeaderComponent {
   @Input() hideMobileMenu = true;
   @Input() categoryTree: CategoryTree[] = [];
   @Input() brands: string[] = [];
+  @Input() isAdmin = false;
   @Output() hideMobileMenuOutput = new EventEmitter<string>();
 
   updateMobileMenuSelection(option: string): void {

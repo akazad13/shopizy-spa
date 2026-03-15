@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Product, ProductDetail } from '../interfaces/product';
+import { Product, ProductDetail, AdminProductCreateUpdate } from '../interfaces/product';
 import { ProductQueryFilters } from '../models/QueryFilters';
 
 @Injectable({
@@ -88,5 +88,19 @@ export class ProductApi {
       rating,
       comment
     });
+  }
+
+  // --- ADMIN ENDPOINTS ---
+
+  createProduct(data: AdminProductCreateUpdate): Observable<ProductDetail> {
+    return this.http.post<ProductDetail>(`${this.url}/products`, data);
+  }
+
+  updateProduct(productId: string, data: AdminProductCreateUpdate): Observable<ProductDetail> {
+    return this.http.put<ProductDetail>(`${this.url}/products/${productId}`, data);
+  }
+
+  deleteProduct(productId: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/products/${productId}`);
   }
 }

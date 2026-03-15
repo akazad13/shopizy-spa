@@ -50,3 +50,18 @@ export interface ProductReview {
   rating: number;
   createdOn: Date;
 }
+
+export interface AdminProductCreateUpdate {
+  name: string;
+  shortDescription: string;
+  description: string;
+  categoryId: string;
+  brandId: string | null;
+  price: number;
+  discount: number;
+  stockQuantity: number;
+  colors: string[];
+  sizes: string[];
+  tags: string[];
+  images: string[];
+}

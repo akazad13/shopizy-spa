@@ -18,6 +18,7 @@ import { AccountComponent } from './components/account/account.component';
 import { OrdersComponent } from './components/account/orders/orders.component';
 import { OrderDetailsComponent } from './components/order/order-details/order-details.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -47,11 +48,13 @@ export const routes: Routes = [
       },
       {
         path: 'checkout',
-        component: CheckoutComponent
+        component: CheckoutComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'payment/:orderId',
         component: PaymentComponent,
+        canActivate: [AuthGuard],
         resolve: { order: OrderDetailResolver }
       },
       {
@@ -61,33 +64,52 @@ export const routes: Routes = [
       },
       {
         path: 'order-confirmation/:orderId',
-        component: OrderComfirmationComponent
+        component: OrderComfirmationComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'account',
-        component: AccountComponent
+        component: AccountComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'account/orders',
-        component: OrdersComponent
+        component: OrdersComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'orders/:orderId',
         component: OrderDetailsComponent,
+        canActivate: [AuthGuard],
         resolve: { order: OrderDetailResolver }
       },
       {
         path: 'wishlist',
-        component: WishlistComponent
+        component: WishlistComponent,
+        canActivate: [AuthGuard]
       }
     ]
   },
   {
     path: 'auth',
     children: [
-      { path: 'signin', component: SigninComponent },
-      { path: 'signup', component: SignupComponent }
+      { 
+        path: 'signin', 
+        component: SigninComponent,
+        canActivate: [AuthGuard],
+        data: { authGuardMode: 'redirectToDashboard' }
+      },
+      { 
+        path: 'signup', 
+        component: SignupComponent,
+        canActivate: [AuthGuard],
+        data: { authGuardMode: 'redirectToDashboard' }
+      }
     ]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin.routes').then((m) => m.adminRoutes)
   },
   { path: '**', component: PageNotFoundComponent }
 ];

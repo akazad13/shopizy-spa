@@ -25,6 +25,9 @@ export interface UserDetails {
   totalReturns: number;
   createdOn: Date;
   modifiedOn: Date | null;
+  roles?: string[];
+  isActive?: boolean;
+  phoneNumber?: string | null;
 }
 
 export interface UpdateUser {

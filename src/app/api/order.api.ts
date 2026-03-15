@@ -80,4 +80,30 @@ export class OrderApi {
       }
     );
   }
+
+  // --- ADMIN ENDPOINTS ---
+
+  getAllOrders(filters: OrderQueryFilters): Observable<Order[]> {
+    let params = new HttpParams();
+    const { startDate, endDate, pageNumber, pageSize, status } = filters;
+
+    if (startDate != null) params = params.append('startDate', startDate);
+    if (endDate != null) params = params.append('endDate', endDate);
+    if (status != null) params = params.append('status', status);
+    
+    params = params.append('pageNumber', pageNumber).append('pageSize', pageSize);
+
+    return this.http.get<Order[]>(`${this.url}/orders`, { params });
+  }
+
+  getGlobalOrder(orderId: string): Observable<Order> {
+    return this.http.get<Order>(`${this.url}/orders/${orderId}`);
+  }
+
+  updateOrderStatus(orderId: string, status: string, trackingNumber?: string): Observable<SuccessResponse> {
+    return this.http.patch<SuccessResponse>(`${this.url}/orders/${orderId}/status`, {
+      status,
+      trackingNumber
+    });
+  }
 }

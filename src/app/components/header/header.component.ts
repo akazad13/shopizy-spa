@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit {
   hideMobileMenu = true;
   isDropCartOpened = false;
   isLoggedIn = false;
+  isAdmin = false;
   categoryTree: CategoryTree[] = [];
   brands: string[] = [];
   cartSummary$!: Observable<CartSummary>;
@@ -70,6 +71,7 @@ export class HeaderComponent implements OnInit {
     private readonly router: Router
   ) {
     this.isLoggedIn = this.authService.loggedIn();
+    this.isAdmin = this.authService.roleMatch(['Admin']);
   }
 
   onSearch(): void {
@@ -90,6 +92,13 @@ export class HeaderComponent implements OnInit {
     }
 
     this.brands = ['Adidas', 'Hugo Boss', 'Zara', 'Gucci', 'H&M', 'Dior'];
+
+    if (this.isAdmin) {
+      this.accountMenu.unshift({
+        label: 'Admin Panel',
+        navigation: 'admin'
+      });
+    }
   }
 
   updateCategorySelection(option: string): void {

@@ -1,4 +1,4 @@
-<app-mobile-header [hideMobileMenu]="hideMobileMenu" [categoryTree]="categoryTree" [brands]="brands"
+<app-mobile-header [hideMobileMenu]="hideMobileMenu" [categoryTree]="categoryTree" [brands]="brands" [isAdmin]="isAdmin"
   (hideMobileMenuOutput)="showHideMobileDrawer($event)"></app-mobile-header>
 
 <div class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm">
@@ -99,6 +99,10 @@
           <!-- Shop link -->
           <a [routerLink]="['/shop']"
             class="flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-600 transition hover:text-gray-900">Shop</a>
+          
+          <!-- Admin Panel link -->
+          <a *ngIf="isAdmin" [routerLink]="['/admin']"
+            class="flex items-center border-b-2 border-transparent pt-px text-sm font-bold text-indigo-600 transition hover:text-indigo-800">Admin</a>
         </div>
 
         <!-- Right side actions -->

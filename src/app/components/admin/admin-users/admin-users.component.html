@@ -1,0 +1,72 @@
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+  <!-- Page header -->
+  <div class="sm:flex sm:justify-between sm:items-center mb-8">
+    <div class="mb-4 sm:mb-0">
+      <h1 class="text-2xl md:text-3xl text-gray-800 font-bold">Customers 👥</h1>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center p-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+
+  <!-- Table Section -->
+  <div *ngIf="!loading" class="bg-white shadow-sm rounded-xl border border-gray-200">
+    <header class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+      <h2 class="font-semibold text-gray-800">All Registered Users <span class="text-gray-400 font-medium ml-1">({{users.length}})</span></h2>
+    </header>
+    <div class="p-3 overflow-x-auto">
+      <table class="table-auto w-full w-full">
+        <!-- Table header -->
+        <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50 border-y border-gray-200">
+          <tr>
+            <th class="p-3 text-left w-12"><div class="font-semibold text-center">No.</div></th>
+            <th class="p-3 text-left"><div class="font-semibold">User</div></th>
+            <th class="p-3 text-left"><div class="font-semibold">Contact</div></th>
+            <th class="p-3 text-left"><div class="font-semibold">Roles</div></th>
+            <th class="p-3 text-center"><div class="font-semibold">Join Date</div></th>
+            <th class="p-3 text-center"><div class="font-semibold">Actions</div></th>
+          </tr>
+        </thead>
+        <!-- Table body -->
+        <tbody class="text-sm divide-y divide-gray-100">
+          <tr *ngFor="let user of users; let i = index" class="hover:bg-gray-50 transition-colors">
+            <td class="p-3 text-center text-gray-500 font-medium">{{ i + 1 }}</td>
+            <td class="p-3 flex items-center">
+              <div class="w-10 h-10 shrink-0 mr-3 hidden sm:block bg-blue-100 text-blue-600 font-bold rounded-full overflow-hidden flex items-center justify-center border border-blue-200">
+                {{ user.firstName ? user.firstName.charAt(0) : 'U' }}{{ user.lastName ? user.lastName.charAt(0) : '' }}
+              </div>
+              <div>
+                <div class="font-semibold text-gray-800">{{user.firstName || 'Unknown'}} {{user.lastName || ''}}</div>
+                <div class="text-xs text-gray-400 mt-0.5" *ngIf="!user.isActive">Inactive</div>
+              </div>
+            </td>
+            <td class="p-3">
+              <div class="text-gray-800">{{user.email}}</div>
+              <div class="text-gray-500 text-xs">{{user.phoneNumber || 'No phone'}}</div>
+            </td>
+            <td class="p-3">
+              <span class="inline-flex font-medium rounded-full text-center px-2 py-0.5 text-xs mr-1" 
+                    [ngClass]="user.roles?.includes('Admin') ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'">
+                {{ user.roles?.includes('Admin') ? 'Admin' : 'User' }}
+              </span>
+            </td>
+            <td class="p-3 text-center text-gray-500">
+              {{user.createdOn | date:'shortDate'}}
+            </td>
+            <td class="p-3 w-40 border-l border-gray-50 text-center">
+              <button (click)="toggleRole(user)" class="text-xs bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg px-2 py-1 font-medium transition-colors">
+                Toggle Role
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="users.length === 0">
+            <td colspan="6" class="p-6 text-center text-gray-500">
+              No users found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -35,4 +35,14 @@ export class UserApi {
       newPassword
     }, { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) });
   }
+
+  // --- ADMIN ENDPOINTS ---
+
+  getAllUsers(pageNumber: number = 1, pageSize: number = 50): Observable<UserDetails[]> {
+    return this.http.get<UserDetails[]>(`${this.url}/users?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
+  updateUserRole(userId: string, role: string): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/${userId}/role`, { role });
+  }
 }
