@@ -45,7 +45,7 @@ export class SignupComponent {
   constructor(
     private readonly authApi: AuthApi,
     private readonly router: Router
-  ) {}
+  ) { }
 
   async signup(): Promise<void> {
     this.signupForm.markAllAsTouched();
