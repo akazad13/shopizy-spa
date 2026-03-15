@@ -6,13 +6,7 @@
 
     <!-- Announcement bar -->
     <div class="flex h-9 items-center justify-center bg-indigo-600 px-4 text-xs font-medium text-white sm:px-6 lg:px-8">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-        class="mr-2 h-4 w-4 text-indigo-300">
-        <path
-          d="M6.5 3c-1.051 0-2.093.04-3.125.117A1.49 1.49 0 002 4.607V10.5h9V4.606c0-.771-.59-1.43-1.375-1.489A41.35 41.35 0 006.5 3zM2 12v2.5A1.5 1.5 0 003.5 16h.041a3 3 0 015.918 0h.791a.75.75 0 00.75-.75V12H2z" />
-        <path
-          d="M6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM13.25 5a.75.75 0 00-.75.75v8.514a3.001 3.001 0 014.893 1.44c.37-.275.607-.714.607-1.204v-1a4 4 0 00-4-4h-.75V6.25a.75.75 0 00-.75-.75h-1.5a.75.75 0 000 1.5H13v5.75a.75.75 0 001.5 0V6.5h.75a2.5 2.5 0 012.5 2.5v1a.253.253 0 01-.094.197 3.01 3.01 0 00-3.93-.197V5.75A.75.75 0 0013.25 5z" />
-      </svg>
+      <app-icon icon="truck" classNames="mr-2 h-4 w-4 text-indigo-300"></app-icon>
       Free delivery on orders over $100 — Limited time offer
     </div>
 
@@ -47,13 +41,8 @@
                 [class.hover:text-gray-900]="selected !== parentCategory.name"
                 (click)="updateCategorySelection(parentCategory.name)">
                 {{ parentCategory.name }}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                  class="h-3.5 w-3.5 transition-transform duration-200"
-                  [class.rotate-180]="selected === parentCategory.name">
-                  <path fill-rule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                    clip-rule="evenodd" />
-                </svg>
+                <app-icon icon="chevron-down" classNames="h-3.5 w-3.5 transition-transform duration-200"
+                  [class.rotate-180]="selected === parentCategory.name"></app-icon>
               </button>
 
               <!-- Mega flyout panel -->

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { IconComponent } from '../../shared/icon/icon.component';
+
 @Component({
   selector: 'app-feature-products',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [RouterLink, IconComponent],
   templateUrl: './feature-products.component.html',
   styles: ``
 })

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { Product } from '../../../interfaces/product';
 import { RouterLink } from '@angular/router';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 export interface BlockProducts {
   title: string;
@@ -13,7 +14,7 @@ export interface BlockProducts {
 @Component({
   selector: 'app-products-block',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, RouterLink],
+  imports: [CommonModule, ProductCardComponent, RouterLink, IconComponent],
   templateUrl: './products-block.component.html',
   styles: ``
 })

@@ -3,11 +3,12 @@ import { CategoryTree } from '../../../interfaces/category';
 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-category-tree',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   templateUrl: './category-tree.component.html',
   styles: ``
 })

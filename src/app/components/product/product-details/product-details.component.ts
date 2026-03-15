@@ -5,12 +5,13 @@ import { ProductDetail } from '../../../interfaces/product';
 import { CartItem, CartService } from '../../../services/cart.service';
 
 import { RatingComponent } from '../rating/rating.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent],
+  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {
