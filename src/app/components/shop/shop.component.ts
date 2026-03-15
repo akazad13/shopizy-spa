@@ -12,6 +12,7 @@ import { firstValueFrom } from 'rxjs';
 import { CategoryApi } from '../../api/category.api';
 import { handleError } from '../../functions/error-handler';
 import { Brand } from '../../interfaces/brand';
+import { IconComponent } from '../shared/icon/icon.component';
 
 @Component({
   selector: 'app-shop',
@@ -20,7 +21,8 @@ import { Brand } from '../../interfaces/brand';
     ProductsGridComponent,
     MobileFiltersComponent,
     ShopFiltersComponent,
-    CommonModule
+    CommonModule,
+    IconComponent
   ],
   templateUrl: './shop.component.html',
   styles: ``,

@@ -6,11 +6,12 @@ import { Color, ShopFilterState } from '../../../interfaces/shop';
 import { CategoryTreeComponent } from '../category-tree/category-tree.component';
 import { Brand } from '../../../interfaces/brand';
 import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-shop-filters',
   standalone: true,
-  imports: [CommonModule, CategoryTreeComponent, FormsModule],
+  imports: [CommonModule, CategoryTreeComponent, FormsModule, IconComponent],
   templateUrl: './shop-filters.component.html',
   styles: ``
 })

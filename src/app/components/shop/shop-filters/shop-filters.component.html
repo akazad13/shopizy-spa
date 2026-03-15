@@ -5,13 +5,8 @@
     <button type="button" class="flex w-full items-center justify-between py-1 text-left"
       (click)="updateCategoryCollapsed()" [attr.aria-expanded]="!shopFilterState.categoryCollapsed">
       <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Category</span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-        class="h-4 w-4 text-gray-400 transition-transform duration-200"
-        [class.rotate-180]="!shopFilterState.categoryCollapsed">
-        <path fill-rule="evenodd"
-          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-          clip-rule="evenodd" />
-      </svg>
+      <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
+        [class.rotate-180]="!shopFilterState.categoryCollapsed"></app-icon>
     </button>
 
     <div *ngIf="!shopFilterState.categoryCollapsed" class="mt-3" id="filter-section-1">
@@ -25,13 +20,8 @@
     <button type="button" class="flex w-full items-center justify-between py-1 text-left"
       (click)="updateBrandCollapsed()" [attr.aria-expanded]="!shopFilterState.brandCollapsed">
       <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Brand</span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-        class="h-4 w-4 text-gray-400 transition-transform duration-200"
-        [class.rotate-180]="!shopFilterState.brandCollapsed">
-        <path fill-rule="evenodd"
-          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-          clip-rule="evenodd" />
-      </svg>
+      <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
+        [class.rotate-180]="!shopFilterState.brandCollapsed"></app-icon>
     </button>
 
     <div *ngIf="!shopFilterState.brandCollapsed" class="mt-3 space-y-1" id="filter-section-2">
@@ -55,13 +45,8 @@
     <button type="button" class="flex w-full items-center justify-between py-1 text-left"
       (click)="updateColorCollapsed()" [attr.aria-expanded]="!shopFilterState.colorCollapsed">
       <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Color</span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-        class="h-4 w-4 text-gray-400 transition-transform duration-200"
-        [class.rotate-180]="!shopFilterState.colorCollapsed">
-        <path fill-rule="evenodd"
-          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-          clip-rule="evenodd" />
-      </svg>
+      <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
+        [class.rotate-180]="!shopFilterState.colorCollapsed"></app-icon>
     </button>
 
     <div *ngIf="!shopFilterState.colorCollapsed" class="mt-3 space-y-1" id="filter-section-0">

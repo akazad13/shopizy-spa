@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IconComponent } from '../../shared/icon/icon.component';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductDetail } from '../../../interfaces/product';
@@ -11,7 +10,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, RouterLink, IconComponent, RatingComponent],
+  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {
