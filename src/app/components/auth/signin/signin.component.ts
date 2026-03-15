@@ -35,6 +35,7 @@ export class SigninComponent {
   });
 
   reqInProgress = false;
+  showPassword = false;
   constructor(
     private readonly router: Router,
     private readonly authApi: AuthApi,

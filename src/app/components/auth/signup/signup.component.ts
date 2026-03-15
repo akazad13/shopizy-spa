@@ -41,6 +41,8 @@ export class SignupComponent {
   );
 
   reqInProgress = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private readonly authApi: AuthApi,
