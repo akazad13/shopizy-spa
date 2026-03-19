@@ -14,7 +14,6 @@ export class AuthService {
 
   roleMatch(allowedRoles: string[]): boolean {
     let isMatch = false;
-    return true;
     const decodedToken = this.tokenService.getDecodedToken();
     const userRoles =
       decodedToken == null ? [] : (decodedToken.role as Array<string>);

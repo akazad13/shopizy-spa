@@ -1,11 +1,15 @@
 import { Product } from './product';
 
 export interface WishlistItem {
+  wishlistItemId?: string;
   productId: string;
-  product: Product;
+  product?: Product;
 }
 
 export interface Wishlist {
+  wishlistId?: string;
   userId: string;
-  items: WishlistItem[];
+  createdOn?: string;
+  modifiedOn?: string | null;
+  wishlistItems: WishlistItem[];
 }

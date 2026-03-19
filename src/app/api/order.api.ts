@@ -60,7 +60,7 @@ export class OrderApi {
     deliveryCharge: Price,
     shippingAddress: Address
   ): Observable<Order> {
-    return this.http.post<Order>(`${this.url}/users/${this.userId}/orders`, {
+    return this.http.post<Order>(`${this.url}/orders/checkout`, {
       promoCode: promoCode,
       deliveryMethod: deliveryMethod,
       deliveryCharge: {
@@ -93,17 +93,14 @@ export class OrderApi {
     
     params = params.append('pageNumber', pageNumber).append('pageSize', pageSize);
 
-    return this.http.get<Order[]>(`${this.url}/orders`, { params });
+    return this.http.get<Order[]>(`${this.url}/admin/orders`, { params });
   }
 
   getGlobalOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.url}/orders/${orderId}`);
+    return this.http.get<Order>(`${this.url}/admin/orders/${orderId}`);
   }
 
-  updateOrderStatus(orderId: string, status: string, trackingNumber?: string): Observable<SuccessResponse> {
-    return this.http.patch<SuccessResponse>(`${this.url}/orders/${orderId}/status`, {
-      status,
-      trackingNumber
-    });
+  updateOrderStatus(orderId: string, status: number): Observable<SuccessResponse> {
+    return this.http.patch<SuccessResponse>(`${this.url}/admin/orders/${orderId}/status`, status);
   }
 }

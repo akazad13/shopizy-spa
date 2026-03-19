@@ -93,14 +93,28 @@ export class ProductApi {
   // --- ADMIN ENDPOINTS ---
 
   createProduct(data: AdminProductCreateUpdate): Observable<ProductDetail> {
-    return this.http.post<ProductDetail>(`${this.url}/products`, data);
+    return this.http.post<ProductDetail>(`${this.url}/admin/products`, data);
   }
 
   updateProduct(productId: string, data: AdminProductCreateUpdate): Observable<ProductDetail> {
-    return this.http.put<ProductDetail>(`${this.url}/products/${productId}`, data);
+    return this.http.put<ProductDetail>(`${this.url}/admin/products/${productId}`, data);
   }
 
   deleteProduct(productId: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/products/${productId}`);
+    return this.http.delete<void>(`${this.url}/admin/products/${productId}`);
+  }
+
+  getBrands(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/brands`);
+  }
+
+  addProductImage(productId: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${this.url}/admin/products/${productId}/image`, formData);
+  }
+
+  deleteProductImage(productId: string, imageId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/admin/products/${productId}/image/${imageId}`);
   }
 }

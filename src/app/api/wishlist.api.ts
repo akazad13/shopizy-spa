@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { WishlistItem } from '../interfaces/wishlist';
+import { Wishlist, WishlistItem } from '../interfaces/wishlist';
 import { TokenService } from '../services/token.service';
 
 @Injectable({
@@ -15,19 +15,27 @@ export class WishlistApi {
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
-  getWishlist(): Observable<WishlistItem[]> {
-    return this.http.get<WishlistItem[]>(`${this.url}/users/${this.userId}/wishlist`);
+  getWishlist(): Observable<Wishlist> {
+    return this.http.get<Wishlist>(`${this.url}/users/${this.userId}/wishlist`);
   }
 
   addToWishlist(productId: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/users/${this.userId}/wishlist`, {
-      productId
+    return this.http.patch<any>(`${this.url}/users/${this.userId}/wishlist`, {
+      productId: productId,
+      action: 'Add'
     });
   }
 
   removeFromWishlist(productId: string): Observable<any> {
-    return this.http.delete<any>(`${this.url}/users/${this.userId}/wishlist/${productId}`);
+    return this.http.patch<any>(`${this.url}/users/${this.userId}/wishlist`, {
+      productId: productId,
+      action: 'Remove'
+    });
+  }
+
+  createWishlist(): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${this.userId}/wishlist`, {});
   }
 }

@@ -67,7 +67,7 @@ export class AdminOrderDetailsComponent implements OnInit {
     // Convert generic text to integer string equivalent if passing numerical enum structure
     const mapped = this.mapStatusValue(this.selectedStatus);
     
-    this.orderApi.updateOrderStatus(this.orderId, mapped.toString()).subscribe({
+    this.orderApi.updateOrderStatus(this.orderId, mapped).subscribe({
       next: () => {
         this.toast.success('Order status updated successfully');
         this.savingStatus = false;

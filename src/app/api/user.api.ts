@@ -30,7 +30,7 @@ export class UserApi {
   }
 
   updatePassword(oldPassword: string, newPassword: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/users/${this.userId}/password`, {
+    return this.http.patch<any>(`${this.url}/users/${this.userId}/password`, {
       oldPassword,
       newPassword
     }, { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) });
@@ -39,10 +39,10 @@ export class UserApi {
   // --- ADMIN ENDPOINTS ---
 
   getAllUsers(pageNumber: number = 1, pageSize: number = 50): Observable<UserDetails[]> {
-    return this.http.get<UserDetails[]>(`${this.url}/users?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    return this.http.get<UserDetails[]>(`${this.url}/admin/users?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
 
   updateUserRole(userId: string, role: string): Observable<any> {
-    return this.http.patch<any>(`${this.url}/users/${userId}/role`, { role });
+    return this.http.patch<any>(`${this.url}/admin/users/${userId}/role`, { role });
   }
 }

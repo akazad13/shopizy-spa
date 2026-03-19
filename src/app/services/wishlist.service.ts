@@ -10,6 +10,7 @@ import { Product } from '../interfaces/product';
 })
 export class WishlistService {
   private wishlistItems: WishlistItem[] = [];
+  private wishlistExists = true;
   private readonly wishlistSubject = new BehaviorSubject<WishlistItem[]>([]);
   wishlist$ = this.wishlistSubject.asObservable();
 
@@ -23,10 +24,14 @@ export class WishlistService {
   private async loadWishlist() {
     if (this.authService.loggedIn()) {
       try {
-        const items = await firstValueFrom(this.wishlistApi.getWishlist());
-        this.wishlistItems = items;
+        const response = await firstValueFrom(this.wishlistApi.getWishlist());
+        this.wishlistItems = response.wishlistItems || [];
+        this.wishlistExists = true;
         this.emit();
-      } catch (error) {
+      } catch (error: any) {
+        if (error.status === 404) {
+          this.wishlistExists = false;
+        }
         console.error('Failed to load wishlist from server', error);
         this.loadFromLocalStorage();
       }
@@ -65,6 +70,10 @@ export class WishlistService {
 
     if (this.authService.loggedIn()) {
       try {
+        if (!this.wishlistExists) {
+          await firstValueFrom(this.wishlistApi.createWishlist());
+          this.wishlistExists = true;
+        }
         await firstValueFrom(this.wishlistApi.addToWishlist(product.productId));
       } catch (error) {
         console.error('Failed to add to wishlist on server', error);
