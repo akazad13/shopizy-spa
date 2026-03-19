@@ -31,7 +31,7 @@
           <div>
             <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select
               order type</label>
-            <select id="order-type"
+            <select id="order-type" (change)="onFilterChange($event)"
               class="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500">
               <option selected>All orders</option>
               <option value="Pending">Pending</option>
@@ -48,12 +48,12 @@
           <div>
             <label for="duration" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select
               duration</label>
-            <select id="duration"
+            <select id="duration" (change)="onDurationChange($event)"
               class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-indigo-500 dark:focus:ring-indigo-500">
-              <option selected>this week</option>
+              <option selected value="this week">this week</option>
               <option value="this month">this month</option>
               <option value="last 3 months">the last 3 months</option>
-              <option value="lats 6 months">the last 6 months</option>
+              <option value="last 6 months">the last 6 months</option>
               <option value="this year">this year</option>
             </select>
           </div>

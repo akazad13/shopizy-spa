@@ -19,7 +19,7 @@
     </nav>
     <div
       class="grid grid-cols-2 gap-4 border-b border-t border-gray-200 py-4 dark:border-gray-700 md:py-8 lg:grid-cols-4 xl:gap-24">
-      <div class="grid grid-cols-3 items-center">
+      <div [routerLink]="['/account/orders']" class="grid grid-cols-3 cursor-pointer items-center rounded-xl p-2 transition-colors hover:bg-gray-50">
         <div class="col-span-1 items-center">
           <app-icon icon="cart" classNames="h-8 w-8 text-gray-400 dark:text-gray-500"></app-icon>
         </div>

@@ -74,8 +74,11 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Brand ID (Optional)</label>
-          <input type="text" formControlName="brandId" class="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" placeholder="e.g. uuid-brand">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Brand (Optional)</label>
+          <select formControlName="brandId" class="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+            <option [ngValue]="null">Select a brand</option>
+            <option *ngFor="let brand of brands" [value]="brand.id">{{brand.name}}</option>
+          </select>
         </div>
       </div>
 

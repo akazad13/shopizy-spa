@@ -46,7 +46,7 @@
                 <div class="text-xs text-gray-400 mt-0.5">ID: {{product.productId.substr(0, 8)}}</div>
               </div>
             </td>
-            <td class="p-3 text-gray-600">{{ product.categoryId || 'Uncategorized' }}</td>
+            <td class="p-3 text-gray-600">{{ getCategoryName(product.categoryId) }}</td>
             <td class="p-3 font-semibold text-gray-800">${{product.price.toFixed(2)}}</td>
             <td class="p-3">
               <span class="inline-flex items-center text-sm" [ngClass]="product.stockQuantity > 10 ? 'text-green-600' : 'text-orange-500'">
@@ -67,6 +67,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    
+    <div class="p-5 border-t border-gray-100 flex justify-center">
+      <app-pagination [pageNumber]="filters.pageNumber" [totalPages]="totalPages" (pageChanged)="onPageChange($event)"></app-pagination>
     </div>
   </div>
 </div>

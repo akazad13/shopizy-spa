@@ -19,6 +19,7 @@ export class AdminProductFormComponent implements OnInit {
   productId: string | null = null;
   loading: boolean = false;
   categories: CategoryTree[] = [];
+  brands: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +33,7 @@ export class AdminProductFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.loadCategories();
+    this.loadBrands();
 
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {
@@ -61,6 +63,13 @@ export class AdminProductFormComponent implements OnInit {
     this.categoryApi.getcategoryTree().subscribe({
       next: (cats) => this.categories = cats,
       error: () => this.toast.error('Failed to load categories')
+    });
+  }
+
+  loadBrands(): void {
+    this.productApi.getBrands().subscribe({
+      next: (brands) => this.brands = brands,
+      error: () => this.toast.error('Failed to load brands')
     });
   }
 

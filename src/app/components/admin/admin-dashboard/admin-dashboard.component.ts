@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardApi } from '../../../api/dashboard.api';
+import { OrderApi } from '../../../api/order.api';
+import { OrderQueryFilters } from '../../../models/QueryFilters';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,15 +16,11 @@ export class AdminDashboardComponent implements OnInit {
   metrics: any = null;
   loading = true;
 
-  recentOrders = [
-    { id: 'ORD-9821', date: new Date(), amount: 120.50, status: 'Processing' },
-    { id: 'ORD-9820', date: new Date(Date.now() - 86400000), amount: 840.00, status: 'Shipped' },
-    { id: 'ORD-9819', date: new Date(Date.now() - 172800000), amount: 45.99, status: 'Delivered' }
-  ];
+  recentOrders: any[] = [];
 
-  constructor(private dashboardApi: DashboardApi) {}
+  constructor(private dashboardApi: DashboardApi, private orderApi: OrderApi) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dashboardApi.getDashboardMetrics().subscribe({
       next: (res) => {
         this.metrics = res;
@@ -31,5 +30,19 @@ export class AdminDashboardComponent implements OnInit {
         this.loading = false;
       }
     });
+
+    try {
+      const filters = new OrderQueryFilters();
+      filters.pageSize = 5;
+      const orders = await firstValueFrom(this.orderApi.getAllOrders(filters));
+      this.recentOrders = orders.map(o => ({
+        id: o.orderId.substring(0, 8),
+        amount: o.total.amount,
+        status: o.orderStatus,
+        currency: o.total.currency
+      }));
+    } catch (e) {
+      console.error('Failed to load recent orders', e);
+    }
   }
 }

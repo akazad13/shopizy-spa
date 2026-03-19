@@ -5,11 +5,12 @@ import { firstValueFrom } from 'rxjs';
 import { handleError } from '../../../functions/error-handler';
 import { OrderQueryFilters } from '../../../models/QueryFilters';
 import { TokenService } from '../../../services/token.service';
-import { Order } from '../../../interfaces/Order';
+import { Order, OrderStatus } from '../../../interfaces/Order';
 import { DatePipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../services/toast.service';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
+import { UserApi } from '../../../api/user.api';
 
 @Component({
   selector: 'app-orders',
@@ -27,21 +28,72 @@ export class OrdersComponent implements OnInit {
   constructor(
     private readonly orderApi: OrderApi,
     private readonly tokenService: TokenService,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly userApi: UserApi
   ) {}
 
   async ngOnInit(): Promise<void> {
+    const now = new Date();
+    this.filters.endDate = this.formatDate(now);
+    this.filters.startDate = this.formatDate(new Date(now.getFullYear(), 0, 1)); // Default to this year
     await this.getOrders();
   }
 
   async getOrders() {
     try {
-      this.filters.startDate = '2021-01-01';
-      this.filters.endDate = '2024-12-31';
+      const userId = this.tokenService.getCurrentUserId();
+      if (userId) {
+        const user = await firstValueFrom(this.userApi.getUser(userId));
+        this.totalPages = Math.ceil((user.totalOrders || 0) / this.filters.pageSize);
+      }
       this.orders = await firstValueFrom(this.orderApi.getOrders(this.filters));
     } catch (error) {
       handleError(null, error);
     }
+  }
+
+  onFilterChange(event: Event) {
+    const statusStr = (event.target as HTMLSelectElement).value;
+    this.filters.pageNumber = 1;
+    if (statusStr === 'All orders') {
+      this.filters.status = null;
+    } else {
+      this.filters.status = OrderStatus[statusStr as keyof typeof OrderStatus] as unknown as OrderStatus;
+    }
+    this.getOrders();
+  }
+
+  onDurationChange(event: Event) {
+    const duration = (event.target as HTMLSelectElement).value;
+    this.filters.pageNumber = 1;
+    const now = new Date();
+    switch (duration) {
+      case 'this week':
+        this.filters.startDate = this.formatDate(new Date(now.setDate(now.getDate() - 7)));
+        this.filters.endDate = this.formatDate(new Date());
+        break;
+      case 'this month':
+        this.filters.startDate = this.formatDate(new Date(now.setMonth(now.getMonth() - 1)));
+        this.filters.endDate = this.formatDate(new Date());
+        break;
+      case 'last 3 months':
+        this.filters.startDate = this.formatDate(new Date(now.setMonth(now.getMonth() - 3)));
+        this.filters.endDate = this.formatDate(new Date());
+        break;
+      case 'last 6 months':
+        this.filters.startDate = this.formatDate(new Date(now.setMonth(now.getMonth() - 6)));
+        this.filters.endDate = this.formatDate(new Date());
+        break;
+      case 'this year':
+        this.filters.startDate = this.formatDate(new Date(now.getFullYear(), 0, 1));
+        this.filters.endDate = this.formatDate(new Date());
+        break;
+    }
+    this.getOrders();
+  }
+
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
   onCancel(orderId: string): void {
@@ -52,7 +104,7 @@ export class OrdersComponent implements OnInit {
 
   async cancelOrder(orderId: string): Promise<void> {
     try {
-      await firstValueFrom(this.orderApi.cancelOrder(orderId, 'Some reason'));
+      await firstValueFrom(this.orderApi.cancelOrder(orderId, 'User requested cancellation'));
       this.toastService.success('Order cancelled successfully');
       await this.getOrders();
     } catch (error) {
