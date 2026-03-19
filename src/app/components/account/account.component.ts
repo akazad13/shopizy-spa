@@ -7,9 +7,11 @@ import { TokenService } from '../../services/token.service';
 import { UpdateAccountModalComponent } from './update-account-modal/update-account-modal.component';
 import { ChangePasswordModalComponent } from './change-password-modal/change-password-modal.component';
 import { CommonModule } from '@angular/common';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-account',
+  standalone: true,
   imports: [IconComponent, UpdateAccountModalComponent, ChangePasswordModalComponent, CommonModule, RouterLink],
   templateUrl: './account.component.html',
   styles: ``
@@ -21,7 +23,8 @@ export class AccountComponent implements OnInit {
 
   constructor(
     private readonly userApi: UserApi,
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
+    public readonly wishlistService: WishlistService
   ) { }
 
   ngOnInit(): void {

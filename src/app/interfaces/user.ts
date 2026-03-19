@@ -1,14 +1,13 @@
 import { Address } from './Address';
 
 export interface User {
-  id?: string;
+  id: string;
   email: string;
+  firstName: string | null;
+  lastName: string | null;
+  role: string | null;
+  token: string | null;
   phone?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  avatar?: string | null;
-  token?: string | null;
-  accessToken?: string | null;
 }
 
 export interface UserDetails {
@@ -16,7 +15,7 @@ export interface UserDetails {
   firstName: string | null;
   lastName: string | null;
   email: string;
-  phone: string | null;
+  phoneNumber: string | null;
   address: Address | null;
   profileImageUrl: string | null;
   totalOrders: number;
@@ -27,7 +26,6 @@ export interface UserDetails {
   modifiedOn: Date | null;
   roles?: string[];
   isActive?: boolean;
-  phoneNumber?: string | null;
 }
 
 export interface UpdateUser {

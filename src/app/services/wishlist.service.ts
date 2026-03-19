@@ -4,6 +4,7 @@ import { WishlistApi } from '../api/wishlist.api';
 import { WishlistItem } from '../interfaces/wishlist';
 import { AuthService } from './auth.service';
 import { Product } from '../interfaces/product';
+import { ProductApi } from '../api/product.api';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class WishlistService {
 
   constructor(
     private readonly wishlistApi: WishlistApi,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly productApi: ProductApi
   ) {
     this.loadWishlist();
   }
@@ -25,7 +27,27 @@ export class WishlistService {
     if (this.authService.loggedIn()) {
       try {
         const response = await firstValueFrom(this.wishlistApi.getWishlist());
-        this.wishlistItems = response.wishlistItems || [];
+        let items = response.wishlistItems || [];
+        
+        // Hydrate all missing items in a batch if needed
+        const missingIds = items.filter(i => !i.product).map(i => i.productId);
+        
+        if (missingIds.length > 0) {
+          try {
+            const products = await firstValueFrom(this.productApi.getProductsByIds(missingIds));
+            items = items.map(item => {
+              const product = products.find(p => p.productId === item.productId);
+              if (product) {
+                item.product = product;
+              }
+              return item;
+            });
+          } catch (e) {
+            console.error('Failed to batch hydrate products', e);
+          }
+        }
+
+        this.wishlistItems = items.filter(i => !!i.product);
         this.wishlistExists = true;
         this.emit();
       } catch (error: any) {

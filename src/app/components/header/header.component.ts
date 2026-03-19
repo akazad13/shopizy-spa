@@ -70,8 +70,13 @@ export class HeaderComponent implements OnInit {
     private readonly authApi: AuthApi,
     private readonly router: Router
   ) {
-    this.isLoggedIn = this.authService.loggedIn();
-    this.isAdmin = this.authService.roleMatch(['Admin']);
+    this.authApi.user$.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.isAdmin = this.authService.roleMatch(['Admin']);
+      
+      // Update menu if admin status changed
+      this.updateAccountMenu();
+    });
   }
 
   onSearch(): void {
@@ -92,6 +97,15 @@ export class HeaderComponent implements OnInit {
     }
 
     this.brands = ['Adidas', 'Hugo Boss', 'Zara', 'Gucci', 'H&M', 'Dior'];
+  }
+
+  private updateAccountMenu(): void {
+    // Reset menu
+    this.accountMenu = [
+      { label: 'Account settings', navigation: 'account' },
+      { label: 'Order Info', navigation: 'account/orders' },
+      { label: 'Sign out', navigation: 'signout' }
+    ];
 
     if (this.isAdmin) {
       this.accountMenu.unshift({
@@ -132,9 +146,7 @@ export class HeaderComponent implements OnInit {
   onAccountMenuItemClick(menuItem: any) {
     if (menuItem.navigation === 'signout') {
       this.authApi.setUser(null);
-      this.router.navigate(['/']).then(() => {
-        window.location.reload();
-      });
+      this.router.navigate(['/']);
     } else {
       this.router.navigate([menuItem.navigation]);
       this.hideAccountMenu = true;

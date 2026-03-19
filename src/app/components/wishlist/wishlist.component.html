@@ -2,14 +2,20 @@
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     
     <!-- ── Header ── -->
-    <div class="mb-10 flex items-center justify-between border-b border-gray-200 pb-6">
+    <div class="mb-10 flex flex-wrap items-center justify-between border-b border-gray-200 pb-6 gap-4">
       <div>
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Your Wishlist</h1>
         <p class="mt-2 text-sm text-gray-500">Products you've saved for later.</p>
       </div>
-      <div class="hidden sm:block">
-        <a [routerLink]="['/shop']" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-          Continue Shopping <span aria-hidden="true"> &rarr;</span>
+      <div class="flex items-center gap-x-4">
+        @if ((wishlist$ | async)?.length) {
+          <button (click)="clearAll()" class="text-sm font-semibold text-rose-600 hover:text-rose-500 transition-colors">
+            Clear all
+          </button>
+        }
+        <a [routerLink]="['/shop']" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500 group flex items-center">
+          Continue Shopping 
+          <span aria-hidden="true" class="ml-1 transition-transform group-hover:translate-x-1"> &rarr;</span>
         </a>
       </div>
     </div>
@@ -36,7 +42,7 @@
       <!-- Grid -->
       <div *ngIf="items.length > 0" class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
         <div *ngFor="let item of items" class="animate-fade-in">
-          <app-product-card [product]="item.product"></app-product-card>
+          <app-product-card *ngIf="item.product" [product]="item.product"></app-product-card>
         </div>
       </div>
 

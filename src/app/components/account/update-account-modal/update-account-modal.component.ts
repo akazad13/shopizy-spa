@@ -60,7 +60,7 @@ export class UpdateAccountModalComponent implements OnChanges {
     }
     this.updateAccountForm.patchValue({
       email: this.userDetails.email,
-      phone: this.userDetails.phone,
+      phone: this.userDetails.phoneNumber,
       firstName: this.userDetails.firstName,
       lastName: this.userDetails.lastName,
       street: this.userDetails.address?.street,

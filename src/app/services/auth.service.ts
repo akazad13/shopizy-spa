@@ -13,19 +13,19 @@ export class AuthService {
   }
 
   roleMatch(allowedRoles: string[]): boolean {
-    let isMatch = false;
     const decodedToken = this.tokenService.getDecodedToken();
-    const userRoles =
-      decodedToken == null ? [] : (decodedToken.role as Array<string>);
-    allowedRoles.forEach((element: string) => {
-      if (userRoles.includes(element)) {
-        isMatch = true;
-      }
-    });
+    const userRole = decodedToken?.role || decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    
+    if (!userRole) {
+      return false;
+    }
 
-    if (allowedRoles.includes('admin')) {
+    const userRoles = Array.isArray(userRole) ? userRole : [userRole];
+    
+    if (allowedRoles.includes('admin') && userRoles.includes('admin')) {
       return true;
     }
-    return isMatch;
+
+    return allowedRoles.some(role => userRoles.includes(role));
   }
 }

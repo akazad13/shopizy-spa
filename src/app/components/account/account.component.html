@@ -49,7 +49,7 @@
         <div class="col-span-2">
           <h3 class="text-gray-500 dark:text-gray-400">Wishlist</h3>
           <span class="flex items-center text-2xl font-bold text-gray-900 dark:text-white">
-            {{ userDetails?.totalFavorites }}
+            {{ (wishlistService.wishlist$ | async)?.length || 0 }}
           </span>
         </div>
       </div>
@@ -81,7 +81,7 @@
                 {{ userDetails?.email }}
               </div>
               <div class="rounded py-0.5 font-medium text-indigo-800 dark:text-indigo-300">
-                {{ userDetails?.phone }}
+                {{ userDetails?.phoneNumber }}
               </div>
               <div class="mt-4 flex flex-wrap gap-2">
                 <button type="button"

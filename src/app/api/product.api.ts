@@ -79,6 +79,14 @@ export class ProductApi {
     return this.http.get<ProductDetail>(`${this.url}/products/${productId}`);
   }
 
+  getProductsByIds(productIds: string[]): Observable<Product[]> {
+    let params = new HttpParams();
+    for (const id of productIds) {
+      params = params.append('productIds', id);
+    }
+    return this.http.get<Product[]>(`${this.url}/products`, { params });
+  }
+
   submitReview(
     productId: string,
     rating: number,
