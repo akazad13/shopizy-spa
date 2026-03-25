@@ -21,7 +21,7 @@ export class AdminProductFormComponent implements OnInit {
   productId: string | null = null;
   loading: boolean = false;
   submitting: boolean = false;
-  categories: CategoryTree[] = [];
+  categories: CategoryTree[] = [];  // flat list for dropdown
   brands: any[] = [];
 
   // For image management in edit mode
@@ -68,9 +68,22 @@ export class AdminProductFormComponent implements OnInit {
 
   loadCategories(): void {
     this.categoryApi.getcategoryTree().subscribe({
-      next: (cats) => this.categories = cats,
+      next: (cats) => {
+        this.categories = this.flattenCategories(cats);
+      },
       error: () => this.toast.error('Failed to load categories')
     });
+  }
+
+  flattenCategories(nodes: CategoryTree[], depth = 0): CategoryTree[] {
+    const result: CategoryTree[] = [];
+    for (const node of nodes) {
+      result.push({ ...node, name: '\u00a0'.repeat(depth * 3) + node.name });
+      if (node.children && node.children.length) {
+        result.push(...this.flattenCategories(node.children, depth + 1));
+      }
+    }
+    return result;
   }
 
   loadBrands(): void {
@@ -91,18 +104,35 @@ export class AdminProductFormComponent implements OnInit {
     this.productApi.getProduct(id).subscribe({
       next: (product) => {
         this.existingImages = product.productImages || [];
+
+        // Safely resolve tags: API may return string, array, or null
+        let tagsText = '';
+        if (Array.isArray(product.tags)) {
+          tagsText = product.tags.join(', ');
+        } else if (typeof product.tags === 'string' && product.tags) {
+          tagsText = product.tags;
+        }
+
+        // colors/sizes are stored as comma-separated strings in the API
+        const colorsText = Array.isArray(product.colors)
+          ? product.colors.join(', ')
+          : (product.colors || '');
+        const sizesText = Array.isArray(product.sizes)
+          ? product.sizes.join(', ')
+          : (product.sizes || '');
+
         this.productForm.patchValue({
-          name: product.name,
-          shortDescription: product.shortDescription,
-          description: product.description,
-          categoryId: product.categoryId,
+          name: product.name || '',
+          shortDescription: product.shortDescription || '',
+          description: product.description || '',
+          categoryId: product.categoryId || '',
           brandId: product.brand?.id || null,
-          price: product.price,
-          discount: product.discount,
-          stockQuantity: product.stockQuantity,
-          colorsText: product.colors || '',
-          sizesText: product.sizes || '',
-          tagsText: product.tags ? product.tags.join(', ') : '',
+          price: +product.price || 0,
+          discount: +product.discount || 0,
+          stockQuantity: +product.stockQuantity || 0,
+          colorsText,
+          sizesText,
+          tagsText,
         });
         this.loading = false;
       },

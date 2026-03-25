@@ -115,22 +115,22 @@
 
             <td class="p-3 text-gray-600 text-sm">{{ getCategoryName(product.categoryId) }}</td>
 
-            <td class="p-3 font-semibold text-gray-800">${{ product.price.toFixed(2) }}</td>
+            <td class="p-3 font-semibold text-gray-800">${{ +product.price | number:'1.2-2' }}</td>
 
             <td class="p-3">
-              <span *ngIf="product.discount > 0"
+              <span *ngIf="+product.discount > 0"
                 class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                -{{ product.discount }}%
+                -{{ +product.discount }}%
               </span>
-              <span *ngIf="product.discount === 0" class="text-gray-400 text-xs">—</span>
+              <span *ngIf="+product.discount === 0" class="text-gray-400 text-xs">—</span>
             </td>
 
             <td class="p-3">
               <span class="inline-flex items-center text-sm"
-                [ngClass]="product.stockQuantity > 10 ? 'text-green-600' : product.stockQuantity > 0 ? 'text-orange-500' : 'text-red-500'">
+                [ngClass]="+product.stockQuantity > 10 ? 'text-green-600' : +product.stockQuantity > 0 ? 'text-orange-500' : 'text-red-500'">
                 <span class="w-2 h-2 rounded-full mr-1.5"
-                  [ngClass]="product.stockQuantity > 10 ? 'bg-green-500' : product.stockQuantity > 0 ? 'bg-orange-400' : 'bg-red-400'"></span>
-                {{ product.stockQuantity }} in stock
+                  [ngClass]="+product.stockQuantity > 10 ? 'bg-green-500' : +product.stockQuantity > 0 ? 'bg-orange-400' : 'bg-red-400'"></span>
+                {{ +product.stockQuantity }} in stock
               </span>
             </td>
 

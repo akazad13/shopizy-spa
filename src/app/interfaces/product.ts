@@ -22,7 +22,7 @@ export interface Product {
   brand: Brand | null;
   colors: string;
   sizes: string;
-  tags: string[];
+  tags: string[] | string | null;
   barcode: string | null;
   stockQuantity: number;
   averageRating: AverageRating;
