@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OrderStatus } from '../../../interfaces/Order';
+
 import { IconComponent } from '../../shared/icon/icon.component';
 
 import { OrderDetails } from '../../../interfaces/Order';

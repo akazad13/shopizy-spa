@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OrderApi } from '../../../api/order.api';
-import { Order, OrderStatus } from '../../../interfaces/Order';
+import { Order } from '../../../interfaces/Order';
 import { OrderQueryFilters } from '../../../models/QueryFilters';
 import { ToastService } from '../../../services/toast.service';
 

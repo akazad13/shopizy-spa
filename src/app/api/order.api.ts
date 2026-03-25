@@ -103,4 +103,22 @@ export class OrderApi {
   updateOrderStatus(orderId: string, status: number): Observable<SuccessResponse> {
     return this.http.patch<SuccessResponse>(`${this.url}/admin/orders/${orderId}/status`, status);
   }
+
+  bulkUpdateOrderStatus(orderIds: string[], status: number): Observable<SuccessResponse> {
+    return this.http.post<SuccessResponse>(`${this.url}/admin/orders/bulk-status`, { orderIds, status });
+  }
+
+  addShipment(orderId: string, data: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/admin/orders/${orderId}/shipments`, data);
+  }
+
+  updateShipment(orderId: string, data: any): Observable<any> {
+    return this.http.patch<any>(`${this.url}/admin/orders/${orderId}/shipments`, data);
+  }
+
+  // --- USER SHIPMENTS ---
+
+  getShipment(orderId: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/users/${this.userId}/orders/${orderId}/shipments`);
+  }
 }

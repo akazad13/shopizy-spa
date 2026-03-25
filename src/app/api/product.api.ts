@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product, ProductDetail, AdminProductCreateUpdate } from '../interfaces/product';
@@ -70,9 +70,16 @@ export class ProductApi {
       .append('pageNumber', pageNumber)
       .append('pageSize', pageSize);
 
-    return this.http.get<Product[]>(`${this.url}/products`, {
+    return this.http.get<any>(`${this.url}/products`, {
       params
-    });
+    }).pipe(
+      map(res => {
+        if (Array.isArray(res)) return res;
+        if (res && res.$values && Array.isArray(res.$values)) return res.$values;
+        if (res && res.items && Array.isArray(res.items)) return res.items;
+        return [];
+      })
+    );
   }
 
   getProduct(productId: string): Observable<ProductDetail> {
@@ -84,7 +91,14 @@ export class ProductApi {
     for (const id of productIds) {
       params = params.append('productIds', id);
     }
-    return this.http.get<Product[]>(`${this.url}/products`, { params });
+    return this.http.get<any>(`${this.url}/products`, { params }).pipe(
+      map(res => {
+        if (Array.isArray(res)) return res;
+        if (res && res.$values && Array.isArray(res.$values)) return res.$values;
+        if (res && res.items && Array.isArray(res.items)) return res.items;
+        return [];
+      })
+    );
   }
 
   submitReview(
@@ -124,5 +138,50 @@ export class ProductApi {
 
   deleteProductImage(productId: string, imageId: string): Observable<any> {
     return this.http.delete<any>(`${this.url}/admin/products/${productId}/image/${imageId}`);
+  }
+
+  // --- VARIANTS ---
+
+  getVariants(productId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/products/${productId}/variants`);
+  }
+
+  addVariant(productId: string, data: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/admin/products/${productId}/variants`, data);
+  }
+
+  updateVariant(productId: string, variantId: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.url}/admin/products/${productId}/variants/${variantId}`, data);
+  }
+
+  removeVariant(productId: string, variantId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/admin/products/${productId}/variants/${variantId}`);
+  }
+
+  // --- BULK OPERATIONS ---
+
+  bulkDelete(productIds: string[]): Observable<any> {
+    return this.http.post<any>(`${this.url}/admin/products/bulk-delete`, { productIds });
+  }
+
+  bulkUpdateStatus(productIds: string[], isActive: boolean): Observable<any> {
+    return this.http.patch<any>(`${this.url}/admin/products/bulk-update-status`, { productIds, isActive });
+  }
+
+  // --- REVIEWS ---
+
+  getProductReviews(productId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/products/${productId}/reviews`).pipe(
+      map(res => {
+        if (Array.isArray(res)) return res;
+        if (res && (res as any).$values) return (res as any).$values;
+        if (res && (res as any).items) return (res as any).items;
+        return res;
+      })
+    );
+  }
+
+  deleteReview(productId: string, reviewId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/admin/products/${productId}/reviews/${reviewId}`);
   }
 }

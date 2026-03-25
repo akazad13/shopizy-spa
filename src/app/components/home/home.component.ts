@@ -22,8 +22,7 @@ import {
     CallToActionComponent,
     ShopFeaturesComponent,
     BrandsComponent,
-    FeatureProductsComponent,
-    ProductsBlockComponent
+    FeatureProductsComponent
   ],
   templateUrl: './home.component.html',
   styles: ``,

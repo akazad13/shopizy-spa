@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { OrderApi } from '../../../api/order.api';
-import { OrderDetails, OrderStatus } from '../../../interfaces/Order';
+import { OrderDetails } from '../../../interfaces/Order';
 import { ToastService } from '../../../services/toast.service';
 import { FormsModule } from '@angular/forms';
 

@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductApi } from '../../../api/product.api';
 import { ToastService } from '../../../services/toast.service';
 import { CategoryApi } from '../../../api/category.api';
 import { CategoryTree } from '../../../interfaces/category';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-admin-product-form',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './admin-product-form.component.html',
   styleUrl: './admin-product-form.component.css'
@@ -18,8 +20,14 @@ export class AdminProductFormComponent implements OnInit {
   isEditMode: boolean = false;
   productId: string | null = null;
   loading: boolean = false;
+  submitting: boolean = false;
   categories: CategoryTree[] = [];
   brands: any[] = [];
+
+  // For image management in edit mode
+  existingImages: { productImageId: string; imageUrl: string }[] = [];
+  uploadingImage: boolean = false;
+  selectedImageFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -45,17 +53,16 @@ export class AdminProductFormComponent implements OnInit {
   initForm(): void {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
-      shortDescription: ['', Validators.required],
+      shortDescription: ['', [Validators.required, Validators.maxLength(300)]],
       description: ['', Validators.required],
       categoryId: ['', Validators.required],
       brandId: [null],
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: [0, [Validators.required, Validators.min(0.01)]],
       discount: [0, [Validators.min(0), Validators.max(100)]],
       stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      colors: [[]],
-      sizes: [[]],
-      tags: [[]],
-      images: [[]]
+      colorsText: [''],
+      sizesText: [''],
+      tagsText: [''],
     });
   }
 
@@ -67,7 +74,13 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   loadBrands(): void {
-    this.productApi.getBrands().subscribe({
+    this.productApi.getBrands().pipe(
+      map((res: any) => {
+        if (Array.isArray(res)) return res;
+        if (res?.$values) return res.$values;
+        return [];
+      })
+    ).subscribe({
       next: (brands) => this.brands = brands,
       error: () => this.toast.error('Failed to load brands')
     });
@@ -77,6 +90,7 @@ export class AdminProductFormComponent implements OnInit {
     this.loading = true;
     this.productApi.getProduct(id).subscribe({
       next: (product) => {
+        this.existingImages = product.productImages || [];
         this.productForm.patchValue({
           name: product.name,
           shortDescription: product.shortDescription,
@@ -86,10 +100,9 @@ export class AdminProductFormComponent implements OnInit {
           price: product.price,
           discount: product.discount,
           stockQuantity: product.stockQuantity,
-          colors: product.colors ? product.colors.split(',') : [],
-          sizes: product.sizes ? product.sizes.split(',') : [],
-          tags: product.tags || [],
-          images: product.productImages?.map(img => img.imageUrl) || []
+          colorsText: product.colors || '',
+          sizesText: product.sizes || '',
+          tagsText: product.tags ? product.tags.join(', ') : '',
         });
         this.loading = false;
       },
@@ -100,33 +113,70 @@ export class AdminProductFormComponent implements OnInit {
     });
   }
 
-  // --- Helpers for simple array inputs mapped to strings (comma separated inputs) ---
-  get colorsText(): string { return this.productForm.get('colors')?.value.join(', ') || ''; }
-  setColors(event: any): void {
-    const val = event.target.value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
-    this.productForm.patchValue({ colors: val });
+  splitCommaSeparated(val: string): string[] {
+    return val.split(',').map(s => s.trim()).filter(s => !!s);
   }
 
-  get sizesText(): string { return this.productForm.get('sizes')?.value.join(', ') || ''; }
-  setSizes(event: any): void {
-    const val = event.target.value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
-    this.productForm.patchValue({ sizes: val });
+  onImageFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedImageFile = input.files[0];
+    }
   }
 
-  get imagesText(): string { return this.productForm.get('images')?.value.join(', ') || ''; }
-  setImages(event: any): void {
-    const val = event.target.value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
-    this.productForm.patchValue({ images: val });
+  uploadImage(): void {
+    if (!this.productId || !this.selectedImageFile) return;
+    this.uploadingImage = true;
+    this.productApi.addProductImage(this.productId, this.selectedImageFile).subscribe({
+      next: (img) => {
+        this.existingImages.push(img);
+        this.selectedImageFile = null;
+        this.uploadingImage = false;
+        this.toast.success('Image uploaded successfully');
+      },
+      error: () => {
+        this.uploadingImage = false;
+        this.toast.error('Failed to upload image');
+      }
+    });
+  }
+
+  deleteImage(imageId: string): void {
+    if (!this.productId) return;
+    if (!confirm('Remove this image?')) return;
+    this.productApi.deleteProductImage(this.productId, imageId).subscribe({
+      next: () => {
+        this.existingImages = this.existingImages.filter(i => i.productImageId !== imageId);
+        this.toast.success('Image removed');
+      },
+      error: () => this.toast.error('Failed to remove image')
+    });
   }
 
   onSubmit(): void {
     if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
       this.toast.error('Please fill all required fields correctly.');
       return;
     }
 
-    this.loading = true;
-    const payload = this.productForm.value;
+    this.submitting = true;
+    const v = this.productForm.value;
+
+    const payload = {
+      name: v.name,
+      shortDescription: v.shortDescription,
+      description: v.description,
+      categoryId: v.categoryId,
+      brandId: v.brandId || null,
+      price: Number(v.price),
+      discount: Number(v.discount),
+      stockQuantity: Number(v.stockQuantity),
+      colors: this.splitCommaSeparated(v.colorsText),
+      sizes: this.splitCommaSeparated(v.sizesText),
+      tags: this.splitCommaSeparated(v.tagsText),
+      images: []
+    };
 
     if (this.isEditMode && this.productId) {
       this.productApi.updateProduct(this.productId, payload).subscribe({
@@ -136,7 +186,7 @@ export class AdminProductFormComponent implements OnInit {
         },
         error: () => {
           this.toast.error('Error updating product.');
-          this.loading = false;
+          this.submitting = false;
         }
       });
     } else {
@@ -147,9 +197,14 @@ export class AdminProductFormComponent implements OnInit {
         },
         error: () => {
           this.toast.error('Error creating product.');
-          this.loading = false;
+          this.submitting = false;
         }
       });
     }
+  }
+
+  isFieldInvalid(field: string): boolean {
+    const ctrl = this.productForm.get(field);
+    return !!(ctrl && ctrl.invalid && ctrl.touched);
   }
 }

@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProductApi } from '../../../api/product.api';
 import { Product } from '../../../interfaces/product';
 import { ProductQueryFilters } from '../../../models/QueryFilters';
 import { ToastService } from '../../../services/toast.service';
-
 import { CategoryApi } from '../../../api/category.api';
-import { CategoryTree } from '../../../interfaces/category';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [CommonModule, RouterModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterModule, PaginationComponent],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
@@ -24,29 +23,35 @@ export class AdminProductsComponent implements OnInit {
   filters = new ProductQueryFilters();
   totalPages = 1;
 
+  // Search controls (bound via ngModel)
+  searchName: string = '';
+  selectedCategoryId: string = '';
+
   constructor(
-    private productApi: ProductApi, 
+    private productApi: ProductApi,
     private categoryApi: CategoryApi,
     private toast: ToastService
   ) {}
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.filters.pageSize = 10;
-    await this.loadCategories();
-    await this.loadProducts();
+    this.loadCategories();
+    this.loadProducts();
   }
 
-  async loadCategories() {
-    try {
-      this.categories = await new Promise((resolve, reject) => {
-        this.categoryApi.getCategories().subscribe({
-          next: (res) => resolve(res),
-          error: (err) => reject(err)
-        });
-      });
-    } catch (e) {
-      console.error('Failed to load categories', e);
-    }
+  loadCategories(): void {
+    this.categoryApi.getCategories().subscribe({
+      next: (res) => {
+        if (Array.isArray(res)) {
+          this.categories = res;
+        } else if ((res as any)?.$values) {
+          this.categories = (res as any).$values;
+        } else {
+          this.categories = [];
+        }
+      },
+      error: (err) => console.error('Failed to load categories', err)
+    });
   }
 
   getCategoryName(id: string): string {
@@ -59,10 +64,9 @@ export class AdminProductsComponent implements OnInit {
     this.productApi.getProducts(this.filters).subscribe({
       next: (res) => {
         this.products = res;
-        // Mock total pages since API returns array. 
-        // In a real app, the API should return a wrapper with totalCount.
-        // We'll assume a large enough number or use the results length if it's the last page.
-        this.totalPages = res.length === this.filters.pageSize ? this.filters.pageNumber + 1 : this.filters.pageNumber;
+        this.totalPages = res.length === this.filters.pageSize
+          ? this.filters.pageNumber + 1
+          : this.filters.pageNumber;
         this.loading = false;
       },
       error: () => {
@@ -72,22 +76,37 @@ export class AdminProductsComponent implements OnInit {
     });
   }
 
-  onPageChange(page: number) {
+  applySearch(): void {
+    this.filters.pageNumber = 1;
+    this.filters.name = this.searchName.trim() || null;
+    this.filters.categoryIds = this.selectedCategoryId ? [this.selectedCategoryId] : null;
+    this.loadProducts();
+  }
+
+  clearSearch(): void {
+    this.searchName = '';
+    this.selectedCategoryId = '';
+    this.filters.name = null;
+    this.filters.categoryIds = null;
+    this.filters.pageNumber = 1;
+    this.loadProducts();
+  }
+
+  onPageChange(page: number): void {
     this.filters.pageNumber = page;
     this.loadProducts();
   }
 
   deleteProduct(productId: string): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.productApi.deleteProduct(productId).subscribe({
-        next: () => {
-          this.toast.success('Product deleted successfully');
-          this.loadProducts(); // refresh table
-        },
-        error: () => {
-          this.toast.error('Could not delete product');
-        }
-      });
-    }
+    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+    this.productApi.deleteProduct(productId).subscribe({
+      next: () => {
+        this.toast.success('Product deleted successfully');
+        this.loadProducts();
+      },
+      error: () => {
+        this.toast.error('Could not delete product');
+      }
+    });
   }
 }

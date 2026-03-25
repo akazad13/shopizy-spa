@@ -45,4 +45,40 @@ export class UserApi {
   updateUserRole(userId: string, role: string): Observable<any> {
     return this.http.patch<any>(`${this.url}/admin/users/${userId}/role`, { role });
   }
+
+  // --- ADDRESSES ---
+
+  getAddresses(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/users/${userId}/addresses`);
+  }
+
+  addAddress(userId: string, address: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/addresses`, address);
+  }
+
+  updateAddress(userId: string, addressId: string, address: any): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/${userId}/addresses/${addressId}`, address);
+  }
+
+  deleteAddress(userId: string, addressId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/users/${userId}/addresses/${addressId}`);
+  }
+
+  setDefaultAddress(userId: string, addressId: string): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/${userId}/addresses/${addressId}/set-default`, {});
+  }
+
+  // --- TWO FACTOR (User specific) ---
+
+  enableTwoFactor(userId: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/two-factor/enable`, {});
+  }
+
+  disableTwoFactor(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/users/${userId}/two-factor`);
+  }
+
+  verifyTwoFactor(userId: string, code: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/two-factor/verify`, { code });
+  }
 }

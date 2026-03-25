@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { WishlistApi } from '../api/wishlist.api';
 import { WishlistItem } from '../interfaces/wishlist';
 import { AuthService } from './auth.service';

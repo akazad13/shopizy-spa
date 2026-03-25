@@ -31,7 +31,9 @@ export function createAuthApiSpy() {
   const s = jasmine.createSpyObj('AuthApi', ['signin', 'signup', 'setUser']);
   s.signin.and.returnValue(of({}));
   s.signup.and.returnValue(of({}));
-  s.setUser && s.setUser.and && s.setUser.and.returnValue(null);
+  if (s.setUser && s.setUser.and) {
+    s.setUser.and.returnValue(null);
+  }
   return s;
 }
 

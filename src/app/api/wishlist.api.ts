@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Wishlist, WishlistItem } from '../interfaces/wishlist';
+import { Wishlist } from '../interfaces/wishlist';
 import { TokenService } from '../services/token.service';
 
 @Injectable({
@@ -37,5 +37,16 @@ export class WishlistApi {
 
   createWishlist(): Observable<any> {
     return this.http.post<any>(`${this.url}/users/${this.userId}/wishlist`, {});
+  }
+
+  getPublicWishlist(wishlistId: string): Observable<Wishlist> {
+    return this.http.get<Wishlist>(`${this.url}/wishlists/${wishlistId}`);
+  }
+
+  updateWishlistSettings(name: string, isPublic: boolean): Observable<Wishlist> {
+    return this.http.patch<Wishlist>(`${this.url}/users/${this.userId}/wishlist/settings`, {
+      name: name,
+      isPublic: isPublic
+    });
   }
 }
