@@ -1,223 +1,257 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-4xl mx-auto">
+<div class="px-6 py-8 w-full max-w-[1400px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-  <!-- Page Header -->
-  <div class="mb-8 flex items-center space-x-4">
-    <a routerLink="/admin/products"
-      class="h-10 w-10 flex items-center justify-center bg-white border border-gray-200 rounded-lg text-gray-400 hover:text-gray-600 shadow-sm transition-colors">
-      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-      </svg>
-    </a>
-    <h1 class="text-2xl md:text-3xl text-gray-800 font-bold">
-      {{ isEditMode ? 'Edit Product' : 'Create New Product' }}
-    </h1>
+  <!-- Floating Page Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+    <div class="flex items-center space-x-4">
+      <a routerLink="/admin/products"
+        class="h-12 w-12 flex items-center justify-center bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-blue-600 hover:border-blue-100 shadow-sm transition-all group">
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      <div>
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+          {{ isEditMode ? 'Edit Product' : 'New Listing' }}
+        </h1>
+        <p class="text-slate-500 mt-1 font-medium">{{ isEditMode ? 'Modify existing catalog entry' : 'Create a fresh item in your store' }}</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button type="button" routerLink="/admin/products"
+        class="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-slate-50 transition-all shadow-sm">
+        Cancel
+      </button>
+      <button type="button" (click)="onSubmit()" [disabled]="submitting"
+        class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black text-sm hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 flex items-center disabled:opacity-50">
+        <svg *ngIf="submitting" class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isEditMode ? 'Update Product' : 'Publish Listing' }}
+      </button>
+    </div>
   </div>
 
-  <!-- Loading Spinner (edit mode only) -->
-  <div *ngIf="loading && isEditMode" class="flex justify-center p-12">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  <div *ngIf="loading && isEditMode" class="flex flex-col justify-center items-center py-32 space-y-4">
+    <div class="h-16 w-16 rounded-full border-4 border-slate-100 border-t-blue-600 animate-spin"></div>
+    <p class="text-slate-400 font-bold text-sm tracking-widest uppercase animate-pulse">Retrieving Product Data...</p>
   </div>
 
-  <form *ngIf="!loading || !isEditMode" [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
-
-    <!-- General Information -->
-    <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-100">General Information</h2>
-      <div class="space-y-5">
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Product Name <span class="text-red-500">*</span>
-          </label>
-          <input type="text" formControlName="name"
-            class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            [class.border-red-400]="isFieldInvalid('name')"
-            [class.border-gray-300]="!isFieldInvalid('name')"
-            placeholder="e.g. Premium Cotton T-Shirt">
-          <p *ngIf="isFieldInvalid('name')" class="mt-1 text-xs text-red-500">Product name is required.</p>
+  <form *ngIf="!loading || !isEditMode" [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
+    
+    <!-- Left Column: Primary Content -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Basic Information -->
+      <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-slate-100 p-8 md:p-10">
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold">1</div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Essential Details</h2>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Short Description <span class="text-red-500">*</span>
-          </label>
-          <input type="text" formControlName="shortDescription"
-            class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            [class.border-red-400]="isFieldInvalid('shortDescription')"
-            [class.border-gray-300]="!isFieldInvalid('shortDescription')"
-            placeholder="Brief one-line description">
-          <p *ngIf="isFieldInvalid('shortDescription')" class="mt-1 text-xs text-red-500">Short description is required (max 300 chars).</p>
-        </div>
+        <div class="space-y-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Product Title</label>
+            <input type="text" formControlName="name"
+              class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-base focus:ring-2 focus:ring-blue-500/20 transition-all font-bold placeholder:text-slate-300"
+              [class.ring-rose-500]="isFieldInvalid('name')"
+              placeholder="e.g. Urban Explorer Backpack">
+            <p *ngIf="isFieldInvalid('name')" class="text-[10px] font-bold text-rose-500 tracking-wide mt-1 ml-2">Title is required for search indexing</p>
+          </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Full Description <span class="text-red-500">*</span>
-          </label>
-          <textarea formControlName="description" rows="5"
-            class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            [class.border-red-400]="isFieldInvalid('description')"
-            [class.border-gray-300]="!isFieldInvalid('description')"
-            placeholder="Detailed product description..."></textarea>
-          <p *ngIf="isFieldInvalid('description')" class="mt-1 text-xs text-red-500">Description is required.</p>
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Brief Tagline</label>
+            <input type="text" formControlName="shortDescription"
+              class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-300"
+              [class.ring-rose-500]="isFieldInvalid('shortDescription')"
+              placeholder="A short punchy description for cards">
+            <p *ngIf="isFieldInvalid('shortDescription')" class="text-[10px] font-bold text-rose-500 tracking-wide mt-1 ml-2">Max 300 characters for optimal display</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Full Narrative</label>
+            <textarea formControlName="description" rows="10"
+              class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-300 resize-none"
+              [class.ring-rose-500]="isFieldInvalid('description')"
+              placeholder="Tell the story of this product, its features, and materials..."></textarea>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Pricing & Inventory -->
-    <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-100">Pricing & Inventory</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Price (USD) <span class="text-red-500">*</span>
-          </label>
-          <div class="relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-            <input type="number" formControlName="price" step="0.01" min="0"
-              class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pl-7 pr-3 py-2.5 text-gray-900 transition"
-              [class.border-red-400]="isFieldInvalid('price')"
-              [class.border-gray-300]="!isFieldInvalid('price')"
-              placeholder="0.00">
-          </div>
-          <p *ngIf="isFieldInvalid('price')" class="mt-1 text-xs text-red-500">Valid price is required.</p>
+      <!-- Attributes & Inventory -->
+      <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-slate-100 p-8 md:p-10">
+        <div class="flex items-center space-x-3 mb-10">
+          <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold">2</div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Stock & Variants</h2>
         </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Discount (%)</label>
-          <div class="relative">
-            <input type="number" formControlName="discount" min="0" max="100"
-              class="w-full bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-7 pl-3 py-2.5 text-gray-900 transition"
-              placeholder="0">
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Initial Inventory</label>
+            <div class="relative">
+              <input type="number" formControlName="stockQuantity" min="0"
+                class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-base focus:ring-2 focus:ring-blue-500/20 transition-all font-black"
+                [class.ring-rose-500]="isFieldInvalid('stockQuantity')">
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 uppercase tracking-widest">Units</span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Tags (Search Keywords)</label>
+            <input type="text" formControlName="tagsText"
+              class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-300"
+              placeholder="e.g. summer, limited, premium">
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Stock Quantity <span class="text-red-500">*</span>
-          </label>
-          <input type="number" formControlName="stockQuantity" min="0"
-            class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            [class.border-red-400]="isFieldInvalid('stockQuantity')"
-            [class.border-gray-300]="!isFieldInvalid('stockQuantity')"
-            placeholder="0">
-          <p *ngIf="isFieldInvalid('stockQuantity')" class="mt-1 text-xs text-red-500">Stock quantity is required.</p>
+        <div class="space-y-10">
+          <!-- Colors -->
+          <div>
+            <div class="flex items-center justify-between mb-4 px-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Available Palette</label>
+              <span class="text-[10px] font-bold text-slate-300 uppercase underline decoration-dotted">Select all that apply</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              <div *ngFor="let color of availableColorsList" 
+                class="flex items-center space-x-3 p-3 rounded-2xl border border-slate-50 bg-slate-50/30 hover:bg-blue-50 hover:border-blue-100 transition-all cursor-pointer group"
+                (click)="onColorToggle(color)">
+                <div class="relative w-5 h-5 flex items-center justify-center">
+                  <input type="checkbox" [checked]="isColorSelected(color)" 
+                    class="w-5 h-5 text-blue-600 border-slate-200 rounded-lg focus:ring-blue-500/20 transition-all pointer-events-none">
+                </div>
+                <span class="text-xs font-bold text-slate-600 group-hover:text-blue-700 transition-colors">{{ color }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sizes -->
+          <div>
+            <div class="flex items-center justify-between mb-4 px-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Size Matrix</label>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <div *ngFor="let size of availableSizesList" 
+                class="flex items-center justify-center min-w-[3.5rem] h-11 px-4 rounded-xl border font-black text-xs transition-all cursor-pointer select-none"
+                [ngClass]="isSizeSelected(size) ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-200 transform scale-105' : 'bg-white border-slate-100 text-slate-400 hover:border-blue-300'"
+                (click)="onSizeToggle(size)">
+                {{ size }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Classification -->
-    <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-100">Classification</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Category <span class="text-red-500">*</span>
-          </label>
-          <select formControlName="categoryId"
-            class="w-full bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            [class.border-red-400]="isFieldInvalid('categoryId')"
-            [class.border-gray-300]="!isFieldInvalid('categoryId')">
-            <option value="">-- Select a category --</option>
-            <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
-          </select>
-          <p *ngIf="isFieldInvalid('categoryId')" class="mt-1 text-xs text-red-500">Category is required.</p>
+    <!-- Right Column: Taxonomy & Pricing -->
+    <div class="space-y-8">
+      
+      <!-- Pricing Card -->
+      <div class="bg-slate-900 rounded-[2.5rem] shadow-2xl shadow-indigo-200 p-8 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 -m-8 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="w-10 h-10 bg-white/10 text-white rounded-xl flex items-center justify-center font-bold relative">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h2 class="text-xl font-black tracking-tight">Financing</h2>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Brand (Optional)</label>
-          <select formControlName="brandId"
-            class="w-full bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition">
-            <option [ngValue]="null">-- No brand --</option>
-            <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
-          </select>
-        </div>
-      </div>
-    </div>
+        <div class="space-y-6 relative">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-white/50 uppercase tracking-[0.2em] ml-1">Base Price</label>
+            <div class="relative group">
+              <span class="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 font-black tracking-tighter text-xl">$</span>
+              <input type="number" formControlName="price" step="0.01" min="0"
+                class="w-full bg-white/5 border-none ring-1 ring-white/10 rounded-2xl pl-12 pr-6 py-5 text-2xl font-black text-white focus:ring-2 focus:ring-white/20 transition-all tracking-tighter">
+            </div>
+          </div>
 
-    <!-- Variants & Attributes -->
-    <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-100">Variants & Attributes</h2>
-      <p class="text-sm text-gray-500 mb-5">Enter multiple values separated by commas.</p>
-      <div class="space-y-5">
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Available Colors</label>
-          <input type="text" formControlName="colorsText"
-            class="w-full bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            placeholder="e.g. Red, Blue, Green, Black">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Available Sizes</label>
-          <input type="text" formControlName="sizesText"
-            class="w-full bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            placeholder="e.g. XS, S, M, L, XL, XXL">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
-          <input type="text" formControlName="tagsText"
-            class="w-full bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 text-gray-900 transition"
-            placeholder="e.g. summer, casual, sale, trending">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-white/50 uppercase tracking-[0.2em] ml-1">Global Discount (%)</label>
+            <div class="relative group">
+              <input type="number" formControlName="discount" min="0" max="100"
+                class="w-full bg-white/5 border-none ring-1 ring-white/10 rounded-2xl px-6 py-4 text-lg font-black text-white focus:ring-2 focus:ring-white/20 transition-all font-display tracking-tight">
+              <span class="absolute right-6 top-1/2 -translate-y-1/2 text-white/40 font-black tracking-tighter">%</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Images (Edit Mode Only) -->
-    <div *ngIf="isEditMode" class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-100">Product Images</h2>
+      <!-- Classification Card -->
+      <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-slate-100 p-8">
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold">3</div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Taxonomy</h2>
+        </div>
 
-      <!-- Existing Images -->
-      <div *ngIf="existingImages.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-6">
-        <div *ngFor="let img of existingImages" class="relative group aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
-          <img [src]="img.imageUrl" [alt]="'Product image'" class="w-full h-full object-cover">
-          <button type="button" (click)="deleteImage(img.productImageId)"
-            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
+        <div class="space-y-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Root Category</label>
+            <div class="relative">
+              <select formControlName="categoryId"
+                class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all appearance-none cursor-pointer font-bold text-slate-700">
+                <option value="" disabled>-- Select Category --</option>
+                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+              </select>
+              <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Brand Identity</label>
+            <div class="relative">
+              <select formControlName="brandId"
+                class="w-full px-6 py-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all appearance-none cursor-pointer font-bold text-slate-700">
+                <option [ngValue]="null">Universal / No Brand</option>
+                <option *ngFor="let brand of brands" [value]="brand.name">{{ brand.name }}</option>
+              </select>
+              <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assets (Images) -->
+      <div *ngIf="isEditMode" class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-slate-100 p-8">
+        <div class="flex items-center space-x-3 mb-6">
+          <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center font-bold">4</div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">Visual Assets</h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-8">
+          <div *ngFor="let img of existingImages"
+            class="relative group aspect-square rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-inner">
+            <img [src]="img.imageUrl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <button type="button" (click)="deleteImage(img.productImageId)"
+                class="bg-rose-500 text-white p-2 rounded-xl scale-90 group-hover:scale-100 transition-all shadow-lg active:scale-95">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 pt-4 border-t border-slate-50">
+          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block ml-1">Upload New Media</label>
+          <div class="relative group">
+            <input type="file" accept="image/*" (change)="onImageFileSelected($event)"
+              class="block w-full text-[10px] text-slate-400 font-bold uppercase tracking-wider
+                file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0
+                file:text-[10px] file:font-black file:uppercase file:tracking-widest
+                file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-colors cursor-pointer">
+          </div>
+          <button type="button" (click)="uploadImage()" [disabled]="!selectedImageFile || uploadingImage"
+            class="w-full py-4 bg-blue-50 text-blue-600 text-sm font-black rounded-2xl hover:bg-blue-600 hover:text-white transition-all disabled:opacity-30 border border-blue-100/50 flex items-center justify-center space-x-2">
+            <svg *ngIf="!uploadingImage" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <svg *ngIf="uploadingImage" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <span>{{ uploadingImage ? 'Processing...' : 'Upload Media' }}</span>
           </button>
         </div>
       </div>
-
-      <p *ngIf="existingImages.length === 0" class="text-sm text-gray-400 mb-4">No images uploaded yet.</p>
-
-      <!-- Upload New Image -->
-      <div class="flex items-center space-x-3">
-        <label class="flex-1">
-          <span class="block text-sm font-medium text-gray-700 mb-1">Upload New Image</span>
-          <input type="file" accept="image/*" (change)="onImageFileSelected($event)"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-        </label>
-        <button type="button" (click)="uploadImage()"
-          [disabled]="!selectedImageFile || uploadingImage"
-          class="mt-6 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 flex items-center space-x-2">
-          <svg *ngIf="uploadingImage" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
-          <span>{{ uploadingImage ? 'Uploading...' : 'Upload' }}</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="flex justify-end space-x-4 pb-8">
-      <a routerLink="/admin/products"
-        class="px-6 py-2.5 text-gray-700 font-medium bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
-        Cancel
-      </a>
-      <button type="submit" [disabled]="submitting"
-        class="px-8 py-2.5 text-white font-medium bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center space-x-2 shadow-sm">
-        <svg *ngIf="submitting" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-        </svg>
-        <span>{{ submitting ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product') }}</span>
-      </button>
     </div>
 
   </form>

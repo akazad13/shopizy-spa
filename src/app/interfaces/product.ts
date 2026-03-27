@@ -22,7 +22,7 @@ export interface Product {
   brand: Brand | null;
   colors: string;
   sizes: string;
-  tags: string[] | string | null;
+  tags: string | null;
   barcode: string | null;
   stockQuantity: number;
   averageRating: AverageRating;
@@ -60,8 +60,8 @@ export interface AdminProductCreateUpdate {
   price: number;
   discount: number;
   stockQuantity: number;
-  colors: string[];
-  sizes: string[];
-  tags: string[];
+  colors: string;
+  sizes: string;
+  tags: string;
   images: string[];
 }

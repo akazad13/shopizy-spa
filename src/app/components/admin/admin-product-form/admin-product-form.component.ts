@@ -29,6 +29,12 @@ export class AdminProductFormComponent implements OnInit {
   uploadingImage: boolean = false;
   selectedImageFile: File | null = null;
 
+  // For color and size checkboxes
+  availableColorsList: string[] = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow', 'Pink', 'Purple', 'Orange', 'Gray', 'Brown', 'Cyan', 'Magenta'];
+  availableSizesList: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size'];
+  selectedColors: string[] = [];
+  selectedSizes: string[] = [];
+
   constructor(
     private fb: FormBuilder,
     private productApi: ProductApi,
@@ -36,7 +42,7 @@ export class AdminProductFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -60,8 +66,6 @@ export class AdminProductFormComponent implements OnInit {
       price: [0, [Validators.required, Validators.min(0.01)]],
       discount: [0, [Validators.min(0), Validators.max(100)]],
       stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      colorsText: [''],
-      sizesText: [''],
       tagsText: [''],
     });
   }
@@ -105,22 +109,6 @@ export class AdminProductFormComponent implements OnInit {
       next: (product) => {
         this.existingImages = product.productImages || [];
 
-        // Safely resolve tags: API may return string, array, or null
-        let tagsText = '';
-        if (Array.isArray(product.tags)) {
-          tagsText = product.tags.join(', ');
-        } else if (typeof product.tags === 'string' && product.tags) {
-          tagsText = product.tags;
-        }
-
-        // colors/sizes are stored as comma-separated strings in the API
-        const colorsText = Array.isArray(product.colors)
-          ? product.colors.join(', ')
-          : (product.colors || '');
-        const sizesText = Array.isArray(product.sizes)
-          ? product.sizes.join(', ')
-          : (product.sizes || '');
-
         this.productForm.patchValue({
           name: product.name || '',
           shortDescription: product.shortDescription || '',
@@ -130,10 +118,22 @@ export class AdminProductFormComponent implements OnInit {
           price: +product.price || 0,
           discount: +product.discount || 0,
           stockQuantity: +product.stockQuantity || 0,
-          colorsText,
-          sizesText,
-          tagsText,
+          tags: product.tags,
         });
+
+        // Set selected colors and sizes
+        if (typeof product.colors === 'string') {
+          this.selectedColors = this.splitCommaSeparated(product.colors);
+        } else if (Array.isArray(product.colors)) {
+          this.selectedColors = product.colors;
+        }
+
+        if (typeof product.sizes === 'string') {
+          this.selectedSizes = this.splitCommaSeparated(product.sizes);
+        } else if (Array.isArray(product.sizes)) {
+          this.selectedSizes = product.sizes;
+        }
+
         this.loading = false;
       },
       error: () => {
@@ -145,6 +145,32 @@ export class AdminProductFormComponent implements OnInit {
 
   splitCommaSeparated(val: string): string[] {
     return val.split(',').map(s => s.trim()).filter(s => !!s);
+  }
+
+  onColorToggle(color: string): void {
+    const index = this.selectedColors.indexOf(color);
+    if (index === -1) {
+      this.selectedColors.push(color);
+    } else {
+      this.selectedColors.splice(index, 1);
+    }
+  }
+
+  onSizeToggle(size: string): void {
+    const index = this.selectedSizes.indexOf(size);
+    if (index === -1) {
+      this.selectedSizes.push(size);
+    } else {
+      this.selectedSizes.splice(index, 1);
+    }
+  }
+
+  isColorSelected(color: string): boolean {
+    return this.selectedColors.includes(color);
+  }
+
+  isSizeSelected(size: string): boolean {
+    return this.selectedSizes.includes(size);
   }
 
   onImageFileSelected(event: Event): void {
@@ -202,14 +228,15 @@ export class AdminProductFormComponent implements OnInit {
       price: Number(v.price),
       discount: Number(v.discount),
       stockQuantity: Number(v.stockQuantity),
-      colors: this.splitCommaSeparated(v.colorsText),
-      sizes: this.splitCommaSeparated(v.sizesText),
-      tags: this.splitCommaSeparated(v.tagsText),
-      images: []
+      colors: this.selectedColors.join(','),
+      sizes: this.selectedSizes.join(','),
+      tags: v.tagsText,
+      images: this.existingImages.map(i => i.productImageId)
     };
 
     if (this.isEditMode && this.productId) {
-      this.productApi.updateProduct(this.productId, payload).subscribe({
+      const updatePayload = { ...payload, productId: this.productId };
+      this.productApi.updateProduct(this.productId, updatePayload as any).subscribe({
         next: () => {
           this.toast.success('Product updated successfully!');
           this.router.navigate(['/admin/products']);
