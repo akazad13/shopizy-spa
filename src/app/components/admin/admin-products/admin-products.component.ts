@@ -63,10 +63,18 @@ export class AdminProductsComponent implements OnInit {
     this.loading = true;
     this.productApi.getProducts(this.filters).subscribe({
       next: (res) => {
-        this.products = res;
-        this.totalPages = res.length === this.filters.pageSize
-          ? this.filters.pageNumber + 1
-          : this.filters.pageNumber;
+        this.products = res.items;
+        
+        // Use backend's totalPages if provided, otherwise estimate it
+        if (res.totalPages && res.totalPages > 1) {
+          this.totalPages = res.totalPages;
+        } else {
+          // Estimate logic: if page is full, assume there's at least one more page
+          this.totalPages = this.products.length >= this.filters.pageSize
+            ? this.filters.pageNumber + 1
+            : this.filters.pageNumber;
+        }
+        
         this.loading = false;
       },
       error: () => {

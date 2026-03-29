@@ -64,7 +64,7 @@ export class ShopComponent implements OnInit {
     private readonly productApi: ProductApi,
     private readonly categoryApi: CategoryApi,
     private readonly route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
@@ -165,9 +165,9 @@ export class ShopComponent implements OnInit {
     this.filters.sortBy = this.shopFilterState.sort;
 
     try {
-      this.products = await firstValueFrom(
-        this.productApi.getProducts(this.filters)
-      );
+      const res = await firstValueFrom(this.productApi.getProducts(this.filters));
+      this.products = res.items;
+      this.totalPages = res.totalPages || Math.ceil((res.totalCount || this.products.length) / this.filters.pageSize);
     } catch (error) {
       handleError(null, error);
     }
@@ -220,7 +220,7 @@ export class ShopComponent implements OnInit {
       case 'Rating: High to Low': sortValue = 'rating-desc'; break;
       default: sortValue = '';
     }
-    
+
     this.shopFilterState.sort = sortValue;
     this.shopFilterState.hideSortingOptions = true;
     this.getProducts();

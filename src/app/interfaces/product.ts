@@ -65,3 +65,12 @@ export interface AdminProductCreateUpdate {
   tags: string;
   images: string[];
 }
+
+export interface PaginatedResponse<T> {
+  items: T;
+  totalCount?: number;
+  totalPages?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  $values?: T; // For JSON.NET reference loop handling
+}

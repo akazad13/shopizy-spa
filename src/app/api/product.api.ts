@@ -13,7 +13,7 @@ export class ProductApi {
 
   constructor(private readonly http: HttpClient) { }
 
-  getProducts(filters: ProductQueryFilters): Observable<Product[]> {
+  getProducts(filters: ProductQueryFilters): Observable<any> {
     let params = new HttpParams();
     const {
       name,
@@ -51,11 +51,11 @@ export class ProductApi {
     }
 
     if (minPrice != null) {
-      params = params.append('minPrice', minPrice);
+      params = params.append('minPrice', minPrice.toString());
     }
 
     if (maxPrice != null) {
-      params = params.append('maxPrice', maxPrice);
+      params = params.append('maxPrice', maxPrice.toString());
     }
 
     if (sortBy != null) {
@@ -63,21 +63,38 @@ export class ProductApi {
     }
 
     if (averageRating != null) {
-      params = params.append('averageRating', averageRating);
+      params = params.append('averageRating', averageRating.toString());
     }
 
     params = params
-      .append('pageNumber', pageNumber)
-      .append('pageSize', pageSize);
+      .append('pageNumber', pageNumber.toString())
+      .append('pageSize', pageSize.toString());
 
     return this.http.get<any>(`${this.url}/products`, {
       params
     }).pipe(
       map(res => {
-        if (Array.isArray(res)) return res;
-        if (res && res.$values && Array.isArray(res.$values)) return res.$values;
-        if (res && res.items && Array.isArray(res.items)) return res.items;
-        return [];
+        // If it's a straight array, wrap it
+        if (Array.isArray(res)) return { items: res, totalCount: res.length, totalPages: 1 };
+        
+        // Handle $values or items wrapper
+        let items: Product[] = [];
+        if (res?.$values && Array.isArray(res.$values)) {
+          items = res.$values;
+        } else if (res?.items && Array.isArray(res.items)) {
+          items = res.items;
+        } else if (res?.items?.$values && Array.isArray(res.items.$values)) {
+          items = res.items.$values;
+        } else {
+          items = [];
+        }
+
+        return {
+          items,
+          totalCount: res?.totalCount || res?.totalItems || items.length,
+          totalPages: res?.totalPages || 1,
+          currentPage: res?.pageNumber || res?.currentPage || pageNumber
+        };
       })
     );
   }
