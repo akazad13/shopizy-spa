@@ -18,6 +18,8 @@ export class ProductApi {
     const {
       name,
       categoryIds,
+      productIds,
+      inStockOnly,
       brandIds,
       colors,
       minPrice,
@@ -29,13 +31,23 @@ export class ProductApi {
     } = filters;
 
     if (name != null) {
-      params = params.append('name', name);
+      params = params.append('Name', name);
     }
 
     if (categoryIds != null) {
       for (const categoryId of categoryIds) {
-        params = params.append('categoryIds', categoryId);
+        params = params.append('CategoryIds', categoryId);
       }
+    }
+
+    if (productIds != null) {
+      for (const productId of productIds) {
+        params = params.append('ProductIds', productId);
+      }
+    }
+
+    if (inStockOnly != null) {
+      params = params.append('InStockOnly', inStockOnly.toString());
     }
 
     if (brandIds != null) {
@@ -51,24 +63,24 @@ export class ProductApi {
     }
 
     if (minPrice != null) {
-      params = params.append('minPrice', minPrice.toString());
+      params = params.append('MinPrice', minPrice.toString());
     }
 
     if (maxPrice != null) {
-      params = params.append('maxPrice', maxPrice.toString());
+      params = params.append('MaxPrice', maxPrice.toString());
     }
 
     if (sortBy != null) {
-      params = params.append('sortBy', sortBy);
+      params = params.append('SortBy', sortBy);
     }
 
     if (averageRating != null) {
-      params = params.append('averageRating', averageRating.toString());
+      params = params.append('AverageRating', averageRating.toString());
     }
 
     params = params
-      .append('pageNumber', pageNumber.toString())
-      .append('pageSize', pageSize.toString());
+      .append('PageNumber', pageNumber.toString())
+      .append('PageSize', pageSize.toString());
 
     return this.http.get<any>(`${this.url}/products`, {
       params
@@ -100,13 +112,23 @@ export class ProductApi {
   }
 
   getProduct(productId: string): Observable<ProductDetail> {
-    return this.http.get<ProductDetail>(`${this.url}/products/${productId}`);
+    return this.http.get<any>(`${this.url}/products/${productId}`).pipe(
+      map(product => {
+        if (product) {
+          if (product.productImages && product.productImages.$values) product.productImages = product.productImages.$values;
+          if (product.specifications && product.specifications.$values) product.specifications = product.specifications.$values;
+          if (product.productReviews && product.productReviews.$values) product.productReviews = product.productReviews.$values;
+        }
+        return product as ProductDetail;
+      })
+    );
   }
+
 
   getProductsByIds(productIds: string[]): Observable<Product[]> {
     let params = new HttpParams();
     for (const id of productIds) {
-      params = params.append('productIds', id);
+      params = params.append('ProductIds', id);
     }
     return this.http.get<any>(`${this.url}/products`, { params }).pipe(
       map(res => {
@@ -117,6 +139,7 @@ export class ProductApi {
       })
     );
   }
+
 
   submitReview(
     productId: string,
@@ -187,8 +210,11 @@ export class ProductApi {
 
   // --- REVIEWS ---
 
-  getProductReviews(productId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/products/${productId}/reviews`).pipe(
+  getProductReviews(productId: string, pageNumber: number = 1, pageSize: number = 10): Observable<any[]> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+    return this.http.get<any[]>(`${this.url}/products/${productId}/reviews`, { params }).pipe(
       map(res => {
         if (Array.isArray(res)) return res;
         if (res && (res as any).$values) return (res as any).$values;
@@ -197,6 +223,7 @@ export class ProductApi {
       })
     );
   }
+
 
   deleteReview(productId: string, reviewId: string): Observable<any> {
     return this.http.delete<any>(`${this.url}/admin/products/${productId}/reviews/${reviewId}`);

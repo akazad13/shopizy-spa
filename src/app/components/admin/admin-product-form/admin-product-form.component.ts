@@ -71,13 +71,14 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   loadCategories(): void {
-    this.categoryApi.getcategoryTree().subscribe({
+    this.categoryApi.getCategoryTree().subscribe({
       next: (cats) => {
         this.categories = this.flattenCategories(cats);
       },
       error: () => this.toast.error('Failed to load categories')
     });
   }
+
 
   flattenCategories(nodes: CategoryTree[], depth = 0): CategoryTree[] {
     const result: CategoryTree[] = [];

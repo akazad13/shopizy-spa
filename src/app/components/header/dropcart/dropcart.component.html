@@ -17,7 +17,7 @@
           <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
             <div class="flex items-start justify-between">
               <h2
-                class="text-lg font-medium text-gray-900"
+                class="cart-drawer-title text-lg font-medium text-gray-900"
                 id="slide-over-title"
                 >
                 Shopping cart
@@ -39,7 +39,7 @@
               <div class="flow-root">
                 <ul class="-my-6 divide-y divide-gray-200">
                   <ng-container *ngFor="let cartItem of cart$ | async">
-                    <li class="flex py-6">
+                    <li class="cart-item flex py-6">
                       <div class="mt-2 h-20 flex-shrink-0 rounded-md border border-gray-200">
                         <img [src]="cartItem.image" alt="{{ cartItem.name }}" class="h-full w-full object-cover object-center" />
                       </div>
@@ -55,13 +55,19 @@
                           </div>
                         </div>
                         <div class="mt-3 flex justify-between text-sm">
-                          <p class="text-gray-500">Qty {{ cartItem.quantity }}</p>
-                          <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500" (click)="removeProduct(cartItem.cartItemId)">Remove</button>
+                          <div class="flex items-center gap-x-2">
+                            <button type="button" class="minus h-6 w-6 rounded-md border text-gray-400 hover:text-indigo-600" (click)="updateQuantity(cartItem, -1)">-</button>
+                            <span class="quantity-display font-medium text-gray-900">{{ cartItem.quantity }}</span>
+                            <button type="button" class="plus h-6 w-6 rounded-md border text-gray-400 hover:text-indigo-600" (click)="updateQuantity(cartItem, 1)">+</button>
+                          </div>
+                          <button type="button" class="remove font-medium text-indigo-600 hover:text-indigo-500" (click)="removeProduct(cartItem.cartItemId)">Remove</button>
                         </div>
+
                       </div>
                     </li>
                   </ng-container>
                 </ul>
+
 
                 <!-- Empty State -->
                 <div *ngIf="!(cart$ | async)?.length" class="flex flex-col items-center justify-center py-12 text-center">

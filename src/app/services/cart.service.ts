@@ -146,6 +146,37 @@ export class CartService {
     }
   }
 
+  async updateItemQuantity(cartItemId: string | null, delta: number): Promise<void> {
+    if (cartItemId === null) return;
+
+    const item = this.cartItems.find(i => i.cartItemId === cartItemId);
+    if (!item) return;
+
+    const prevQty = item.quantity;
+    const newQty = item.quantity + delta;
+    if (newQty < 1) return;
+
+    item.quantity = newQty;
+    this.emit();
+
+    if (!this.authService.loggedIn()) {
+      this.saveToLocalStorage();
+      return;
+    }
+
+    try {
+      const cart = await firstValueFrom(
+        this.cartApi.updateItemQuantity(cartItemId, newQty)
+      );
+      this.applyServerCart(cart);
+    } catch (error) {
+      item.quantity = prevQty;
+      this.emit();
+      handleError(null, error);
+    }
+  }
+
+
   private applyServerCart(cart: Cart): void {
     const previous = this.cartItems;
     this.cartItems = cart.cartItems

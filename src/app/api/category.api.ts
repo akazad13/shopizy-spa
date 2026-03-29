@@ -10,9 +10,10 @@ export class CategoryApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  getcategoryTree(): Observable<CategoryTree[]> {
+  getCategoryTree(): Observable<CategoryTree[]> {
     return this.http.get<CategoryTree[]>(`${this.url}/categories/tree`);
   }
+
 
   getCategoryById(categoryId: string): Observable<any> {
     return this.http.get<any>(`${this.url}/categories/${categoryId}`);

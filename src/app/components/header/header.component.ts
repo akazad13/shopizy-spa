@@ -90,8 +90,9 @@ export class HeaderComponent implements OnInit {
     this.cartSummary$ = this.cartService.cartSummary$;
     try {
       this.categoryTree = await firstValueFrom(
-        this.categoryApi.getcategoryTree()
+        this.categoryApi.getCategoryTree()
       );
+
     } catch (error) {
       handleError(null, error);
     }

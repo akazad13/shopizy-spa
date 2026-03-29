@@ -82,7 +82,8 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50">
-          <tr *ngFor="let cat of categories" class="hover:bg-slate-50/80 transition-all duration-300 group">
+          <tr *ngFor="let cat of categories" class="category-row hover:bg-slate-50/80 transition-all duration-300 group">
+
             <td class="px-6 py-6 font-black text-slate-800 tracking-tight text-base">
               <div class="flex items-center">
                 <div class="h-8 w-8 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center mr-3 font-bold text-xs uppercase">{{ cat.name.charAt(0) }}</div>

@@ -17,16 +17,17 @@ test.describe('Shop and Product Discovery', () => {
   test('should search for products', async ({ page }) => {
     const searchInput = page.locator('input[placeholder*="Search"]');
     if (await searchInput.isVisible()) {
-      await searchInput.fill('watch');
+      await searchInput.fill('New');
       await searchInput.press('Enter');
       
       // Wait for results
       await page.waitForTimeout(1000); 
       const productNames = page.locator('app-product-card h3');
       const text = await productNames.first().innerText();
-      expect(text.toLowerCase()).toContain('watch');
+      expect(text.toLowerCase()).toContain('new');
     }
   });
+
 
   test('should filter by category', async ({ page }) => {
     // Assuming there's a category tree or list

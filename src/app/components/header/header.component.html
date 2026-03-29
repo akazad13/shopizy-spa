@@ -101,8 +101,9 @@
             class="flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-600 transition hover:text-gray-900">Shop</a>
           
           <!-- Admin Panel link -->
-          <a *ngIf="isAdmin" [routerLink]="['/admin']"
+          <a *ngIf="isAdmin" [routerLink]="['/admin']" id="admin-link"
             class="flex items-center border-b-2 border-transparent pt-px text-sm font-bold text-indigo-600 transition hover:text-indigo-800">Admin</a>
+
         </div>
 
         <!-- Right side actions -->
@@ -168,14 +169,15 @@
           <!-- Cart -->
           <div class="relative flex items-center">
             <button type="button"
-              class="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100"
+              class="cart-button relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100"
               (click)="updateDropCartSelection()">
               <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
             </button>
             <!-- Badge: positioned on the outer div so it sits on the top-right corner of the button -->
             <span *ngIf="(cartSummary$ | async)?.totalItems"
-              class="pointer-events-none absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold leading-none text-white ring-2 ring-white">{{
+              class="cart-badge pointer-events-none absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold leading-none text-white ring-2 ring-white">{{
               (cartSummary$ | async)?.totalItems }}</span>
+
             <app-dropcart [isDropCartOpened]="isDropCartOpened"></app-dropcart>
           </div>
 

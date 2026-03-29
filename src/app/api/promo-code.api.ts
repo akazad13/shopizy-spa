@@ -34,9 +34,10 @@ export class PromoCodeApi {
     return this.http.patch<any>(`${this.baseUrl}/admin/promo-codes/${id}`, data);
   }
 
-  validatePromoCode(userId: string, code: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/users/${userId}/orders/validate-promo`, `"${code}"`, {
+  validatePromoCode(code: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/promo-codes/validate`, `"${code}"`, {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+
 }

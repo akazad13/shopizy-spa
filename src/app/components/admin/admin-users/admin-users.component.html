@@ -30,7 +30,8 @@
         </thead>
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-gray-100">
-          <tr *ngFor="let user of users; let i = index" class="hover:bg-gray-50 transition-colors">
+          <tr *ngFor="let user of users; let i = index" class="user-row hover:bg-gray-50 transition-colors">
+
             <td class="p-3 text-center text-gray-500 font-medium">{{ i + 1 }}</td>
             <td class="p-3 flex items-center">
               <div class="w-10 h-10 shrink-0 mr-3 hidden sm:block bg-blue-100 text-blue-600 font-bold rounded-full overflow-hidden flex items-center justify-center border border-blue-200">

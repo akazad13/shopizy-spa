@@ -140,7 +140,7 @@ export class ShopComponent implements OnInit {
         checked: false
       }
     ];
-    this.getcategoryTree();
+    this.getCategoryTree();
   }
 
   showHideMobileFiltersDrawer(val: string): void {
@@ -173,11 +173,12 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  async getcategoryTree() {
+  async getCategoryTree() {
     try {
       this.categoryTree = await firstValueFrom(
-        this.categoryApi.getcategoryTree()
+        this.categoryApi.getCategoryTree()
       );
+
     } catch (error) {
       handleError(null, error);
     }

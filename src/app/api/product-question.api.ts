@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,12 @@ export class ProductQuestionApi {
     return this.http.post<any>(`${this.baseUrl}/products/${productId}/questions`, { question });
   }
 
-  getQuestions(productId: string): Observable<any[]> {
-    return this.http.get<any>(`${this.baseUrl}/products/${productId}/questions`).pipe(
+  getQuestions(productId: string, pageNumber: number = 1, pageSize: number = 10): Observable<any[]> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<any>(`${this.baseUrl}/products/${productId}/questions`, { params }).pipe(
       map(res => {
         if (Array.isArray(res)) return res;
         if (res?.$values) return res.$values;
@@ -25,6 +30,7 @@ export class ProductQuestionApi {
       })
     );
   }
+
 
   answerQuestion(questionId: string, answer: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/admin/questions/${questionId}/answer`, { answer });

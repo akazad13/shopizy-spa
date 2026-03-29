@@ -136,18 +136,18 @@ export class CheckoutComponent implements OnInit {
       currency: seletedDeliveryMethod!.price.currency
     };
 
-    this.cart$.subscribe((items) => {
-      items
-        .filter((i) => i.quantity > 0) // Filter out items with 0 quantity
-        .forEach((item) => {
-          orderItems.push({
-            productId: item.productId,
-            quantity: item.quantity,
-            color: item.color,
-            size: item.size
-          });
+    const items = await firstValueFrom(this.cart$);
+    items
+      .filter((i) => i.quantity > 0)
+      .forEach((item) => {
+        orderItems.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          color: item.color,
+          size: item.size
         });
-    });
+      });
+
 
     try {
       const data = await firstValueFrom(

@@ -20,12 +20,11 @@ export class AuthService {
       return false;
     }
 
-    const userRoles = Array.isArray(userRole) ? userRole : [userRole];
+    const userRoles: string[] = Array.isArray(userRole) ? userRole : [userRole];
     
-    if (allowedRoles.includes('admin') && userRoles.includes('admin')) {
-      return true;
-    }
+    return allowedRoles.some(role => 
+      userRoles.some(ur => ur && ur.toString().toLowerCase() === role.toLowerCase())
+    );
 
-    return allowedRoles.some(role => userRoles.includes(role));
   }
 }

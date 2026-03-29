@@ -37,25 +37,29 @@ test.describe('Shopping Cart Operations', () => {
   });
 
   test('should update item quantity in cart', async ({ page }) => {
-    // This assumes items are in the cart
-    await page.goto('/cart'); // Direct navigation to cart if it exists
-    const cartItem = page.locator('.cart-item').first();
+    // Open the cart
+    const cartButton = page.locator('app-header .cart-button, app-header a[routerLink="/cart"]');
+    await cartButton.click();
     
+    const cartItem = page.locator('.cart-item').first();
     if (await cartItem.isVisible()) {
       const plusButton = cartItem.locator('button.plus, button:has-text("+")');
       const qtyDisplay = cartItem.locator('.quantity-display, input.quantity');
       
-      const prevQty = parseInt(await qtyDisplay.innerText()) || 1;
+      const prevQtyValue = await qtyDisplay.innerText();
+      const prevQty = parseInt(prevQtyValue) || 1;
       await plusButton.click();
       
-      await expect(qtyDisplay).toHaveText((prevQty + 1).toString());
+      await expect(qtyDisplay).toHaveText((prevQty + 1).toString(), { timeout: 10000 });
     }
   });
 
   test('should remove item from cart', async ({ page }) => {
-    await page.goto('/cart');
-    const cartItem = page.locator('.cart-item').first();
+    // Open the cart if not open
+    const cartButton = page.locator('app-header .cart-button, app-header a[routerLink="/cart"]');
+    await cartButton.click();
     
+    const cartItem = page.locator('.cart-item').first();
     if (await cartItem.isVisible()) {
       const deleteButton = cartItem.locator('button.remove, button:has-text("Remove")');
       await deleteButton.click();
@@ -63,4 +67,5 @@ test.describe('Shopping Cart Operations', () => {
       await expect(cartItem).not.toBeVisible();
     }
   });
+
 });

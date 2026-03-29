@@ -9,6 +9,8 @@ import { OrderQueryFilters } from '../models/QueryFilters';
 import { SuccessResponse } from '../interfaces/SuccessResponse';
 import { TokenService } from '../services/token.service';
 
+import { map } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,29 +26,40 @@ export class OrderApi {
       filters;
 
     if (startDate != null) {
-      params = params.append('startDate', startDate);
+      params = params.append('StartDate', startDate);
     }
 
     if (endDate != null) {
-      params = params.append('endDate', endDate);
+      params = params.append('EndDate', endDate);
     }
 
     if (status != null) {
-      params = params.append('status', status);
+      params = params.append('Status', status);
     }
 
     params = params
-      .append('pageNumber', pageNumber)
-      .append('pageSize', pageSize);
+      .append('PageNumber', pageNumber)
+      .append('PageSize', pageSize);
 
-    return this.http.get<Order[]>(`${this.url}/users/${this.userId}/orders`, {
+    return this.http.get<any>(`${this.url}/users/${this.userId}/orders`, {
       params
-    });
+    }).pipe(
+      map((res: any) => res?.$values || res || [])
+    );
   }
+
 
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.url}/users/${this.userId}/orders/${orderId}`);
+    return this.http.get<any>(`${this.url}/users/${this.userId}/orders/${orderId}`).pipe(
+      map(order => {
+        if (order && order.orderItems && order.orderItems.$values) {
+          order.orderItems = order.orderItems.$values;
+        }
+        return order;
+      })
+    );
   }
+
 
   createOrder(
     orderItems: {
@@ -87,18 +100,30 @@ export class OrderApi {
     let params = new HttpParams();
     const { startDate, endDate, pageNumber, pageSize, status } = filters;
 
-    if (startDate != null) params = params.append('startDate', startDate);
-    if (endDate != null) params = params.append('endDate', endDate);
-    if (status != null) params = params.append('status', status);
+    if (startDate != null) params = params.append('StartDate', startDate);
+    if (endDate != null) params = params.append('EndDate', endDate);
+    if (status != null) params = params.append('Status', status);
     
-    params = params.append('pageNumber', pageNumber).append('pageSize', pageSize);
+    params = params.append('PageNumber', pageNumber).append('PageSize', pageSize);
 
-    return this.http.get<Order[]>(`${this.url}/admin/orders`, { params });
+    return this.http.get<any>(`${this.url}/admin/orders`, { params }).pipe(
+      map((res: any) => res?.$values || res || [])
+    );
   }
+
 
   getGlobalOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.url}/admin/orders/${orderId}`);
+    return this.http.get<any>(`${this.url}/admin/orders/${orderId}`).pipe(
+      map(order => {
+        if (order && order.orderItems && order.orderItems.$values) {
+          order.orderItems = order.orderItems.$values;
+        }
+        return order;
+      })
+    );
   }
+
+
 
   updateOrderStatus(orderId: string, status: number): Observable<SuccessResponse> {
     return this.http.patch<SuccessResponse>(`${this.url}/admin/orders/${orderId}/status`, status);

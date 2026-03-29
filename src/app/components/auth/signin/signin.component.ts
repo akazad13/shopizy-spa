@@ -24,7 +24,6 @@ import { CartService } from '../../../services/cart.service';
     HasErrorPipe,
     IconComponent
   ],
-  providers: [AuthApi],
   templateUrl: './signin.component.html',
   styles: ``
 })

@@ -24,8 +24,8 @@ import { IconComponent } from '../../shared/icon/icon.component';
     HasErrorPipe,
     IconComponent
   ],
-  providers: [AuthApi],
   templateUrl: './signup.component.html',
+
   styles: ``
 })
 export class SignupComponent {
