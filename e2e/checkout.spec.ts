@@ -1,103 +1,174 @@
 import { test, expect } from '@playwright/test';
 
-// Use the authenticated state for checkout
 test.use({ storageState: 'playwright/.auth/user.json' });
 
-test.describe('Secure Checkout Flow', () => {
+// Serial: test 2 asserts the order created in test 1 appears in history.
+test.describe.serial('Secure Checkout Flow', () => {
 
-  test('should go from product to successfully placing an order', async ({ page }) => {
-    // 1. Visit shop and add a product to cart
+  test('should place an order end-to-end', async ({ page, browser }) => {
+    // ── 0. Ensure the first product has sufficient stock ──────────────────────
+    // Open a throw-away admin context so we can call the admin PUT endpoint.
+    // We use page.evaluate (runs inside the browser) so that fetch inherits the
+    // origin's TLS trust and the admin JWT from localStorage is available.
+    const adminCtx = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
+    const adminPage = await adminCtx.newPage();
+    await adminPage.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await adminPage.evaluate(async (apiUrl: string) => {
+      const raw = localStorage.getItem('user');
+      const user = raw ? JSON.parse(raw) : null;
+      // TokenService tries user.token → .accessToken → .jwt → user itself
+      const token: string | null =
+        user?.token ?? user?.accessToken ?? user?.jwt ??
+        (typeof user === 'string' ? user : null);
+      if (!token) throw new Error('Admin JWT not found in localStorage');
+
+      const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+      // Fetch the first product from the public listing
+      const listRes = await fetch(`${apiUrl}/api/v1.0/products?PageNumber=1&PageSize=1`, { headers });
+      const listData = await listRes.json();
+      const products: any[] =
+        listData.$values ?? listData.items?.$values ?? listData.items ?? [];
+      if (!products.length) throw new Error('No products found');
+
+      // Fetch full detail (needed for the PUT body)
+      const detailRes = await fetch(`${apiUrl}/api/v1.0/products/${products[0].productId}`, { headers });
+      const p = await detailRes.json();
+
+      // PUT with stockQuantity bumped to 100.
+      // The API requires `sku` and `unitPrice` (not `price`); images expects
+      // productImageId values (matching the admin form's onSubmit payload).
+      const putRes = await fetch(`${apiUrl}/api/v1.0/admin/products/${p.productId}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          name: p.name,
+          shortDescription: p.shortDescription,
+          description: p.description,
+          categoryId: p.categoryId,
+          brandId: p.brand?.brandId ?? null,
+          sku: p.sku ?? `SKU-${p.productId.slice(0, 8)}`,
+          price: p.price,
+          unitPrice: p.price,
+          discount: p.discount,
+          stockQuantity: 100,
+          colors: p.colors,
+          sizes: p.sizes,
+          tags: p.tags ?? '',
+          images: (p.productImages ?? []).map((i: any) => i.productImageId ?? i.imageUrl),
+        }),
+      });
+      if (!putRes.ok) throw new Error(`Stock update failed: ${putRes.status} ${await putRes.text()}`);
+    }, 'https://localhost:7171');
+
+    await adminCtx.close();
+
+    // ── 1. Add a product to cart ──────────────────────────────────────────────
     await page.goto('/shop');
     const firstProduct = page.locator('app-product-card').first();
-    const addToCartBtn = firstProduct.locator('button:has-text("Add to Cart"), .add-to-cart-btn');
-    
-    if (await addToCartBtn.isVisible()) {
-      await addToCartBtn.click();
-    } else {
-      // If no button, click product and add from details
-      await firstProduct.click();
-      await page.waitForURL(/.*product\/.*/);
-      await page.locator('button:has-text("Add to Cart")').click();
+    await expect(firstProduct).toBeVisible({ timeout: 10000 });
+
+    // ── 0. Clear cart leftovers from previous runs ────────────────────────────
+    // The cart is server-side and persists; repeated runs accumulate quantity
+    // until it exceeds stock and the order API returns 400.
+    await page.locator('app-header .cart-button').click();
+    const removeBtn = page.locator('app-dropcart .remove');
+    while (await removeBtn.count() > 0) {
+      await Promise.all([
+        page.waitForResponse(
+          res => res.url().includes('/cart/items/') && res.request().method() === 'DELETE' && res.ok(),
+          { timeout: 5000 }
+        ),
+        removeBtn.first().click(),
+      ]);
     }
+    // Close via the cart button (the header's toggle) — using the dropcart's
+    // internal "Close panel" button only flips the child @Input locally and
+    // leaves the header's isDropCartOpened=true, causing the next cart-button
+    // click to close rather than open the dropcart.
+    await page.locator('app-header .cart-button').click();
 
-    // Open dropcart and wait for cart-item to be visible — this confirms the
-    // API add-to-cart call completed (not just the optimistic update).
-    const cartButton = page.locator('app-header .cart-button');
-    await cartButton.click();
-    await expect(page.locator('.cart-item').first()).toBeVisible({ timeout: 10000 });
-    // Close dropcart before navigating
-    await cartButton.click();
+    // .add-to-cart-btn is an icon-only button; no visible text to match against.
+    // waitForResponse guards against the race where CartService.getCartData()'s
+    // GET /cart response would overwrite the optimistic update after a rollback.
+    await Promise.all([
+      page.waitForResponse(
+        res =>
+          res.url().includes('/cart/items') &&
+          res.request().method() === 'PATCH' &&
+          res.ok(),
+        { timeout: 10000 }
+      ),
+      firstProduct.locator('.add-to-cart-btn').click(),
+    ]);
 
-    // 2. Navigate to checkout page
-    await page.goto('/checkout');
-    await expect(page).toHaveURL(/.*checkout/);
+    // ── 2. Navigate to checkout via the dropcart ──────────────────────────────
+    // page.goto('/checkout') triggers a full page reload which reinitialises
+    // CartService and clears the in-memory cart before submitOrder() can read it.
+    // The dropcart's Checkout link calls router.navigate() (client-side) instead.
+    await page.locator('app-header .cart-button').click();
+    await expect(page.locator('.cart-item').first()).toBeVisible({ timeout: 5000 });
+    await page.locator('app-dropcart').getByText('Checkout', { exact: true }).click();
+    await expect(page).toHaveURL(/.*checkout/, { timeout: 10000 });
 
-    // 3. Select delivery method
-    const deliveryOption = page.locator('input[type="radio"][name="deliveryMethod"]').first();
-    await deliveryOption.check();
-
-    // 4. Fill in shipping information (autofilled if authenticated but let's ensure)
+    // ── 3. Fill shipping form ─────────────────────────────────────────────────
+    // Wait for firstName to confirm the form is interactive.
     const firstName = page.locator('input[formControlName="firstName"]');
-    await firstName.clear();
+    await expect(firstName).toBeVisible();
     await firstName.fill('Test');
-    
-    const lastName = page.locator('input[formControlName="lastName"]');
-    await lastName.clear();
-    await lastName.fill('User');
-
+    await page.locator('input[formControlName="lastName"]').fill('User');
     await page.locator('input[formControlName="street"]').fill('123 Test Street');
     await page.locator('input[formControlName="city"]').fill('Test City');
     await page.locator('input[formControlName="state"]').fill('TS');
     await page.locator('input[formControlName="zipCode"]').fill('12345');
-    
-    // Capture API response from order creation for better error messages
+
+    // ── 4. Submit the order ───────────────────────────────────────────────────
+    // Capture the checkout API response first so we can surface the server error
+    // if navigation to /payment does not happen.
     let orderApiResponse: { status: number; body: string } | null = null;
-    page.on('response', async response => {
-      if (response.url().includes('/orders/checkout')) {
-        orderApiResponse = { status: response.status(), body: await response.text().catch(() => '') };
+    page.on('response', async res => {
+      if (res.url().includes('/orders/checkout')) {
+        orderApiResponse = { status: res.status(), body: await res.text().catch(() => '') };
       }
     });
 
-    // 5. Place order and proceed to payment
-    const placeOrderBtn = page.locator('a:has-text("Place Order & Proceed to Payment")');
-    await placeOrderBtn.click();
+    await page.locator('a:has-text("Place Order & Proceed to Payment")').click();
 
-    // 6. Navigate to payment page
     try {
       await page.waitForURL(/.*payment\/.*/, { timeout: 30000 });
     } catch {
-      const serverError = page.locator('[role="alert"]');
-      const errorText = await serverError.innerText().catch(() => 'unknown error');
-      const apiDetails = orderApiResponse
+      const alertText = await page.locator('[role="alert"]').innerText().catch(() => 'no alert');
+      const apiInfo = orderApiResponse
         ? `API ${orderApiResponse.status}: ${orderApiResponse.body.slice(0, 500)}`
         : 'no API response captured';
-      throw new Error(`Order creation failed — form error: "${errorText}" | ${apiDetails}`);
+      throw new Error(`Order creation failed — "${alertText}" | ${apiInfo}`);
     }
-    await expect(page).toHaveURL(/.*payment\/.*/);
 
-    // 7. Select COD for simplicity in testing
-    const codOption = page.locator('input[type="radio"][value="2"]');
-    await codOption.waitFor({ state: 'visible' });
+    // ── 5. Pay with Cash on Delivery ─────────────────────────────────────────
+    // [value="2"] is unreliable with Angular ngModel; name="payment-method" is
+    // hardcoded in the template so nth(1) (= COD) is stable.
+    const codOption = page.locator('input[name="payment-method"]').nth(1);
+    await expect(codOption).toBeVisible();
     await codOption.check();
-    
-    // Wait for price update if any
-    await page.waitForTimeout(500);
-    
-    const finishBtn = page.locator('button:has-text("Place Order")');
-    await finishBtn.click();
-    
-    // 8. Should see confirmation page
-    await page.waitForURL(/.*order-confirmation\/.*/, { timeout: 30000 });
-    await expect(page).toHaveURL(/.*order-confirmation\/.*/);
-    await expect(page.locator('h1, h2, h3')).toContainText(/Order|Success|confirmed/i);
 
+    // Wait for the total to update before submitting.
+    await expect(page.locator('button:has-text("Place Order")')).toBeEnabled();
+    await page.locator('button:has-text("Place Order")').click();
+
+    // ── 6. Confirm order ──────────────────────────────────────────────────────
+    // dropcart keeps its <h2 "Shopping cart"> in the DOM (scale-0); a broad
+    // 'h1, h2, h3' locator would match it too, failing toContainText on all.
+    await page.waitForURL(/.*order-confirmation\/.*/, { timeout: 30000 });
+    await expect(page.getByText('Thanks for your order!')).toBeVisible();
   });
 
-  test('should view the placed order in account history', async ({ page }) => {
+  test('should show the placed order in account history', async ({ page }) => {
     await page.goto('/account/orders');
-    
-    // There should be at least one order now
-    const orders = page.locator('.order-card, .order-item, tr.order-row');
-    await expect(orders.first()).toBeVisible();
+    // Default filter is "this week"; widen to "this year" so the just-placed
+    // order is always included regardless of week-boundary edge cases.
+    await page.locator('select#duration').selectOption('this year');
+    // orders.component.html renders each row as <div class="order-item ...">
+    await expect(page.locator('.order-item').first()).toBeVisible({ timeout: 15000 });
   });
 });

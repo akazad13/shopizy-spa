@@ -6,23 +6,34 @@ test.describe('Shopping Cart Operations', () => {
   });
 
   test('should add a product to cart from shop page', async ({ page }) => {
+    // Clear any pre-existing cart items so initialCount is always 0.
+    // Without this, adding an already-present product only updates its quantity
+    // while totalItems (unique line count) stays the same, breaking the +1 assertion.
+    await page.locator('app-header .cart-button').click();
+    const removeBtn = page.locator('app-dropcart .remove');
+    while (await removeBtn.count() > 0) {
+      await Promise.all([
+        page.waitForResponse(
+          res => res.url().includes('/cart/items/') && res.request().method() === 'DELETE' && res.ok(),
+          { timeout: 5000 }
+        ),
+        removeBtn.first().click(),
+      ]);
+    }
+    await page.locator('app-header .cart-button').click(); // close dropcart via toggle
+
     // Locate the first product card's "Add to Cart" button
     const productCard = page.locator('app-product-card').first();
     const addToCartButton = productCard.locator('button:has-text("Add to Cart"), .add-to-cart-btn');
-    
-    // Check current cart count in header
+
     const cartBadge = page.locator('app-header .cart-badge');
-    let initialCount = 0;
-    if (await cartBadge.isVisible()) {
-      const text = await cartBadge.innerText();
-      initialCount = parseInt(text) || 0;
-    }
 
     if (await addToCartButton.isVisible()) {
       await addToCartButton.click();
-      
-      // Verify cart count increased
-      await expect(cartBadge).toHaveText((initialCount + 1).toString(), { timeout: 10000 });
+      // Cart was empty; badge must now show 1.
+      // Guest: cart is localStorage-only (no PATCH), badge still updates.
+      // Authenticated: PATCH fires, then CartService updates the badge.
+      await expect(cartBadge).toHaveText('1', { timeout: 10000 });
     }
   });
 

@@ -44,7 +44,13 @@ export class OrderApi {
     return this.http.get<any>(`${this.url}/users/${this.userId}/orders`, {
       params
     }).pipe(
-      map((res: any) => res?.$values || res || [])
+      map((res: any) => {
+        if (Array.isArray(res)) return res;
+        if (res?.$values) return res.$values;
+        if (res?.items?.$values) return res.items.$values;
+        if (Array.isArray(res?.items)) return res.items;
+        return [];
+      })
     );
   }
 

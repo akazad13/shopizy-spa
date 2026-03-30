@@ -40,12 +40,19 @@ export class OrdersComponent implements OnInit {
   }
 
   async getOrders() {
+    // Fetch pagination metadata separately so a failure here never prevents
+    // the orders list from loading.
     try {
       const userId = this.tokenService.getCurrentUserId();
       if (userId) {
         const user = await firstValueFrom(this.userApi.getUser(userId));
         this.totalPages = Math.ceil((user.totalOrders || 0) / this.filters.pageSize);
       }
+    } catch {
+      // totalOrders unavailable; leave totalPages at its current value.
+    }
+
+    try {
       this.orders = await firstValueFrom(this.orderApi.getOrders(this.filters));
     } catch (error) {
       handleError(null, error);
