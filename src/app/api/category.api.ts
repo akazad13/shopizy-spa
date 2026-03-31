@@ -10,7 +10,28 @@ export class CategoryApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  getcategoryTree(): Observable<CategoryTree[]> {
+  getCategoryTree(): Observable<CategoryTree[]> {
     return this.http.get<CategoryTree[]>(`${this.url}/categories/tree`);
+  }
+
+
+  getCategoryById(categoryId: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/categories/${categoryId}`);
+  }
+
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/categories`);
+  }
+
+  createCategory(data: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/admin/categories`, data);
+  }
+
+  updateCategory(categoryId: string, data: any): Observable<any> {
+    return this.http.patch<any>(`${this.url}/admin/categories/${categoryId}`, data);
+  }
+
+  deleteCategory(categoryId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/admin/categories/${categoryId}`);
   }
 }

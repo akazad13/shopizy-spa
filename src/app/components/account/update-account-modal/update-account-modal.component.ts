@@ -20,10 +20,12 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { finalize, firstValueFrom } from 'rxjs';
 import { Address } from '../../../interfaces/Address';
 import { handleError } from '../../../functions/error-handler';
+import { ToastService } from '../../../services/toast.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-update-account-modal',
-  imports: [IsInvalidPipe, HasErrorPipe, ReactiveFormsModule, IconComponent],
+  imports: [IsInvalidPipe, HasErrorPipe, ReactiveFormsModule, IconComponent, CommonModule],
   templateUrl: './update-account-modal.component.html',
   styles: ``
 })
@@ -31,6 +33,7 @@ export class UpdateAccountModalComponent implements OnChanges {
   @Input() isUpdateAccountModelOpened = false;
   @Input() userDetails: UserDetails | null = null;
   @Output() closed = new EventEmitter<boolean>();
+  @Output() updated = new EventEmitter<void>();
 
   updateAccountForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -46,7 +49,10 @@ export class UpdateAccountModalComponent implements OnChanges {
 
   reqInProgress = false;
 
-  constructor(private readonly userApi: UserApi) {}
+  constructor(
+    private readonly userApi: UserApi,
+    private readonly toastService: ToastService
+  ) { }
 
   ngOnChanges(): void {
     if (!this.userDetails) {
@@ -54,7 +60,7 @@ export class UpdateAccountModalComponent implements OnChanges {
     }
     this.updateAccountForm.patchValue({
       email: this.userDetails.email,
-      phone: this.userDetails.phone,
+      phone: this.userDetails.phoneNumber,
       firstName: this.userDetails.firstName,
       lastName: this.userDetails.lastName,
       street: this.userDetails.address?.street,
@@ -93,7 +99,6 @@ export class UpdateAccountModalComponent implements OnChanges {
     const updateUser: UpdateUser = {
       firstName: this.updateAccountForm.value.firstName,
       lastName: this.updateAccountForm.value.lastName,
-      email: this.updateAccountForm.value.email,
       phoneNumber: this.updateAccountForm.value.phone,
       address: address
     };
@@ -104,7 +109,9 @@ export class UpdateAccountModalComponent implements OnChanges {
           .updateUser(updateUser)
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      window.location.reload();
+      this.toastService.success('Profile updated successfully');
+      this.updated.emit();
+      this.onCloseUpdateAccountModel();
     } catch (error) {
       handleError(this.updateAccountForm, error);
     }

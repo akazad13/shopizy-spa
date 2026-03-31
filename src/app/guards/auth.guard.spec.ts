@@ -1,17 +1,34 @@
-// import { TestBed } from '@angular/core/testing';
-// import { CanActivateFn } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { ToastService } from '../services/toast.service';
+import { provideRouter } from '@angular/router';
 
-// import { AuthGuard } from './auth.guard';
+describe('AuthGuard', () => {
+  let guard: AuthGuard;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let routerSpy: jasmine.SpyObj<Router>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
 
-// describe('authGuard', () => {
-//   const executeGuard: CanActivateFn = (...guardParameters) =>
-//     TestBed.runInInjectionContext(() => AuthGuard(...guardParameters));
+  beforeEach(() => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['roleMatch', 'loggedIn']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['error']);
 
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({});
-//   });
+    TestBed.configureTestingModule({
+      providers: [
+        AuthGuard,
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: ToastService, useValue: toastServiceSpy },
+        provideRouter([])
+      ]
+    });
+    guard = TestBed.inject(AuthGuard);
+  });
 
-//   it('should be created', () => {
-//     expect(executeGuard).toBeTruthy();
-//   });
-// });
+  it('should be created', () => {
+    expect(guard).toBeTruthy();
+  });
+});

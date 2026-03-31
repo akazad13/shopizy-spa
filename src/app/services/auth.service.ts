@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private readonly tokenService: TokenService) {}
+  constructor(private readonly tokenService: TokenService) { }
 
   loggedIn(): boolean {
     const token = this.tokenService.getToken();
@@ -13,15 +13,18 @@ export class AuthService {
   }
 
   roleMatch(allowedRoles: string[]): boolean {
-    let isMatch = false;
     const decodedToken = this.tokenService.getDecodedToken();
-    const userRoles =
-      decodedToken == null ? [] : (decodedToken.role as Array<string>);
-    allowedRoles.forEach((element: string) => {
-      if (userRoles.includes(element)) {
-        isMatch = true;
-      }
-    });
-    return isMatch;
+    const userRole = decodedToken?.role || decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    
+    if (!userRole) {
+      return false;
+    }
+
+    const userRoles: string[] = Array.isArray(userRole) ? userRole : [userRole];
+    
+    return allowedRoles.some(role => 
+      userRoles.some(ur => ur && ur.toString().toLowerCase() === role.toLowerCase())
+    );
+
   }
 }

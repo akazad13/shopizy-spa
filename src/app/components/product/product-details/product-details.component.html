@@ -34,9 +34,15 @@
       <div class="top-6 lg:sticky lg:self-start">
 
         <!-- Main image -->
-        <div class="overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100" style="aspect-ratio: 1/1;">
+        <div class="group relative cursor-zoom-in overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100"
+          style="aspect-ratio: 1/1;" (click)="openLightbox()">
           <img [src]="mainPhotoUrl" [alt]="product.name"
-            class="h-full w-full object-cover object-center transition-all duration-500" />
+            class="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-110" />
+          <div
+            class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover:bg-black/10">
+            <app-icon icon="magnifying-glass"
+              classNames="h-10 w-10 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"></app-icon>
+          </div>
         </div>
 
         <!-- Thumbnail strip -->
@@ -141,10 +147,12 @@
             <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
             Add to Cart
           </button>
-          <button type="button"
-            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 border-rose-200 bg-white px-6 py-3 text-sm font-semibold text-rose-500 shadow-sm transition-all duration-150 hover:bg-rose-50 active:scale-95">
-            <app-icon icon="heart-outline" classNames="h-5 w-5"></app-icon>
-            Wishlist
+          <button type="button" (click)="toggleWishlist()"
+            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-150 active:scale-95"
+            [class.border-rose-200]="!isInWishlist()" [class.bg-white]="!isInWishlist()" [class.text-rose-500]="!isInWishlist()"
+            [class.border-rose-500]="isInWishlist()" [class.bg-rose-500]="isInWishlist()" [class.text-white]="isInWishlist()">
+            <app-icon [icon]="isInWishlist() ? 'heart-solid' : 'heart-outline'" classNames="h-5 w-5"></app-icon>
+            {{ isInWishlist() ? 'In Wishlist' : 'Add to Wishlist' }}
           </button>
         </div>
 
@@ -246,18 +254,50 @@
             </div>
           </div>
 
-          <!-- Overall score -->
-          <div class="flex flex-col items-center justify-center rounded-2xl bg-amber-50 p-8">
-            <span class="text-6xl font-bold text-amber-400">{{ product.averageRating.value }}</span>
-            <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-6 w-6'"
-              class="mt-3"></app-rating>
-            <p class="mt-2 text-sm font-medium text-gray-600">Based on {{ product.averageRating.numRatings }} reviews
-            </p>
-          </div>
+        <!-- Overall score -->
+        <div class="flex flex-col items-center justify-center rounded-2xl bg-amber-50 p-8">
+          <span class="text-6xl font-bold text-amber-400">{{ product.averageRating.value }}</span>
+          <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-6 w-6'"
+            class="mt-3"></app-rating>
+          <p class="mt-2 text-sm font-medium text-gray-600">Based on {{ product.averageRating.numRatings }} reviews
+          </p>
+        </div>
+      </div>
+
+      <!-- Add Review Form -->
+      <div *ngIf="isLoggedIn" class="mt-8 rounded-2xl border border-indigo-100 bg-indigo-50/30 p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900">Share your thoughts</h3>
+        <p class="mb-4 text-sm text-gray-500">How would you rate this product?</p>
+
+        <div class="mb-4 flex gap-x-2">
+          <button *ngFor="let star of [1,2,3,4,5]" type="button" (click)="setReviewRating(star)"
+            class="transition-transform hover:scale-110">
+            <app-icon [icon]="reviewRating >= star ? 'star-solid' : 'star-outline'"
+              [classNames]="'h-8 w-8 ' + (reviewRating >= star ? 'text-amber-400' : 'text-gray-300')"></app-icon>
+          </button>
         </div>
 
-        <!-- Individual reviews -->
-        <div class="mt-8 space-y-6">
+        <div class="relative">
+          <textarea [(ngModel)]="reviewComment" rows="4"
+            class="block w-full rounded-xl border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-gray-400"
+            placeholder="Write your review here..."></textarea>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button type="button" (click)="onSubmitReview()" [disabled]="isSubmittingReview || reviewRating === 0 || !reviewComment"
+            class="inline-flex items-center gap-x-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span *ngIf="isSubmittingReview" class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+            {{ isSubmittingReview ? 'Submitting...' : 'Post Review' }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoggedIn" class="mt-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 text-center">
+        <p class="text-sm text-gray-600">Please <a [routerLink]="['/auth/signin']" class="font-semibold text-indigo-600 hover:underline">sign in</a> to write a review.</p>
+      </div>
+
+      <!-- Individual reviews -->
+      <div class="mt-8 space-y-6">
           <div *ngFor="let review of product.productReviews"
             class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <!-- Reviewer info header -->
@@ -281,5 +321,20 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ── Lightbox Modal ── -->
+<div *ngIf="isLightboxOpen"
+  class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm transition-all duration-300"
+  (click)="closeLightbox()">
+  <button
+    class="absolute right-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+    (click)="closeLightbox()">
+    <app-icon icon="x-mark" classNames="h-6 w-6"></app-icon>
+  </button>
+
+  <div class="max-h-[90vh] max-w-[90vw] overflow-hidden rounded-2xl shadow-2xl" (click)="$event.stopPropagation()">
+    <img [src]="mainPhotoUrl" [alt]="product.name" class="h-full w-full object-contain" />
   </div>
 </div>

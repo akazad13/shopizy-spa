@@ -20,7 +20,30 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+To execute the end-to-end tests via [Playwright](https://playwright.dev/):
+
+1.  **First-time Setup**: Install the required browser binaries:
+    ```bash
+    npx playwright install
+    ```
+
+2.  **Run All Tests (Headless)**:
+    ```bash
+    npm run test:e2e
+    ```
+
+3.  **Run in Interactive UI Mode**:
+    ```bash
+    npm run test:e2e:ui
+    ```
+
+4.  **Run Specific Project**:
+    *   **Users Only**: `npx playwright test --project=user-chrome`
+    *   **Admins Only**: `npx playwright test --project=admin-chrome`
+    *   **Guests Only**: `npx playwright test --project=guest-chrome`
+
+> [!NOTE]
+> Tests are configured to automatically log in and reuse the authentication session from `playwright/.auth/`. Ensure your backend API is running at `http://localhost:5054` before testing.
 
 ## Further help
 

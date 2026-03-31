@@ -1,0 +1,116 @@
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-5xl mx-auto">
+  <!-- Header -->
+  <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="flex items-center space-x-4">
+      <a routerLink="/admin/orders"
+        class="h-10 w-10 flex items-center justify-center bg-white border border-gray-200 rounded-lg text-gray-400 hover:text-gray-600 shadow-sm transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      <div>
+        <h1 class="text-2xl md:text-3xl text-gray-800 font-bold">Order Details</h1>
+        <p class="text-gray-500 mt-1" *ngIf="order">ID: {{ order.orderId }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm border border-gray-200" *ngIf="order">
+      <label class="text-sm font-medium text-gray-600 pl-2">Status:</label>
+      <select [(ngModel)]="selectedStatus"
+        class="bg-gray-50 border border-gray-300 text-gray-900 border-none rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+        <option *ngFor="let s of availableStatuses" [value]="s.value">{{s.label}}</option>
+      </select>
+      <button (click)="updateStatus()" [disabled]="savingStatus"
+        class="btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded flex items-center shadow-sm disabled:opacity-50">
+        <svg *ngIf="savingStatus" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+          </path>
+        </svg>
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center p-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+
+  <div *ngIf="!loading && order" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Left Column: Products & Totals -->
+    <div class="md:col-span-2 space-y-6">
+      <!-- Order Items -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-4">Order Items</h2>
+        <div class="space-y-4">
+          <div *ngFor="let item of order.orderItems" class="flex items-center gap-4 py-2">
+            <div class="w-16 h-16 bg-gray-100 rounded-lg border overflow-hidden shrink-0">
+              <img *ngIf="item.pictureUrl" [src]="item.pictureUrl" class="w-full h-full object-cover" [alt]="item.name">
+            </div>
+            <div class="flex-1">
+              <h3 class="font-medium text-gray-900">{{item.name}}</h3>
+              <p class="text-gray-500 text-sm">Qty: {{item.quantity}}</p>
+            </div>
+            <div class="font-semibold text-gray-800">
+              {{ (item.unitPrice.amount * item.quantity) | currency:item.unitPrice.currency }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Summary -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-4">Financial Summary</h2>
+        <div class="space-y-3">
+          <div class="flex justify-between text-gray-600">
+            <span>Payment Status</span>
+            <span
+              class="font-medium px-2 py-0.5 rounded text-sm bg-green-100 text-green-700">{{order.paymentStatus}}</span>
+          </div>
+          <div class="flex justify-between text-gray-600">
+            <span>Delivery Charge</span>
+            <span>{{ order.deliveryCharge.amount | currency:order.deliveryCharge.currency }}</span>
+          </div>
+          <div class="flex justify-between text-lg font-bold text-gray-900 border-t pt-3 mt-3">
+            <span>Total Value</span>
+            <span>{{ (order.orderItems[0].unitPrice.amount * order.orderItems[0].quantity + order.deliveryCharge.amount)
+              | currency:order.deliveryCharge.currency }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Customer Info -->
+    <div class="space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-4">Customer Details</h2>
+        <div class="text-sm text-gray-600 space-y-3">
+          <div>
+            <span class="block text-gray-400 text-xs mb-1">User ID:</span>
+            <span class="font-mono">{{order.userId.substring(0,8)}}...</span>
+          </div>
+          <div>
+            <span class="block text-gray-400 text-xs mb-1">Date Placed:</span>
+            <span>{{order.createdOn | date:'medium'}}</span>
+          </div>
+          <div *ngIf="order.promoCode">
+            <span class="block text-gray-400 text-xs mb-1">Promo Applied:</span>
+            <span class="font-medium text-blue-600">{{order.promoCode}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-4">Shipping Destination</h2>
+        <!-- <p class="text-sm text-gray-800 font-medium">{{order.shippingAddress.firstName}}
+          {{order.shippingAddress.lastName}}</p> -->
+        <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+          {{order.shippingAddress.street}} <br>
+          {{order.shippingAddress.city}}, {{order.shippingAddress.state}} {{order.shippingAddress.zipCode}} <br>
+          {{order.shippingAddress.country}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

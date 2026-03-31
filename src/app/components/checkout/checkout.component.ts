@@ -16,7 +16,7 @@ import { Address } from '../../interfaces/Address';
 import { Price } from '../../interfaces/Price';
 import { handleError } from '../../functions/error-handler';
 import { AuthService } from '../../services/auth.service';
-import { AlertifyService } from '../../services/alertify.service';
+import { ToastService } from '../../services/toast.service';
 import { IsInvalidPipe } from '../../pipes/is-invalid.pipe';
 import { HasErrorPipe } from '../../pipes/has-error.pipe';
 import { IconComponent } from '../shared/icon/icon.component';
@@ -83,7 +83,7 @@ export class CheckoutComponent implements OnInit {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly authApi: AuthApi,
-    private readonly alertifyService: AlertifyService
+    private readonly toastService: ToastService
   ) {
     this.isLoggedIn = this.authService.loggedIn();
   }
@@ -136,18 +136,18 @@ export class CheckoutComponent implements OnInit {
       currency: seletedDeliveryMethod!.price.currency
     };
 
-    this.cart$.subscribe((items) => {
-      items
-        .filter((i) => i.quantity > 0) // Filter out items with 0 quantity
-        .forEach((item) => {
-          orderItems.push({
-            productId: item.productId,
-            quantity: item.quantity,
-            color: item.color,
-            size: item.size
-          });
+    const items = await firstValueFrom(this.cart$);
+    items
+      .filter((i) => i.quantity > 0)
+      .forEach((item) => {
+        orderItems.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          color: item.color,
+          size: item.size
         });
-    });
+      });
+
 
     try {
       const data = await firstValueFrom(
@@ -161,7 +161,7 @@ export class CheckoutComponent implements OnInit {
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      this.alertifyService.success('Order placed successfully');
+      this.toastService.success('Order placed successfully');
       this.router.navigate(['/', 'payment', data.orderId]);
     } catch (error) {
       handleError(this.checkoutForm, error);

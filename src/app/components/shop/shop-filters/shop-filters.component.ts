@@ -92,4 +92,22 @@ export class ShopFiltersComponent {
       }
     }
   }
+  
+  clearFilters(): void {
+    this.categoryTree.forEach(c => this.resetCategory(c));
+    this.brands.forEach(b => b.checked = false);
+    this.colors.forEach(c => c.checked = false);
+    this.shopFilterState.selectedCategory = [];
+    this.shopFilterState.selectedBrand = [];
+    this.shopFilterState.selectedColor = [];
+    this.shopFilterState.priceRange = 500;
+    this.updateProductGridOutput.emit(this.shopFilterState);
+  }
+
+  private resetCategory(category: CategoryTree) {
+    category.checked = false;
+    if (category.children) {
+      category.children.forEach(child => this.resetCategory(child));
+    }
+  }
 }

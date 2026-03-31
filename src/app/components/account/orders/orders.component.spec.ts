@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OrdersComponent } from './orders.component';
 import { OrderApi } from '../../../api/order.api';
 import { TokenService } from '../../../services/token.service';
-import { AlertifyService } from '../../../services/alertify.service';
+import { ToastService } from '../../../services/toast.service';
 import {
   COMMON_TEST_IMPORTS,
   createOrderApiSpy,
@@ -18,8 +18,7 @@ describe('OrdersComponent', () => {
     const orderApiSpy = createOrderApiSpy();
 
     const tokenServiceStub = { getCurrentUserId: () => 'test-user' };
-    const alertifyStub = {
-      confirm: jasmine.createSpy('confirm'),
+    const toastStub = {
       success: jasmine.createSpy('success')
     };
 
@@ -28,7 +27,7 @@ describe('OrdersComponent', () => {
       providers: [
         provideSpy(OrderApi, orderApiSpy),
         { provide: TokenService, useValue: tokenServiceStub },
-        { provide: AlertifyService, useValue: alertifyStub }
+        { provide: ToastService, useValue: toastStub }
       ]
     }).compileComponents();
 

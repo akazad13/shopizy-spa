@@ -38,6 +38,10 @@ export class DropcartComponent implements OnInit {
     this.cartService.removeFromCart(cartItemId);
   }
 
+  async updateQuantity(item: CartItem, delta: number): Promise<void> {
+    await this.cartService.updateItemQuantity(item.cartItemId, item.quantity + delta > 0 ? delta : 0);
+  }
+
   checkout(): void {
     this.isDropCartOpened = false;
     if (this.authService.loggedIn()) {
@@ -46,4 +50,5 @@ export class DropcartComponent implements OnInit {
       this.router.navigate(['auth', 'signin']);
     }
   }
+
 }

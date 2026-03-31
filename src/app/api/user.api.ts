@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UpdateUser, UserDetails } from '../interfaces/user';
 import { TokenService } from '../services/token.service';
 
@@ -24,14 +24,61 @@ export class UserApi {
   updateUser(data: UpdateUser): Observable<any> {
     return this.http.put<any>(
       `${this.url}/users/${this.userId}`,
-      data
+      data,
+      { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) }
     );
   }
 
   updatePassword(oldPassword: string, newPassword: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/users/${this.userId}/password`, {
+    return this.http.patch<any>(`${this.url}/users/${this.userId}/password`, {
       oldPassword,
       newPassword
-    });
+    }, { headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' }) });
+  }
+
+  // --- ADMIN ENDPOINTS ---
+
+  getAllUsers(pageNumber: number = 1, pageSize: number = 50): Observable<UserDetails[]> {
+    return this.http.get<UserDetails[]>(`${this.url}/admin/users?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
+  updateUserRole(userId: string, role: string): Observable<any> {
+    return this.http.patch<any>(`${this.url}/admin/users/${userId}/role`, { role });
+  }
+
+  // --- ADDRESSES ---
+
+  getAddresses(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/users/${userId}/addresses`);
+  }
+
+  addAddress(userId: string, address: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/addresses`, address);
+  }
+
+  updateAddress(userId: string, addressId: string, address: any): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/${userId}/addresses/${addressId}`, address);
+  }
+
+  deleteAddress(userId: string, addressId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/users/${userId}/addresses/${addressId}`);
+  }
+
+  setDefaultAddress(userId: string, addressId: string): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/${userId}/addresses/${addressId}/set-default`, {});
+  }
+
+  // --- TWO FACTOR (User specific) ---
+
+  enableTwoFactor(userId: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/two-factor/enable`, {});
+  }
+
+  disableTwoFactor(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.url}/users/${userId}/two-factor`);
+  }
+
+  verifyTwoFactor(userId: string, code: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/users/${userId}/two-factor/verify`, { code });
   }
 }

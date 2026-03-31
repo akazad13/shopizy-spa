@@ -78,7 +78,6 @@
         <aside class="hidden lg:block">
           <!-- Sidebar card -->
           <div class="rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
-            <h3 class="mb-3 text-sm font-semibold text-gray-900">Filter By</h3>
             <app-shop-filters [shopFilterState]="shopFilterState" [brands]="brands" [colors]="colors"
               [categoryTree]="categoryTree" (updateFilterStateOutput)="updateFilterState($event)"
               (updateProductGridOutput)="updateProductGrid($event)"></app-shop-filters>
@@ -90,23 +89,12 @@
           <app-products-grid [products]="products"></app-products-grid>
 
           <!-- Pagination -->
-          <div class="mt-10 flex items-center justify-center gap-x-2">
-            <button type="button" (click)="previous()" [disabled]="filters.pageNumber === 1"
-              class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200">
-              <app-icon icon="arrow-left-solid" classNames="h-4 w-4"></app-icon>
-              Previous
-            </button>
-
-            <span
-              class="rounded-lg bg-white border border-gray-200 px-3.5 py-2 text-sm font-medium text-gray-500 shadow-sm">
-              Page {{ filters.pageNumber }}
-            </span>
-
-            <button type="button" (click)="next()"
-              class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700">
-              Next
-              <app-icon icon="arrow-right-solid" classNames="h-4 w-4"></app-icon>
-            </button>
+          <div class="mt-12 border-t border-gray-100 pt-10">
+            <app-pagination 
+              [pageNumber]="filters.pageNumber" 
+              [totalPages]="totalPages"
+              (pageChanged)="onPageChange($event)">
+            </app-pagination>
           </div>
         </div>
 

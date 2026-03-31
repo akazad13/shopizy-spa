@@ -1,0 +1,26 @@
+<div class="flex items-center justify-center gap-x-1 sm:gap-x-2">
+  <!-- Previous -->
+  <button type="button" (click)="onPageChange(pageNumber - 1)" [disabled]="pageNumber === 1"
+    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-700 shadow-sm transition-all hover:bg-gray-50 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
+    <app-icon icon="chevron-left" classNames="h-4 w-4"></app-icon>
+  </button>
+
+  <!-- Pages -->
+  <ng-container *ngFor="let page of pages">
+    <button type="button" (click)="onPageChange(page)"
+      class="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold transition-all active:scale-95"
+      [class.bg-indigo-600]="page === pageNumber" [class.text-white]="page === pageNumber"
+      [class.shadow-lg]="page === pageNumber" [class.shadow-indigo-200]="page === pageNumber"
+      [class.bg-white]="page !== pageNumber" [class.text-gray-600]="page !== pageNumber"
+      [class.border]="page !== pageNumber" [class.border-gray-200]="page !== pageNumber"
+      [class.hover:bg-gray-50]="page !== pageNumber">
+      {{ page }}
+    </button>
+  </ng-container>
+
+  <!-- Next -->
+  <button type="button" (click)="onPageChange(pageNumber + 1)" [disabled]="pageNumber === totalPages"
+    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-700 shadow-sm transition-all hover:bg-gray-50 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
+    <app-icon icon="chevron-right" classNames="h-4 w-4"></app-icon>
+  </button>
+</div>

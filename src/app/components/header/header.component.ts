@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { ClickOutsideAccountDirective } from './../../directives/click-outside-account.directive';
 import { AuthService } from './../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -27,7 +28,8 @@ import { AuthApi } from '../../api/auth.api';
     IconComponent,
     ClickOutsideCategoryFlyoutDirective,
     ClickOutsideAccountDirective,
-    ToIterablePipe
+    ToIterablePipe,
+    FormsModule
   ],
   providers: [CategoryApi],
   templateUrl: './header.component.html',
@@ -38,6 +40,7 @@ export class HeaderComponent implements OnInit {
   hideMobileMenu = true;
   isDropCartOpened = false;
   isLoggedIn = false;
+  isAdmin = false;
   categoryTree: CategoryTree[] = [];
   brands: string[] = [];
   cartSummary$!: Observable<CartSummary>;
@@ -58,6 +61,8 @@ export class HeaderComponent implements OnInit {
     }
   ];
 
+  searchTerm = '';
+
   constructor(
     private readonly authService: AuthService,
     public readonly cartService: CartService,
@@ -65,19 +70,50 @@ export class HeaderComponent implements OnInit {
     private readonly authApi: AuthApi,
     private readonly router: Router
   ) {
-    this.isLoggedIn = this.authService.loggedIn();
+    this.authApi.user$.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.isAdmin = this.authService.roleMatch(['Admin']);
+      
+      // Update menu if admin status changed
+      this.updateAccountMenu();
+    });
+  }
+
+  onSearch(): void {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/shop'], {
+        queryParams: { search: this.searchTerm.trim() }
+      });
+    }
   }
   async ngOnInit(): Promise<void> {
     this.cartSummary$ = this.cartService.cartSummary$;
     try {
       this.categoryTree = await firstValueFrom(
-        this.categoryApi.getcategoryTree()
+        this.categoryApi.getCategoryTree()
       );
+
     } catch (error) {
       handleError(null, error);
     }
 
     this.brands = ['Adidas', 'Hugo Boss', 'Zara', 'Gucci', 'H&M', 'Dior'];
+  }
+
+  private updateAccountMenu(): void {
+    // Reset menu
+    this.accountMenu = [
+      { label: 'Account settings', navigation: 'account' },
+      { label: 'Order Info', navigation: 'account/orders' },
+      { label: 'Sign out', navigation: 'signout' }
+    ];
+
+    if (this.isAdmin) {
+      this.accountMenu.unshift({
+        label: 'Admin Panel',
+        navigation: 'admin'
+      });
+    }
   }
 
   updateCategorySelection(option: string): void {
@@ -111,9 +147,7 @@ export class HeaderComponent implements OnInit {
   onAccountMenuItemClick(menuItem: any) {
     if (menuItem.navigation === 'signout') {
       this.authApi.setUser(null);
-      this.router.navigate(['/']).then(() => {
-        window.location.reload();
-      });
+      this.router.navigate(['/']);
     } else {
       this.router.navigate([menuItem.navigation]);
       this.hideAccountMenu = true;

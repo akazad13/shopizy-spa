@@ -43,10 +43,10 @@ import { CardInfo } from '../../interfaces/CardInfo';
         margin-bottom: 20.35%;
       }
     }
-  `,
-  providers: [PaymentApi]
+  `
 })
 export class PaymentComponent implements OnInit, OnDestroy {
+
   @ViewChild(StripeCardNumberComponent) card!: StripeCardNumberComponent;
   orderId!: string;
   order!: OrderDetails;

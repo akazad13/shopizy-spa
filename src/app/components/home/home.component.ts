@@ -22,8 +22,7 @@ import {
     CallToActionComponent,
     ShopFeaturesComponent,
     BrandsComponent,
-    FeatureProductsComponent,
-    ProductsBlockComponent
+    FeatureProductsComponent
   ],
   templateUrl: './home.component.html',
   styles: ``,
@@ -45,7 +44,7 @@ export class HomeComponent implements OnInit {
     products: []
   };
 
-  constructor(private readonly productApi: ProductApi) {}
+  constructor(private readonly productApi: ProductApi) { }
   ngOnInit(): void {
     this.getTopCollection();
     this.getMenSection();
@@ -67,7 +66,7 @@ export class HomeComponent implements OnInit {
       const menCollection = await firstValueFrom(
         this.productApi.getProducts(filters)
       );
-      this.menProducts.products = menCollection;
+      this.menProducts.products = menCollection.items;
     } catch (error) {
       handleError(null, error);
     }
@@ -88,7 +87,7 @@ export class HomeComponent implements OnInit {
       const womenCollection = await firstValueFrom(
         this.productApi.getProducts(filters)
       );
-      this.womenProducts.products = womenCollection;
+      this.womenProducts.products = womenCollection.items;
     } catch (error) {
       handleError(null, error);
     }
@@ -104,7 +103,7 @@ export class HomeComponent implements OnInit {
       const topCollection = await firstValueFrom(
         this.productApi.getProducts(filters)
       );
-      this.topProducts.products = topCollection;
+      this.topProducts.products = topCollection.items;
     } catch (error) {
       handleError(null, error);
     }

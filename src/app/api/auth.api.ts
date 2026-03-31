@@ -65,4 +65,16 @@ export class AuthApi {
 
     localStorage.setItem('user', JSON.stringify(user));
   }
+
+  enable2fa(): Observable<any> {
+    return this.http.post<any>(`${this.url}/auth/2fa/enable`, {});
+  }
+
+  disable2fa(): Observable<any> {
+    return this.http.post<any>(`${this.url}/auth/2fa/disable`, {});
+  }
+
+  verify2fa(code: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/auth/2fa/verify`, { code });
+  }
 }

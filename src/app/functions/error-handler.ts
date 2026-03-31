@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
-import * as alertify from 'alertifyjs';
 
 export function handleError(form: FormGroup | null, e: any): void {
   let errorMessage = '';
@@ -50,7 +49,5 @@ export function handleError(form: FormGroup | null, e: any): void {
     form.setErrors({
       server: errorMessage?.trim()
     });
-  } else {
-    alertify.error(errorMessage);
   }
 }

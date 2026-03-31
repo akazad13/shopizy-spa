@@ -1,6 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/alertifyjs/build/css/alertify.min.css";
-@import "../node_modules/alertifyjs//build/css/themes/default.min.css";
 
 @tailwind base;
 @tailwind components;
@@ -17,34 +15,33 @@
     animation-name: fadeIn;
   }
   
-  .slide-in-from-top-2 {
-    animation-name: slideInFromTop2;
+  .zoom-in-95 {
+    animation-name: zoomIn95;
+  }
+  
+  .slide-in-from-bottom-4 {
+    animation-name: slideInFromBottom4;
   }
 
-  .slide-in-from-bottom-2 {
-    animation-name: slideInFromBottom2;
+  .shake-animation {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
   }
 
-  .slide-in-from-right-2 {
-    animation-name: slideInFromRight2;
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
   }
 
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
   }
 
-  .glass-dark {
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0; /* slate-200 */
+    border-radius: 9999px;
   }
 
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600;
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1; /* slate-300 */
   }
 }
 
@@ -53,18 +50,20 @@
   to { opacity: 1; }
 }
 
-@keyframes slideInFromTop2 {
-  from { transform: translateY(-1rem); opacity: 0; }
+@keyframes zoomIn95 {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInFromBottom4 {
+  from { transform: translateY(2rem); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes slideInFromBottom2 {
-  from { transform: translateY(1rem); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideInFromRight2 {
-  from { transform: translateX(1rem); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 

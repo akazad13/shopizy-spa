@@ -22,16 +22,32 @@ export function createProductApiSpy() {
 }
 
 export function createCategoryApiSpy() {
-  const s = jasmine.createSpyObj('CategoryApi', ['getCategories']);
+  const s = jasmine.createSpyObj('CategoryApi', ['getCategories', 'getCategoryTree']);
   s.getCategories.and.returnValue(of([]));
+  s.getCategoryTree.and.returnValue(of([]));
   return s;
 }
 
 export function createAuthApiSpy() {
   const s = jasmine.createSpyObj('AuthApi', ['signin', 'signup', 'setUser']);
+  s.user$ = of(null);
   s.signin.and.returnValue(of({}));
   s.signup.and.returnValue(of({}));
-  s.setUser && s.setUser.and && s.setUser.and.returnValue(null);
+  if (s.setUser && s.setUser.and) {
+    s.setUser.and.returnValue(null);
+  }
+  return s;
+}
+
+export function createAuthServiceSpy() {
+  const s = jasmine.createSpyObj('AuthService', ['roleMatch', 'getCurrentUserToken']);
+  s.roleMatch.and.returnValue(false);
+  return s;
+}
+
+export function createCartServiceSpy() {
+  const s = jasmine.createSpyObj('CartService', ['addToCart', 'removeFromCart', 'clearCart']);
+  s.cartSummary$ = of({ totalItems: 0, totalPrice: 0 });
   return s;
 }
 
