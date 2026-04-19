@@ -17,7 +17,7 @@ export class AdminOrderDetailsComponent implements OnInit {
   order: OrderDetails | null = null;
   loading: boolean = true;
   savingStatus: boolean = false;
-  
+
   availableStatuses = [
     { value: 1, label: 'Pending' },
     { value: 2, label: 'Processing' },
@@ -63,10 +63,10 @@ export class AdminOrderDetailsComponent implements OnInit {
   updateStatus(): void {
     if (!this.orderId) return;
     this.savingStatus = true;
-    
+
     // Convert generic text to integer string equivalent if passing numerical enum structure
     const mapped = this.mapStatusValue(this.selectedStatus);
-    
+
     this.orderApi.updateOrderStatus(this.orderId, mapped).subscribe({
       next: () => {
         this.toast.success('Order status updated successfully');
@@ -79,15 +79,28 @@ export class AdminOrderDetailsComponent implements OnInit {
       }
     });
   }
-  
+
   // Backend expects number but often passes text for OrderStatus
   mapStatusValue(val: any): number {
     if (typeof val === 'number') return val;
     if (!isNaN(Number(val))) return Number(val);
-    
+
     const mapping: any = {
-      'Pending': 1, 'Processing': 2, 'Shipping': 3, 'Delivered': 4, 'Cancelled': 5, 'Refunded': 6
+      Pending: 1,
+      Processing: 2,
+      Shipping: 3,
+      Delivered: 4,
+      Cancelled: 5,
+      Refunded: 6
     };
     return mapping[val] || 1;
+  }
+
+  getItemsSubtotal(): number {
+    if (!this.order?.orderItems?.length) return 0;
+    return this.order.orderItems.reduce(
+      (sum, item) => sum + item.unitPrice.amount * item.quantity,
+      0
+    );
   }
 }

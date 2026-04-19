@@ -16,14 +16,18 @@ import { map } from 'rxjs/operators';
 })
 export class OrderApi {
   private readonly url = `${environment.apiUrl}/api/v1.0`;
-  private get userId(): string { return this.tokenService.getCurrentUserId()!; }
+  private get userId(): string {
+    return this.tokenService.getCurrentUserId()!;
+  }
 
-  constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) { }
+  constructor(
+    private readonly http: HttpClient,
+    private readonly tokenService: TokenService
+  ) {}
 
   getOrders(filters: OrderQueryFilters): Observable<Order[]> {
     let params = new HttpParams();
-    const { startDate, endDate, pageNumber, pageSize, status } =
-      filters;
+    const { startDate, endDate, pageNumber, pageSize, status } = filters;
 
     if (startDate != null) {
       params = params.append('StartDate', startDate);
@@ -41,31 +45,33 @@ export class OrderApi {
       .append('PageNumber', pageNumber)
       .append('PageSize', pageSize);
 
-    return this.http.get<any>(`${this.url}/users/${this.userId}/orders`, {
-      params
-    }).pipe(
-      map((res: any) => {
-        if (Array.isArray(res)) return res;
-        if (res?.$values) return res.$values;
-        if (res?.items?.$values) return res.items.$values;
-        if (Array.isArray(res?.items)) return res.items;
-        return [];
+    return this.http
+      .get<any>(`${this.url}/users/${this.userId}/orders`, {
+        params
       })
-    );
+      .pipe(
+        map((res: any) => {
+          if (Array.isArray(res)) return res;
+          if (res?.$values) return res.$values;
+          if (res?.items?.$values) return res.items.$values;
+          if (Array.isArray(res?.items)) return res.items;
+          return [];
+        })
+      );
   }
-
 
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<any>(`${this.url}/users/${this.userId}/orders/${orderId}`).pipe(
-      map(order => {
-        if (order && order.orderItems && order.orderItems.$values) {
-          order.orderItems = order.orderItems.$values;
-        }
-        return order;
-      })
-    );
+    return this.http
+      .get<any>(`${this.url}/users/${this.userId}/orders/${orderId}`)
+      .pipe(
+        map((order) => {
+          if (order && order.orderItems && order.orderItems.$values) {
+            order.orderItems = order.orderItems.$values;
+          }
+          return order;
+        })
+      );
   }
-
 
   createOrder(
     orderItems: {
@@ -109,18 +115,27 @@ export class OrderApi {
     if (startDate != null) params = params.append('StartDate', startDate);
     if (endDate != null) params = params.append('EndDate', endDate);
     if (status != null) params = params.append('Status', status);
-    
-    params = params.append('PageNumber', pageNumber).append('PageSize', pageSize);
+
+    params = params
+      .append('PageNumber', pageNumber)
+      .append('PageSize', pageSize);
 
     return this.http.get<any>(`${this.url}/admin/orders`, { params }).pipe(
-      map((res: any) => res?.$values || res || [])
+      map((res: any) => {
+        if (Array.isArray(res)) return res as Order[];
+        if (res?.$values && Array.isArray(res.$values))
+          return res.$values as Order[];
+        if (res?.items && Array.isArray(res.items)) return res.items as Order[];
+        if (res?.items?.$values && Array.isArray(res.items.$values))
+          return res.items.$values as Order[];
+        return [];
+      })
     );
   }
 
-
   getGlobalOrder(orderId: string): Observable<Order> {
     return this.http.get<any>(`${this.url}/admin/orders/${orderId}`).pipe(
-      map(order => {
+      map((order) => {
         if (order && order.orderItems && order.orderItems.$values) {
           order.orderItems = order.orderItems.$values;
         }
@@ -129,27 +144,45 @@ export class OrderApi {
     );
   }
 
-
-
-  updateOrderStatus(orderId: string, status: number): Observable<SuccessResponse> {
-    return this.http.patch<SuccessResponse>(`${this.url}/admin/orders/${orderId}/status`, status);
+  updateOrderStatus(
+    orderId: string,
+    status: number
+  ): Observable<SuccessResponse> {
+    return this.http.patch<SuccessResponse>(
+      `${this.url}/admin/orders/${orderId}/status`,
+      status
+    );
   }
 
-  bulkUpdateOrderStatus(orderIds: string[], status: number): Observable<SuccessResponse> {
-    return this.http.post<SuccessResponse>(`${this.url}/admin/orders/bulk-status`, { orderIds, status });
+  bulkUpdateOrderStatus(
+    orderIds: string[],
+    status: number
+  ): Observable<SuccessResponse> {
+    return this.http.post<SuccessResponse>(
+      `${this.url}/admin/orders/bulk-status`,
+      { orderIds, status }
+    );
   }
 
   addShipment(orderId: string, data: any): Observable<any> {
-    return this.http.post<any>(`${this.url}/admin/orders/${orderId}/shipments`, data);
+    return this.http.post<any>(
+      `${this.url}/admin/orders/${orderId}/shipments`,
+      data
+    );
   }
 
   updateShipment(orderId: string, data: any): Observable<any> {
-    return this.http.patch<any>(`${this.url}/admin/orders/${orderId}/shipments`, data);
+    return this.http.patch<any>(
+      `${this.url}/admin/orders/${orderId}/shipments`,
+      data
+    );
   }
 
   // --- USER SHIPMENTS ---
 
   getShipment(orderId: string): Observable<any> {
-    return this.http.get<any>(`${this.url}/users/${this.userId}/orders/${orderId}/shipments`);
+    return this.http.get<any>(
+      `${this.url}/users/${this.userId}/orders/${orderId}/shipments`
+    );
   }
 }

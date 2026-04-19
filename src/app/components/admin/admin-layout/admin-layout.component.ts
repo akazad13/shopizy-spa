@@ -6,9 +6,14 @@ import { AdminSidebarComponent } from '../admin-sidebar/admin-sidebar.component'
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [CommonModule, RouterModule, AdminHeaderComponent, AdminSidebarComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    AdminHeaderComponent,
+    AdminSidebarComponent
+  ],
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.css'
 })
-export class AdminLayoutComponent {
-}
+export class AdminLayoutComponent {}

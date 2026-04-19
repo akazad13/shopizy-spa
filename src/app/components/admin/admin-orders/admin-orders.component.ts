@@ -15,6 +15,15 @@ import { ToastService } from '../../../services/toast.service';
 export class AdminOrdersComponent implements OnInit {
   orders: Order[] = [];
   loading: boolean = true;
+  totalRevenue = 0;
+  statusCounts = {
+    Pending: 0,
+    Processing: 0,
+    Shipping: 0,
+    Delivered: 0,
+    Cancelled: 0,
+    Refunded: 0
+  };
   orderStatusMap: any = {
     1: 'Pending',
     2: 'Processing',
@@ -24,7 +33,10 @@ export class AdminOrdersComponent implements OnInit {
     6: 'Refunded'
   };
 
-  constructor(private orderApi: OrderApi, private toast: ToastService) {}
+  constructor(
+    private orderApi: OrderApi,
+    private toast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadOrders();
@@ -38,7 +50,33 @@ export class AdminOrdersComponent implements OnInit {
 
     this.orderApi.getAllOrders(filters).subscribe({
       next: (res) => {
-        this.orders = res;
+        this.orders = Array.isArray(res)
+          ? res
+          : ((res as any)?.$values ??
+            (res as any)?.items?.$values ??
+            (res as any)?.items ??
+            []);
+        this.totalRevenue = this.orders.reduce(
+          (sum, order) => sum + Number(order.total?.amount || 0),
+          0
+        );
+        this.statusCounts = {
+          Pending: 0,
+          Processing: 0,
+          Shipping: 0,
+          Delivered: 0,
+          Cancelled: 0,
+          Refunded: 0
+        };
+
+        for (const order of this.orders) {
+          const status = this.getStatusName(order.orderStatus);
+          if (
+            this.statusCounts[status as keyof typeof this.statusCounts] != null
+          ) {
+            this.statusCounts[status as keyof typeof this.statusCounts]++;
+          }
+        }
         this.loading = false;
       },
       error: () => {

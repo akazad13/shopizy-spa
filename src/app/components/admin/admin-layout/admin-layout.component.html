@@ -1,9 +1,14 @@
-<div class="flex h-screen overflow-hidden bg-slate-50/50">
-  <app-admin-sidebar></app-admin-sidebar>
-  <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
-    <app-admin-header></app-admin-header>
-    <main class="w-full flex-1">
-      <router-outlet></router-outlet>
-    </main>
+<div class="min-h-screen bg-slate-50 text-slate-900">
+  <div class="flex min-h-screen">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div class="flex min-h-screen flex-1 flex-col overflow-hidden">
+      <app-admin-header></app-admin-header>
+      <main class="flex-1 px-4 py-6 sm:px-6 lg:px-8 xl:px-10">
+        <div class="mx-auto w-full max-w-[1600px]">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
   </div>
 </div>

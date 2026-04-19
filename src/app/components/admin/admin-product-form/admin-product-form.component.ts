@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductApi } from '../../../api/product.api';
 import { ToastService } from '../../../services/toast.service';
@@ -21,7 +26,7 @@ export class AdminProductFormComponent implements OnInit {
   productId: string | null = null;
   loading: boolean = false;
   submitting: boolean = false;
-  categories: CategoryTree[] = [];  // flat list for dropdown
+  categories: CategoryTree[] = []; // flat list for dropdown
   brands: any[] = [];
 
   // For image management in edit mode
@@ -30,8 +35,31 @@ export class AdminProductFormComponent implements OnInit {
   selectedImageFile: File | null = null;
 
   // For color and size checkboxes
-  availableColorsList: string[] = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow', 'Pink', 'Purple', 'Orange', 'Gray', 'Brown', 'Cyan', 'Magenta'];
-  availableSizesList: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size'];
+  availableColorsList: string[] = [
+    'Red',
+    'Blue',
+    'Green',
+    'Black',
+    'White',
+    'Yellow',
+    'Pink',
+    'Purple',
+    'Orange',
+    'Gray',
+    'Brown',
+    'Cyan',
+    'Magenta'
+  ];
+  availableSizesList: string[] = [
+    'XS',
+    'S',
+    'M',
+    'L',
+    'XL',
+    'XXL',
+    '3XL',
+    'One Size'
+  ];
   selectedColors: string[] = [];
   selectedSizes: string[] = [];
 
@@ -42,7 +70,7 @@ export class AdminProductFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toast: ToastService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -63,10 +91,11 @@ export class AdminProductFormComponent implements OnInit {
       description: ['', Validators.required],
       categoryId: ['', Validators.required],
       brandId: [null],
-      price: [0, [Validators.required, Validators.min(0.01)]],
+      sku: ['', Validators.required],
+      unitPrice: [0, [Validators.required, Validators.min(0.01)]],
       discount: [0, [Validators.min(0), Validators.max(100)]],
       stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      tagsText: [''],
+      tagsText: ['']
     });
   }
 
@@ -78,7 +107,6 @@ export class AdminProductFormComponent implements OnInit {
       error: () => this.toast.error('Failed to load categories')
     });
   }
-
 
   flattenCategories(nodes: CategoryTree[], depth = 0): CategoryTree[] {
     const result: CategoryTree[] = [];
@@ -92,16 +120,19 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   loadBrands(): void {
-    this.productApi.getBrands().pipe(
-      map((res: any) => {
-        if (Array.isArray(res)) return res;
-        if (res?.$values) return res.$values;
-        return [];
-      })
-    ).subscribe({
-      next: (brands) => this.brands = brands,
-      error: () => this.toast.error('Failed to load brands')
-    });
+    this.productApi
+      .getBrands()
+      .pipe(
+        map((res: any) => {
+          if (Array.isArray(res)) return res;
+          if (res?.$values) return res.$values;
+          return [];
+        })
+      )
+      .subscribe({
+        next: (brands) => (this.brands = brands),
+        error: () => this.toast.error('Failed to load brands')
+      });
   }
 
   loadProduct(id: string): void {
@@ -116,10 +147,11 @@ export class AdminProductFormComponent implements OnInit {
           description: product.description || '',
           categoryId: product.categoryId || '',
           brandId: product.brand?.id || null,
-          price: +product.price || 0,
+          sku: product.sku || '',
+          unitPrice: Number((product as any).unitPrice ?? product.price ?? 0),
           discount: +product.discount || 0,
           stockQuantity: +product.stockQuantity || 0,
-          tags: product.tags,
+          tagsText: product.tags || ''
         });
 
         // Set selected colors and sizes
@@ -145,7 +177,10 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   splitCommaSeparated(val: string): string[] {
-    return val.split(',').map(s => s.trim()).filter(s => !!s);
+    return val
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => !!s);
   }
 
   onColorToggle(color: string): void {
@@ -184,18 +219,20 @@ export class AdminProductFormComponent implements OnInit {
   uploadImage(): void {
     if (!this.productId || !this.selectedImageFile) return;
     this.uploadingImage = true;
-    this.productApi.addProductImage(this.productId, this.selectedImageFile).subscribe({
-      next: (img) => {
-        this.existingImages.push(img);
-        this.selectedImageFile = null;
-        this.uploadingImage = false;
-        this.toast.success('Image uploaded successfully');
-      },
-      error: () => {
-        this.uploadingImage = false;
-        this.toast.error('Failed to upload image');
-      }
-    });
+    this.productApi
+      .addProductImage(this.productId, this.selectedImageFile)
+      .subscribe({
+        next: (img) => {
+          this.existingImages.push(img);
+          this.selectedImageFile = null;
+          this.uploadingImage = false;
+          this.toast.success('Image uploaded successfully');
+        },
+        error: () => {
+          this.uploadingImage = false;
+          this.toast.error('Failed to upload image');
+        }
+      });
   }
 
   deleteImage(imageId: string): void {
@@ -203,7 +240,9 @@ export class AdminProductFormComponent implements OnInit {
     if (!confirm('Remove this image?')) return;
     this.productApi.deleteProductImage(this.productId, imageId).subscribe({
       next: () => {
-        this.existingImages = this.existingImages.filter(i => i.productImageId !== imageId);
+        this.existingImages = this.existingImages.filter(
+          (i) => i.productImageId !== imageId
+        );
         this.toast.success('Image removed');
       },
       error: () => this.toast.error('Failed to remove image')
@@ -226,27 +265,31 @@ export class AdminProductFormComponent implements OnInit {
       description: v.description,
       categoryId: v.categoryId,
       brandId: v.brandId || null,
-      price: Number(v.price),
+      sku: v.sku,
+      price: Number(v.unitPrice),
+      unitPrice: Number(v.unitPrice),
       discount: Number(v.discount),
       stockQuantity: Number(v.stockQuantity),
       colors: this.selectedColors.join(','),
       sizes: this.selectedSizes.join(','),
       tags: v.tagsText,
-      images: this.existingImages.map(i => i.productImageId)
+      images: this.existingImages.map((i) => i.productImageId)
     };
 
     if (this.isEditMode && this.productId) {
       const updatePayload = { ...payload, productId: this.productId };
-      this.productApi.updateProduct(this.productId, updatePayload as any).subscribe({
-        next: () => {
-          this.toast.success('Product updated successfully!');
-          this.router.navigate(['/admin/products']);
-        },
-        error: () => {
-          this.toast.error('Error updating product.');
-          this.submitting = false;
-        }
-      });
+      this.productApi
+        .updateProduct(this.productId, updatePayload as any)
+        .subscribe({
+          next: () => {
+            this.toast.success('Product updated successfully!');
+            this.router.navigate(['/admin/products']);
+          },
+          error: () => {
+            this.toast.error('Error updating product.');
+            this.submitting = false;
+          }
+        });
     } else {
       this.productApi.createProduct(payload).subscribe({
         next: () => {

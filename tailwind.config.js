@@ -1,20 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  darkMode: "class",
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
-      gridTemplateRows: {
-        '[auto,auto,1fr]': 'auto auto 1fr',
+      fontFamily: {
+        sans: ["Inter", "sans-serif"]
       },
-    },
+      gridTemplateRows: {
+        "[auto,auto,1fr]": "auto auto 1fr"
+      }
+    }
   },
   corePlugins: {
-    aspectRatio: false,
+    aspectRatio: false
   },
-  plugins: [
-    require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/forms')
-  ],
-}
-
+  plugins: [require("@tailwindcss/aspect-ratio"), require("@tailwindcss/forms")]
+};

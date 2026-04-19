@@ -12,7 +12,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class AdminCategoriesComponent implements OnInit {
   categories: any[] = [];
+  categoryTree: any[] = [];
   loading = true;
+  topLevelCategories = 0;
   categoryForm = {
     id: '',
     name: '',
@@ -22,7 +24,10 @@ export class AdminCategoriesComponent implements OnInit {
   isEditMode = false;
   showForm = false;
 
-  constructor(private categoryApi: CategoryApi, private toast: ToastService) {}
+  constructor(
+    private categoryApi: CategoryApi,
+    private toast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -32,7 +37,16 @@ export class AdminCategoriesComponent implements OnInit {
     this.loading = true;
     this.categoryApi.getCategories().subscribe({
       next: (res) => {
-        this.categories = res;
+        this.categories = Array.isArray(res)
+          ? res
+          : ((res as any)?.$values ??
+            (res as any)?.items?.$values ??
+            (res as any)?.items ??
+            []);
+        this.topLevelCategories = this.categories.filter(
+          (c) => !c.parentId
+        ).length;
+        this.buildTree();
         this.loading = false;
       },
       error: () => {
@@ -54,11 +68,11 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   onEdit(cat: any) {
-    this.categoryForm = { 
-      id: cat.id, 
-      name: cat.name, 
-      description: cat.description || '', 
-      parentId: cat.parentId 
+    this.categoryForm = {
+      id: cat.id,
+      name: cat.name,
+      description: cat.description || '',
+      parentId: cat.parentId
     };
     this.isEditMode = true;
     this.showForm = true;
@@ -76,13 +90,46 @@ export class AdminCategoriesComponent implements OnInit {
     }
   }
 
+  buildTree(): void {
+    const map = new Map<string, any>();
+    const roots: any[] = [];
+
+    // Create entries with expanded state and children array
+    this.categories.forEach((cat) => {
+      map.set(cat.id, {
+        ...cat,
+        children: [],
+        expanded: false
+      });
+    });
+
+    // Build parent-child relationships
+    this.categories.forEach((cat) => {
+      const node = map.get(cat.id);
+      if (cat.parentId) {
+        const parent = map.get(cat.parentId);
+        if (parent) {
+          parent.children.push(node);
+        }
+      } else {
+        roots.push(node);
+      }
+    });
+
+    this.categoryTree = roots;
+  }
+
+  toggleExpanded(node: any): void {
+    node.expanded = !node.expanded;
+  }
+
   onSubmit() {
     if (!this.categoryForm.name) return;
 
-    const payload = { 
-      name: this.categoryForm.name, 
+    const payload = {
+      name: this.categoryForm.name,
       description: this.categoryForm.description,
-      parentId: this.categoryForm.parentId 
+      parentId: this.categoryForm.parentId
     };
 
     if (this.isEditMode) {

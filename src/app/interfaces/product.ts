@@ -57,7 +57,9 @@ export interface AdminProductCreateUpdate {
   description: string;
   categoryId: string;
   brandId: string | null;
+  sku: string;
   price: number;
+  unitPrice: number;
   discount: number;
   stockQuantity: number;
   colors: string;
