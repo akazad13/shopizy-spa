@@ -12,11 +12,12 @@ import { WishlistService } from '../../../services/wishlist.service';
 import { RatingComponent } from '../rating/rating.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Subscription } from 'rxjs';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent, FormsModule],
+  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent, FormsModule, SkeletonLoaderComponent],
   templateUrl: './product-details.component.html',
   styles: `
     .text-red-500 {
@@ -40,6 +41,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   reviewComment = '';
   isSubmittingReview = false;
   isLoggedIn = false;
+  loading = true;
 
   maxRating = 5.0;
   starsArray: string[] = [];
@@ -74,6 +76,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
         this.calculateStarNumberArray();
       }
+      this.loading = false;
     });
   }
 

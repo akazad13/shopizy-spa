@@ -20,7 +20,11 @@
     </div>
   </section>
 
-  <div *ngIf="loading" class="py-20 text-center text-sm text-slate-500">Loading...</div>
+  <div *ngIf="loading" class="space-y-6">
+    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <app-skeleton-loader type="form" [rows]="4"></app-skeleton-loader>
+    </div>
+  </div>
 
   <div *ngIf="!loading && order" class="grid gap-6 xl:grid-cols-3">
     <div class="space-y-6 xl:col-span-2">

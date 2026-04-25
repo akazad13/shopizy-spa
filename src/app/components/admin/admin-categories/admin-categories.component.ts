@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { CategoryApi } from '../../../api/category.api';
 import { ToastService } from '../../../services/toast.service';
 import { FormsModule } from '@angular/forms';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SkeletonLoaderComponent],
   templateUrl: './admin-categories.component.html'
 })
 export class AdminCategoriesComponent implements OnInit {

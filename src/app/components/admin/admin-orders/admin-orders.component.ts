@@ -5,10 +5,11 @@ import { OrderApi } from '../../../api/order.api';
 import { Order } from '../../../interfaces/Order';
 import { OrderQueryFilters } from '../../../models/QueryFilters';
 import { ToastService } from '../../../services/toast.service';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-orders',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './admin-orders.component.html',
   styleUrl: './admin-orders.component.css'
 })

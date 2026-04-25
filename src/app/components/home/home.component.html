@@ -2,8 +2,8 @@
 <app-shop-features></app-shop-features>
 <app-feature-products></app-feature-products>
 <!-- <app-top-categories></app-top-categories> -->
-<app-products-block [column]="topProducts"></app-products-block>
+<app-products-block [column]="topProducts" [loading]="topProductsLoading"></app-products-block>
 <app-promotion></app-promotion>
-<app-products-block [column]="menProducts"></app-products-block>
-<app-products-block [column]="womenProducts"></app-products-block>
+<app-products-block [column]="menProducts" [loading]="menProductsLoading"></app-products-block>
+<app-products-block [column]="womenProducts" [loading]="womenProductsLoading"></app-products-block>
 <app-brands></app-brands>

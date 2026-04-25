@@ -5,10 +5,11 @@ import { OrderApi } from '../../../api/order.api';
 import { OrderDetails } from '../../../interfaces/Order';
 import { ToastService } from '../../../services/toast.service';
 import { FormsModule } from '@angular/forms';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-order-details',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, SkeletonLoaderComponent],
   templateUrl: './admin-order-details.component.html',
   styleUrl: './admin-order-details.component.css'
 })

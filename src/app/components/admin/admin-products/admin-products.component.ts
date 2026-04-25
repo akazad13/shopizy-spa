@@ -8,11 +8,18 @@ import { ProductQueryFilters } from '../../../models/QueryFilters';
 import { ToastService } from '../../../services/toast.service';
 import { CategoryApi } from '../../../api/category.api';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, PaginationComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    PaginationComponent,
+    SkeletonLoaderComponent
+  ],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
@@ -55,7 +62,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   getCategoryName(id: string): string {
-    const cat = this.categories.find(c => c.id === id);
+    const cat = this.categories.find((c) => c.id === id);
     return cat ? cat.name : 'Uncategorized';
   }
 
@@ -64,17 +71,18 @@ export class AdminProductsComponent implements OnInit {
     this.productApi.getProducts(this.filters).subscribe({
       next: (res) => {
         this.products = res.items;
-        
+
         // Use backend's totalPages if provided, otherwise estimate it
         if (res.totalPages && res.totalPages > 1) {
           this.totalPages = res.totalPages;
         } else {
           // Estimate logic: if page is full, assume there's at least one more page
-          this.totalPages = this.products.length >= this.filters.pageSize
-            ? this.filters.pageNumber + 1
-            : this.filters.pageNumber;
+          this.totalPages =
+            this.products.length >= this.filters.pageSize
+              ? this.filters.pageNumber + 1
+              : this.filters.pageNumber;
         }
-        
+
         this.loading = false;
       },
       error: () => {
@@ -87,7 +95,9 @@ export class AdminProductsComponent implements OnInit {
   applySearch(): void {
     this.filters.pageNumber = 1;
     this.filters.name = this.searchName.trim() || null;
-    this.filters.categoryIds = this.selectedCategoryId ? [this.selectedCategoryId] : null;
+    this.filters.categoryIds = this.selectedCategoryId
+      ? [this.selectedCategoryId]
+      : null;
     this.loadProducts();
   }
 
@@ -106,7 +116,12 @@ export class AdminProductsComponent implements OnInit {
   }
 
   deleteProduct(productId: string): void {
-    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+    if (
+      !confirm(
+        'Are you sure you want to delete this product? This action cannot be undone.'
+      )
+    )
+      return;
     this.productApi.deleteProduct(productId).subscribe({
       next: () => {
         this.toast.success('Product deleted successfully');

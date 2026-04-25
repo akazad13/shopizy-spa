@@ -62,8 +62,12 @@
 
       <div class="mt-6 flow-root sm:mt-8">
         <div class="divide-y divide-gray-200 dark:divide-gray-700">
+          <div *ngIf="loading" class="rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
+          </div>
+
           <ng-container *ngFor="let order of orders">
-            <div class="order-item flex flex-wrap items-center gap-y-4 py-6">
+            <div *ngIf="!loading" class="order-item flex flex-wrap items-center gap-y-4 py-6">
 
               <div class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                 <div class="text-base font-medium text-gray-500 dark:text-gray-400">Order ID:</div>
@@ -111,7 +115,7 @@
             </div>
           </ng-container>
 
-          <div *ngIf="orders.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+          <div *ngIf="!loading && orders.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
             <app-icon icon="truck" classNames="h-16 w-16 text-gray-200"></app-icon>
             <h3 class="mt-4 text-lg font-bold text-gray-900">No orders found</h3>
             <p class="mt-1 text-sm text-gray-500">You haven't placed any orders yet. Start shopping to see them here.
@@ -123,7 +127,7 @@
         </div>
       </div>
 
-      <div *ngIf="orders.length > 0" class="mt-8 flex justify-center">
+      <div *ngIf="!loading && orders.length > 0" class="mt-8 flex justify-center">
         <app-pagination [pageNumber]="filters.pageNumber" [totalPages]="totalPages"
           (pageChanged)="onPageChange($event)">
         </app-pagination>

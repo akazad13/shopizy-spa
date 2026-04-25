@@ -29,6 +29,10 @@ import {
   providers: [ProductApi]
 })
 export class HomeComponent implements OnInit {
+  topProductsLoading = true;
+  womenProductsLoading = true;
+  menProductsLoading = true;
+
   topProducts: BlockProducts = {
     title: 'Our Top Products',
     products: []
@@ -44,7 +48,7 @@ export class HomeComponent implements OnInit {
     products: []
   };
 
-  constructor(private readonly productApi: ProductApi) { }
+  constructor(private readonly productApi: ProductApi) {}
   ngOnInit(): void {
     this.getTopCollection();
     this.getMenSection();
@@ -52,6 +56,7 @@ export class HomeComponent implements OnInit {
   }
 
   async getMenSection() {
+    this.menProductsLoading = true;
     try {
       const filters = new ProductQueryFilters();
       filters.categoryIds = [
@@ -69,10 +74,13 @@ export class HomeComponent implements OnInit {
       this.menProducts.products = menCollection.items;
     } catch (error) {
       handleError(null, error);
+    } finally {
+      this.menProductsLoading = false;
     }
   }
 
   async getWomenSection() {
+    this.womenProductsLoading = true;
     try {
       const filters = new ProductQueryFilters();
       filters.categoryIds = [
@@ -90,10 +98,13 @@ export class HomeComponent implements OnInit {
       this.womenProducts.products = womenCollection.items;
     } catch (error) {
       handleError(null, error);
+    } finally {
+      this.womenProductsLoading = false;
     }
   }
 
   async getTopCollection() {
+    this.topProductsLoading = true;
     try {
       const filters = new ProductQueryFilters();
       filters.pageNumber = 1;
@@ -106,6 +117,8 @@ export class HomeComponent implements OnInit {
       this.topProducts.products = topCollection.items;
     } catch (error) {
       handleError(null, error);
+    } finally {
+      this.topProductsLoading = false;
     }
   }
 }

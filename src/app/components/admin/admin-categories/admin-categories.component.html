@@ -59,7 +59,9 @@
       <p class="text-sm text-slate-500">Clean list with edit and delete actions.</p>
     </div>
 
-    <div *ngIf="loading" class="py-20 text-center text-sm text-slate-500">Loading...</div>
+    <div *ngIf="loading" class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
+    </div>
 
     <div *ngIf="!loading && !showForm" class="px-6 py-4">
       <div *ngIf="categoryTree.length === 0" class="py-16 text-center text-sm text-slate-500">No categories found.</div>

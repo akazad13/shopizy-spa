@@ -12,11 +12,17 @@ import { ToastService } from '../../../services/toast.service';
 import { CategoryApi } from '../../../api/category.api';
 import { CategoryTree } from '../../../interfaces/category';
 import { map } from 'rxjs';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    SkeletonLoaderComponent
+  ],
   templateUrl: './admin-product-form.component.html',
   styleUrl: './admin-product-form.component.css'
 })

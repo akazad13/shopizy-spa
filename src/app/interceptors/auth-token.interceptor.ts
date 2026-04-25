@@ -7,12 +7,13 @@ export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
   const tokenService = inject(TokenService);
   const requestUrl = new URL(request.url, window.location.origin);
   const apiBaseUrl = new URL(environment.apiUrl || window.location.origin);
+  const isApiRequest = requestUrl.pathname.startsWith('/api/');
   const isAuthRequest = requestUrl.pathname.startsWith('/api/v1.0/auth');
   const isTargetApiRequest =
     requestUrl.origin === apiBaseUrl.origin ||
     request.url.startsWith(environment.apiUrl);
 
-  if (!isTargetApiRequest || isAuthRequest) {
+  if (!isApiRequest || !isTargetApiRequest || isAuthRequest) {
     return next(request);
   }
 

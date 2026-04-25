@@ -1,14 +1,18 @@
 <!-- Products grid -->
 <div>
+  <div *ngIf="loading" class="rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <app-skeleton-loader type="card" [rows]="2" [columns]="4"></app-skeleton-loader>
+  </div>
+
   <!-- Empty state -->
-  <div *ngIf="products.length === 0" class="flex flex-col items-center justify-center py-20 text-center">
+  <div *ngIf="!loading && products.length === 0" class="flex flex-col items-center justify-center py-20 text-center">
     <app-icon icon="empty-bag" classNames="mb-4 h-14 w-14 text-gray-300"></app-icon>
     <p class="text-base font-medium text-gray-500">No products found</p>
     <p class="mt-1 text-sm text-gray-400">Try adjusting your filters to see results.</p>
   </div>
 
   <!-- Grid -->
-  <div *ngIf="products.length > 0"
+  <div *ngIf="!loading && products.length > 0"
     class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
     <ng-container *ngFor="let product of products">
       <app-product-card [product]="product"></app-product-card>

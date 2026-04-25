@@ -1,3 +1,9 @@
+<div *ngIf="loading" class="space-y-6">
+  <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <app-skeleton-loader type="card" [rows]="4" [columns]="2"></app-skeleton-loader>
+  </div>
+</div>
+
 <div *ngIf="metrics" class="space-y-8 animate-in fade-in duration-500">
   <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

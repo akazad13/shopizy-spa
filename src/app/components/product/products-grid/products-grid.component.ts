@@ -4,14 +4,21 @@ import { CommonModule } from '@angular/common';
 
 import { Product } from '../../../interfaces/product';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-products-grid',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, IconComponent],
+  imports: [
+    CommonModule,
+    ProductCardComponent,
+    IconComponent,
+    SkeletonLoaderComponent
+  ],
   templateUrl: './products-grid.component.html',
   styles: ``
 })
 export class ProductsGridComponent {
   @Input() products: Product[] = [];
+  @Input() loading = false;
 }

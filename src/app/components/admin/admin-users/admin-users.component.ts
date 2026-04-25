@@ -4,10 +4,11 @@ import { RouterModule } from '@angular/router';
 import { UserApi } from '../../../api/user.api';
 import { UserDetails } from '../../../interfaces/user';
 import { ToastService } from '../../../services/toast.service';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.css'
 })

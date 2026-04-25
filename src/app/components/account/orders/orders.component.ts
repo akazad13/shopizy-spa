@@ -11,11 +11,12 @@ import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../services/toast.service';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
 import { UserApi } from '../../../api/user.api';
+import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, IconComponent, DatePipe, RouterLink, PaginationComponent],
+  imports: [CommonModule, IconComponent, DatePipe, RouterLink, PaginationComponent, SkeletonLoaderComponent],
   templateUrl: './orders.component.html',
   styles: ``,
   schemas: [NO_ERRORS_SCHEMA]
@@ -24,6 +25,7 @@ export class OrdersComponent implements OnInit {
   filters = new OrderQueryFilters();
   orders: Order[] = [];
   totalPages = 1;
+  loading = true;
 
   constructor(
     private readonly orderApi: OrderApi,
@@ -40,6 +42,7 @@ export class OrdersComponent implements OnInit {
   }
 
   async getOrders() {
+    this.loading = true;
     // Fetch pagination metadata separately so a failure here never prevents
     // the orders list from loading.
     try {
@@ -56,6 +59,8 @@ export class OrdersComponent implements OnInit {
       this.orders = await firstValueFrom(this.orderApi.getOrders(this.filters));
     } catch (error) {
       handleError(null, error);
+    } finally {
+      this.loading = false;
     }
   }
 

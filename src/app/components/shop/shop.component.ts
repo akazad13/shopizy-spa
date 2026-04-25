@@ -36,6 +36,7 @@ export class ShopComponent implements OnInit {
   brands: Brand[] = [];
   colors: Color[] = [];
   products: Product[] = [];
+  loadingProducts = true;
   filters = new ProductQueryFilters();
   totalPages = 5; // Placeholder since API doesn't return count
 
@@ -64,7 +65,7 @@ export class ShopComponent implements OnInit {
     private readonly productApi: ProductApi,
     private readonly categoryApi: CategoryApi,
     private readonly route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
@@ -157,6 +158,7 @@ export class ShopComponent implements OnInit {
   }
 
   async getProducts(): Promise<void> {
+    this.loadingProducts = true;
     this.filters.pageSize = 8;
     this.filters.categoryIds = this.shopFilterState.selectedCategory;
     this.filters.brandIds = this.shopFilterState.selectedBrand;
@@ -165,11 +167,19 @@ export class ShopComponent implements OnInit {
     this.filters.sortBy = this.shopFilterState.sort;
 
     try {
-      const res = await firstValueFrom(this.productApi.getProducts(this.filters));
+      const res = await firstValueFrom(
+        this.productApi.getProducts(this.filters)
+      );
       this.products = res.items;
-      this.totalPages = res.totalPages || Math.ceil((res.totalCount || this.products.length) / this.filters.pageSize);
+      this.totalPages =
+        res.totalPages ||
+        Math.ceil(
+          (res.totalCount || this.products.length) / this.filters.pageSize
+        );
     } catch (error) {
       handleError(null, error);
+    } finally {
+      this.loadingProducts = false;
     }
   }
 
@@ -178,7 +188,6 @@ export class ShopComponent implements OnInit {
       this.categoryTree = await firstValueFrom(
         this.categoryApi.getCategoryTree()
       );
-
     } catch (error) {
       handleError(null, error);
     }
@@ -214,12 +223,23 @@ export class ShopComponent implements OnInit {
   onSort(sortingOption: string): void {
     let sortValue = '';
     switch (sortingOption) {
-      case 'Newest Arrivals': sortValue = 'newest'; break;
-      case 'Price: Low to High': sortValue = 'price-asc'; break;
-      case 'Price: High to Low': sortValue = 'price-desc'; break;
-      case 'Most Popular': sortValue = 'popular'; break;
-      case 'Rating: High to Low': sortValue = 'rating-desc'; break;
-      default: sortValue = '';
+      case 'Newest Arrivals':
+        sortValue = 'newest';
+        break;
+      case 'Price: Low to High':
+        sortValue = 'price-asc';
+        break;
+      case 'Price: High to Low':
+        sortValue = 'price-desc';
+        break;
+      case 'Most Popular':
+        sortValue = 'popular';
+        break;
+      case 'Rating: High to Low':
+        sortValue = 'rating-desc';
+        break;
+      default:
+        sortValue = '';
     }
 
     this.shopFilterState.sort = sortValue;
