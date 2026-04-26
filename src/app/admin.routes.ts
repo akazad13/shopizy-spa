@@ -7,6 +7,7 @@ import { AdminOrderDetailsComponent } from './components/admin/admin-order-detai
 import { AdminUsersComponent } from './components/admin/admin-users/admin-users.component';
 import { AdminProductFormComponent } from './components/admin/admin-product-form/admin-product-form.component';
 import { AdminCategoriesComponent } from './components/admin/admin-categories/admin-categories.component';
+import { AdminBrandsComponent } from './components/admin/admin-brands/admin-brands.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const adminRoutes: Routes = [
@@ -52,6 +53,10 @@ export const adminRoutes: Routes = [
       {
         path: 'categories',
         component: AdminCategoriesComponent
+      },
+      {
+        path: 'brands',
+        component: AdminBrandsComponent
       }
     ]
   }

@@ -28,6 +28,12 @@ export function createCategoryApiSpy() {
   return s;
 }
 
+export function createBrandApiSpy() {
+  const s = jasmine.createSpyObj('BrandApi', ['getBrands']);
+  s.getBrands.and.returnValue(of([]));
+  return s;
+}
+
 export function createAuthApiSpy() {
   const s = jasmine.createSpyObj('AuthApi', ['signin', 'signup', 'setUser']);
   s.user$ = of(null);

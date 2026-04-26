@@ -15,6 +15,7 @@ import { handleError } from '../../functions/error-handler';
 import { Brand } from '../../interfaces/brand';
 import { IconComponent } from '../shared/icon/icon.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { BrandApi } from '../../api/brand.api';
 
 @Component({
   selector: 'app-shop',
@@ -64,6 +65,7 @@ export class ShopComponent implements OnInit {
   constructor(
     private readonly productApi: ProductApi,
     private readonly categoryApi: CategoryApi,
+    private readonly brandApi: BrandApi,
     private readonly route: ActivatedRoute
   ) {}
 
@@ -77,44 +79,7 @@ export class ShopComponent implements OnInit {
       this.getProducts();
     });
 
-    this.brands = [
-      {
-        id: 'brand1',
-        name: 'Adidas',
-        image: 'adidas.png',
-        country: 'Germany'
-      },
-      {
-        id: 'brand2',
-        name: 'Hugo Boss',
-        image: 'hugo-boss.png',
-        country: 'France'
-      },
-      {
-        id: 'brand3',
-        name: 'Zara',
-        image: 'zara.png',
-        country: 'France'
-      },
-      {
-        id: 'brand4',
-        name: 'Gucci',
-        image: 'gucci.png',
-        country: 'Italy'
-      },
-      {
-        id: 'brand5',
-        name: 'H&M',
-        image: 'hm.png',
-        country: 'France'
-      },
-      {
-        id: 'brand6',
-        name: 'Dior',
-        image: 'dior.png',
-        country: 'France'
-      }
-    ];
+    this.getBrands();
     this.colors = [
       {
         name: 'White',
@@ -189,6 +154,16 @@ export class ShopComponent implements OnInit {
         this.categoryApi.getCategoryTree()
       );
     } catch (error) {
+      handleError(null, error);
+    }
+  }
+
+  async getBrands(): Promise<void> {
+    try {
+      const brands = await firstValueFrom(this.brandApi.getBrands());
+      this.brands = brands.map((brand) => ({ ...brand, checked: false }));
+    } catch (error) {
+      this.brands = [];
       handleError(null, error);
     }
   }

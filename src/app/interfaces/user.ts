@@ -33,7 +33,6 @@ export interface UserDetails {
 export interface UpdateUser {
   firstName?: string;
   lastName?: string;
-  email?: string;
   phoneNumber?: string;
   address?: Address;
 }

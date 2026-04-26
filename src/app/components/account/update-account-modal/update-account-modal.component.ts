@@ -19,13 +19,19 @@ import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { finalize, firstValueFrom } from 'rxjs';
 import { Address } from '../../../interfaces/Address';
-import { handleError } from '../../../functions/error-handler';
+import * as errorHandler from '../../../functions/error-handler';
 import { ToastService } from '../../../services/toast.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-update-account-modal',
-  imports: [IsInvalidPipe, HasErrorPipe, ReactiveFormsModule, IconComponent, CommonModule],
+  imports: [
+    IsInvalidPipe,
+    HasErrorPipe,
+    ReactiveFormsModule,
+    IconComponent,
+    CommonModule
+  ],
   templateUrl: './update-account-modal.component.html',
   styles: ``
 })
@@ -36,7 +42,6 @@ export class UpdateAccountModalComponent implements OnChanges {
   @Output() updated = new EventEmitter<void>();
 
   updateAccountForm: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl(''),
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
@@ -52,7 +57,7 @@ export class UpdateAccountModalComponent implements OnChanges {
   constructor(
     private readonly userApi: UserApi,
     private readonly toastService: ToastService
-  ) { }
+  ) {}
 
   ngOnChanges(): void {
     if (!this.userDetails) {
@@ -113,7 +118,7 @@ export class UpdateAccountModalComponent implements OnChanges {
       this.updated.emit();
       this.onCloseUpdateAccountModel();
     } catch (error) {
-      handleError(this.updateAccountForm, error);
+      errorHandler.handleError(this.updateAccountForm, error);
     }
   }
 }

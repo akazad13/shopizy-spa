@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Wishlist } from '../interfaces/wishlist';
 import { TokenService } from '../services/token.service';
 
@@ -18,7 +18,9 @@ export class WishlistApi {
   ) { }
 
   getWishlist(): Observable<Wishlist> {
-    return this.http.get<Wishlist>(`${this.url}/users/${this.userId}/wishlist`);
+    return this.http.get<Wishlist>(`${this.url}/users/${this.userId}/wishlist`, {
+      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
+    });
   }
 
   addToWishlist(productId: string): Observable<any> {

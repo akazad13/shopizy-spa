@@ -96,7 +96,10 @@ export class TokenService {
       return null;
     }
 
-    const normalizedToken = value.replace(/^Bearer\s+/i, '').trim();
+    const normalizedToken = value
+      .trim()
+      .replace(/^Bearer\s+/i, '')
+      .trim();
 
     return normalizedToken === '' ? null : normalizedToken;
   }

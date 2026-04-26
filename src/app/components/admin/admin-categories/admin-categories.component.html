@@ -1,25 +1,47 @@
 <div class="space-y-6">
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+  <section
+    class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+  >
+    <div
+      class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+    >
       <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Categories</h1>
-        <p class="mt-1 text-sm text-slate-500">A flat, minimal view for store taxonomy.</p>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
+          Categories
+        </h1>
+        <p class="mt-1 text-sm text-slate-500">
+          A flat, minimal view for store taxonomy.
+        </p>
       </div>
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Total</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ categories.length }}</div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            Total
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ categories.length }}
+          </div>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Top level</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ topLevelCategories }}</div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            Top level
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ topLevelCategories }}
+          </div>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Nested</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ categories.length - topLevelCategories }}</div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            Nested
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ categories.length - topLevelCategories }}
+          </div>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Mode</div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            Mode
+          </div>
           <div class="mt-1 text-lg font-semibold text-slate-900">Tree</div>
         </div>
       </div>
@@ -30,71 +52,166 @@
     <div class="flex items-center justify-between gap-4">
       <div>
         <h2 class="text-base font-medium text-slate-900">Editor</h2>
-        <p class="text-sm text-slate-500">Create or edit categories with a compact form.</p>
+        <p class="text-sm text-slate-500">
+          Create or edit categories with a compact form.
+        </p>
       </div>
-      <button (click)="onAdd()" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">New category</button>
+      <button
+        (click)="onAdd()"
+        class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+      >
+        New category
+      </button>
     </div>
 
-    <div *ngIf="showForm" class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+    <div
+      *ngIf="showForm"
+      class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5"
+    >
       <form (ngSubmit)="onSubmit()" class="grid gap-4 md:grid-cols-3">
-        <input name="name" [(ngModel)]="categoryForm.name" type="text" placeholder="Category name" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300" required />
-        <select name="parentId" [(ngModel)]="categoryForm.parentId" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300">
+        <input
+          name="name"
+          [(ngModel)]="categoryForm.name"
+          type="text"
+          placeholder="Category name"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+          required
+        />
+        <select
+          name="parentId"
+          [(ngModel)]="categoryForm.parentId"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+        >
           <option [ngValue]="null">Main category</option>
           <ng-container *ngFor="let cat of categories">
-            <option *ngIf="cat.id !== categoryForm.id" [ngValue]="cat.id">{{ cat.name }}</option>
+            <option *ngIf="cat.id !== categoryForm.id" [ngValue]="cat.id">
+              {{ cat.name }}
+            </option>
           </ng-container>
         </select>
-        <input name="description" [(ngModel)]="categoryForm.description" type="text" placeholder="Description" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300" />
-        <div class="md:col-span-3 flex gap-3">
-          <button type="submit" class="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white">{{ isEditMode ? 'Save changes' : 'Create category' }}</button>
-          <button type="button" (click)="resetForm()" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700">Cancel</button>
+        <input
+          name="description"
+          [(ngModel)]="categoryForm.description"
+          type="text"
+          placeholder="Description"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+        />
+        <div class="flex gap-3 md:col-span-3">
+          <button
+            type="submit"
+            class="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white"
+          >
+            {{ isEditMode ? "Save changes" : "Create category" }}
+          </button>
+          <button
+            type="button"
+            (click)="resetForm()"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700"
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
   </section>
 
-  <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <section
+    class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+  >
     <div class="border-b border-slate-200 px-6 py-4">
       <h2 class="text-base font-medium text-slate-900">All categories</h2>
-      <p class="text-sm text-slate-500">Clean list with edit and delete actions.</p>
+      <p class="text-sm text-slate-500">
+        Clean list with edit and delete actions.
+      </p>
     </div>
 
-    <div *ngIf="loading" class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div
+      *ngIf="loading"
+      class="rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
       <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
     </div>
 
     <div *ngIf="!loading && !showForm" class="px-6 py-4">
-      <div *ngIf="categoryTree.length === 0" class="py-16 text-center text-sm text-slate-500">No categories found.</div>
-      
-      <ng-container *ngFor="let node of categoryTree" [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{node: node, level: 0}"></ng-container>
+      <div
+        *ngIf="categoryTree.length === 0"
+        class="py-16 text-center text-sm text-slate-500"
+      >
+        No categories found.
+      </div>
+
+      <ng-container
+        *ngFor="let node of categoryTree"
+        [ngTemplateOutlet]="treeNode"
+        [ngTemplateOutletContext]="{ node: node, level: 0 }"
+      ></ng-container>
     </div>
-    
+
     <ng-template #treeNode let-node="node" let-level="level">
       <div class="space-y-1">
-        <div class="flex items-center gap-2 py-3 hover:bg-slate-50 px-3 rounded-lg transition" [style.padding-left.px]="level * 24">
-          <button 
+        <div
+          class="flex items-center gap-2 rounded-lg px-3 py-3 transition hover:bg-slate-50"
+          [style.padding-left.px]="level * 24"
+        >
+          <button
             *ngIf="node.children && node.children.length > 0"
             (click)="toggleExpanded(node)"
-            class="flex items-center justify-center w-6 h-6 text-slate-400 hover:text-slate-600 transition">
-            <svg class="w-4 h-4 transition-transform" [class.rotate-90]="node.expanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            class="flex h-6 w-6 items-center justify-center text-slate-400 transition hover:text-slate-600"
+          >
+            <svg
+              class="h-4 w-4 transition-transform"
+              [class.rotate-90]="node.expanded"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
-          <div *ngIf="!node.children || node.children.length === 0" class="w-6"></div>
-          
-          <div class="flex-1 min-w-0">
-            <div class="text-sm font-medium text-slate-900">{{ node.name }}</div>
-            <div class="text-xs text-slate-500">{{ node.description || '—' }}</div>
+          <div
+            *ngIf="!node.children || node.children.length === 0"
+            class="w-6"
+          ></div>
+
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium text-slate-900">
+              {{ node.name }}
+            </div>
+            <div class="text-xs text-slate-500">
+              {{ node.description || "—" }}
+            </div>
           </div>
-          
-          <div class="flex gap-2 shrink-0">
-            <button (click)="onEdit(node)" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition">Edit</button>
-            <button (click)="onDelete(node.id)" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition">Delete</button>
+
+          <div class="flex shrink-0 gap-2">
+            <button
+              (click)="onEdit(node)"
+              class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
+            >
+              Edit
+            </button>
+            <button
+              (click)="onDelete(node.id)"
+              class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
+            >
+              Delete
+            </button>
           </div>
         </div>
-        
-        <div *ngIf="node.expanded && node.children && node.children.length > 0" class="space-y-1">
-          <ng-container *ngFor="let child of node.children" [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{node: child, level: level + 1}"></ng-container>
+
+        <div
+          *ngIf="node.expanded && node.children && node.children.length > 0"
+          class="space-y-1"
+        >
+          <ng-container
+            *ngFor="let child of node.children"
+            [ngTemplateOutlet]="treeNode"
+            [ngTemplateOutletContext]="{ node: child, level: level + 1 }"
+          ></ng-container>
         </div>
       </div>
     </ng-template>

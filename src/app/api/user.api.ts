@@ -24,9 +24,7 @@ export class UserApi {
   }
 
   updateUser(data: UpdateUser): Observable<any> {
-    return this.http.put<any>(`${this.url}/users/${this.userId}`, data, {
-      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
-    });
+    return this.http.patch<any>(`${this.url}/users/${this.userId}`, data);
   }
 
   updatePassword(oldPassword: string, newPassword: string): Observable<any> {

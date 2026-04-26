@@ -12,7 +12,13 @@ import { WishlistService } from '../../services/wishlist.service';
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [IconComponent, UpdateAccountModalComponent, ChangePasswordModalComponent, CommonModule, RouterLink],
+  imports: [
+    IconComponent,
+    UpdateAccountModalComponent,
+    ChangePasswordModalComponent,
+    CommonModule,
+    RouterLink
+  ],
   templateUrl: './account.component.html',
   styles: ``
 })
@@ -25,7 +31,7 @@ export class AccountComponent implements OnInit {
     private readonly userApi: UserApi,
     private readonly tokenService: TokenService,
     public readonly wishlistService: WishlistService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getUserDetails();

@@ -1,0 +1,183 @@
+<div class="space-y-6">
+  <section
+    class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+  >
+    <div
+      class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+    >
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
+          Brands
+        </h1>
+        <p class="mt-1 text-sm text-slate-500">
+          Manage catalog brands with quick create, update, and delete actions.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            Total
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ brands.length }}
+          </div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            With logo
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ brandsWithLogoCount }}
+          </div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            With country
+          </div>
+          <div class="mt-1 text-lg font-semibold text-slate-900">
+            {{ brandsWithCountryCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <h2 class="text-base font-medium text-slate-900">Editor</h2>
+        <p class="text-sm text-slate-500">
+          Create a new brand or edit an existing one.
+        </p>
+      </div>
+      <button
+        (click)="onAdd()"
+        class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+      >
+        New brand
+      </button>
+    </div>
+
+    <div
+      *ngIf="showForm"
+      class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5"
+    >
+      <form (ngSubmit)="onSubmit()" class="grid gap-4 md:grid-cols-3">
+        <input
+          name="name"
+          [(ngModel)]="brandForm.name"
+          type="text"
+          placeholder="Brand name"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+          required
+        />
+        <input
+          name="image"
+          [(ngModel)]="brandForm.logoUrl"
+          type="text"
+          placeholder="Logo/image URL"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+        />
+        <input
+          name="country"
+          [(ngModel)]="brandForm.country"
+          type="text"
+          placeholder="Country"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+        />
+        <div class="flex gap-3 md:col-span-3">
+          <button
+            type="submit"
+            class="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white"
+          >
+            {{ isEditMode ? "Save changes" : "Create brand" }}
+          </button>
+          <button
+            type="button"
+            (click)="resetForm()"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section
+    class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+  >
+    <div class="border-b border-slate-200 px-6 py-4">
+      <h2 class="text-base font-medium text-slate-900">All brands</h2>
+      <p class="text-sm text-slate-500">
+        Compact list with direct edit and delete actions.
+      </p>
+    </div>
+
+    <div
+      *ngIf="loading"
+      class="rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
+      <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
+    </div>
+
+    <div *ngIf="!loading" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead
+          class="bg-slate-50 text-left text-xs uppercase tracking-[0.2em] text-slate-500"
+        >
+          <tr>
+            <th class="px-6 py-3 font-medium">Brand</th>
+            <th class="px-6 py-3 font-medium">Country</th>
+            <th class="px-6 py-3 font-medium">Logo</th>
+            <th class="px-6 py-3 text-right font-medium">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr *ngIf="brands.length === 0">
+            <td
+              colspan="4"
+              class="px-6 py-16 text-center text-sm text-slate-500"
+            >
+              No brands found.
+            </td>
+          </tr>
+          <tr *ngFor="let brand of brands" class="hover:bg-slate-50/70">
+            <td class="px-6 py-4 font-medium text-slate-900">
+              {{ brand.name }}
+            </td>
+            <td class="px-6 py-4 text-slate-600">{{ brand.country || "—" }}</td>
+            <td class="px-6 py-4 text-slate-600">
+              <a
+                *ngIf="brand.logoUrl"
+                [href]="brand.logoUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-700 underline decoration-slate-300 underline-offset-2"
+              >
+                Preview
+              </a>
+              <span *ngIf="!brand.logoUrl">—</span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <div class="inline-flex gap-2">
+                <button
+                  (click)="onEdit(brand)"
+                  class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="onDelete(brand.id)"
+                  class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
