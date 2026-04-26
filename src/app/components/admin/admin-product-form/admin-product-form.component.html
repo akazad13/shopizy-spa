@@ -1,14 +1,31 @@
-<div class="space-y-6 max-w-6xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+<div class="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+  <section
+    class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+  >
     <div class="flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <a routerLink="/admin/products" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">Back</a>
+        <a
+          routerLink="/admin/products"
+          class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          >Back</a
+        >
         <div>
-          <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ isEditMode ? 'Edit product' : 'New product' }}</h1>
-          <p class="mt-1 text-sm text-slate-500">Compact product form for the admin area.</p>
+          <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
+            {{ isEditMode ? "Edit product" : "New product" }}
+          </h1>
+          <p class="mt-1 text-sm text-slate-500">
+            Compact product form for the admin area.
+          </p>
         </div>
       </div>
-      <button type="submit" (click)="onSubmit()" [disabled]="submitting" class="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white disabled:opacity-50">{{ isEditMode ? 'Update' : 'Create' }}</button>
+      <button
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="submitting"
+        class="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white disabled:opacity-50"
+      >
+        {{ isEditMode ? "Update" : "Create" }}
+      </button>
     </div>
   </section>
 
@@ -18,35 +35,117 @@
     </div>
   </div>
 
-  <form *ngIf="!loading || !isEditMode" [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid gap-6 lg:grid-cols-3">
+  <form
+    *ngIf="!loading || !isEditMode"
+    [formGroup]="productForm"
+    (ngSubmit)="onSubmit()"
+    class="grid gap-6 lg:grid-cols-3"
+  >
     <div class="space-y-6 lg:col-span-2">
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section
+        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <h2 class="text-base font-medium text-slate-900">Details</h2>
         <div class="mt-5 grid gap-4 md:grid-cols-2">
-          <input type="text" formControlName="name" placeholder="Product title" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2" [class.border-rose-400]="isFieldInvalid('name')" />
-          <input type="text" formControlName="sku" placeholder="SKU" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300" [class.border-rose-400]="isFieldInvalid('sku')" />
-          <input type="number" formControlName="unitPrice" step="0.01" min="0" placeholder="Unit price" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300" [class.border-rose-400]="isFieldInvalid('unitPrice')" />
-          <input type="text" formControlName="shortDescription" placeholder="Short description" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2" [class.border-rose-400]="isFieldInvalid('shortDescription')" />
-          <textarea formControlName="description" rows="8" placeholder="Description" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2"></textarea>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Product title"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2"
+            [class.border-rose-400]="isFieldInvalid('name')"
+          />
+          <input
+            type="text"
+            formControlName="sku"
+            placeholder="SKU"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+            [class.border-rose-400]="isFieldInvalid('sku')"
+          />
+          <input
+            type="number"
+            formControlName="unitPrice"
+            step="0.01"
+            min="0"
+            placeholder="Unit price"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+            [class.border-rose-400]="isFieldInvalid('unitPrice')"
+          />
+          <input
+            type="text"
+            formControlName="shortDescription"
+            placeholder="Short description"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2"
+            [class.border-rose-400]="isFieldInvalid('shortDescription')"
+          />
+          <textarea
+            formControlName="description"
+            rows="8"
+            placeholder="Description"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300 md:col-span-2"
+          ></textarea>
         </div>
       </section>
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section
+        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <h2 class="text-base font-medium text-slate-900">Inventory and tags</h2>
         <div class="mt-5 grid gap-4 md:grid-cols-2">
-          <input type="number" formControlName="stockQuantity" min="0" placeholder="Stock quantity" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300" [class.border-rose-400]="isFieldInvalid('stockQuantity')" />
-          <input type="text" formControlName="tagsText" placeholder="Tags, comma separated" class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300" />
-          <div class="md:col-span-2 text-sm text-slate-500">Use plain values for colors and sizes below.</div>
-          <div class="md:col-span-2 space-y-3">
-            <div class="text-xs uppercase tracking-[0.2em] text-slate-400">Colors</div>
+          <input
+            type="number"
+            formControlName="stockQuantity"
+            min="0"
+            placeholder="Stock quantity"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+            [class.border-rose-400]="isFieldInvalid('stockQuantity')"
+          />
+          <input
+            type="text"
+            formControlName="tagsText"
+            placeholder="Tags, comma separated"
+            class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+          />
+          <div class="text-sm text-slate-500 md:col-span-2">
+            Use plain values for colors and sizes below.
+          </div>
+          <div class="space-y-3 md:col-span-2">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-400">
+              Colors
+            </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" *ngFor="let color of availableColorsList" (click)="onColorToggle(color)" class="rounded-full border px-3 py-2 text-sm" [ngClass]="isColorSelected(color) ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-700'">{{ color }}</button>
+              <button
+                type="button"
+                *ngFor="let color of availableColorsList"
+                (click)="onColorToggle(color)"
+                class="rounded-full border px-3 py-2 text-sm"
+                [ngClass]="
+                  isColorSelected(color)
+                    ? 'border-slate-900 bg-slate-900 text-white'
+                    : 'border-slate-200 bg-white text-slate-700'
+                "
+              >
+                {{ color }}
+              </button>
             </div>
           </div>
-          <div class="md:col-span-2 space-y-3">
-            <div class="text-xs uppercase tracking-[0.2em] text-slate-400">Sizes</div>
+          <div class="space-y-3 md:col-span-2">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-400">
+              Sizes
+            </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" *ngFor="let size of availableSizesList" (click)="onSizeToggle(size)" class="rounded-full border px-3 py-2 text-sm" [ngClass]="isSizeSelected(size) ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-700'">{{ size }}</button>
+              <button
+                type="button"
+                *ngFor="let size of availableSizesList"
+                (click)="onSizeToggle(size)"
+                class="rounded-full border px-3 py-2 text-sm"
+                [ngClass]="
+                  isSizeSelected(size)
+                    ? 'border-slate-900 bg-slate-900 text-white'
+                    : 'border-slate-200 bg-white text-slate-700'
+                "
+              >
+                {{ size }}
+              </button>
             </div>
           </div>
         </div>
@@ -54,16 +153,28 @@
     </div>
 
     <div class="space-y-6">
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section
+        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <h2 class="text-base font-medium text-slate-900">Classification</h2>
         <div class="mt-5 space-y-4">
-          <select formControlName="categoryId" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300">
+          <select
+            formControlName="categoryId"
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+          >
             <option value="" disabled>Select category</option>
-            <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+            <option *ngFor="let cat of categories" [value]="cat.id">
+              {{ cat.name }}
+            </option>
           </select>
-          <select formControlName="brandId" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300">
+          <select
+            formControlName="brandId"
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-300"
+          >
             <option [ngValue]="null">No brand</option>
-            <option *ngFor="let brand of brands" [value]="brand.name">{{ brand.name }}</option>
+            <option *ngFor="let brand of brands" [value]="brand.id">
+              {{ brand.name }}
+            </option>
           </select>
         </div>
       </section>
@@ -71,21 +182,48 @@
       <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
         <h2 class="text-base font-medium text-slate-900">Pricing</h2>
         <div class="mt-5 space-y-4">
-          <input type="number" formControlName="discount" min="0" max="100" placeholder="Discount %" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300" />
-          <div class="text-sm text-slate-500">Keep pricing simple and readable.</div>
+          <input
+            type="number"
+            formControlName="discount"
+            min="0"
+            max="100"
+            placeholder="Discount %"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
+          />
+          <div class="text-sm text-slate-500">
+            Keep pricing simple and readable.
+          </div>
         </div>
       </section>
 
-      <section *ngIf="isEditMode" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section
+        *ngIf="isEditMode"
+        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <h2 class="text-base font-medium text-slate-900">Images</h2>
         <div class="mt-4 grid grid-cols-2 gap-3">
-          <div *ngFor="let img of existingImages" class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+          <div
+            *ngFor="let img of existingImages"
+            class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50"
+          >
             <img [src]="img.imageUrl" class="h-32 w-full object-cover" />
           </div>
         </div>
         <div class="mt-4 space-y-3">
-          <input type="file" accept="image/*" (change)="onImageFileSelected($event)" class="block w-full text-sm text-slate-500" />
-          <button type="button" (click)="uploadImage()" [disabled]="!selectedImageFile || uploadingImage" class="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white disabled:opacity-50">{{ uploadingImage ? 'Uploading...' : 'Upload image' }}</button>
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onImageFileSelected($event)"
+            class="block w-full text-sm text-slate-500"
+          />
+          <button
+            type="button"
+            (click)="uploadImage()"
+            [disabled]="!selectedImageFile || uploadingImage"
+            class="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white disabled:opacity-50"
+          >
+            {{ uploadingImage ? "Uploading..." : "Upload image" }}
+          </button>
         </div>
       </section>
     </div>

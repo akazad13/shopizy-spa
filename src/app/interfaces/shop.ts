@@ -5,7 +5,6 @@ export interface ShopFilterState {
   selectedCategory: string[];
   categoryCollapsed: boolean;
   selectedColor: string[];
-  colorCollapsed: boolean;
   priceRange: number;
   sort: string;
   showAll: boolean;

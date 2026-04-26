@@ -48,7 +48,6 @@ export class ShopComponent implements OnInit {
     selectedCategory: [],
     categoryCollapsed: false,
     selectedColor: [],
-    colorCollapsed: false,
     priceRange: 500,
     sort: '',
     showAll: false,
@@ -80,32 +79,6 @@ export class ShopComponent implements OnInit {
     });
 
     this.getBrands();
-    this.colors = [
-      {
-        name: 'White',
-        checked: false
-      },
-      {
-        name: 'Black',
-        checked: false
-      },
-      {
-        name: 'Blue',
-        checked: false
-      },
-      {
-        name: 'Green',
-        checked: false
-      },
-      {
-        name: 'Purple',
-        checked: false
-      },
-      {
-        name: 'Brown',
-        checked: false
-      }
-    ];
     this.getCategoryTree();
   }
 
@@ -127,7 +100,6 @@ export class ShopComponent implements OnInit {
     this.filters.pageSize = 8;
     this.filters.categoryIds = this.shopFilterState.selectedCategory;
     this.filters.brandIds = this.shopFilterState.selectedBrand;
-    this.filters.colors = this.shopFilterState.selectedColor;
     this.filters.maxPrice = this.shopFilterState.priceRange;
     this.filters.sortBy = this.shopFilterState.sort;
 
@@ -202,16 +174,16 @@ export class ShopComponent implements OnInit {
         sortValue = 'newest';
         break;
       case 'Price: Low to High':
-        sortValue = 'price-asc';
+        sortValue = 'price_asc';
         break;
       case 'Price: High to Low':
-        sortValue = 'price-desc';
+        sortValue = 'price_desc';
         break;
       case 'Most Popular':
-        sortValue = 'popular';
+        sortValue = 'most_reviewed';
         break;
       case 'Rating: High to Low':
-        sortValue = 'rating-desc';
+        sortValue = 'best_rated';
         break;
       default:
         sortValue = '';

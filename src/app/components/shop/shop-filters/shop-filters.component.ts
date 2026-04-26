@@ -23,7 +23,6 @@ export class ShopFiltersComponent {
     selectedCategory: [],
     categoryCollapsed: true,
     selectedColor: [],
-    colorCollapsed: true,
     priceRange: 0,
     sort: '',
     showAll: false,
@@ -31,7 +30,6 @@ export class ShopFiltersComponent {
     sortingOptions: []
   };
   @Input() brands: Brand[] = [];
-  @Input() colors: Color[] = [];
   @Input() categoryTree: CategoryTree[] = [];
 
   @Output() updateFilterStateOutput = new EventEmitter<ShopFilterState>();
@@ -46,9 +44,7 @@ export class ShopFiltersComponent {
   updateBrandCollapsed(): void {
     this.shopFilterState.brandCollapsed = !this.shopFilterState.brandCollapsed;
   }
-  updateColorCollapsed(): void {
-    this.shopFilterState.colorCollapsed = !this.shopFilterState.colorCollapsed;
-  }
+
   updateCategorySelection(category: CategoryTree) {
     this.updateSelectedCategory(category);
     this.updateProductGridOutput.emit(this.shopFilterState);
@@ -92,11 +88,10 @@ export class ShopFiltersComponent {
       }
     }
   }
-  
+
   clearFilters(): void {
-    this.categoryTree.forEach(c => this.resetCategory(c));
-    this.brands.forEach(b => b.checked = false);
-    this.colors.forEach(c => c.checked = false);
+    this.categoryTree.forEach((c) => this.resetCategory(c));
+    this.brands.forEach((b) => (b.checked = false));
     this.shopFilterState.selectedCategory = [];
     this.shopFilterState.selectedBrand = [];
     this.shopFilterState.selectedColor = [];
@@ -107,7 +102,7 @@ export class ShopFiltersComponent {
   private resetCategory(category: CategoryTree) {
     category.checked = false;
     if (category.children) {
-      category.children.forEach(child => this.resetCategory(child));
+      category.children.forEach((child) => this.resetCategory(child));
     }
   }
 }

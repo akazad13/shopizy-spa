@@ -1,102 +1,131 @@
 <!-- Mobile filter drawer — only visible on < lg screens -->
 <div class="relative z-40 lg:hidden" aria-modal="true">
-
   <!-- Backdrop -->
-  <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" aria-hidden="true" [ngClass]="
+  <div
+    class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"
+    aria-hidden="true"
+    [ngClass]="
       shopFilterState.hideMobileFilters
         ? 'pointer-events-none opacity-0 transition duration-300 ease-in-out'
         : 'pointer-events-auto opacity-100 transition duration-300 ease-in-out'
-    " (click)="hideMobileDrawer()"></div>
+    "
+    (click)="hideMobileDrawer()"
+  ></div>
 
   <!-- Drawer panel -->
-  <div class="fixed inset-0 z-40 flex" [ngClass]="
+  <div
+    class="fixed inset-0 z-40 flex"
+    [ngClass]="
       shopFilterState.hideMobileFilters
         ? 'translate-x-full transform transition duration-300 ease-in-out'
         : 'translate-x-0 transform transition duration-300 ease-in-out'
-    ">
-    <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white shadow-2xl">
-
+    "
+  >
+    <div
+      class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white shadow-2xl"
+    >
       <!-- Header -->
-      <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+      <div
+        class="flex items-center justify-between border-b border-gray-100 px-5 py-4"
+      >
         <div class="flex items-center gap-x-2">
-          <app-icon icon="funnel" classNames="h-5 w-5 text-indigo-500"></app-icon>
+          <app-icon
+            icon="funnel"
+            classNames="h-5 w-5 text-indigo-500"
+          ></app-icon>
           <h2 class="text-base font-semibold text-gray-900">Filters</h2>
         </div>
-        <button type="button"
+        <button
+          type="button"
           class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors duration-150 hover:bg-gray-100 hover:text-gray-600"
-          (click)="hideMobileDrawer()">
+          (click)="hideMobileDrawer()"
+        >
           <span class="sr-only">Close menu</span>
           <app-icon icon="x-mark" classNames="h-5 w-5"></app-icon>
         </button>
       </div>
 
       <!-- Filter sections -->
-      <form class="flex-1 overflow-y-auto px-5 py-4 space-y-1">
-
+      <form class="flex-1 space-y-1 overflow-y-auto px-5 py-4">
         <!-- ── Category ──────────────────────────── -->
         <div class="border-b border-gray-100 pb-4">
-          <button type="button" class="flex w-full items-center justify-between py-3 text-left"
-            (click)="updateCategoryCollapsed()" [attr.aria-expanded]="!shopFilterState.categoryCollapsed">
-            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Category</span>
-            <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
-              [class.rotate-180]="!shopFilterState.categoryCollapsed"></app-icon>
+          <button
+            type="button"
+            class="flex w-full items-center justify-between py-3 text-left"
+            (click)="updateCategoryCollapsed()"
+            [attr.aria-expanded]="!shopFilterState.categoryCollapsed"
+          >
+            <span
+              class="text-xs font-semibold uppercase tracking-wider text-gray-400"
+              >Category</span
+            >
+            <app-icon
+              icon="chevron-down"
+              classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
+              [class.rotate-180]="!shopFilterState.categoryCollapsed"
+            ></app-icon>
           </button>
-          <div *ngIf="!shopFilterState.categoryCollapsed" id="filter-section-mobile-1">
-            <app-category-tree [categoryTree]="categoryTree"
-              (updateCategorySelection)="updateCategorySelection($event)"></app-category-tree>
+          <div
+            *ngIf="!shopFilterState.categoryCollapsed"
+            id="filter-section-mobile-1"
+          >
+            <app-category-tree
+              [categoryTree]="categoryTree"
+              (updateCategorySelection)="updateCategorySelection($event)"
+            ></app-category-tree>
           </div>
         </div>
 
         <!-- ── Brand ──────────────────────────────── -->
         <div class="border-b border-gray-100 pb-4">
-          <button type="button" class="flex w-full items-center justify-between py-3 text-left"
-            (click)="updateBrandCollapsed()" [attr.aria-expanded]="!shopFilterState.brandCollapsed">
-            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Brand</span>
-            <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
-              [class.rotate-180]="!shopFilterState.brandCollapsed"></app-icon>
+          <button
+            type="button"
+            class="flex w-full items-center justify-between py-3 text-left"
+            (click)="updateBrandCollapsed()"
+            [attr.aria-expanded]="!shopFilterState.brandCollapsed"
+          >
+            <span
+              class="text-xs font-semibold uppercase tracking-wider text-gray-400"
+              >Brand</span
+            >
+            <app-icon
+              icon="chevron-down"
+              classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
+              [class.rotate-180]="!shopFilterState.brandCollapsed"
+            ></app-icon>
           </button>
-          <div *ngIf="!shopFilterState.brandCollapsed" class="space-y-1" id="filter-section-mobile-2">
+          <div
+            *ngIf="!shopFilterState.brandCollapsed"
+            class="space-y-1"
+            id="filter-section-mobile-2"
+          >
             <ng-container *ngFor="let brand of brands">
-              <label [for]="brand.id"
+              <label
+                [for]="brand.id"
                 class="flex cursor-pointer items-center gap-x-2.5 rounded-lg px-1 py-2 transition-colors duration-150 hover:bg-indigo-50/70"
-                [class.bg-indigo-50]="brand.checked">
-                <input [id]="brand.id" [(ngModel)]="brand.checked" [name]="brand.name" [value]="brand.id"
-                  type="checkbox" (change)="onBrandCheckboxChange(brand)"
-                  class="h-3.5 w-3.5 flex-shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:ring-offset-0" />
-                <span class="text-sm transition-colors duration-150" [class.text-indigo-700]="brand.checked"
-                  [class.font-semibold]="brand.checked" [class.text-gray-600]="!brand.checked">{{ brand.name || brand
-                  }}</span>
+                [class.bg-indigo-50]="brand.checked"
+              >
+                <input
+                  [id]="brand.id"
+                  [(ngModel)]="brand.checked"
+                  [name]="brand.name"
+                  [value]="brand.id"
+                  type="checkbox"
+                  (change)="onBrandCheckboxChange(brand)"
+                  class="h-3.5 w-3.5 flex-shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:ring-offset-0"
+                />
+                <span
+                  class="text-sm transition-colors duration-150"
+                  [class.text-indigo-700]="brand.checked"
+                  [class.font-semibold]="brand.checked"
+                  [class.text-gray-600]="!brand.checked"
+                  >{{ brand.name || brand }}</span
+                >
               </label>
             </ng-container>
           </div>
         </div>
-
-        <!-- ── Color ──────────────────────────────── -->
-        <div class="pb-4">
-          <button type="button" class="flex w-full items-center justify-between py-3 text-left"
-            (click)="updateColorCollapsed()" [attr.aria-expanded]="!shopFilterState.colorCollapsed">
-            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Color</span>
-            <app-icon icon="chevron-down" classNames="h-4 w-4 text-gray-400 transition-transform duration-200"
-              [class.rotate-180]="!shopFilterState.colorCollapsed"></app-icon>
-          </button>
-          <div *ngIf="!shopFilterState.colorCollapsed" class="space-y-1" id="filter-section-mobile-0">
-            <ng-container *ngFor="let color of colors">
-              <label [for]="color.name"
-                class="flex cursor-pointer items-center gap-x-2.5 rounded-lg px-1 py-2 transition-colors duration-150 hover:bg-indigo-50/70"
-                [class.bg-indigo-50]="color.checked">
-                <input [id]="color.name" [(ngModel)]="color.checked" [name]="color.name" [value]="color.name"
-                  type="checkbox" (change)="onColorCheckboxChange(color)"
-                  class="h-3.5 w-3.5 flex-shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:ring-offset-0" />
-                <span class="text-sm transition-colors duration-150" [class.text-indigo-700]="color.checked"
-                  [class.font-semibold]="color.checked" [class.text-gray-600]="!color.checked">{{ color.name || color
-                  }}</span>
-              </label>
-            </ng-container>
-          </div>
-        </div>
-
       </form>
     </div>
   </div>
-
 </div>

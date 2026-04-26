@@ -1,5 +1,4 @@
 import { CustomFields } from './custom-fields';
-import { Brand } from './brand';
 
 export interface Productspecification {
   name: string;
@@ -19,7 +18,7 @@ export interface Product {
   categoryId: string;
   price: number;
   discount: number;
-  brand: Brand | null;
+  brandId: string | null;
   colors: string;
   sizes: string;
   tags: string | null;

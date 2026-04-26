@@ -24,7 +24,7 @@ describe('ProductCardComponent', () => {
       categoryId: '',
       price: 0,
       discount: 0,
-      brand: null,
+      brandId: null,
       colors: '',
       sizes: '',
       tags: null,

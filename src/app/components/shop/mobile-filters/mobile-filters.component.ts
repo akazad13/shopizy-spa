@@ -22,7 +22,6 @@ export class MobileFiltersComponent {
     selectedCategory: [],
     categoryCollapsed: true,
     selectedColor: [],
-    colorCollapsed: true,
     priceRange: 0,
     sort: '',
     showAll: false,
@@ -30,7 +29,6 @@ export class MobileFiltersComponent {
     sortingOptions: []
   };
   @Input() brands: Brand[] = [];
-  @Input() colors: Color[] = [];
   @Input() categoryTree: CategoryTree[] = [];
 
   @Output() hideMobileFiltersOutput = new EventEmitter<string>();
@@ -51,9 +49,6 @@ export class MobileFiltersComponent {
   }
   updateBrandCollapsed(): void {
     this.shopFilterState.brandCollapsed = !this.shopFilterState.brandCollapsed;
-  }
-  updateColorCollapsed(): void {
-    this.shopFilterState.colorCollapsed = !this.shopFilterState.colorCollapsed;
   }
 
   updateCategorySelection(category: CategoryTree) {

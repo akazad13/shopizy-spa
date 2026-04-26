@@ -152,7 +152,7 @@ export class AdminProductFormComponent implements OnInit {
           shortDescription: product.shortDescription || '',
           description: product.description || '',
           categoryId: product.categoryId || '',
-          brandId: product.brand?.id || null,
+          brandId: product.brandId || null,
           sku: product.sku || '',
           unitPrice: Number((product as any).unitPrice ?? product.price ?? 0),
           discount: +product.discount || 0,

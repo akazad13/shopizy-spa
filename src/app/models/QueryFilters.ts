@@ -6,7 +6,6 @@ export class ProductQueryFilters {
   brandIds: string[] | null = null;
   productIds: string[] | null = null;
   inStockOnly: boolean | null = null;
-  colors: string[] | null = null;
   minPrice: number | null = null;
   maxPrice: number | null = null;
   sortBy: string | null = null;
@@ -14,7 +13,6 @@ export class ProductQueryFilters {
   pageNumber = 1;
   pageSize = 10;
 }
-
 
 export class OrderQueryFilters {
   startDate: string | null = null;
