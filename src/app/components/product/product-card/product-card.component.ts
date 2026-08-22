@@ -27,13 +27,42 @@ export class ProductCardComponent {
     private readonly toast: ToastService
   ) {}
 
+  get productId(): string {
+    return (this.product as any).id || (this.product as any).productId;
+  }
+
+  get imageUrl(): string | undefined {
+    if (this.product.productImages && this.product.productImages.length > 0) {
+      return (this.product.productImages[0] as any).imageUrl || (this.product.productImages[0] as any);
+    }
+    if ((this.product as any).imageUrls && (this.product as any).imageUrls.length > 0) {
+      return (this.product as any).imageUrls[0];
+    }
+    return undefined;
+  }
+
+  get rating(): number {
+    if (typeof this.product.averageRating === 'number') {
+      return this.product.averageRating;
+    }
+    return (this.product.averageRating as any)?.value ?? 0;
+  }
+
+  get isBogo(): boolean {
+    return !!(this.product as any).isBogo || ((this.product as any).tags && (this.product as any).tags.includes('bogo'));
+  }
+
+  get isFreeShipping(): boolean {
+    return !!(this.product as any).isFreeShippingQualified || this.product.price >= 75 || ((this.product as any).tags && (this.product as any).tags.includes('free-shipping'));
+  }
+
   toggleWishlist(event: Event): void {
     event.stopPropagation();
     this.wishlistService.toggleWishlist(this.product);
   }
 
   isInWishlist(): boolean {
-    return this.wishlistService.isInWishlist(this.product.productId);
+    return this.wishlistService.isInWishlist(this.productId);
   }
 
   addToCart(event: Event): void {
@@ -43,11 +72,11 @@ export class ProductCardComponent {
     
     this.cartService.addToCart({
       cartItemId: null,
-      productId: this.product.productId,
-      image: this.product.productImages?.[0]?.imageUrl,
+      productId: this.productId,
+      image: this.imageUrl,
       name: this.product.name,
       price: this.product.price,
-      discount: this.product.discount,
+      discount: this.product.discount || 0,
       quantity: 1,
       color: color,
       size: size

@@ -8,22 +8,26 @@ import { AuthService } from '../../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { WishlistService } from '../../../services/wishlist.service';
-
 import { RatingComponent } from '../rating/rating.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { Subscription } from 'rxjs';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, RouterLink, RatingComponent, IconComponent, FormsModule, SkeletonLoaderComponent],
+  imports: [
+    CommonModule,
+    DecimalPipe,
+    RouterLink,
+    RatingComponent,
+    IconComponent,
+    FormsModule,
+    SkeletonLoaderComponent
+  ],
   templateUrl: './product-details.component.html',
-  styles: `
-    .text-red-500 {
-      text-color: red;
-    }
-  `,
+  styles: ``,
   providers: [ProductApi]
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
@@ -38,7 +42,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   isLightboxOpen = false;
 
   reviewRating = 0;
+  reviewHeadline = '';
   reviewComment = '';
+  reviewImageUrl = '';
+  reviewImageUrls: string[] = [];
   isSubmittingReview = false;
   isLoggedIn = false;
   loading = true;
@@ -54,22 +61,24 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     private readonly cartService: CartService,
     private readonly productApi: ProductApi,
     private readonly authService: AuthService,
-    private readonly wishlistService: WishlistService
+    private readonly wishlistService: WishlistService,
+    private readonly toast: ToastService
   ) {
     this.mapColors();
     this.isLoggedIn = this.authService.loggedIn();
   }
+
   async ngOnInit(): Promise<void> {
     this.routeSubscription = this.activatedRoute.data.subscribe((data) => {
       this.product = data['product'];
       if (this.product != null) {
         this.mainPhotoUrl =
-          this.product.productImages == null
+          this.product.productImages == null || this.product.productImages.length === 0
             ? null
             : this.product.productImages[0].imageUrl;
 
-        this.availableSizes = this.product.sizes.split(',');
-        this.availableColors = this.product.colors.split(',');
+        this.availableSizes = this.product.sizes ? this.product.sizes.split(',') : ['Standard'];
+        this.availableColors = this.product.colors ? this.product.colors.split(',') : ['Standard'];
 
         this.selectedColor = this.availableColors[0];
         this.selectedSize = this.availableSizes[0];
@@ -81,14 +90,16 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 
   addProductToCart() {
     const cartItem: CartItem = {
       cartItemId: null,
       productId: this.product.productId,
-      image: this.product.productImages?.[0].imageUrl,
+      image: this.mainPhotoUrl || this.product.productImages?.[0]?.imageUrl,
       name: this.product.name,
       price: this.product.price,
       discount: this.product.discount,
@@ -97,6 +108,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       size: this.selectedSize
     };
     this.cartService.addToCart(cartItem);
+    this.toast.success(`Added ${this.product.name} to cart`);
   }
 
   selectColor(color: string) {
@@ -120,15 +132,22 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   calculateStarNumberArray(): void {
     this.starNumberArr = Array.from({ length: 6 }, () => ({
-      ...{ num: 0, pct: 0 }
+      num: 0,
+      pct: 0
     }));
-    for (const review of this.product.productReviews) {
-      this.starNumberArr[Math.floor(review.rating)].num++;
+    if (this.product?.productReviews) {
+      for (const review of this.product.productReviews) {
+        const r = Math.floor(review.rating);
+        if (r >= 1 && r <= 5) {
+          this.starNumberArr[r].num++;
+        }
+      }
     }
     this.starNumberArr = this.starNumberArr.slice(1, 6).reverse();
 
+    const total = this.product?.averageRating?.numRatings || 1;
     for (const element of this.starNumberArr) {
-      element.pct = (element.num * 100) / this.product.averageRating.numRatings;
+      element.pct = (element.num * 100) / total;
     }
   }
 
@@ -162,6 +181,17 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.reviewRating = rating;
   }
 
+  addReviewImage() {
+    if (this.reviewImageUrl.trim()) {
+      this.reviewImageUrls.push(this.reviewImageUrl.trim());
+      this.reviewImageUrl = '';
+    }
+  }
+
+  removeReviewImage(index: number) {
+    this.reviewImageUrls.splice(index, 1);
+  }
+
   async onSubmitReview() {
     if (this.reviewRating === 0 || !this.reviewComment.trim()) {
       return;
@@ -173,13 +203,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         this.productApi.submitReview(
           this.product.productId,
           this.reviewRating,
-          this.reviewComment
+          this.reviewComment,
+          this.reviewHeadline,
+          this.reviewImageUrls
         )
       );
+      this.toast.success('Review submitted successfully!');
       // Reset form on success
       this.reviewRating = 0;
+      this.reviewHeadline = '';
       this.reviewComment = '';
-      // Refresh product to see new review
+      this.reviewImageUrls = [];
+      // Refresh product
       const updatedProduct = await firstValueFrom(
         this.productApi.getProduct(this.product.productId)
       );
@@ -192,8 +227,32 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  async upvoteReview(review: any) {
+    const reviewId = review.reviewId || review.id;
+    if (!reviewId) return;
+
+    try {
+      await firstValueFrom(
+        this.productApi.markReviewHelpful(this.product.productId, reviewId)
+      );
+      review.helpfulVotesCount = (review.helpfulVotesCount || 0) + 1;
+      review.hasUpvoted = true;
+      this.toast.success('Thank you for your feedback!');
+    } catch (err) {
+      console.error('Failed to upvote review', err);
+    }
+  }
+
   toggleWishlist(): void {
+    const wasInWishlist = this.isInWishlist();
     this.wishlistService.toggleWishlist(this.product);
+    if (!wasInWishlist) {
+      this.toast.success(
+        'Saved to Wishlist! Price-drop and back-in-stock alerts enabled.'
+      );
+    } else {
+      this.toast.info('Removed from Wishlist');
+    }
   }
 
   isInWishlist(): boolean {

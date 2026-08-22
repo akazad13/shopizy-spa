@@ -1,13 +1,11 @@
 import { Color, ShopFilterState } from './../../interfaces/shop';
-import { Product } from '../../interfaces/product';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ProductsGridComponent } from '../product/products-grid/products-grid.component';
 import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
 import { MobileFiltersComponent } from './mobile-filters/mobile-filters.component';
 import { CommonModule } from '@angular/common';
 import { ProductApi } from '../../api/product.api';
-import { ProductQueryFilters } from '../../models/QueryFilters';
 import { CategoryTree } from '../../interfaces/category';
 import { firstValueFrom } from 'rxjs';
 import { CategoryApi } from '../../api/category.api';
@@ -16,6 +14,8 @@ import { Brand } from '../../interfaces/brand';
 import { IconComponent } from '../shared/icon/icon.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { BrandApi } from '../../api/brand.api';
+import { FormsModule } from '@angular/forms';
+import { SearchFacet, FacetedSearchRequest } from '../../types/api';
 
 @Component({
   selector: 'app-shop',
@@ -25,6 +25,7 @@ import { BrandApi } from '../../api/brand.api';
     MobileFiltersComponent,
     ShopFiltersComponent,
     CommonModule,
+    FormsModule,
     IconComponent,
     PaginationComponent
   ],
@@ -36,10 +37,18 @@ export class ShopComponent implements OnInit {
   categoryTree: CategoryTree[] = [];
   brands: Brand[] = [];
   colors: Color[] = [];
-  products: Product[] = [];
+  products: any[] = [];
   loadingProducts = true;
-  filters = new ProductQueryFilters();
-  totalPages = 5; // Placeholder since API doesn't return count
+  totalPages = 1;
+  totalCount = 0;
+  pageNumber = 1;
+  pageSize = 12;
+
+  searchTerm = '';
+  suggestedKeywords: string[] = [];
+  facets: SearchFacet[] = [];
+  inStockOnly = false;
+  minRating = 0;
 
   shopFilterState: ShopFilterState = {
     hideMobileFilters: true,
@@ -49,7 +58,7 @@ export class ShopComponent implements OnInit {
     categoryCollapsed: false,
     selectedColor: [],
     priceRange: 500,
-    sort: '',
+    sort: 'newest',
     showAll: false,
     hideSortingOptions: true,
     sortingOptions: [
@@ -65,15 +74,15 @@ export class ShopComponent implements OnInit {
     private readonly productApi: ProductApi,
     private readonly categoryApi: CategoryApi,
     private readonly brandApi: BrandApi,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
-      if (params['search']) {
-        this.filters.name = params['search'];
-      } else {
-        this.filters.name = null;
+      this.searchTerm = params['search'] || params['q'] || '';
+      if (params['category']) {
+        this.shopFilterState.selectedCategory = [params['category']];
       }
       this.getProducts();
     });
@@ -83,11 +92,7 @@ export class ShopComponent implements OnInit {
   }
 
   showHideMobileFiltersDrawer(val: string): void {
-    if (val == 'show') {
-      this.shopFilterState.hideMobileFilters = false;
-    } else {
-      this.shopFilterState.hideMobileFilters = true;
-    }
+    this.shopFilterState.hideMobileFilters = val !== 'show';
   }
 
   showHideSortingOptions(): void {
@@ -97,27 +102,71 @@ export class ShopComponent implements OnInit {
 
   async getProducts(): Promise<void> {
     this.loadingProducts = true;
-    this.filters.pageSize = 8;
-    this.filters.categoryIds = this.shopFilterState.selectedCategory;
-    this.filters.brandIds = this.shopFilterState.selectedBrand;
-    this.filters.maxPrice = this.shopFilterState.priceRange;
-    this.filters.sortBy = this.shopFilterState.sort;
+    const request: FacetedSearchRequest = {
+      searchTerm: this.searchTerm ? this.searchTerm.trim() : undefined,
+      categoryIds:
+        this.shopFilterState.selectedCategory.length > 0
+          ? this.shopFilterState.selectedCategory
+          : undefined,
+      brandIds:
+        this.shopFilterState.selectedBrand.length > 0
+          ? this.shopFilterState.selectedBrand
+          : undefined,
+      maxPrice:
+        this.shopFilterState.priceRange > 0
+          ? this.shopFilterState.priceRange
+          : undefined,
+      inStockOnly: this.inStockOnly ? true : undefined,
+      minRating: this.minRating > 0 ? this.minRating : undefined,
+      sortBy: this.shopFilterState.sort || 'newest',
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
 
     try {
-      const res = await firstValueFrom(
-        this.productApi.getProducts(this.filters)
-      );
-      this.products = res.items;
-      this.totalPages =
-        res.totalPages ||
-        Math.ceil(
-          (res.totalCount || this.products.length) / this.filters.pageSize
+      const res = await firstValueFrom(this.productApi.facetedSearch(request));
+      this.products = res.items || [];
+      this.totalCount = res.totalCount || this.products.length;
+      this.totalPages = res.totalPages || Math.ceil(this.totalCount / this.pageSize) || 1;
+      this.facets = res.facets || [];
+      this.suggestedKeywords = res.suggestedKeywords || [];
+    } catch {
+      // Fallback to basic getProducts if faceted search fails
+      try {
+        const fallbackRes = await firstValueFrom(
+          this.productApi.getProducts({
+            name: this.searchTerm || null,
+            categoryIds: this.shopFilterState.selectedCategory,
+            brandIds: this.shopFilterState.selectedBrand,
+            maxPrice: this.shopFilterState.priceRange,
+            sortBy: this.shopFilterState.sort,
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize
+          } as any)
         );
-    } catch (error) {
-      handleError(null, error);
+        this.products = fallbackRes.items || [];
+        this.totalCount = fallbackRes.totalCount || this.products.length;
+        this.totalPages = fallbackRes.totalPages || 1;
+      } catch (fallbackErr) {
+        handleError(null, fallbackErr);
+      }
     } finally {
       this.loadingProducts = false;
     }
+  }
+
+  onSearchSubmit(): void {
+    this.pageNumber = 1;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchTerm || null },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  applySuggestedKeyword(keyword: string): void {
+    this.searchTerm = keyword;
+    this.onSearchSubmit();
   }
 
   async getCategoryTree() {
@@ -146,29 +195,18 @@ export class ShopComponent implements OnInit {
 
   async updateProductGrid(filters: any): Promise<void> {
     this.shopFilterState = { ...this.shopFilterState, ...filters };
+    this.pageNumber = 1;
     await this.getProducts();
   }
 
   async onPageChange(page: number): Promise<void> {
-    this.filters.pageNumber = page;
+    this.pageNumber = page;
     await this.getProducts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  async previous(): Promise<void> {
-    if (this.filters.pageNumber > 1) {
-      await this.onPageChange(this.filters.pageNumber - 1);
-    }
-  }
-
-  async next(): Promise<void> {
-    if (this.products.length >= this.filters.pageSize) {
-      await this.onPageChange(this.filters.pageNumber + 1);
-    }
-  }
-
   onSort(sortingOption: string): void {
-    let sortValue = '';
+    let sortValue = 'newest';
     switch (sortingOption) {
       case 'Newest Arrivals':
         sortValue = 'newest';
@@ -186,11 +224,12 @@ export class ShopComponent implements OnInit {
         sortValue = 'best_rated';
         break;
       default:
-        sortValue = '';
+        sortValue = 'newest';
     }
 
     this.shopFilterState.sort = sortValue;
     this.shopFilterState.hideSortingOptions = true;
+    this.pageNumber = 1;
     this.getProducts();
   }
 }

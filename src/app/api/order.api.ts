@@ -77,24 +77,39 @@ export class OrderApi {
     orderItems: {
       productId: string;
       quantity: number;
-      color: string;
-      size: string;
+      color?: string;
+      size?: string;
+      variantId?: string;
     }[],
     promoCode: string,
     deliveryMethod: number,
     deliveryCharge: Price,
-    shippingAddress: Address
+    shippingAddress: Address,
+    extraParams?: any
   ): Observable<Order> {
-    return this.http.post<Order>(`${this.url}/orders/checkout`, {
-      promoCode: promoCode,
+    const payload = {
+      promoCode: promoCode || undefined,
       deliveryMethod: deliveryMethod,
       deliveryCharge: {
         amount: deliveryCharge.amount,
         currency: deliveryCharge.currency
       },
       orderItems: orderItems,
-      shippingAddress: shippingAddress
-    });
+      shippingAddress: shippingAddress,
+      ...extraParams
+    };
+
+    return this.http.post<Order>(`${this.url}/users/${this.userId}/orders`, payload).pipe(
+      map((order) => {
+        if (order && (order as any).orderItems && (order as any).orderItems.$values) {
+          (order as any).orderItems = (order as any).orderItems.$values;
+        }
+        if (order && (order as any).items && (order as any).items.$values) {
+          order.items = (order as any).items.$values;
+        }
+        return order;
+      })
+    );
   }
 
   cancelOrder(orderId: string, reason: string): Observable<SuccessResponse> {

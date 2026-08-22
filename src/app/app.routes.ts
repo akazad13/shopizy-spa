@@ -20,6 +20,8 @@ import { OrderDetailsComponent } from './components/order/order-details/order-de
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { AuthGuard } from './guards/auth.guard';
 
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +34,10 @@ export const routes: Routes = [
       },
       {
         path: 'shop',
+        component: ShopComponent
+      },
+      {
+        path: 'search',
         component: ShopComponent
       },
       {
@@ -63,6 +69,11 @@ export const routes: Routes = [
         resolve: { product: ProductDetailResolver }
       },
       {
+        path: 'products/:productId',
+        component: ProductDetailsComponent,
+        resolve: { product: ProductDetailResolver }
+      },
+      {
         path: 'order-confirmation/:orderId',
         component: OrderComfirmationComponent,
         canActivate: [AuthGuard]
@@ -73,9 +84,20 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'account/preferences',
+        component: AccountComponent,
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'account/orders',
         component: OrdersComponent,
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'account/orders/:orderId',
+        component: OrderDetailsComponent,
+        canActivate: [AuthGuard],
+        resolve: { order: OrderDetailResolver }
       },
       {
         path: 'orders/:orderId',
@@ -104,6 +126,10 @@ export const routes: Routes = [
         component: SignupComponent,
         canActivate: [AuthGuard],
         data: { authGuardMode: 'redirectToDashboard' }
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent
       }
     ]
   },

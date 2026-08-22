@@ -29,8 +29,7 @@
           <app-icon icon="chevron-right" classNames="h-4 w-4 text-gray-300"></app-icon>
         </li>
         <li>
-          <span aria-current="page" class="max-w-[200px] truncate text-sm font-medium text-gray-800">{{ product.name
-            }}</span>
+          <span aria-current="page" class="max-w-[200px] truncate text-sm font-medium text-gray-800">{{ product.name }}</span>
         </li>
       </ol>
     </nav>
@@ -148,20 +147,25 @@
 
         <div class="border-t border-gray-100"></div>
 
-        <!-- CTA buttons -->
-        <div class="flex flex-wrap gap-3">
-          <button type="button" (click)="addProductToCart()"
-            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-indigo-700 active:scale-95">
-            <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
-            Add to Cart
-          </button>
-          <button type="button" (click)="toggleWishlist()"
-            class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-150 active:scale-95"
-            [class.border-rose-200]="!isInWishlist()" [class.bg-white]="!isInWishlist()" [class.text-rose-500]="!isInWishlist()"
-            [class.border-rose-500]="isInWishlist()" [class.bg-rose-500]="isInWishlist()" [class.text-white]="isInWishlist()">
-            <app-icon [icon]="isInWishlist() ? 'heart-solid' : 'heart-outline'" classNames="h-5 w-5"></app-icon>
-            {{ isInWishlist() ? 'In Wishlist' : 'Add to Wishlist' }}
-          </button>
+        <!-- CTA buttons & Price Drop Alert -->
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-wrap gap-3">
+            <button type="button" (click)="addProductToCart()"
+              class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-indigo-700 active:scale-95">
+              <app-icon icon="cart" classNames="h-5 w-5"></app-icon>
+              Add to Cart
+            </button>
+            <button type="button" (click)="toggleWishlist()"
+              class="inline-flex flex-1 items-center justify-center gap-x-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-150 active:scale-95"
+              [class.border-rose-200]="!isInWishlist()" [class.bg-white]="!isInWishlist()" [class.text-rose-500]="!isInWishlist()"
+              [class.border-rose-500]="isInWishlist()" [class.bg-rose-500]="isInWishlist()" [class.text-white]="isInWishlist()">
+              <app-icon [icon]="isInWishlist() ? 'heart-solid' : 'heart-outline'" classNames="h-5 w-5"></app-icon>
+              {{ isInWishlist() ? 'In Wishlist (Alerts On)' : 'Price Drop & Stock Alert' }}
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 text-center">
+            🔔 Adding to wishlist automatically enables instant Price Drop &amp; Back-in-Stock alerts.
+          </p>
         </div>
 
         <!-- Highlights -->
@@ -209,7 +213,7 @@
             class="relative px-5 py-3 text-sm font-semibold transition-colors duration-150"
             [class.text-indigo-700]="selectedTab === 'review'" [class.text-gray-500]="selectedTab !== 'review'"
             [class.hover:text-gray-800]="selectedTab !== 'review'">
-            Reviews
+            Reviews &amp; Proof
             <span class="ml-1.5 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
               {{ product.averageRating.numRatings }}
             </span>
@@ -236,10 +240,6 @@
             <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
             Machine washable — care-free and built to last.
           </li>
-          <li class="flex items-start gap-x-2 text-sm text-gray-600">
-            <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-            Customisable — add designs, paintings, or embroidery to make it truly yours.
-          </li>
         </ul>
       </div>
 
@@ -262,50 +262,86 @@
             </div>
           </div>
 
-        <!-- Overall score -->
-        <div class="flex flex-col items-center justify-center rounded-2xl bg-amber-50 p-8">
-          <span class="text-6xl font-bold text-amber-400">{{ product.averageRating.value }}</span>
-          <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-6 w-6'"
-            class="mt-3"></app-rating>
-          <p class="mt-2 text-sm font-medium text-gray-600">Based on {{ product.averageRating.numRatings }} reviews
-          </p>
-        </div>
-      </div>
-
-      <!-- Add Review Form -->
-      <div *ngIf="isLoggedIn" class="mt-8 rounded-2xl border border-indigo-100 bg-indigo-50/30 p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900">Share your thoughts</h3>
-        <p class="mb-4 text-sm text-gray-500">How would you rate this product?</p>
-
-        <div class="mb-4 flex gap-x-2">
-          <button *ngFor="let star of [1,2,3,4,5]" type="button" (click)="setReviewRating(star)"
-            class="transition-transform hover:scale-110">
-            <app-icon [icon]="reviewRating >= star ? 'star-solid' : 'star-outline'"
-              [classNames]="'h-8 w-8 ' + (reviewRating >= star ? 'text-amber-400' : 'text-gray-300')"></app-icon>
-          </button>
+          <!-- Overall score -->
+          <div class="flex flex-col items-center justify-center rounded-2xl bg-amber-50 p-8">
+            <span class="text-6xl font-bold text-amber-400">{{ product.averageRating.value }}</span>
+            <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-6 w-6'"
+              class="mt-3"></app-rating>
+            <p class="mt-2 text-sm font-medium text-gray-600">Based on {{ product.averageRating.numRatings }} verified reviews</p>
+          </div>
         </div>
 
-        <div class="relative">
-          <textarea [(ngModel)]="reviewComment" rows="4"
-            class="block w-full rounded-xl border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-gray-400"
-            placeholder="Write your review here..."></textarea>
+        <!-- Add Review Form -->
+        <div *ngIf="isLoggedIn" class="mt-8 rounded-2xl border border-indigo-100 bg-indigo-50/30 p-6 shadow-sm">
+          <h3 class="text-lg font-bold text-gray-900">Share your experience</h3>
+          <p class="mb-4 text-sm text-gray-500">How would you rate this product?</p>
+
+          <div class="mb-4 flex gap-x-2">
+            <button *ngFor="let star of [1,2,3,4,5]" type="button" (click)="setReviewRating(star)"
+              class="transition-transform hover:scale-110">
+              <app-icon [icon]="reviewRating >= star ? 'star-solid' : 'star-outline'"
+                [classNames]="'h-8 w-8 ' + (reviewRating >= star ? 'text-amber-400' : 'text-gray-300')"></app-icon>
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <input
+              type="text"
+              [(ngModel)]="reviewHeadline"
+              placeholder="Headline / Summary (e.g. Great fit and very comfortable!)"
+              class="block w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-gray-400"
+            />
+            <textarea [(ngModel)]="reviewComment" rows="4"
+              class="block w-full rounded-xl border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-gray-400"
+              placeholder="Write your detailed review here..."></textarea>
+
+            <!-- Optional Image URLs -->
+            <div class="flex gap-2">
+              <input
+                type="text"
+                [(ngModel)]="reviewImageUrl"
+                placeholder="Optional Cloudinary photo URL (e.g. https://...)"
+                class="flex-1 rounded-xl border-gray-200 bg-white px-4 py-2 text-xs text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+              <button
+                type="button"
+                (click)="addReviewImage()"
+                class="rounded-xl bg-gray-100 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-200 transition"
+              >
+                Attach Photo
+              </button>
+            </div>
+
+            <!-- Attached photo previews -->
+            <div *ngIf="reviewImageUrls.length > 0" class="flex flex-wrap gap-2 pt-2">
+              <div *ngFor="let img of reviewImageUrls; let i = index" class="relative h-16 w-16 overflow-hidden rounded-lg border border-gray-200">
+                <img [src]="img" alt="attachment" class="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  (click)="removeReviewImage(i)"
+                  class="absolute right-0.5 top-0.5 rounded-full bg-black/60 p-0.5 text-white hover:bg-black"
+                >
+                  <app-icon icon="x-mark" classNames="h-3 w-3"></app-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-end">
+            <button type="button" (click)="onSubmitReview()" [disabled]="isSubmittingReview || reviewRating === 0 || !reviewComment"
+              class="inline-flex items-center gap-x-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+              <span *ngIf="isSubmittingReview" class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+              {{ isSubmittingReview ? 'Submitting...' : 'Post Verified Review' }}
+            </button>
+          </div>
         </div>
 
-        <div class="mt-4 flex justify-end">
-          <button type="button" (click)="onSubmitReview()" [disabled]="isSubmittingReview || reviewRating === 0 || !reviewComment"
-            class="inline-flex items-center gap-x-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
-            <span *ngIf="isSubmittingReview" class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-            {{ isSubmittingReview ? 'Submitting...' : 'Post Review' }}
-          </button>
+        <div *ngIf="!isLoggedIn" class="mt-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 text-center">
+          <p class="text-sm text-gray-600">Please <a [routerLink]="['/auth/signin']" class="font-semibold text-indigo-600 hover:underline">sign in</a> to write a verified review.</p>
         </div>
-      </div>
 
-      <div *ngIf="!isLoggedIn" class="mt-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 text-center">
-        <p class="text-sm text-gray-600">Please <a [routerLink]="['/auth/signin']" class="font-semibold text-indigo-600 hover:underline">sign in</a> to write a review.</p>
-      </div>
-
-      <!-- Individual reviews -->
-      <div class="mt-8 space-y-6">
+        <!-- Individual reviews list -->
+        <div class="mt-8 space-y-6">
           <div *ngFor="let review of product.productReviews"
             class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <!-- Reviewer info header -->
@@ -313,16 +349,57 @@
               <div class="flex items-center gap-x-3">
                 <img
                   [src]="review.reviewerImageUrl ?? 'https://res.cloudinary.com/akazad13/image/upload/v1733996785/shopizy/default-user_sii97y.jpg'"
-                  [alt]="review.reviewer" class="h-9 w-9 rounded-full object-cover ring-2 ring-indigo-100" />
+                  [alt]="review.reviewer || review.userName" class="h-9 w-9 rounded-full object-cover ring-2 ring-indigo-100" />
                 <div>
-                  <h6 class="text-sm font-semibold text-gray-900">{{ review.reviewer }}</h6>
+                  <div class="flex items-center gap-2">
+                    <h6 class="text-sm font-semibold text-gray-900">{{ review.reviewer || review.userName }}</h6>
+                    <!-- Verified Purchase Badge -->
+                    <span
+                      *ngIf="review.isVerifiedPurchase !== false"
+                      class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 ring-1 ring-emerald-200"
+                    >
+                      <app-icon icon="check-solid" classNames="h-2.5 w-2.5 text-emerald-600"></app-icon>
+                      Verified Buyer
+                    </span>
+                  </div>
                   <p class="text-xs text-gray-400">{{ review.createdOn }}</p>
                 </div>
               </div>
               <app-rating [rating]="review.rating" [maxRating]="5.0" [classes]="'h-4 w-4'"></app-rating>
             </div>
+
+            <!-- Headline -->
+            <h4 *ngIf="review.headline" class="mt-2 text-sm font-bold text-gray-900">
+              {{ review.headline }}
+            </h4>
+
             <!-- Comment -->
-            <p class="mt-3 text-sm leading-relaxed text-gray-600">{{ review.comment }}</p>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600">{{ review.comment }}</p>
+
+            <!-- Attached photo thumbnails -->
+            <div *ngIf="review.imageUrls && review.imageUrls.length > 0" class="mt-3 flex flex-wrap gap-2">
+              <img
+                *ngFor="let img of review.imageUrls"
+                [src]="img"
+                alt="review photo"
+                class="h-16 w-16 rounded-lg object-cover border border-gray-100 shadow-sm cursor-pointer hover:opacity-90"
+              />
+            </div>
+
+            <!-- Upvote helpfulness row -->
+            <div class="mt-4 flex items-center justify-between border-t border-gray-50 pt-3">
+              <span class="text-xs text-gray-400">
+                Was this review helpful?
+              </span>
+              <button
+                type="button"
+                (click)="upvoteReview(review)"
+                class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition"
+              >
+                <app-icon icon="hand-thumb-up" classNames="h-3.5 w-3.5 text-gray-400"></app-icon>
+                <span>Helpful ({{ review.helpfulVotesCount || 0 }})</span>
+              </button>
+            </div>
           </div>
         </div>
 

@@ -40,4 +40,11 @@ export class PromoCodeApi {
     });
   }
 
+  validatePromo(userId: string, code: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/users/${userId}/orders/validate-promo`,
+      JSON.stringify(code),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 }

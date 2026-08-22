@@ -1,18 +1,27 @@
-<!-- Product card -->
 <div
   class="group relative flex w-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer"
-  [routerLink]="['/', 'product', product.productId]">
+  [routerLink]="['/', 'product', productId]">
 
   <!-- Image wrapper -->
   <div class="relative overflow-hidden bg-gray-50" style="aspect-ratio: 3/3;">
     <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-      [src]="product.productImages?.[0]?.imageUrl" [alt]="product.name" />
+      [src]="imageUrl" [alt]="product.name" />
 
-    <!-- Discount badge -->
-    <span *ngIf="product.discount && product.discount > 0"
-      class="absolute left-3 top-3 rounded-full bg-rose-500 px-2.5 py-1 text-xs font-bold text-white shadow">
-      −{{ product.discount }}%
-    </span>
+    <!-- Badges container -->
+    <div class="absolute left-3 top-3 flex flex-col gap-1 z-10">
+      <span *ngIf="product.discount && product.discount > 0"
+        class="rounded-full bg-rose-500 px-2.5 py-0.5 text-xs font-bold text-white shadow">
+        −{{ product.discount }}%
+      </span>
+      <span *ngIf="isBogo"
+        class="rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-bold text-white shadow">
+        BOGO
+      </span>
+      <span *ngIf="isFreeShipping"
+        class="rounded-full bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white shadow">
+        Free Shipping
+      </span>
+    </div>
 
     <!-- Wishlist button -->
     <button type="button" (click)="toggleWishlist($event)"
@@ -37,7 +46,7 @@
     </h3>
 
     <!-- Rating -->
-    <app-rating [rating]="product.averageRating.value" [maxRating]="5.0" [classes]="'h-3.5 w-3.5'"
+    <app-rating [rating]="rating" [maxRating]="5.0" [classes]="'h-3.5 w-3.5'"
       [showRatingNumber]="true"></app-rating>
 
     <!-- Price row and Add to Cart -->

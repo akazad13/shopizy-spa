@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { mustMatchValidator } from '../../../functions/must-match';
-import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
-import { HasErrorPipe } from '../../../pipes/has-error.pipe';
-import { handleError } from '../../../functions/error-handler';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize, firstValueFrom } from 'rxjs';
 import { AuthApi } from '../../../api/auth.api';
+import { mustMatchValidator } from '../../../functions/must-match';
+import { handleError } from '../../../functions/error-handler';
+import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
+import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../services/toast.service';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,44 +27,43 @@ import { ToastService } from '../../../services/toast.service';
     HasErrorPipe,
     IconComponent
   ],
-  templateUrl: './signup.component.html',
+  templateUrl: './reset-password.component.html',
   styles: ``
 })
-export class SignupComponent {
-  signupForm = new FormGroup(
-    {
-      firstName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2)
-      ]),
-      lastName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2)
-      ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phoneNumber: new FormControl(''),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6)
-      ]),
-      confirmPassword: new FormControl('', [Validators.required]),
-      acceptTerms: new FormControl(true, [Validators.requiredTrue])
-    },
-    { validators: [mustMatchValidator('password', 'confirmPassword')] }
-  );
-
+export class ResetPasswordComponent implements OnInit {
+  resetToken = '';
+  email = '';
   reqInProgress = false;
   showPassword = false;
   showConfirmPassword = false;
 
+  resetForm = new FormGroup(
+    {
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6)
+      ]),
+      confirmPassword: new FormControl('', [Validators.required])
+    },
+    { validators: [mustMatchValidator('password', 'confirmPassword')] }
+  );
+
   constructor(
-    private readonly authApi: AuthApi,
+    private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly authApi: AuthApi,
     private readonly toast: ToastService
   ) {}
 
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.resetToken = params['token'] || params['resetToken'] || '';
+      this.email = params['email'] || '';
+    });
+  }
+
   get passwordValue(): string {
-    return this.signupForm.get('password')?.value || '';
+    return this.resetForm.get('password')?.value || '';
   }
 
   get passwordStrength(): { score: number; label: string; color: string } {
@@ -87,33 +86,33 @@ export class SignupComponent {
     }
   }
 
-  async signup(): Promise<void> {
-    this.signupForm.markAllAsTouched();
+  async submitReset(): Promise<void> {
+    this.resetForm.markAllAsTouched();
 
-    if (this.reqInProgress || this.signupForm.invalid) {
+    if (this.reqInProgress || this.resetForm.invalid) {
       return;
     }
+
+    if (!this.resetToken) {
+      this.toast.error('Invalid or missing password reset token. Please request a new link.');
+      return;
+    }
+
     this.reqInProgress = true;
     try {
       await firstValueFrom(
         this.authApi
-          .signUp(
-            this.signupForm.value.firstName ?? '',
-            this.signupForm.value.lastName ?? '',
-            this.signupForm.value.email ?? '',
-            this.signupForm.value.password ?? '',
-            this.signupForm.value.phoneNumber || undefined
-          )
+          .resetPassword(this.resetForm.value.password!, this.resetToken)
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      this.toast.success('Account created successfully! Please sign in.');
+      this.toast.success('Password updated successfully! Please sign in.');
       this.router.navigateByUrl('/auth/signin');
     } catch (error) {
-      handleError(this.signupForm, error);
+      handleError(this.resetForm, error);
     }
   }
 
   get formData() {
-    return this.signupForm.controls;
+    return this.resetForm.controls;
   }
 }

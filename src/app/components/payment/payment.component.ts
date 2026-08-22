@@ -208,10 +208,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
   calculateOrderSummary(): void {
     this.order.orderItems.forEach((item) => {
+      const discount = item.discount || 0;
       this.orderSummary.subtotal.amount +=
         item.unitPrice.amount * item.quantity;
       this.orderSummary.saving +=
-        ((item.unitPrice.amount * item.discount) / 100) * item.quantity;
+        ((item.unitPrice.amount * discount) / 100) * item.quantity;
     });
 
     this.orderSummary.totalPrice.amount =

@@ -50,6 +50,25 @@ export class TokenService {
     return !!token && this.helper.isTokenExpired(token);
   }
 
+  getRefreshToken(): string | null {
+    const user = this.getStoredUser();
+    return user?.refreshToken ?? user?.data?.refreshToken ?? user?.result?.refreshToken ?? localStorage.getItem('refreshToken') ?? null;
+  }
+
+  updateTokens(token: string, refreshToken?: string, tokenExpiresAtUtc?: string): void {
+    const user = this.getStoredUser() || {};
+    user.token = token;
+    user.accessToken = token;
+    if (refreshToken) {
+      user.refreshToken = refreshToken;
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+    if (tokenExpiresAtUtc) {
+      user.tokenExpiresAtUtc = tokenExpiresAtUtc;
+    }
+    localStorage.setItem(this.userStorageKey, JSON.stringify(user));
+  }
+
   private getStoredUserId(): string | null {
     const user = this.getStoredUser();
 

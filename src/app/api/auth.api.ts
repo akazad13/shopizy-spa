@@ -37,14 +37,39 @@ export class AuthApi {
     firstName: string,
     lastName: string,
     email: string,
-    password: string
+    password: string,
+    phoneNumber?: string
   ): Observable<any> {
     return this.http.post<any>(`${this.url}/auth/register`, {
       firstName,
       lastName,
       email,
-      password
+      password,
+      phoneNumber
     });
+  }
+
+  refreshToken(token: string, refreshToken: string): Observable<any> {
+    return this.http
+      .post<any>(`${this.url}/auth/refresh-token`, {
+        token,
+        refreshToken
+      })
+      .pipe(
+        tap((res) => {
+          if (res?.token) {
+            const currentUser = this.userSubject.value || ({} as any);
+            const updatedUser = {
+              ...currentUser,
+              token: res.token,
+              accessToken: res.token,
+              refreshToken: res.refreshToken || currentUser.refreshToken,
+              tokenExpiresAtUtc: res.tokenExpiresAtUtc
+            };
+            this.setUser(updatedUser);
+          }
+        })
+      );
   }
 
   resetPassword(newPassword: string, resetToken: string): Observable<any> {

@@ -42,12 +42,19 @@ export interface AverageRating {
 }
 
 export interface ProductReview {
-  productReviewId: string;
-  reviewer: string;
-  reviewerImageUrl: string | null;
+  productReviewId?: string;
+  reviewId?: string;
+  userId?: string;
+  reviewer?: string;
+  userName?: string;
+  reviewerImageUrl?: string | null;
   comment: string;
+  headline?: string;
   rating: number;
-  createdOn: Date;
+  isVerifiedPurchase?: boolean;
+  helpfulVotesCount?: number;
+  imageUrls?: string[];
+  createdOn: any;
 }
 
 export interface AdminProductCreateUpdate {

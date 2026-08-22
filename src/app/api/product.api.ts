@@ -143,15 +143,71 @@ export class ProductApi {
     );
   }
 
+  facetedSearch(request: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/products/faceted-search`, request).pipe(
+      map((res) => {
+        let items = [];
+        if (res?.items) {
+          items = Array.isArray(res.items)
+            ? res.items
+            : res.items?.$values || [];
+        } else if (Array.isArray(res)) {
+          items = res;
+        }
+
+        let facets = [];
+        if (res?.facets) {
+          facets = Array.isArray(res.facets)
+            ? res.facets
+            : res.facets?.$values || [];
+          facets = facets.map((f: any) => ({
+            fieldName: f.fieldName || f.name,
+            values: Array.isArray(f.values)
+              ? f.values
+              : f.values?.$values || []
+          }));
+        }
+
+        let suggestedKeywords = [];
+        if (res?.suggestedKeywords) {
+          suggestedKeywords = Array.isArray(res.suggestedKeywords)
+            ? res.suggestedKeywords
+            : res.suggestedKeywords?.$values || [];
+        }
+
+        return {
+          items,
+          totalCount: res?.totalCount ?? items.length,
+          pageNumber: res?.pageNumber ?? 1,
+          pageSize: res?.pageSize ?? 20,
+          totalPages: res?.totalPages ?? 1,
+          facets,
+          suggestedKeywords
+        };
+      })
+    );
+  }
+
   submitReview(
     productId: string,
     rating: number,
-    comment: string
+    comment: string,
+    headline?: string,
+    imageUrls?: string[]
   ): Observable<any> {
     return this.http.post<any>(`${this.url}/products/${productId}/reviews`, {
       rating,
-      comment
+      comment,
+      headline,
+      imageUrls: imageUrls || []
     });
+  }
+
+  markReviewHelpful(productId: string, reviewId: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.url}/products/${productId}/reviews/${reviewId}/helpful`,
+      {}
+    );
   }
 
   // --- ADMIN ENDPOINTS ---
