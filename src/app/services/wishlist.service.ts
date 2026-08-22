@@ -11,7 +11,8 @@ import { ProductApi } from '../api/product.api';
 })
 export class WishlistService {
   private wishlistItems: WishlistItem[] = [];
-  private wishlistExists = true;
+  private wishlistExists = false;
+  private loadPromise?: Promise<void>;
   private readonly wishlistSubject = new BehaviorSubject<WishlistItem[]>([]);
   wishlist$ = this.wishlistSubject.asObservable();
 
@@ -23,43 +24,45 @@ export class WishlistService {
     this.loadWishlist();
   }
 
-  private async loadWishlist() {
-    if (this.authService.loggedIn()) {
-      try {
-        const response = await firstValueFrom(this.wishlistApi.getWishlist());
-        let items = response.wishlistItems || [];
-        
-        // Hydrate all missing items in a batch if needed
-        const missingIds = items.filter(i => !i.product).map(i => i.productId);
-        
-        if (missingIds.length > 0) {
-          try {
-            const products = await firstValueFrom(this.productApi.getProductsByIds(missingIds));
-            items = items.map(item => {
-              const product = products.find(p => p.productId === item.productId);
-              if (product) {
-                item.product = product;
-              }
-              return item;
-            });
-          } catch (e) {
-            console.error('Failed to batch hydrate products', e);
+  public loadWishlist(): Promise<void> {
+    this.loadPromise = (async () => {
+      if (this.authService.loggedIn()) {
+        try {
+          const response = await firstValueFrom(this.wishlistApi.getWishlist());
+          let items = response?.wishlistItems || [];
+          
+          // Hydrate all missing items in a batch if needed
+          const missingIds = items.filter(i => !i.product).map(i => i.productId);
+          
+          if (missingIds.length > 0) {
+            try {
+              const products = await firstValueFrom(this.productApi.getProductsByIds(missingIds));
+              items = items.map(item => {
+                const product = products.find(p => p.productId === item.productId);
+                if (product) {
+                  item.product = product;
+                }
+                return item;
+              });
+            } catch (e) {
+              console.error('Failed to batch hydrate products', e);
+            }
           }
-        }
 
-        this.wishlistItems = items.filter(i => !!i.product);
-        this.wishlistExists = true;
-        this.emit();
-      } catch (error: any) {
-        if (error.status === 404) {
+          this.wishlistItems = items.filter(i => !!i.product);
+          this.wishlistExists = true;
+          this.emit();
+        } catch (error: any) {
           this.wishlistExists = false;
+          console.error('Failed to load wishlist from server', error);
+          this.loadFromLocalStorage();
         }
-        console.error('Failed to load wishlist from server', error);
+      } else {
+        this.wishlistExists = false;
         this.loadFromLocalStorage();
       }
-    } else {
-      this.loadFromLocalStorage();
-    }
+    })();
+    return this.loadPromise;
   }
 
   private loadFromLocalStorage() {
@@ -91,24 +94,39 @@ export class WishlistService {
     };
 
     if (this.authService.loggedIn()) {
+      if (this.loadPromise) {
+        await this.loadPromise;
+      }
       try {
         if (!this.wishlistExists) {
           await firstValueFrom(this.wishlistApi.createWishlist());
           this.wishlistExists = true;
         }
         await firstValueFrom(this.wishlistApi.addToWishlist(product.productId));
-      } catch (error) {
-        console.error('Failed to add to wishlist on server', error);
+      } catch (error: any) {
+        // If operation failed (e.g. wishlist did not exist on server), attempt auto-creation once and retry
+        try {
+          await firstValueFrom(this.wishlistApi.createWishlist());
+          this.wishlistExists = true;
+          await firstValueFrom(this.wishlistApi.addToWishlist(product.productId));
+        } catch (retryErr) {
+          console.error('Failed to add to wishlist on server', retryErr);
+        }
       }
     }
 
-    this.wishlistItems.push(item);
+    if (!this.isInWishlist(product.productId)) {
+      this.wishlistItems.push(item);
+    }
     this.saveToLocalStorage();
     this.emit();
   }
 
   private async removeFromWishlist(productId: string): Promise<void> {
     if (this.authService.loggedIn()) {
+      if (this.loadPromise) {
+        await this.loadPromise;
+      }
       try {
         await firstValueFrom(this.wishlistApi.removeFromWishlist(productId));
       } catch (error) {

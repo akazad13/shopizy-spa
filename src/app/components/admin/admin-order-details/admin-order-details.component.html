@@ -1,88 +1,120 @@
-<div class="space-y-6">
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-    <div class="flex items-center gap-3">
-      <a routerLink="/admin/orders" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">Back</a>
-      <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Order details</h1>
-        <p class="mt-1 text-sm text-slate-500" *ngIf="order">Reference {{ order.orderId }}</p>
+<div class="space-y-6 animate-in fade-in duration-300">
+  <!-- Top Navigation & Header -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-4">
+        <a routerLink="/admin/orders" class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 active:scale-95">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </a>
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-0.5 text-xs font-bold text-slate-600">
+            <span>Order Reference</span>
+          </div>
+          <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl" *ngIf="order">
+            #{{ order.orderId }}
+          </h1>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="order" class="mt-6 flex flex-wrap items-center gap-3">
-      <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">Status: {{ order.orderStatus }}</div>
-      <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">Payment: {{ order.paymentStatus }}</div>
-      <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-        <select [(ngModel)]="selectedStatus" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none">
-          <option *ngFor="let s of availableStatuses" [value]="s.value">{{ s.label }}</option>
-        </select>
-        <button (click)="updateStatus()" [disabled]="savingStatus" class="rounded-lg bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-50">Save</button>
+      <div *ngIf="order" class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-1.5 pl-3">
+          <span class="text-xs font-bold text-slate-500">Status:</span>
+          <select [(ngModel)]="selectedStatus" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 outline-none transition focus:border-indigo-500">
+            <option *ngFor="let s of availableStatuses" [value]="s.value">{{ s.label }}</option>
+          </select>
+          <button (click)="updateStatus()" [disabled]="savingStatus" class="rounded-xl bg-indigo-600 px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-indigo-500 disabled:opacity-50 active:scale-95">
+            {{ savingStatus ? 'Updating...' : 'Update' }}
+          </button>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Skeleton Loading -->
   <div *ngIf="loading" class="space-y-6">
-    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
       <app-skeleton-loader type="form" [rows]="4"></app-skeleton-loader>
     </div>
   </div>
 
+  <!-- Order Content Grid -->
   <div *ngIf="!loading && order" class="grid gap-6 xl:grid-cols-3">
+    <!-- Left 2 Columns: Items & Summary -->
     <div class="space-y-6 xl:col-span-2">
-      <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div class="border-b border-slate-200 px-6 py-4">
-          <h2 class="text-base font-medium text-slate-900">Items</h2>
-          <p class="text-sm text-slate-500">Order line items and totals.</p>
+      <!-- Order Items Table -->
+      <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4.5 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold tracking-tight text-slate-900">Purchased Items</h2>
+            <p class="text-xs text-slate-500">Items included in this customer order.</p>
+          </div>
+          <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-700">
+            {{ order.orderItems.length }} item{{ order.orderItems.length > 1 ? 's' : '' }}
+          </span>
         </div>
         <div class="divide-y divide-slate-100">
-          <div *ngFor="let item of order.orderItems" class="flex items-center gap-4 px-6 py-4">
-            <div class="h-14 w-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shrink-0">
+          <div *ngFor="let item of order.orderItems" class="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-slate-50/50">
+            <div class="h-16 w-16 overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 shrink-0">
               <img *ngIf="item.pictureUrl" [src]="item.pictureUrl" class="h-full w-full object-cover" [alt]="item.name">
+              <div *ngIf="!item.pictureUrl" class="flex h-full w-full items-center justify-center text-slate-300">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
             </div>
             <div class="flex-1">
-              <div class="text-sm font-medium text-slate-900">{{ item.name }}</div>
-              <div class="text-xs text-slate-500">Qty {{ item.quantity }}</div>
+              <div class="text-sm font-bold text-slate-900">{{ item.name }}</div>
+              <div class="mt-0.5 text-xs text-slate-500">Unit Price: {{ item.unitPrice.amount | currency:item.unitPrice.currency }} • Qty: {{ item.quantity }}</div>
             </div>
-            <div class="text-sm font-medium text-slate-900">{{ (item.unitPrice.amount * item.quantity) | currency:item.unitPrice.currency }}</div>
+            <div class="text-sm font-extrabold text-slate-900">
+              {{ (item.unitPrice.amount * item.quantity) | currency:item.unitPrice.currency }}
+            </div>
           </div>
         </div>
       </section>
 
+      <!-- Cost Breakdown & Customer Info -->
       <section class="grid gap-6 md:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 class="text-base font-medium text-slate-900">Summary</h2>
+        <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
+          <h2 class="text-base font-bold tracking-tight text-slate-900">Payment Breakdown</h2>
           <div class="mt-4 space-y-3 text-sm text-slate-600">
-            <div class="flex justify-between"><span>Subtotal</span><span class="font-medium text-slate-900">{{ getItemsSubtotal() | currency:order.deliveryCharge.currency }}</span></div>
-            <div class="flex justify-between"><span>Delivery</span><span class="font-medium text-slate-900">{{ order.deliveryCharge.amount | currency:order.deliveryCharge.currency }}</span></div>
-            <div class="flex justify-between border-t border-slate-100 pt-3"><span>Total</span><span class="font-medium text-slate-900">{{ (getItemsSubtotal() + order.deliveryCharge.amount) | currency:order.deliveryCharge.currency }}</span></div>
+            <div class="flex justify-between"><span>Items Subtotal</span><span class="font-bold text-slate-900">{{ getItemsSubtotal() | currency:order.deliveryCharge.currency }}</span></div>
+            <div class="flex justify-between"><span>Delivery Charge</span><span class="font-bold text-slate-900">{{ order.deliveryCharge.amount | currency:order.deliveryCharge.currency }}</span></div>
+            <div class="flex justify-between border-t border-slate-100 pt-3 text-base"><span>Total Paid</span><span class="font-extrabold text-indigo-600">{{ (getItemsSubtotal() + order.deliveryCharge.amount) | currency:order.deliveryCharge.currency }}</span></div>
           </div>
         </div>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 class="text-base font-medium text-slate-900">Customer</h2>
+        <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
+          <h2 class="text-base font-bold tracking-tight text-slate-900">Customer Details</h2>
           <div class="mt-4 space-y-3 text-sm text-slate-600">
-            <div><span class="block text-xs uppercase tracking-[0.2em] text-slate-400">User ID</span>{{ order.userId.substring(0,8) }}...</div>
-            <div><span class="block text-xs uppercase tracking-[0.2em] text-slate-400">Date placed</span>{{ order.createdOn | date:'medium' }}</div>
-            <div *ngIf="order.promoCode"><span class="block text-xs uppercase tracking-[0.2em] text-slate-400">Promo code</span>{{ order.promoCode }}</div>
+            <div><span class="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">User ID</span><span class="font-mono text-xs text-slate-800">{{ order.userId }}</span></div>
+            <div><span class="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Date Placed</span><span class="font-semibold text-slate-800">{{ order.createdOn | date:'medium' }}</span></div>
+            <div *ngIf="order.promoCode"><span class="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Promo Code</span><span class="font-semibold text-emerald-600">{{ order.promoCode }}</span></div>
           </div>
         </div>
       </section>
     </div>
 
+    <!-- Right Sidebar Column: Shipping & Status Actions -->
     <div class="space-y-6">
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-base font-medium text-slate-900">Shipping</h2>
-        <p class="mt-3 text-sm leading-7 text-slate-600">
+      <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
+        <div class="flex items-center gap-2 text-indigo-600">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <h2 class="text-base font-bold tracking-tight text-slate-900">Shipping Address</h2>
+        </div>
+        <div class="mt-4 rounded-2xl bg-slate-50/80 p-4 border border-slate-200/50 text-sm leading-relaxed text-slate-700 font-medium">
           {{ order.shippingAddress.street }}<br>
           {{ order.shippingAddress.city }}, {{ order.shippingAddress.state }} {{ order.shippingAddress.zipCode }}<br>
-          {{ order.shippingAddress.country }}
-        </p>
+          <span class="font-bold text-slate-900">{{ order.shippingAddress.country }}</span>
+        </div>
       </section>
 
-      <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-        <div class="text-xs uppercase tracking-[0.2em] text-slate-400">Fulfilment</div>
-        <h2 class="mt-2 text-lg font-medium text-slate-900">Update status</h2>
-        <p class="mt-1 text-sm text-slate-500">Keep the order moving.</p>
-        <button (click)="updateStatus()" [disabled]="savingStatus" class="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm text-white disabled:opacity-50">{{ savingStatus ? 'Saving...' : 'Save status' }}</button>
+      <section class="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-indigo-50/40 p-6 shadow-sm">
+        <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-600">Fulfillment Status</div>
+        <h2 class="mt-1 text-lg font-bold text-slate-900">Update Order State</h2>
+        <p class="mt-1 text-xs text-slate-500">Modify order status to reflect dispatch, delivery or resolution.</p>
+
+        <button (click)="updateStatus()" [disabled]="savingStatus" class="mt-4 w-full rounded-2xl bg-slate-900 px-4 py-3 text-xs font-bold text-white shadow-md transition hover:bg-black disabled:opacity-50 active:scale-95">
+          {{ savingStatus ? 'Saving Status...' : 'Save Order Status' }}
+        </button>
       </section>
     </div>
   </div>

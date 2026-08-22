@@ -12,11 +12,12 @@ import { ToastService } from '../../../services/toast.service';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
 import { UserApi } from '../../../api/user.api';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, IconComponent, DatePipe, RouterLink, PaginationComponent, SkeletonLoaderComponent],
+  imports: [CommonModule, IconComponent, DatePipe, RouterLink, PaginationComponent, SkeletonLoaderComponent, ConfirmModalComponent],
   templateUrl: './orders.component.html',
   styles: ``,
   schemas: [NO_ERRORS_SCHEMA]
@@ -26,6 +27,11 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   totalPages = 1;
   loading = true;
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Cancel Order';
+  confirmModalMessage = 'Are you sure you want to cancel this order?';
+  orderToCancelId: string | null = null;
 
   constructor(
     private readonly orderApi: OrderApi,
@@ -109,9 +115,23 @@ export class OrdersComponent implements OnInit {
   }
 
   onCancel(orderId: string): void {
-    if (window.confirm('Are you sure you want to cancel this order?')) {
-      this.cancelOrder(orderId);
-    }
+    this.orderToCancelId = orderId;
+    this.confirmModalTitle = 'Cancel Order';
+    this.confirmModalMessage = 'Are you sure you want to cancel this order?';
+    this.confirmModalOpen = true;
+  }
+
+  async confirmCancelOrder(): Promise<void> {
+    if (!this.orderToCancelId) return;
+    const orderId = this.orderToCancelId;
+    this.confirmModalOpen = false;
+    this.orderToCancelId = null;
+    await this.cancelOrder(orderId);
+  }
+
+  cancelModalClose(): void {
+    this.confirmModalOpen = false;
+    this.orderToCancelId = null;
   }
 
   async cancelOrder(orderId: string): Promise<void> {

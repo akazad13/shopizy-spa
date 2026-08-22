@@ -95,6 +95,20 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getHighlightsList(): string[] {
+    if (!this.product || !this.product.highlights) {
+      return [];
+    }
+
+    const raw = this.product.highlights;
+    const lines = raw
+      .split(/[\r\n;]+/)
+      .map(line => line.replace(/^[\s•\-\*\d+\.\:]+/, '').trim())
+      .filter(line => line.length > 0);
+
+    return lines.length > 0 ? lines : [raw];
+  }
+
   addProductToCart() {
     const cartItem: CartItem = {
       cartItemId: null,

@@ -5,10 +5,12 @@ import { UserApi } from '../../../api/user.api';
 import { UserDetails } from '../../../interfaces/user';
 import { ToastService } from '../../../services/toast.service';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  standalone: true,
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, ConfirmModalComponent],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.css'
 })
@@ -17,6 +19,12 @@ export class AdminUsersComponent implements OnInit {
   loading: boolean = true;
   activeUsers = 0;
   adminUsers = 0;
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Update User Role';
+  confirmModalMessage = '';
+  userToUpdate: UserDetails | null = null;
+  targetNewRole: string | null = null;
 
   constructor(
     private userApi: UserApi,
@@ -57,20 +65,34 @@ export class AdminUsersComponent implements OnInit {
   }
 
   toggleRole(user: UserDetails): void {
-    // Quick mock switch. Usually would open a dialog or hit API explicitly
     const newRole = (user.roles || []).includes('Admin') ? 'User' : 'Admin';
-    if (
-      confirm(
-        `Are you sure you want to change ${user.firstName}'s role to ${newRole}?`
-      )
-    ) {
-      this.userApi.updateUserRole(user.id, newRole).subscribe({
-        next: () => {
-          this.toast.success(`User role updated to ${newRole}`);
-          this.loadUsers();
-        },
-        error: () => this.toast.error('Failed to update role')
-      });
-    }
+    this.userToUpdate = user;
+    this.targetNewRole = newRole;
+    this.confirmModalTitle = 'Update User Role';
+    this.confirmModalMessage = `Are you sure you want to change ${user.firstName || 'this user'}'s role to ${newRole}?`;
+    this.confirmModalOpen = true;
+  }
+
+  confirmUpdateRole(): void {
+    if (!this.userToUpdate || !this.targetNewRole) return;
+    const user = this.userToUpdate;
+    const newRole = this.targetNewRole;
+    this.confirmModalOpen = false;
+    this.userToUpdate = null;
+    this.targetNewRole = null;
+
+    this.userApi.updateUserRole(user.id, newRole).subscribe({
+      next: () => {
+        this.toast.success(`User role updated to ${newRole}`);
+        this.loadUsers();
+      },
+      error: () => this.toast.error('Failed to update role')
+    });
+  }
+
+  cancelUpdateRole(): void {
+    this.confirmModalOpen = false;
+    this.userToUpdate = null;
+    this.targetNewRole = null;
   }
 }

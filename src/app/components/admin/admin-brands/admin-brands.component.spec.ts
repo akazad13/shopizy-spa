@@ -161,18 +161,17 @@ describe('AdminBrandsComponent', () => {
   });
 
   it('onDelete should not call api if user cancels confirmation', () => {
-    spyOn(window, 'confirm').and.returnValue(false);
-
     component.onDelete('brand-1');
+    component.cancelDeleteBrand();
 
     expect(brandApiMock.deleteBrand).not.toHaveBeenCalled();
   });
 
   it('onDelete should delete and reload when confirmed', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     spyOn(component, 'loadBrands');
 
     component.onDelete('brand-1');
+    component.confirmDeleteBrand();
 
     expect(brandApiMock.deleteBrand).toHaveBeenCalledWith('brand-1');
     expect(toastServiceMock.success).toHaveBeenCalledWith('Brand deleted');
@@ -224,12 +223,12 @@ describe('AdminBrandsComponent', () => {
   });
 
   it('should show error toast when delete fails', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     brandApiMock.deleteBrand.and.returnValue(
       throwError(() => new Error('boom'))
     );
 
     component.onDelete('brand-1');
+    component.confirmDeleteBrand();
 
     expect(toastServiceMock.error).toHaveBeenCalledWith('Error deleting brand');
   });

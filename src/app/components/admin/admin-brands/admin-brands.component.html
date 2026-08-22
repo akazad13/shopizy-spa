@@ -1,102 +1,75 @@
-<div class="space-y-6">
-  <section
-    class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
-  >
-    <div
-      class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
-    >
+<div class="space-y-6 animate-in fade-in duration-300">
+  <!-- Page Header & Metrics Summary -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
-          Brands
-        </h1>
-        <p class="mt-1 text-sm text-slate-500">
-          Manage catalog brands with quick create, update, and delete actions.
-        </p>
+        <div
+          class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">
+          <span class="h-2 w-2 rounded-full bg-emerald-600"></span>
+          <span>Brand Catalog</span>
+        </div>
+        <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">Brand Management</h1>
+        <p class="mt-1 text-sm text-slate-500">Manage store partner brands, logos, and regional origins.</p>
       </div>
+
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            Total
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ brands.length }}
-          </div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Total Brands</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-slate-900">{{ brands.length }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            With logo
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ brandsWithLogoCount }}
-          </div>
+        <div class="rounded-2xl border border-indigo-200/60 bg-indigo-50/40 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">With Logo</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-indigo-900">{{ brandsWithLogoCount }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            With country
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ brandsWithCountryCount }}
-          </div>
+        <div class="rounded-2xl border border-emerald-200/60 bg-emerald-50/40 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-700">With Country</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-emerald-900">{{ brandsWithCountryCount }}</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <!-- Brand Form Section -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
     <div class="flex items-center justify-between gap-4">
       <div>
-        <h2 class="text-base font-medium text-slate-900">Editor</h2>
-        <p class="text-sm text-slate-500">
-          Create a new brand or edit an existing one.
-        </p>
+        <h2 class="text-lg font-bold tracking-tight text-slate-900">Brand Form</h2>
+        <p class="text-xs text-slate-500">Add a new store brand or edit details.</p>
       </div>
-      <button
-        (click)="onAdd()"
-        class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-      >
-        New brand
+      <button (click)="onAdd()"
+        class="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-indigo-500 active:scale-95">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Add Brand</span>
       </button>
     </div>
 
-    <div
-      *ngIf="showForm"
-      class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5"
-    >
+    <div *ngIf="showForm" class="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5">
       <form (ngSubmit)="onSubmit()" class="grid gap-4 md:grid-cols-3">
-        <input
-          name="name"
-          [(ngModel)]="brandForm.name"
-          type="text"
-          placeholder="Brand name"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-          required
-        />
-        <input
-          name="image"
-          [(ngModel)]="brandForm.logoUrl"
-          type="text"
-          placeholder="Logo/image URL"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-        />
-        <input
-          name="country"
-          [(ngModel)]="brandForm.country"
-          type="text"
-          placeholder="Country"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-        />
-        <div class="flex gap-3 md:col-span-3">
-          <button
-            type="submit"
-            class="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white"
-          >
-            {{ isEditMode ? "Save changes" : "Create brand" }}
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Brand Name *</label>
+          <input name="name" [(ngModel)]="brandForm.name" type="text" placeholder="e.g. Nike"
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+            required />
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Logo Image URL</label>
+          <input name="image" [(ngModel)]="brandForm.logoUrl" type="text" placeholder="https://..."
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Origin Country</label>
+          <input name="country" [(ngModel)]="brandForm.country" type="text" placeholder="e.g. United States"
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10" />
+        </div>
+        <div class="flex gap-3 md:col-span-3 pt-2">
+          <button type="submit"
+            class="rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-black active:scale-95">
+            {{ isEditMode ? "Save Changes" : "Create Brand" }}
           </button>
-          <button
-            type="button"
-            (click)="resetForm()"
-            class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700"
-          >
+          <button type="button" (click)="resetForm()"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 active:scale-95">
             Cancel
           </button>
         </div>
@@ -104,73 +77,72 @@
     </div>
   </section>
 
-  <section
-    class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-  >
-    <div class="border-b border-slate-200 px-6 py-4">
-      <h2 class="text-base font-medium text-slate-900">All brands</h2>
-      <p class="text-sm text-slate-500">
-        Compact list with direct edit and delete actions.
-      </p>
+  <!-- Brands Data Table -->
+  <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+    <div class="border-b border-slate-100 px-7 py-5 sm:px-8">
+      <h2 class="text-base font-bold tracking-tight text-slate-900">Registered Brands</h2>
+      <p class="text-xs text-slate-500">Brands catalog listing with direct management actions.</p>
     </div>
 
-    <div
-      *ngIf="loading"
-      class="rounded-2xl border border-slate-200 bg-white shadow-sm"
-    >
-      <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
+    <div *ngIf="loading" class="p-8">
+      <app-skeleton-loader type="table" [rows]="5" [columns]="4"></app-skeleton-loader>
     </div>
 
     <div *ngIf="!loading" class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200 text-sm">
-        <thead
-          class="bg-slate-50 text-left text-xs uppercase tracking-[0.2em] text-slate-500"
-        >
+      <table class="w-full min-w-[750px] text-left">
+        <thead class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 bg-slate-50/50">
           <tr>
-            <th class="px-6 py-3 font-medium">Brand</th>
-            <th class="px-6 py-3 font-medium">Country</th>
-            <th class="px-6 py-3 font-medium">Logo</th>
-            <th class="px-6 py-3 text-right font-medium">Actions</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Brand Details</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Country</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Logo Preview</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 bg-white">
           <tr *ngIf="brands.length === 0">
-            <td
-              colspan="4"
-              class="px-6 py-16 text-center text-sm text-slate-500"
-            >
+            <td colspan="4" class="px-7 py-16 text-center text-sm font-medium text-slate-400">
               No brands found.
             </td>
           </tr>
-          <tr *ngFor="let brand of brands" class="hover:bg-slate-50/70">
-            <td class="px-6 py-4 font-medium text-slate-900">
-              {{ brand.name }}
+          <tr *ngFor="let brand of brands" class="hover:bg-slate-50/70 transition-colors group">
+            <td class="px-7 py-5 sm:px-8">
+              <div class="flex items-center gap-3.5">
+                <div
+                  class="h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-slate-200/80 bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-sm">
+                  <img *ngIf="brand.logoUrl" [src]="brand.logoUrl" [alt]="brand.name"
+                    class="h-full w-full object-contain p-1">
+                  <span *ngIf="!brand.logoUrl">{{ brand.name.substring(0, 2).toUpperCase() }}</span>
+                </div>
+                <div class="font-bold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors">{{
+                  brand.name }}</div>
+              </div>
             </td>
-            <td class="px-6 py-4 text-slate-600">{{ brand.country || "—" }}</td>
-            <td class="px-6 py-4 text-slate-600">
-              <a
-                *ngIf="brand.logoUrl"
-                [href]="brand.logoUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-slate-700 underline decoration-slate-300 underline-offset-2"
-              >
-                Preview
+            <td class="px-7 py-5 sm:px-8">
+              <span *ngIf="brand.country"
+                class="inline-flex items-center rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
+                {{ brand.country }}
+              </span>
+              <span *ngIf="!brand.country" class="text-xs text-slate-400">—</span>
+            </td>
+            <td class="px-7 py-5 sm:px-8">
+              <a *ngIf="brand.logoUrl" [href]="brand.logoUrl" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline">
+                <span>Preview Image</span>
+                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
               </a>
-              <span *ngIf="!brand.logoUrl">—</span>
+              <span *ngIf="!brand.logoUrl" class="text-xs text-slate-400">No logo URL</span>
             </td>
-            <td class="px-6 py-4 text-right">
+            <td class="px-7 py-5 sm:px-8 text-right">
               <div class="inline-flex gap-2">
-                <button
-                  (click)="onEdit(brand)"
-                  class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
-                >
+                <button (click)="onEdit(brand)"
+                  class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs transition hover:bg-slate-100 hover:border-slate-300">
                   Edit
                 </button>
-                <button
-                  (click)="onDelete(brand.id)"
-                  class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
-                >
+                <button (click)="onDelete(brand.id, brand.name)"
+                  class="rounded-xl border border-rose-200/80 bg-rose-50/50 px-3.5 py-2 text-xs font-bold text-rose-600 transition hover:bg-rose-600 hover:text-white">
                   Delete
                 </button>
               </div>
@@ -180,4 +152,7 @@
       </table>
     </div>
   </section>
+
+  <app-confirm-modal [isOpen]="confirmModalOpen" [title]="confirmModalTitle" [message]="confirmModalMessage"
+    confirmText="Delete Brand" (confirmed)="confirmDeleteBrand()" (cancelled)="cancelDeleteBrand()"></app-confirm-modal>
 </div>

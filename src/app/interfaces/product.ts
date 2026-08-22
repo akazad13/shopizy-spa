@@ -15,6 +15,7 @@ export interface Product {
   name: string;
   shortDescription: string;
   description: string;
+  highlights?: string | null;
   categoryId: string;
   price: number;
   discount: number;
@@ -61,6 +62,7 @@ export interface AdminProductCreateUpdate {
   name: string;
   shortDescription: string;
   description: string;
+  highlights?: string;
   categoryId: string;
   brandId: string | null;
   sku: string;

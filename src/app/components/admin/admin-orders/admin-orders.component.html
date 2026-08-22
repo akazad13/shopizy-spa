@@ -1,67 +1,105 @@
-<div class="space-y-6">
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+<div class="space-y-6 animate-in fade-in duration-300">
+  <!-- Page Header & Metrics Summary -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Orders</h1>
-        <p class="mt-1 text-sm text-slate-500">A straightforward view of order activity.</p>
+        <div class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600">
+          <span class="h-2 w-2 rounded-full bg-blue-600"></span>
+          <span>Order Management</span>
+        </div>
+        <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">Orders Overview</h1>
+        <p class="mt-1 text-sm text-slate-500">Monitor customer transactions, fulfillment status, and order processing.
+        </p>
       </div>
+
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Orders</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ orders.length }}</div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Total Orders</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-slate-900">{{ orders.length }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Revenue</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ totalRevenue | currency }}</div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Total Revenue</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-indigo-600">{{ totalRevenue | currency }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Pending</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ statusCounts.Pending }}</div>
+        <div class="rounded-2xl border border-amber-200/60 bg-amber-50/40 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-amber-700">Pending</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-amber-900">{{ statusCounts.Pending }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Delivered</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ statusCounts.Delivered }}</div>
+        <div class="rounded-2xl border border-emerald-200/60 bg-emerald-50/40 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-700">Delivered</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-emerald-900">{{ statusCounts.Delivered }}</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-    <div class="border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+  <!-- Orders Data Table -->
+  <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+    <div class="border-b border-slate-100 px-7 py-5 sm:px-8 flex items-center justify-between">
       <div>
-        <h2 class="text-base font-medium text-slate-900">All orders</h2>
-        <p class="text-sm text-slate-500">Minimal table with essential fields only.</p>
+        <h2 class="text-base font-bold tracking-tight text-slate-900">All Orders</h2>
+        <p class="text-xs text-slate-500">Live order queue sorted by timestamp.</p>
       </div>
-      <div class="text-xs uppercase tracking-[0.2em] text-slate-400">Live</div>
+      <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Live Feed</div>
     </div>
 
-    <div *ngIf="loading" class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div *ngIf="loading" class="p-8">
       <app-skeleton-loader type="table" [rows]="5" [columns]="5"></app-skeleton-loader>
     </div>
 
     <div *ngIf="!loading" class="overflow-x-auto">
       <table class="w-full min-w-[820px] text-left">
-        <thead class="text-xs uppercase tracking-[0.2em] text-slate-400">
+        <thead class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 bg-slate-50/50">
           <tr>
-            <th class="px-6 py-4 font-medium">Order</th>
-            <th class="px-6 py-4 font-medium">Date</th>
-            <th class="px-6 py-4 font-medium">Total</th>
-            <th class="px-6 py-4 font-medium">Status</th>
-            <th class="px-6 py-4 font-medium text-right">Action</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Order ID</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Date Placed</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Total Amount</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold">Fulfillment Status</th>
+            <th class="px-7 py-4.5 sm:px-8 font-bold text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
-          <tr *ngFor="let order of orders" class="hover:bg-slate-50/60">
-            <td class="px-6 py-4 text-sm font-medium text-slate-900">#{{ order.orderId.substring(0, 8) }}</td>
-            <td class="px-6 py-4 text-sm text-slate-600">{{ order.createdOn | date:'mediumDate' }}</td>
-            <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ order.total.amount | currency:order.total.currency }}</td>
-            <td class="px-6 py-4 text-sm text-slate-600">{{ getStatusName(order.orderStatus) }}</td>
-            <td class="px-6 py-4 text-right">
-              <a [routerLink]="['/admin/orders', order.orderId]" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">View</a>
+          <tr *ngFor="let order of orders" class="hover:bg-slate-50/70 transition-colors group">
+            <td
+              class="px-7 py-5 sm:px-8 text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              #{{ order.orderId.substring(0, 8) }}
+            </td>
+            <td class="px-7 py-5 sm:px-8 text-xs font-semibold text-slate-600">
+              {{ order.createdOn | date:'mediumDate' }}
+            </td>
+            <td class="px-7 py-5 sm:px-8 text-sm font-extrabold text-slate-900">
+              {{ order.total.amount | currency:order.total.currency }}
+            </td>
+            <td class="px-7 py-5 sm:px-8">
+              <span [ngClass]="{
+                'bg-amber-50 text-amber-700 border-amber-200': getStatusName(order.orderStatus) === 'Pending',
+                'bg-indigo-50 text-indigo-700 border-indigo-200': getStatusName(order.orderStatus) === 'Processing',
+                'bg-blue-50 text-blue-700 border-blue-200': getStatusName(order.orderStatus) === 'Shipping',
+                'bg-emerald-50 text-emerald-700 border-emerald-200': getStatusName(order.orderStatus) === 'Delivered',
+                'bg-rose-50 text-rose-700 border-rose-200': getStatusName(order.orderStatus) === 'Cancelled'
+              }" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold">
+                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="{
+                  'bg-amber-500': getStatusName(order.orderStatus) === 'Pending',
+                  'bg-indigo-500': getStatusName(order.orderStatus) === 'Processing',
+                  'bg-blue-500': getStatusName(order.orderStatus) === 'Shipping',
+                  'bg-emerald-500': getStatusName(order.orderStatus) === 'Delivered',
+                  'bg-rose-500': getStatusName(order.orderStatus) === 'Cancelled'
+                }"></span>
+                <span>{{ getStatusName(order.orderStatus) }}</span>
+              </span>
+            </td>
+            <td class="px-7 py-5 sm:px-8 text-right">
+              <a [routerLink]="['/admin/orders', order.orderId]"
+                class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs transition hover:bg-slate-100 hover:border-slate-300">
+                <span>Details</span>
+                <svg class="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
             </td>
           </tr>
           <tr *ngIf="orders.length === 0">
-            <td colspan="5" class="px-6 py-16 text-center text-sm text-slate-500">No orders found.</td>
+            <td colspan="5" class="px-7 py-16 text-center text-sm font-medium text-slate-400">No orders found.</td>
           </tr>
         </tbody>
       </table>

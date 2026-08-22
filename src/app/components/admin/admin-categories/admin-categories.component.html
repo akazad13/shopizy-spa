@@ -1,113 +1,79 @@
-<div class="space-y-6">
-  <section
-    class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
-  >
-    <div
-      class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
-    >
+<div class="space-y-6 animate-in fade-in duration-300">
+  <!-- Page Header & Taxonomy Stats -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
-          Categories
-        </h1>
-        <p class="mt-1 text-sm text-slate-500">
-          A flat, minimal view for store taxonomy.
-        </p>
+        <div class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600">
+          <span class="h-2 w-2 rounded-full bg-blue-600"></span>
+          <span>Store Taxonomy</span>
+        </div>
+        <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">Categories Hierarchy</h1>
+        <p class="mt-1 text-sm text-slate-500">Organize and manage catalog categories and sub-category levels.</p>
       </div>
+
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            Total
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ categories.length }}
-          </div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Total Categories</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-slate-900">{{ categories.length }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            Top level
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ topLevelCategories }}
-          </div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Top-Level</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-indigo-600">{{ topLevelCategories }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            Nested
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">
-            {{ categories.length - topLevelCategories }}
-          </div>
+        <div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Sub-Categories</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-slate-900">{{ categories.length - topLevelCategories }}</div>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-            Mode
-          </div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">Tree</div>
+        <div class="rounded-2xl border border-emerald-200/60 bg-emerald-50/40 p-4">
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-700">Taxonomy</div>
+          <div class="mt-1.5 text-2xl font-extrabold text-emerald-900">Tree View</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <!-- Category Editor Form & Trigger -->
+  <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
     <div class="flex items-center justify-between gap-4">
       <div>
-        <h2 class="text-base font-medium text-slate-900">Editor</h2>
-        <p class="text-sm text-slate-500">
-          Create or edit categories with a compact form.
-        </p>
+        <h2 class="text-lg font-bold tracking-tight text-slate-900">Category Form</h2>
+        <p class="text-xs text-slate-500">Create new categories or update existing store taxonomy.</p>
       </div>
-      <button
-        (click)="onAdd()"
-        class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-      >
-        New category
+      <button (click)="onAdd()" class="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-indigo-500 active:scale-95">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        <span>Add Category</span>
       </button>
     </div>
 
-    <div
-      *ngIf="showForm"
-      class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5"
-    >
+    <div *ngIf="showForm" class="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5">
       <form (ngSubmit)="onSubmit()" class="grid gap-4 md:grid-cols-3">
-        <input
-          name="name"
-          [(ngModel)]="categoryForm.name"
-          type="text"
-          placeholder="Category name"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-          required
-        />
-        <select
-          name="parentId"
-          [(ngModel)]="categoryForm.parentId"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-        >
-          <option [ngValue]="null">Main category</option>
-          <ng-container *ngFor="let cat of categories">
-            <option *ngIf="cat.id !== categoryForm.id" [ngValue]="cat.id">
-              {{ cat.name }}
-            </option>
-          </ng-container>
-        </select>
-        <input
-          name="description"
-          [(ngModel)]="categoryForm.description"
-          type="text"
-          placeholder="Description"
-          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-300"
-        />
-        <div class="flex gap-3 md:col-span-3">
-          <button
-            type="submit"
-            class="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white"
-          >
-            {{ isEditMode ? "Save changes" : "Create category" }}
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Category Name *</label>
+          <input name="name" [(ngModel)]="categoryForm.name" type="text" placeholder="e.g. Footwear"
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10" required />
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Parent Category</label>
+          <select name="parentId" [(ngModel)]="categoryForm.parentId"
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+            <option [ngValue]="null">Main / Top-Level Category</option>
+            <ng-container *ngFor="let cat of categories">
+              <option *ngIf="cat.id !== categoryForm.id" [ngValue]="cat.id">
+                {{ cat.name }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Description</label>
+          <input name="description" [(ngModel)]="categoryForm.description" type="text" placeholder="Brief category summary"
+            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10" />
+        </div>
+        <div class="flex gap-3 md:col-span-3 pt-2">
+          <button type="submit" class="rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-black active:scale-95">
+            {{ isEditMode ? "Save Changes" : "Create Category" }}
           </button>
-          <button
-            type="button"
-            (click)="resetForm()"
-            class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700"
-          >
+          <button type="button" (click)="resetForm()" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 active:scale-95">
             Cancel
           </button>
         </div>
@@ -115,28 +81,19 @@
     </div>
   </section>
 
-  <section
-    class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-  >
-    <div class="border-b border-slate-200 px-6 py-4">
-      <h2 class="text-base font-medium text-slate-900">All categories</h2>
-      <p class="text-sm text-slate-500">
-        Clean list with edit and delete actions.
-      </p>
+  <!-- Taxonomy Tree Listing -->
+  <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+    <div class="border-b border-slate-100 px-7 py-5 sm:px-8">
+      <h2 class="text-base font-bold tracking-tight text-slate-900">Active Category Tree</h2>
+      <p class="text-xs text-slate-500">Expandable sub-categories with direct management controls.</p>
     </div>
 
-    <div
-      *ngIf="loading"
-      class="rounded-2xl border border-slate-200 bg-white shadow-sm"
-    >
+    <div *ngIf="loading" class="p-8">
       <app-skeleton-loader type="list" [rows]="5"></app-skeleton-loader>
     </div>
 
-    <div *ngIf="!loading && !showForm" class="px-6 py-4">
-      <div
-        *ngIf="categoryTree.length === 0"
-        class="py-16 text-center text-sm text-slate-500"
-      >
+    <div *ngIf="!loading && !showForm" class="p-6 sm:p-8">
+      <div *ngIf="categoryTree.length === 0" class="py-16 text-center text-sm font-medium text-slate-400">
         No categories found.
       </div>
 
@@ -148,65 +105,41 @@
     </div>
 
     <ng-template #treeNode let-node="node" let-level="level">
-      <div class="space-y-1">
-        <div
-          class="flex items-center gap-2 rounded-lg px-3 py-3 transition hover:bg-slate-50"
-          [style.padding-left.px]="level * 24"
-        >
-          <button
-            *ngIf="node.children && node.children.length > 0"
-            (click)="toggleExpanded(node)"
-            class="flex h-6 w-6 items-center justify-center text-slate-400 transition hover:text-slate-600"
-          >
-            <svg
-              class="h-4 w-4 transition-transform"
-              [class.rotate-90]="node.expanded"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
+      <div class="space-y-1.5">
+        <div class="flex items-center gap-3.5 rounded-2xl p-4 transition-colors hover:bg-slate-50 border border-transparent hover:border-slate-200/60" [style.padding-left.px]="(level * 32) + 16">
+          <button *ngIf="node.children && node.children.length > 0" (click)="toggleExpanded(node)"
+            class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition hover:bg-slate-200">
+            <svg class="h-4 w-4 transition-transform duration-200" [class.rotate-90]="node.expanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
-          <div
-            *ngIf="!node.children || node.children.length === 0"
-            class="w-6"
-          ></div>
+          <div *ngIf="!node.children || node.children.length === 0" class="w-7"></div>
+
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 font-bold text-xs">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          </div>
 
           <div class="min-w-0 flex-1">
-            <div class="text-sm font-medium text-slate-900">
-              {{ node.name }}
+            <div class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span>{{ node.name }}</span>
+              <span *ngIf="node.children && node.children.length > 0" class="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-600">
+                {{ node.children.length }} sub
+              </span>
             </div>
-            <div class="text-xs text-slate-500">
-              {{ node.description || "—" }}
-            </div>
+            <div class="text-xs text-slate-500 mt-0.5">{{ node.description || "No description specified" }}</div>
           </div>
 
           <div class="flex shrink-0 gap-2">
-            <button
-              (click)="onEdit(node)"
-              class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
-            >
+            <button (click)="onEdit(node)" class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs transition hover:bg-slate-100 hover:border-slate-300">
               Edit
             </button>
-            <button
-              (click)="onDelete(node.id)"
-              class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50"
-            >
+            <button (click)="onDelete(node.id, node.name)" class="rounded-xl border border-rose-200/80 bg-rose-50/50 px-3.5 py-2 text-xs font-bold text-rose-600 transition hover:bg-rose-600 hover:text-white">
               Delete
             </button>
           </div>
         </div>
 
-        <div
-          *ngIf="node.expanded && node.children && node.children.length > 0"
-          class="space-y-1"
-        >
+        <div *ngIf="node.expanded && node.children && node.children.length > 0" class="space-y-1.5">
           <ng-container
             *ngFor="let child of node.children"
             [ngTemplateOutlet]="treeNode"
@@ -216,4 +149,13 @@
       </div>
     </ng-template>
   </section>
+
+  <app-confirm-modal
+    [isOpen]="confirmModalOpen"
+    [title]="confirmModalTitle"
+    [message]="confirmModalMessage"
+    confirmText="Delete Category"
+    (confirmed)="confirmDeleteCategory()"
+    (cancelled)="cancelDeleteCategory()"
+  ></app-confirm-modal>
 </div>

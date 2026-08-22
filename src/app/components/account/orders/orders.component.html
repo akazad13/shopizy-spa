@@ -247,4 +247,13 @@
       </div>
     </div>
   </div>
+
+  <app-confirm-modal
+    [isOpen]="confirmModalOpen"
+    [title]="confirmModalTitle"
+    [message]="confirmModalMessage"
+    confirmText="Cancel Order"
+    (confirmed)="confirmCancelOrder()"
+    (cancelled)="cancelModalClose()"
+  ></app-confirm-modal>
 </section>

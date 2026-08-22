@@ -9,6 +9,7 @@ import { ToastService } from '../../../services/toast.service';
 import { CategoryApi } from '../../../api/category.api';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-products',
@@ -18,7 +19,8 @@ import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-l
     FormsModule,
     RouterModule,
     PaginationComponent,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    ConfirmModalComponent
   ],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
@@ -33,6 +35,11 @@ export class AdminProductsComponent implements OnInit {
   // Search controls (bound via ngModel)
   searchName: string = '';
   selectedCategoryId: string = '';
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Delete Product';
+  confirmModalMessage = '';
+  productToDeleteId: string | null = null;
 
   constructor(
     private productApi: ProductApi,
@@ -115,14 +122,36 @@ export class AdminProductsComponent implements OnInit {
     this.loadProducts();
   }
 
-  deleteProduct(productId: string): void {
-    if (
-      !confirm(
-        'Are you sure you want to delete this product? This action cannot be undone.'
-      )
-    )
-      return;
-    this.productApi.deleteProduct(productId).subscribe({
+  getProductId(product: any): string {
+    return product?.productId || product?.id || '';
+  }
+
+  getProductImageUrl(product: any): string | null {
+    if (!product) return null;
+    let imgs = product.productImages;
+    if (imgs && (imgs as any).$values) {
+      imgs = (imgs as any).$values;
+    }
+    if (Array.isArray(imgs) && imgs.length > 0) {
+      return typeof imgs[0] === 'string' ? imgs[0] : (imgs[0]?.imageUrl || null);
+    }
+    return null;
+  }
+
+  deleteProduct(productId: string, name?: string): void {
+    this.productToDeleteId = productId;
+    this.confirmModalTitle = 'Delete Product';
+    this.confirmModalMessage = `Are you sure you want to delete "${name || 'this product'}"? This action cannot be undone.`;
+    this.confirmModalOpen = true;
+  }
+
+  confirmDeleteProduct(): void {
+    if (!this.productToDeleteId) return;
+    const id = this.productToDeleteId;
+    this.confirmModalOpen = false;
+    this.productToDeleteId = null;
+
+    this.productApi.deleteProduct(id).subscribe({
       next: () => {
         this.toast.success('Product deleted successfully');
         this.loadProducts();
@@ -131,5 +160,10 @@ export class AdminProductsComponent implements OnInit {
         this.toast.error('Could not delete product');
       }
     });
+  }
+
+  cancelDeleteProduct(): void {
+    this.confirmModalOpen = false;
+    this.productToDeleteId = null;
   }
 }

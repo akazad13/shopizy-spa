@@ -5,11 +5,12 @@ import { BrandApi } from '../../../api/brand.api';
 import { Brand } from '../../../interfaces/brand';
 import { ToastService } from '../../../services/toast.service';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-brands',
   standalone: true,
-  imports: [CommonModule, FormsModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, SkeletonLoaderComponent, ConfirmModalComponent],
   templateUrl: './admin-brands.component.html'
 })
 export class AdminBrandsComponent implements OnInit {
@@ -17,6 +18,11 @@ export class AdminBrandsComponent implements OnInit {
   loading = true;
   showForm = false;
   isEditMode = false;
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Delete Brand';
+  confirmModalMessage = '';
+  brandToDeleteId: string | null = null;
 
   get brandsWithLogoCount(): number {
     return this.brands.filter((brand) => !!brand.logoUrl).length;
@@ -86,16 +92,31 @@ export class AdminBrandsComponent implements OnInit {
     this.showForm = true;
   }
 
-  onDelete(brandId: string): void {
-    if (!confirm('Are you sure you want to delete this brand?')) return;
+  onDelete(brandId: string, name?: string): void {
+    this.brandToDeleteId = brandId;
+    this.confirmModalTitle = 'Delete Brand';
+    this.confirmModalMessage = `Are you sure you want to delete "${name || 'this brand'}"? This action cannot be undone.`;
+    this.confirmModalOpen = true;
+  }
 
-    this.brandApi.deleteBrand(brandId).subscribe({
+  confirmDeleteBrand(): void {
+    if (!this.brandToDeleteId) return;
+    const id = this.brandToDeleteId;
+    this.confirmModalOpen = false;
+    this.brandToDeleteId = null;
+
+    this.brandApi.deleteBrand(id).subscribe({
       next: () => {
         this.toast.success('Brand deleted');
         this.loadBrands();
       },
       error: () => this.toast.error('Error deleting brand')
     });
+  }
+
+  cancelDeleteBrand(): void {
+    this.confirmModalOpen = false;
+    this.brandToDeleteId = null;
   }
 
   onSubmit(): void {

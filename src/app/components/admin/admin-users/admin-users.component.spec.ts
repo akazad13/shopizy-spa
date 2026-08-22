@@ -116,20 +116,19 @@ describe('AdminUsersComponent', () => {
   });
 
   it('toggleRole should not call update api when confirmation is cancelled', () => {
-    spyOn(window, 'confirm').and.returnValue(false);
-
     component.toggleRole(makeUser({ id: '77', roles: ['User'] }));
+    component.cancelUpdateRole();
 
     expect(userApiMock.updateUserRole).not.toHaveBeenCalled();
   });
 
   it('toggleRole should switch User to Admin and reload on success', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     spyOn(component, 'loadUsers');
 
     component.toggleRole(
       makeUser({ id: '77', firstName: 'Ava', roles: ['User'] })
     );
+    component.confirmUpdateRole();
 
     expect(userApiMock.updateUserRole).toHaveBeenCalledWith('77', 'Admin');
     expect(toastServiceMock.success).toHaveBeenCalledWith(
@@ -139,17 +138,15 @@ describe('AdminUsersComponent', () => {
   });
 
   it('toggleRole should switch Admin to User', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
-
     component.toggleRole(
       makeUser({ id: '99', firstName: 'Max', roles: ['Admin'] })
     );
+    component.confirmUpdateRole();
 
     expect(userApiMock.updateUserRole).toHaveBeenCalledWith('99', 'User');
   });
 
   it('toggleRole should show error toast when update fails', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     userApiMock.updateUserRole.and.returnValue(
       throwError(() => new Error('boom'))
     );
@@ -157,6 +154,7 @@ describe('AdminUsersComponent', () => {
     component.toggleRole(
       makeUser({ id: '102', firstName: 'Mia', roles: ['User'] })
     );
+    component.confirmUpdateRole();
 
     expect(toastServiceMock.error).toHaveBeenCalledWith(
       'Failed to update role'

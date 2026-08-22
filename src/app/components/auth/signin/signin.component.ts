@@ -14,6 +14,7 @@ import { IsInvalidPipe } from '../../../pipes/is-invalid.pipe';
 import { HasErrorPipe } from '../../../pipes/has-error.pipe';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { CartService } from '../../../services/cart.service';
+import { WishlistService } from '../../../services/wishlist.service';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../services/toast.service';
 
@@ -49,6 +50,7 @@ export class SigninComponent {
     private readonly router: Router,
     private readonly authApi: AuthApi,
     private readonly cartService: CartService,
+    private readonly wishlistService: WishlistService,
     private readonly toast: ToastService
   ) {}
 
@@ -70,6 +72,7 @@ export class SigninComponent {
       );
       this.toast.success('Welcome back to Shopizy!');
       this.cartService.getCartData();
+      this.wishlistService.loadWishlist();
       this.router.navigateByUrl('/');
     } catch (error) {
       handleError(this.signinForm, error);

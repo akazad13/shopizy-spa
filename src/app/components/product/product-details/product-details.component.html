@@ -169,24 +169,12 @@
         </div>
 
         <!-- Highlights -->
-        <div class="rounded-xl bg-indigo-50/60 p-4 ring-1 ring-indigo-100">
+        <div *ngIf="getHighlightsList().length > 0" class="rounded-xl bg-indigo-50/60 p-4 ring-1 ring-indigo-100">
           <h3 class="mb-2 text-xs font-semibold uppercase tracking-wider text-indigo-500">Highlights</h3>
           <ul class="space-y-1.5">
-            <li class="flex items-center gap-x-2 text-sm text-gray-600">
+            <li *ngFor="let item of getHighlightsList()" class="flex items-center gap-x-2 text-sm text-gray-600">
               <app-icon icon="check-solid" classNames="h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-              Hand cut and sewn locally
-            </li>
-            <li class="flex items-center gap-x-2 text-sm text-gray-600">
-              <app-icon icon="check-solid" classNames="h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-              Dyed with proprietary colors
-            </li>
-            <li class="flex items-center gap-x-2 text-sm text-gray-600">
-              <app-icon icon="check-solid" classNames="h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-              Pre-washed &amp; pre-shrunk
-            </li>
-            <li class="flex items-center gap-x-2 text-sm text-gray-600">
-              <app-icon icon="check-solid" classNames="h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-              Ultra-soft 100% cotton
+              <span>{{ item }}</span>
             </li>
           </ul>
         </div>
@@ -224,23 +212,21 @@
       </div>
 
       <!-- Description tab -->
-      <div *ngIf="selectedTab === 'description'" class="mt-8 max-w-3xl">
-        <h3 class="text-lg font-bold text-gray-900">Product Description</h3>
-        <p class="mt-3 text-sm leading-relaxed text-gray-500">{{ product.description }}</p>
-        <ul class="mt-5 space-y-2">
-          <li class="flex items-start gap-x-2 text-sm text-gray-600">
-            <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-            A timeless wardrobe essential — versatile enough to pair with anything.
-          </li>
-          <li class="flex items-start gap-x-2 text-sm text-gray-600">
-            <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-            Available in a wide range of sizes from XS to XL, including tall and petite.
-          </li>
-          <li class="flex items-start gap-x-2 text-sm text-gray-600">
-            <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-400"></app-icon>
-            Machine washable — care-free and built to last.
-          </li>
-        </ul>
+      <div *ngIf="selectedTab === 'description'" class="mt-8 max-w-3xl space-y-6">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">Product Description</h3>
+          <div class="mt-3 text-sm leading-relaxed text-gray-600 whitespace-pre-line" [innerHTML]="product.description"></div>
+        </div>
+
+        <div *ngIf="getHighlightsList().length > 0">
+          <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Key Product Highlights</h4>
+          <ul class="mt-3 space-y-2">
+            <li *ngFor="let item of getHighlightsList()" class="flex items-start gap-x-2 text-sm text-gray-600">
+              <app-icon icon="check-circle-solid" classNames="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-500"></app-icon>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <!-- Reviews tab -->

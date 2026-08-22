@@ -195,18 +195,17 @@ describe('AdminCategoriesComponent', () => {
   });
 
   it('onDelete should not call api when confirmation is cancelled', () => {
-    spyOn(window, 'confirm').and.returnValue(false);
-
     component.onDelete('cat-1');
+    component.cancelDeleteCategory();
 
     expect(categoryApiMock.deleteCategory).not.toHaveBeenCalled();
   });
 
   it('onDelete should delete and reload when confirmed', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     spyOn(component, 'loadCategories');
 
     component.onDelete('cat-1');
+    component.confirmDeleteCategory();
 
     expect(categoryApiMock.deleteCategory).toHaveBeenCalledWith('cat-1');
     expect(toastServiceMock.success).toHaveBeenCalledWith('Category deleted');
@@ -214,12 +213,12 @@ describe('AdminCategoriesComponent', () => {
   });
 
   it('onDelete should show error toast on failure', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     categoryApiMock.deleteCategory.and.returnValue(
       throwError(() => new Error('boom'))
     );
 
     component.onDelete('cat-1');
+    component.confirmDeleteCategory();
 
     expect(toastServiceMock.error).toHaveBeenCalledWith(
       'Error deleting category'

@@ -27,6 +27,8 @@ export class WishlistApi {
     return this.http.patch<any>(`${this.url}/users/${this.userId}/wishlist`, {
       productId: productId,
       action: 'Add'
+    }, {
+      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
     });
   }
 
@@ -34,11 +36,15 @@ export class WishlistApi {
     return this.http.patch<any>(`${this.url}/users/${this.userId}/wishlist`, {
       productId: productId,
       action: 'Remove'
+    }, {
+      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
     });
   }
 
   createWishlist(): Observable<any> {
-    return this.http.post<any>(`${this.url}/users/${this.userId}/wishlist`, {});
+    return this.http.post<any>(`${this.url}/users/${this.userId}/wishlist`, {}, {
+      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
+    });
   }
 
   getPublicWishlist(wishlistId: string): Observable<Wishlist> {

@@ -164,18 +164,17 @@ describe('AdminProductsComponent', () => {
   });
 
   it('deleteProduct should not call api if user cancels', () => {
-    spyOn(window, 'confirm').and.returnValue(false);
-
     component.deleteProduct('p-1');
+    component.cancelDeleteProduct();
 
     expect(productApiMock.deleteProduct).not.toHaveBeenCalled();
   });
 
   it('deleteProduct should delete and reload when confirmed', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     spyOn(component, 'loadProducts');
 
     component.deleteProduct('p-2');
+    component.confirmDeleteProduct();
 
     expect(productApiMock.deleteProduct).toHaveBeenCalledWith('p-2');
     expect(toastServiceMock.success).toHaveBeenCalledWith(
@@ -185,12 +184,12 @@ describe('AdminProductsComponent', () => {
   });
 
   it('deleteProduct should show error toast on failure', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
     productApiMock.deleteProduct.and.returnValue(
       throwError(() => new Error('boom'))
     );
 
     component.deleteProduct('p-2');
+    component.confirmDeleteProduct();
 
     expect(toastServiceMock.error).toHaveBeenCalledWith(
       'Could not delete product'

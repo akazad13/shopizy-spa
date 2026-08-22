@@ -4,11 +4,12 @@ import { CategoryApi } from '../../../api/category.api';
 import { ToastService } from '../../../services/toast.service';
 import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, SkeletonLoaderComponent, ConfirmModalComponent],
   templateUrl: './admin-categories.component.html'
 })
 export class AdminCategoriesComponent implements OnInit {
@@ -24,6 +25,11 @@ export class AdminCategoriesComponent implements OnInit {
   };
   isEditMode = false;
   showForm = false;
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Delete Category';
+  confirmModalMessage = '';
+  categoryToDeleteId: string | null = null;
 
   constructor(
     private categoryApi: CategoryApi,
@@ -79,16 +85,31 @@ export class AdminCategoriesComponent implements OnInit {
     this.showForm = true;
   }
 
-  onDelete(id: string) {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryApi.deleteCategory(id).subscribe({
-        next: () => {
-          this.toast.success('Category deleted');
-          this.loadCategories();
-        },
-        error: () => this.toast.error('Error deleting category')
-      });
-    }
+  onDelete(id: string, name?: string) {
+    this.categoryToDeleteId = id;
+    this.confirmModalTitle = 'Delete Category';
+    this.confirmModalMessage = `Are you sure you want to delete "${name || 'this category'}"? This action cannot be undone.`;
+    this.confirmModalOpen = true;
+  }
+
+  confirmDeleteCategory() {
+    if (!this.categoryToDeleteId) return;
+    const id = this.categoryToDeleteId;
+    this.confirmModalOpen = false;
+    this.categoryToDeleteId = null;
+
+    this.categoryApi.deleteCategory(id).subscribe({
+      next: () => {
+        this.toast.success('Category deleted');
+        this.loadCategories();
+      },
+      error: () => this.toast.error('Error deleting category')
+    });
+  }
+
+  cancelDeleteCategory() {
+    this.confirmModalOpen = false;
+    this.categoryToDeleteId = null;
   }
 
   buildTree(): void {

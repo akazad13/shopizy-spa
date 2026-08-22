@@ -13,6 +13,7 @@ import { CategoryApi } from '../../../api/category.api';
 import { CategoryTree } from '../../../interfaces/category';
 import { map } from 'rxjs';
 import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-loader.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -21,7 +22,8 @@ import { SkeletonLoaderComponent } from '../../shared/skeleton-loader/skeleton-l
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    ConfirmModalComponent
   ],
   templateUrl: './admin-product-form.component.html',
   styleUrl: './admin-product-form.component.css'
@@ -34,6 +36,11 @@ export class AdminProductFormComponent implements OnInit {
   submitting: boolean = false;
   categories: CategoryTree[] = []; // flat list for dropdown
   brands: any[] = [];
+
+  confirmModalOpen = false;
+  confirmModalTitle = 'Remove Image';
+  confirmModalMessage = 'Are you sure you want to remove this product image?';
+  imageToDeleteId: string | null = null;
 
   // For image management in edit mode
   existingImages: { productImageId: string; imageUrl: string }[] = [];
@@ -95,6 +102,7 @@ export class AdminProductFormComponent implements OnInit {
       name: ['', Validators.required],
       shortDescription: ['', [Validators.required, Validators.maxLength(300)]],
       description: ['', Validators.required],
+      highlights: [''],
       categoryId: ['', Validators.required],
       brandId: [null],
       sku: ['', Validators.required],
@@ -151,6 +159,7 @@ export class AdminProductFormComponent implements OnInit {
           name: product.name || '',
           shortDescription: product.shortDescription || '',
           description: product.description || '',
+          highlights: product.highlights || '',
           categoryId: product.categoryId || '',
           brandId: product.brandId || null,
           sku: product.sku || '',
@@ -243,7 +252,18 @@ export class AdminProductFormComponent implements OnInit {
 
   deleteImage(imageId: string): void {
     if (!this.productId) return;
-    if (!confirm('Remove this image?')) return;
+    this.imageToDeleteId = imageId;
+    this.confirmModalTitle = 'Remove Image';
+    this.confirmModalMessage = 'Are you sure you want to remove this product image?';
+    this.confirmModalOpen = true;
+  }
+
+  confirmDeleteImage(): void {
+    if (!this.productId || !this.imageToDeleteId) return;
+    const imageId = this.imageToDeleteId;
+    this.confirmModalOpen = false;
+    this.imageToDeleteId = null;
+
     this.productApi.deleteProductImage(this.productId, imageId).subscribe({
       next: () => {
         this.existingImages = this.existingImages.filter(
@@ -253,6 +273,11 @@ export class AdminProductFormComponent implements OnInit {
       },
       error: () => this.toast.error('Failed to remove image')
     });
+  }
+
+  cancelDeleteImage(): void {
+    this.confirmModalOpen = false;
+    this.imageToDeleteId = null;
   }
 
   onSubmit(): void {
@@ -269,6 +294,7 @@ export class AdminProductFormComponent implements OnInit {
       name: v.name,
       shortDescription: v.shortDescription,
       description: v.description,
+      highlights: v.highlights || '',
       categoryId: v.categoryId,
       brandId: v.brandId || null,
       sku: v.sku,
