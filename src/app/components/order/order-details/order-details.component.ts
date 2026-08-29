@@ -160,6 +160,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
         return 2;
       case 'Shipping':
       case 'Shipped':
+      case 'InTransit':
         return 3;
       case 'Delivered':
         return 4;
@@ -169,6 +170,43 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
 
   getStatusName(): string {
-    return this.order?.status || this.order?.orderStatus || 'Pending';
+    const raw = this.order?.status || this.order?.orderStatus || 'Pending';
+    return this.formatTrackingStatus(raw);
+  }
+
+  formatTrackingStatus(status?: string): string {
+    if (!status) return '';
+    const statusMap: Record<string, string> = {
+      'LabelCreated': 'Label Created',
+      'InTransit': 'In Transit',
+      'OutForDelivery': 'Out for Delivery',
+      'Delivered': 'Delivered',
+      'Pending': 'Pending',
+      'Processing': 'Processing',
+      'Shipping': 'Shipping',
+      'Shipped': 'Shipped',
+      'Cancelled': 'Cancelled',
+      'Failed': 'Failed',
+      'Exception': 'Exception'
+    };
+    if (statusMap[status]) return statusMap[status];
+    return status.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
+
+  getTrackingStatusBadgeClass(status?: string): string {
+    const s = (status || '').toLowerCase();
+    if (s.includes('deliver')) {
+      return 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200';
+    }
+    if (s.includes('transit') || s.includes('shipped') || s.includes('shipping')) {
+      return 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200';
+    }
+    if (s.includes('label')) {
+      return 'bg-amber-50 text-amber-700 ring-1 ring-amber-200';
+    }
+    if (s.includes('cancel') || s.includes('fail') || s.includes('exception')) {
+      return 'bg-rose-50 text-rose-700 ring-1 ring-rose-200';
+    }
+    return 'bg-gray-100 text-gray-700';
   }
 }
