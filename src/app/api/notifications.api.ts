@@ -5,8 +5,7 @@ import { environment } from '../../environments/environment';
 import { TokenService } from '../services/token.service';
 import {
   NotificationPreferences,
-  UpdateNotificationPreferencesRequest,
-  SendSmsRequest
+  UpdateNotificationPreferencesRequest
 } from '../types/api';
 
 @Injectable({
@@ -40,9 +39,5 @@ export class NotificationsApi {
       `${this.url}/users/${targetUserId}/notification-preferences`,
       preferences
     );
-  }
-
-  sendSms(request: SendSmsRequest): Observable<any> {
-    return this.http.post<any>(`${this.url}/notifications/sms`, request);
   }
 }

@@ -103,7 +103,7 @@ export class WishlistService {
           this.wishlistExists = true;
         }
         await firstValueFrom(this.wishlistApi.addToWishlist(product.productId));
-      } catch (error: any) {
+      } catch {
         // If operation failed (e.g. wishlist did not exist on server), attempt auto-creation once and retry
         try {
           await firstValueFrom(this.wishlistApi.createWishlist());

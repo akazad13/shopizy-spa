@@ -33,12 +33,12 @@ export class WishlistApi {
   }
 
   removeFromWishlist(productId: string): Observable<any> {
-    return this.http.patch<any>(`${this.url}/users/${this.userId}/wishlist`, {
-      productId: productId,
-      action: 'Remove'
-    }, {
-      headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
-    });
+    return this.http.delete<any>(
+      `${this.url}/users/${this.userId}/wishlist/items/${productId}`,
+      {
+        headers: new HttpHeaders({ 'X-Skip-Error-Toast': 'true' })
+      }
+    );
   }
 
   createWishlist(): Observable<any> {

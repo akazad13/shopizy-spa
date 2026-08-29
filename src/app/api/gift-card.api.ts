@@ -35,8 +35,6 @@ export class GiftCardApi {
   }
 
   validateGiftCard(code: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/gift-cards/validate`, `"${code}"`, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return this.http.post<any>(`${this.baseUrl}/gift-cards/validate`, { code });
   }
 }

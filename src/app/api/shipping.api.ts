@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
-  ShippingRateEstimate,
-  ShippingRateEstimateRequest,
+  ShippingMethod,
   ShippingTrackingInfo
 } from '../types/api';
 
@@ -16,13 +15,8 @@ export class ShippingApi {
 
   constructor(private readonly http: HttpClient) {}
 
-  estimateRates(
-    request: ShippingRateEstimateRequest
-  ): Observable<ShippingRateEstimate[]> {
-    return this.http.post<ShippingRateEstimate[]>(
-      `${this.url}/shipping/estimate-rates`,
-      request
-    );
+  getShippingMethods(): Observable<ShippingMethod[]> {
+    return this.http.get<ShippingMethod[]>(`${this.url}/shipping/methods`);
   }
 
   getOrderTracking(orderId: string): Observable<ShippingTrackingInfo> {

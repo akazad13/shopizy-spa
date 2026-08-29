@@ -1,4 +1,7 @@
-// --- Common & Pagination ---
+// ==============================================================================
+// 1. Common & Base Types
+// ==============================================================================
+
 export interface ApiErrorResponse {
   title: string;
   status: number;
@@ -14,7 +17,62 @@ export interface Address {
   zipCode: string;
 }
 
-// --- Auth Interfaces ---
+export interface Price {
+  amount: number;
+  currency: string;
+}
+
+// ==============================================================================
+// 2. Authentication & User Profile
+// ==============================================================================
+
+export interface AuthResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'Customer' | 'Admin' | string;
+  token: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
+}
+
+export interface UserDetails {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  isTwoFactorEnabled: boolean;
+  addresses: UserAddress[];
+  defaultAddressId?: string;
+  createdAtUtc: string;
+}
+
+export interface UserAddress extends Address {
+  id: string;
+  isDefault: boolean;
+}
+
+export interface NotificationPreferences {
+  userId: string;
+  emailEnabled: boolean;
+  pushEnabled: boolean;
+  orderUpdates: boolean;
+  promotions: boolean;
+  priceAlerts: boolean;
+  restockAlerts: boolean;
+}
+
+export interface UpdateNotificationPreferencesRequest {
+  emailEnabled: boolean;
+  pushEnabled: boolean;
+  orderUpdates: boolean;
+  promotions: boolean;
+  priceAlerts: boolean;
+  restockAlerts: boolean;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -26,17 +84,6 @@ export interface RegisterRequest {
   email: string;
   password: string;
   phoneNumber?: string;
-}
-
-export interface AuthResponse {
-  userId: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  roles: string[]; // e.g., ["Customer"], ["Admin"]
-  token: string;
-  refreshToken: string;
-  tokenExpiresAtUtc: string;
 }
 
 export interface RefreshTokenRequest {
@@ -53,8 +100,11 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
-// --- Product & Faceted Search ---
-export interface ProductSearchResultItem {
+// ==============================================================================
+// 3. Products & Faceted Search
+// ==============================================================================
+
+export interface ProductItem {
   id: string;
   name: string;
   description: string;
@@ -69,9 +119,13 @@ export interface ProductSearchResultItem {
   totalReviews: number;
   imageUrls: string[];
   tags: string[];
+  highlights?: string[];
   isBogo?: boolean;
   isFreeShippingQualified?: boolean;
 }
+
+// Backward-compatible alias for ProductItem
+export type ProductSearchResultItem = ProductItem;
 
 export interface FacetValue {
   key: string;
@@ -85,7 +139,7 @@ export interface SearchFacet {
 }
 
 export interface ProductSearchResult {
-  items: ProductSearchResultItem[];
+  items: ProductItem[];
   totalCount: number;
   pageNumber: number;
   pageSize: number;
@@ -116,18 +170,21 @@ export interface ProductVariant {
   stockQuantity: number;
 }
 
-// --- Cart & Line Items ---
+// ==============================================================================
+// 4. Shopping Cart
+// ==============================================================================
+
 export interface CartItem {
   id: string;
   productId: string;
   productName: string;
-  variantId?: string;
-  variantDescription?: string;
+  color?: string;
+  size?: string;
   unitPrice: number;
   quantity: number;
   imageUrl?: string;
-  color?: string;
-  size?: string;
+  variantId?: string;
+  variantDescription?: string;
 }
 
 export interface Cart {
@@ -139,43 +196,64 @@ export interface Cart {
   lastAbandonedReminderSentOn?: string;
 }
 
-// --- Shipping Rates & Tracking ---
-export interface ShippingRateEstimateRequest {
-  street: string;
-  city: string;
-  state: string;
-  country: string;
-  zipCode: string;
-  totalWeightKg: number;
-  subtotal: number;
+// ==============================================================================
+// 5. Shipping Methods & Fixed Tier Rates
+// ==============================================================================
+
+export interface ShippingMethod {
+  carrier: string;            // e.g. "Standard", "Express", "Premium"
+  serviceCode: 'STANDARD' | 'EXPRESS' | 'PREMIUM' | string;
+  serviceName: string;        // e.g. "Standard Delivery", "Express Delivery", "Premium Delivery"
+  rate: number;               // 4.99 | 9.99 | 19.99
+  currency: string;           // "USD"
+  estimatedDaysMin: number;
+  estimatedDaysMax: number;
+}
+
+export enum DeliveryMethods {
+  Standard = 1,
+  Express = 2,
+  Premium = 3
 }
 
 export interface ShippingRateEstimate {
-  carrierCode: string; // e.g., "USPS", "UPS", "FedEx", "DHL"
+  id?: string;
+  carrierCode: string;
   carrierName: string;
-  serviceLevel: string; // e.g., "Ground", "2-Day Express", "Priority Overnight"
+  serviceCode?: string;
+  serviceLevel: string;
   estimatedCost: number;
-  estimatedDeliveryDays: number;
-  isFreeShippingQualified: boolean;
+  currency?: string;
+  estimatedDaysMin?: number;
+  estimatedDaysMax?: number;
+  estimatedDeliveryDays?: number;
+  isFreeShippingQualified?: boolean;
 }
 
 export interface TrackingCheckpoint {
   timestampUtc: string;
   location: string;
-  status: string;
   description: string;
+  status?: string;
 }
 
 export interface ShippingTrackingInfo {
-  orderId: string;
-  carrierName: string;
+  carrier?: string;
+  carrierName?: string;
+  orderId?: string;
   trackingNumber: string;
-  currentStatus: 'LabelCreated' | 'InTransit' | 'OutForDelivery' | 'Delivered' | 'Failed';
+  status?: 'LabelCreated' | 'InTransit' | 'OutForDelivery' | 'Delivered' | 'Failed';
+  currentStatus?: 'LabelCreated' | 'InTransit' | 'OutForDelivery' | 'Delivered' | 'Failed';
+  currentLocation?: string;
+  estimatedDelivery?: string;
   estimatedDeliveryDateUtc?: string;
   checkpoints: TrackingCheckpoint[];
 }
 
-// --- Order Management ---
+// ==============================================================================
+// 6. Checkout & Order Management Flow
+// ==============================================================================
+
 export type OrderStatus =
   | 'Pending'
   | 'Processing'
@@ -184,55 +262,72 @@ export type OrderStatus =
   | 'Cancelled'
   | 'Refunded';
 
-export interface OrderItem {
+export interface OrderItemRequest {
+  productId: string;
+  color: string;
+  size: string;
+  quantity: number;
+}
+
+// Backward-compatible alias
+export type CheckoutOrderItem = OrderItemRequest;
+
+export interface CreateOrderRequest {
+  promoCode?: string;
+  giftCardCode?: string;
+  deliveryMethod: DeliveryMethods | number; // 1 = Standard, 2 = Express, 3 = Premium
+  deliveryCharge: Price;
+  orderItems: OrderItemRequest[];
+  shippingAddress: Address;
+  loyaltyPointsToRedeem?: number;
+}
+
+export interface OrderItemResponse {
   id: string;
   productId: string;
   productName: string;
-  variantId?: string;
-  unitPrice: number;
-  quantity: number;
-  lineTotal: number;
   color?: string;
   size?: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+  variantId?: string;
   imageUrl?: string;
 }
 
-export interface Order {
+// Backward-compatible alias
+export type OrderItem = OrderItemResponse;
+
+export interface OrderResponse {
   id: string;
   userId: string;
   status: OrderStatus;
   shippingAddress: Address;
-  items: OrderItem[];
+  deliveryMethod: number;
+  deliveryCharge: Price;
+  orderItems: OrderItemResponse[];
   subtotal: number;
   discountAmount: number;
-  shippingCost: number;
-  taxAmount: number;
   totalAmount: number;
+  loyaltyPointsUsed: number;
+  loyaltyPointsEarned: number;
+  giftCardAmountUsed: number;
+  createdAtUtc: string;
+  clientSecret?: string; // Stripe Payment Element clientSecret if payment required
+  shippingCost?: number;
+  taxAmount?: number;
   promoCodeApplied?: string;
   stripePaymentIntentId?: string;
-  clientSecret?: string; // Provided for Stripe Payment Element checkout
-  createdAtUtc: string;
 }
 
-export interface CreateOrderRequest {
-  shippingAddress: Address;
-  items: {
-    productId: string;
-    variantId?: string;
-    quantity: number;
-    color?: string;
-    size?: string;
-  }[];
-  promoCode?: string;
-  carrierCode?: string;
-  serviceLevel?: string;
-  shippingCost?: number;
-  loyaltyPointsRedeemed?: number;
-  giftCardCode?: string;
-}
+// Backward-compatible alias
+export type Order = OrderResponse;
 
-// --- Promotions, Loyalty & Gift Cards ---
-export interface PromoCodeResponse {
+// ==============================================================================
+// 7. Promotions, Loyalty & Gift Cards
+// ==============================================================================
+
+export interface ValidatePromoResponse {
   code: string;
   discountType: 'Percentage' | 'FixedAmount' | 'BuyXGetY' | 'TieredMinimumSpend';
   discountValue: number;
@@ -242,22 +337,35 @@ export interface PromoCodeResponse {
   isValid: boolean;
 }
 
-export interface LoyaltyAccount {
+// Backward-compatible alias
+export type PromoCodeResponse = ValidatePromoResponse;
+
+export interface LoyaltyAccountResponse {
   userId: string;
   pointsBalance: number;
-  tierName: string; // e.g., "Silver", "Gold", "Platinum"
-  cashEquivalentValue: number;
+  tierName: 'Bronze' | 'Silver' | 'Gold' | 'Platinum' | string;
+  cashEquivalentValue: number; // 100 points = $1.00
 }
 
-export interface GiftCard {
+// Backward-compatible alias
+export type LoyaltyAccount = LoyaltyAccountResponse;
+
+export interface GiftCardValidationResponse {
   code: string;
-  initialBalance: number;
-  remainingBalance: number;
-  isRedeemed: boolean;
+  balance: number;
+  currency: string;
+  isValid: boolean;
   expiresAtUtc?: string;
+  remainingBalance?: number;
 }
 
-// --- Customer Reviews ---
+// Backward-compatible alias
+export type GiftCard = GiftCardValidationResponse;
+
+// ==============================================================================
+// 8. Reviews, Questions & Social Proof
+// ==============================================================================
+
 export interface ProductReview {
   reviewId: string;
   userId: string;
@@ -276,31 +384,4 @@ export interface CreateProductReviewRequest {
   comment: string;
   headline?: string;
   imageUrls?: string[];
-}
-
-// --- Notification Preferences ---
-export interface NotificationPreferences {
-  userId: string;
-  emailEnabled: boolean;
-  smsEnabled: boolean;
-  pushEnabled: boolean;
-  orderUpdates: boolean;
-  promotions: boolean;
-  priceAlerts: boolean;
-  restockAlerts: boolean;
-}
-
-export interface UpdateNotificationPreferencesRequest {
-  emailEnabled: boolean;
-  smsEnabled: boolean;
-  pushEnabled: boolean;
-  orderUpdates: boolean;
-  promotions: boolean;
-  priceAlerts: boolean;
-  restockAlerts: boolean;
-}
-
-export interface SendSmsRequest {
-  phoneNumber: string;
-  message: string;
 }

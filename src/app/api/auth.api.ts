@@ -51,7 +51,7 @@ export class AuthApi {
 
   refreshToken(token: string, refreshToken: string): Observable<any> {
     return this.http
-      .post<any>(`${this.url}/auth/refresh-token`, {
+      .post<any>(`${this.url}/auth/refresh`, {
         token,
         refreshToken
       })

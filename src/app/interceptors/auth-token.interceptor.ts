@@ -24,6 +24,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
   const isAuthEndpoint =
     req.url.includes('/auth/login') ||
     req.url.includes('/auth/register') ||
+    req.url.includes('/auth/refresh') ||
     req.url.includes('/auth/refresh-token');
 
   // Add Idempotency key on critical state-modifying requests (e.g. POST /orders, POST /checkout)

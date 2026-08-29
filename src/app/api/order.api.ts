@@ -79,27 +79,46 @@ export class OrderApi {
       quantity: number;
       color?: string;
       size?: string;
-      variantId?: string;
     }[],
-    promoCode: string,
+    promoCode: string | undefined,
     deliveryMethod: number,
     deliveryCharge: Price,
     shippingAddress: Address,
-    extraParams?: any
+    extraParams?: {
+      giftCardCode?: string;
+      loyaltyPointsToRedeem?: number;
+      loyaltyPointsRedeemed?: number;
+      [key: string]: any;
+    }
   ): Observable<Order> {
     const payload = {
       promoCode: promoCode || undefined,
-      deliveryMethod: deliveryMethod,
+      giftCardCode: extraParams?.giftCardCode || undefined,
+      deliveryMethod: typeof deliveryMethod === 'number' ? deliveryMethod : 0,
       deliveryCharge: {
         amount: deliveryCharge.amount,
-        currency: deliveryCharge.currency
+        currency: deliveryCharge.currency || 'USD'
       },
-      orderItems: orderItems,
-      shippingAddress: shippingAddress,
-      ...extraParams
+      orderItems: orderItems.map((item) => ({
+        productId: item.productId,
+        color: item.color || '',
+        size: item.size || '',
+        quantity: item.quantity
+      })),
+      shippingAddress: {
+        street: shippingAddress.street,
+        city: shippingAddress.city,
+        state: shippingAddress.state,
+        country: shippingAddress.country,
+        zipCode: shippingAddress.zipCode
+      },
+      loyaltyPointsToRedeem:
+        extraParams?.loyaltyPointsToRedeem ??
+        extraParams?.loyaltyPointsRedeemed ??
+        0
     };
 
-    return this.http.post<Order>(`${this.url}/users/${this.userId}/orders`, payload).pipe(
+    return this.http.post<Order>(`${this.url}/orders/checkout`, payload).pipe(
       map((order) => {
         if (order && (order as any).orderItems && (order as any).orderItems.$values) {
           (order as any).orderItems = (order as any).orderItems.$values;

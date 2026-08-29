@@ -139,8 +139,9 @@ test.describe.serial('Secure Checkout Flow', () => {
       await page.waitForURL(/.*payment\/.*/, { timeout: 30000 });
     } catch {
       const alertText = await page.locator('[role="alert"]').innerText().catch(() => 'no alert');
-      const apiInfo = orderApiResponse
-        ? `API ${orderApiResponse.status}: ${orderApiResponse.body.slice(0, 500)}`
+      const capturedResponse = orderApiResponse as { status: number; body: string } | null;
+      const apiInfo = capturedResponse
+        ? `API ${capturedResponse.status}: ${capturedResponse.body.slice(0, 500)}`
         : 'no API response captured';
       throw new Error(`Order creation failed — "${alertText}" | ${apiInfo}`);
     }
