@@ -125,6 +125,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   async pay(): Promise<void> {
+    if (this.reqInProgress) return;
+    this.reqInProgress = true;
+
     if (this.selectedPaymentOption == this.paymentOptions[0].id) {
       this.stripeService
         .createPaymentMethod({
@@ -141,12 +144,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
             }
           }
         })
-
-        .subscribe(async (result) => {
-          if (result.error) {
-            console.log(result.error.message);
-          } else {
-            if (result.paymentMethod) {
+        .subscribe({
+          next: async (result) => {
+            if (result.error) {
+              this.reqInProgress = false;
+              console.log(result.error.message);
+            } else if (result.paymentMethod) {
               const cardInfo: CardInfo = {
                 cardName: this.cardHolderName,
                 cardExpiryMonth: result.paymentMethod.card!.exp_month,
@@ -161,7 +164,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
                 result.paymentMethod.id,
                 cardInfo
               );
+            } else {
+              this.reqInProgress = false;
             }
+          },
+          error: () => {
+            this.reqInProgress = false;
           }
         });
     } else {

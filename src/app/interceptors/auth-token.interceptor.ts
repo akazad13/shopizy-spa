@@ -4,17 +4,6 @@ import { catchError, switchMap, throwError } from 'rxjs';
 import { TokenService } from '../services/token.service';
 import { AuthApi } from '../api/auth.api';
 
-function generateUUID(): string {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
 export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
   const tokenService = inject(TokenService);
   const authApi = inject(AuthApi);
@@ -26,14 +15,6 @@ export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
     req.url.includes('/auth/register') ||
     req.url.includes('/auth/refresh') ||
     req.url.includes('/auth/refresh-token');
-
-
-  // Attach Idempotency key on critical order mutations
-  if (req.method === 'POST' && req.url.includes('/orders/checkout') && !req.headers.has('X-Idempotency-Key')) {
-    req = req.clone({
-      headers: req.headers.set('X-Idempotency-Key', generateUUID())
-    });
-  }
 
   // Attach Bearer token if not auth endpoint
   if (isApiRequest && !isAuthEndpoint) {

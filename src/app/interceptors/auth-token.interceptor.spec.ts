@@ -56,17 +56,6 @@ describe('authTokenInterceptor', () => {
     req.flush([]);
   });
 
-  it('should attach X-Idempotency-Key on critical POST /orders/checkout mutations', () => {
-    http.post('/api/v1.0/orders/checkout', {}).subscribe();
-
-    const req = httpMock.expectOne('/api/v1.0/orders/checkout');
-    expect(req.request.headers.has('X-Idempotency-Key')).toBeTrue();
-    const idempotencyKey = req.request.headers.get('X-Idempotency-Key');
-    expect(idempotencyKey).toBeTruthy();
-    expect(idempotencyKey?.length).toBeGreaterThan(10);
-    req.flush({});
-  });
-
   it('should not attach Authorization header on auth endpoints', () => {
     http.post('/api/v1.0/auth/login', { email: 'test@test.com' }).subscribe();
 

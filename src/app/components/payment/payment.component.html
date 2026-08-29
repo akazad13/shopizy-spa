@@ -110,10 +110,12 @@
             <div class="space-y-3">
               <button
                 type="button"
-                class="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                [disabled]="reqInProgress"
+                class="flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 transition"
                 (click)="pay()"
                 >
-                Place Order
+                <span *ngIf="reqInProgress" class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span>{{ reqInProgress ? 'Processing Payment...' : 'Place Order' }}</span>
               </button>
             </div>
           </div>
