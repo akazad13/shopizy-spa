@@ -320,9 +320,22 @@ export class CheckoutComponent implements OnInit {
   }
 
   async submitOrder(): Promise<void> {
+    if (this.reqInProgress) {
+      return;
+    }
+
+    if (!this.selectedCarrierRate && this.carrierRates.length > 0) {
+      this.selectCarrierRate(this.carrierRates[0]);
+    } else if (this.selectedCarrierRate && !this.checkoutForm.value.deliveryMethod) {
+      this.checkoutForm.patchValue({
+        deliveryMethod: `${this.selectedCarrierRate.carrierCode}-${this.selectedCarrierRate.serviceLevel}`
+      });
+    }
+
     this.checkoutForm.markAllAsTouched();
 
-    if (this.reqInProgress || this.checkoutForm.invalid) {
+    if (this.checkoutForm.invalid) {
+      this.toastService.error('Please fill in all required shipping fields.');
       return;
     }
 
@@ -357,6 +370,7 @@ export class CheckoutComponent implements OnInit {
       }));
 
     const deliveryMethod = this.getDeliveryMethodIndex(this.selectedCarrierRate);
+    console.log('[Checkout] Submitting order with items:', orderItems, 'deliveryMethod:', deliveryMethod);
 
     try {
       const data = await firstValueFrom(
@@ -375,10 +389,12 @@ export class CheckoutComponent implements OnInit {
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
 
+      console.log('[Checkout] Order created successfully:', data);
       this.toastService.success('Order placed successfully!');
       const orderId = data.id || (data as any).orderId;
       this.router.navigate(['/', 'payment', orderId]);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('[Checkout] Order creation failed:', error?.error || error);
       handleError(this.checkoutForm, error);
     }
   }

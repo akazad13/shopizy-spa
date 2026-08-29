@@ -200,9 +200,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
           )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
-      console.log(data);
+      console.log('[Payment] Success:', data);
       this.router.navigate(['/', 'order-confirmation', this.orderId]);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('[Payment] postPayment error:', error?.error || error);
       handleError(null, error);
     }
   }

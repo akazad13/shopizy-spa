@@ -60,7 +60,7 @@ test.describe.serial('Secure Checkout Flow', () => {
         }),
       });
       if (!putRes.ok) throw new Error(`Stock update failed: ${putRes.status} ${await putRes.text()}`);
-    }, 'https://localhost:7171');
+    }, 'http://localhost:18080');
 
     await adminCtx.close();
 
@@ -133,7 +133,7 @@ test.describe.serial('Secure Checkout Flow', () => {
       }
     });
 
-    await page.locator('a:has-text("Place Order & Proceed to Payment")').click();
+    await page.locator('#submit-order-btn').click();
 
     try {
       await page.waitForURL(/.*payment\/.*/, { timeout: 30000 });

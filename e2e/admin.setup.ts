@@ -15,8 +15,8 @@ setup('authenticate admin', async ({ page }) => {
 
 
   // Fill in admin credentials
-  await page.locator('input#email').fill('admin-test@shopizy.com');
-  await page.locator('input#password').fill('Pass1234');
+  await page.locator('input#email').fill('abul.kalam@gmail.com');
+  await page.locator('input#password').fill('Password1234$');
   
   // Click sign in
   await page.locator('button[type="submit"]').click();

@@ -6,8 +6,10 @@ import { ToastService } from '../services/toast.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
+  const skipToast = req.headers.has('X-Skip-Error-Toast');
+  const forwardedReq = skipToast ? req.clone({ headers: req.headers.delete('X-Skip-Error-Toast') }) : req;
 
-  return next(req).pipe(
+  return next(forwardedReq).pipe(
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An unexpected error occurred';
 
@@ -77,7 +79,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       // We only show toast if the request hasn't set a skip-global-error header
-      if (!req.headers.has('X-Skip-Error-Toast')) {
+      if (!skipToast) {
         toastService.error(errorMessage);
       }
 

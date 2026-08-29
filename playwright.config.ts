@@ -50,14 +50,14 @@ export default defineConfig({
         storageState: 'playwright/.auth/admin.json',
       },
       dependencies: ['setup-admin'],
-      testMatch: /admin\.spec\.ts/, // Run only admin spec here
+      testMatch: /admin(|-journey)\.spec\.ts/, // Run admin and admin-journey specs
     },
 
     // Guest project (common Browsers)
     {
       name: 'guest-chrome',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: [/account\.spec\.ts/, /checkout\.spec\.ts/, /admin\.spec\.ts/],
+      testIgnore: [/account\.spec\.ts/, /checkout\.spec\.ts/, /admin\.spec\.ts/, /end-user-journey\.spec\.ts/],
     },
   ],
 
@@ -65,5 +65,6 @@ export default defineConfig({
     command: 'npm run start',
     url: 'http://localhost:4200',
     reuseExistingServer: !process.env['CI'],
+    timeout: 120 * 1000,
   },
 });

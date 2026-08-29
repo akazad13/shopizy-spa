@@ -34,7 +34,8 @@ export class OrderApi {
     }
 
     if (endDate != null) {
-      params = params.append('EndDate', endDate);
+      const formattedEndDate = endDate.includes('T') ? endDate : `${endDate}T23:59:59.999Z`;
+      params = params.append('EndDate', formattedEndDate);
     }
 
     if (status != null) {
@@ -118,7 +119,16 @@ export class OrderApi {
         0
     };
 
-    return this.http.post<Order>(`${this.url}/orders/checkout`, payload).pipe(
+    const idempotencyKey = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+        });
+
+    return this.http.post<Order>(`${this.url}/orders/checkout`, payload, {
+      headers: { 'Idempotency-Key': idempotencyKey }
+    }).pipe(
       map((order) => {
         if (order && (order as any).orderItems && (order as any).orderItems.$values) {
           (order as any).orderItems = (order as any).orderItems.$values;

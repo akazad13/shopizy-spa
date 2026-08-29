@@ -23,13 +23,26 @@ export class PaymentApi {
     paymentMethodId: string | null,
     cardInfo: CardInfo | null
   ): Observable<any> {
-    return this.http.post<any>(`${this.url}/users/${this.userId}/payments`, {
-      orderId: orderId,
-      amount: total.amount,
-      currency: total.currency,
-      paymentMethod: paymentMethod,
-      paymentMethodId: paymentMethodId,
-      cardInfo: cardInfo
-    });
+    const idempotencyKey = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+        });
+
+    return this.http.post<any>(
+      `${this.url}/users/${this.userId}/payments`,
+      {
+        orderId: orderId,
+        amount: total.amount,
+        currency: total.currency,
+        paymentMethod: paymentMethod,
+        paymentMethodId: paymentMethodId,
+        cardInfo: cardInfo
+      },
+      {
+        headers: { 'Idempotency-Key': idempotencyKey }
+      }
+    );
   }
 }

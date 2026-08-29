@@ -57,7 +57,6 @@ export interface UserAddress extends Address {
 export interface NotificationPreferences {
   userId: string;
   emailEnabled: boolean;
-  pushEnabled: boolean;
   orderUpdates: boolean;
   promotions: boolean;
   priceAlerts: boolean;
@@ -66,7 +65,6 @@ export interface NotificationPreferences {
 
 export interface UpdateNotificationPreferencesRequest {
   emailEnabled: boolean;
-  pushEnabled: boolean;
   orderUpdates: boolean;
   promotions: boolean;
   priceAlerts: boolean;

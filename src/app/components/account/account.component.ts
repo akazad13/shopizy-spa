@@ -38,7 +38,6 @@ export class AccountComponent implements OnInit {
   notificationPreferences: NotificationPreferences = {
     userId: '',
     emailEnabled: true,
-    pushEnabled: true,
     orderUpdates: true,
     promotions: true,
     priceAlerts: true,
