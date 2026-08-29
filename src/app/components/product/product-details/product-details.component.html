@@ -99,14 +99,14 @@
         <!-- Pricing -->
         <div class="flex items-baseline gap-x-3">
           <span class="text-3xl font-bold text-gray-900">
-            ${{ product.price - (product.price * product.discount) / 100 | number:'1.2-2' }}
+            ${{ finalPrice | number:'1.2-2' }}
           </span>
-          <span *ngIf="product.discount > 0" class="text-base text-gray-400 line-through">
-            ${{ product.price }}
+          <span *ngIf="hasDiscount" class="text-base text-gray-400 line-through">
+            ${{ originalPrice | number:'1.2-2' }}
           </span>
-          <span *ngIf="product.discount > 0"
+          <span *ngIf="hasDiscount"
             class="rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-bold text-green-600 ring-1 ring-green-100">
-            Save {{ product.discount }}%
+            Save {{ discount }}%
           </span>
         </div>
 

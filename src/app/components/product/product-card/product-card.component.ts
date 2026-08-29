@@ -42,18 +42,41 @@ export class ProductCardComponent {
   }
 
   get rating(): number {
-    if (typeof this.product.averageRating === 'number') {
+    if (typeof this.product?.averageRating === 'number') {
       return this.product.averageRating;
     }
-    return (this.product.averageRating as any)?.value ?? 0;
+    return (this.product?.averageRating as any)?.value ?? 0;
+  }
+
+  get originalPrice(): number {
+    const p = this.product as any;
+    const val = p?.price ?? p?.unitPrice ?? 0;
+    return typeof val === 'number' ? val : Number(val) || 0;
+  }
+
+  get discount(): number {
+    return Number(this.product?.discount) || 0;
+  }
+
+  get hasDiscount(): boolean {
+    return this.discount > 0;
+  }
+
+  get finalPrice(): number {
+    const price = this.originalPrice;
+    const discount = this.discount;
+    if (discount > 0) {
+      return price - (price * discount) / 100;
+    }
+    return price;
   }
 
   get isBogo(): boolean {
-    return !!(this.product as any).isBogo || ((this.product as any).tags && (this.product as any).tags.includes('bogo'));
+    return !!(this.product as any)?.isBogo || !!((this.product as any)?.tags && (this.product as any).tags.includes('bogo'));
   }
 
   get isFreeShipping(): boolean {
-    return !!(this.product as any).isFreeShippingQualified || this.product.price >= 75 || ((this.product as any).tags && (this.product as any).tags.includes('free-shipping'));
+    return !!(this.product as any)?.isFreeShippingQualified || this.originalPrice >= 75 || !!((this.product as any)?.tags && (this.product as any).tags.includes('free-shipping'));
   }
 
   toggleWishlist(event: Event): void {
@@ -67,21 +90,25 @@ export class ProductCardComponent {
 
   addToCart(event: Event): void {
     event.stopPropagation();
-    const color = (this.product.colors && this.product.colors.length > 0) ? this.product.colors[0] : 'Standard';
-    const size = (this.product.sizes && this.product.sizes.length > 0) ? this.product.sizes[0] : 'Standard';
+    const color = (this.product?.colors && Array.isArray(this.product.colors) && this.product.colors.length > 0)
+      ? this.product.colors[0]
+      : (typeof this.product?.colors === 'string' && this.product.colors.trim() ? this.product.colors.split(',')[0].trim() : 'Standard');
+    const size = (this.product?.sizes && Array.isArray(this.product.sizes) && this.product.sizes.length > 0)
+      ? this.product.sizes[0]
+      : (typeof this.product?.sizes === 'string' && this.product.sizes.trim() ? this.product.sizes.split(',')[0].trim() : 'Standard');
     
     this.cartService.addToCart({
       cartItemId: null,
       productId: this.productId,
       image: this.imageUrl,
-      name: this.product.name,
-      price: this.product.price,
-      discount: this.product.discount || 0,
+      name: this.product?.name,
+      price: this.originalPrice,
+      discount: this.discount,
       quantity: 1,
       color: color,
       size: size
     });
-    this.toast.success(`Added ${this.product.name} to cart`);
+    this.toast.success(`Added ${this.product?.name} to cart`);
   }
 }
 

@@ -109,14 +109,37 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     return lines.length > 0 ? lines : [raw];
   }
 
+  get originalPrice(): number {
+    const p = this.product as any;
+    const val = p?.price ?? p?.unitPrice ?? 0;
+    return typeof val === 'number' ? val : Number(val) || 0;
+  }
+
+  get discount(): number {
+    return Number(this.product?.discount) || 0;
+  }
+
+  get hasDiscount(): boolean {
+    return this.discount > 0;
+  }
+
+  get finalPrice(): number {
+    const price = this.originalPrice;
+    const discount = this.discount;
+    if (discount > 0) {
+      return price - (price * discount) / 100;
+    }
+    return price;
+  }
+
   addProductToCart() {
     const cartItem: CartItem = {
       cartItemId: null,
       productId: this.product.productId,
       image: this.mainPhotoUrl || this.product.productImages?.[0]?.imageUrl,
       name: this.product.name,
-      price: this.product.price,
-      discount: this.product.discount,
+      price: this.originalPrice,
+      discount: this.discount,
       quantity: 1,
       color: this.selectedColor,
       size: this.selectedSize
