@@ -61,7 +61,7 @@ export class CheckoutComponent implements OnInit {
     lastName: new FormControl('', [Validators.required]),
     street: new FormControl('', [Validators.required]),
     city: new FormControl('', [Validators.required]),
-    country: new FormControl('USA', [Validators.required]),
+    country: new FormControl('US', [Validators.required]),
     state: new FormControl('', [Validators.required]),
     zipCode: new FormControl('', [Validators.required])
   });

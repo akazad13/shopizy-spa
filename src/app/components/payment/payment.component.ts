@@ -23,6 +23,8 @@ import { OrderDetails } from '../../interfaces/Order';
 
 import { CardInfo } from '../../interfaces/CardInfo';
 
+import { ToastService } from '../../services/toast.service';
+
 @Component({
   selector: 'app-payment',
   standalone: true,
@@ -108,7 +110,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private readonly activatedRoute: ActivatedRoute,
     private readonly paymentApi: PaymentApi,
     private readonly router: Router,
-    public readonly cartService: CartService
+    public readonly cartService: CartService,
+    private readonly toastService: ToastService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -125,11 +128,37 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.routeSubscription.unsubscribe();
   }
 
+  private normalizeCountryCode(country?: string): string {
+    if (!country) return 'US';
+    const c = country.trim().toUpperCase();
+    const map: Record<string, string> = {
+      'USA': 'US',
+      'UNITED STATES': 'US',
+      'UNITED STATES OF AMERICA': 'US',
+      'CAN': 'CA',
+      'CANADA': 'CA',
+      'GBR': 'GB',
+      'UK': 'GB',
+      'UNITED KINGDOM': 'GB',
+      'MEX': 'MX',
+      'MEXICO': 'MX',
+      'AUS': 'AU',
+      'AUSTRALIA': 'AU',
+      'DEU': 'DE',
+      'GERMANY': 'DE',
+      'FRA': 'FR',
+      'FRANCE': 'FR'
+    };
+    return map[c] || (c.length === 2 ? c : 'US');
+  }
+
   async pay(): Promise<void> {
     if (this.reqInProgress) return;
     this.reqInProgress = true;
 
     if (this.selectedPaymentOption == this.paymentOptions[0].id) {
+      const countryCode = this.normalizeCountryCode(this.order?.shippingAddress?.country);
+
       this.stripeService
         .createPaymentMethod({
           type: 'card',
@@ -138,7 +167,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             name: this.cardHolderName,
             address: {
               city: this.order.shippingAddress.city,
-              country: this.order.shippingAddress.country,
+              country: countryCode,
               line1: this.order.shippingAddress.street,
               postal_code: this.order.shippingAddress.zipCode,
               state: this.order.shippingAddress.state
@@ -149,7 +178,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
           next: async (result) => {
             if (result.error) {
               this.reqInProgress = false;
-              console.log(result.error.message);
+              console.error('[Stripe] createPaymentMethod error:', result.error.message);
+              this.toastService.error(result.error.message || 'Payment method creation failed. Please verify your card details.');
             } else if (result.paymentMethod) {
               const cardInfo: CardInfo = {
                 cardName: this.cardHolderName,
@@ -169,8 +199,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
               this.reqInProgress = false;
             }
           },
-          error: () => {
+          error: (err) => {
             this.reqInProgress = false;
+            console.error('[Stripe] Unexpected error:', err);
+            this.toastService.error('An unexpected error occurred during payment processing.');
           }
         });
     } else {
