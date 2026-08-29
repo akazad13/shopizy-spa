@@ -1,39 +1,32 @@
 <section class="bg-white py-8 antialiased dark:bg-gray-900">
   <div class="container mx-auto px-6">
     <nav class="mb-4 flex" aria-label="Breadcrumb">
-      <ol class="flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+      <ol class="inline-flex items-center gap-x-1.5 text-sm">
         <li class="inline-flex items-center">
           <a
             [routerLink]="['/']"
-            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white"
+            class="inline-flex items-center gap-x-1 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition-colors"
           >
-            <app-icon classNames="me-2 h-4 w-4" icon="home"></app-icon>
+            <app-icon icon="home-solid" classNames="h-4 w-4 text-gray-400"></app-icon>
             Home
           </a>
         </li>
-        <li aria-current="page">
-          <div class="flex items-center">
-            <app-icon
-              classNames="mx-1 h-4 w-4 text-gray-400 rtl:rotate-180"
-              icon="greaterThan"
-            ></app-icon>
-            <span
-              class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2"
-              >Account</span
-            >
-          </div>
+        <li class="flex items-center">
+          <app-icon icon="chevron-right" classNames="h-4 w-4 text-gray-300 dark:text-gray-600"></app-icon>
+        </li>
+        <li>
+          <a
+            [routerLink]="['/account']"
+            class="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition-colors"
+          >
+            Account
+          </a>
+        </li>
+        <li class="flex items-center">
+          <app-icon icon="chevron-right" classNames="h-4 w-4 text-gray-300 dark:text-gray-600"></app-icon>
         </li>
         <li aria-current="page">
-          <div class="flex items-center">
-            <app-icon
-              classNames="mx-1 h-4 w-4 text-gray-400 rtl:rotate-180"
-              icon="greaterThan"
-            ></app-icon>
-            <span
-              class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2"
-              >Orders</span
-            >
-          </div>
+          <span class="font-medium text-gray-800 dark:text-gray-200">Orders</span>
         </li>
       </ol>
     </nav>

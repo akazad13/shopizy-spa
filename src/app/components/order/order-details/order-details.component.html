@@ -5,11 +5,20 @@
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
       <div>
         <nav class="flex mb-2" aria-label="Breadcrumb">
-          <ol class="inline-flex items-center space-x-1.5 text-xs text-gray-500">
-            <li><a [routerLink]="['/']" class="hover:text-gray-800">Home</a></li>
-            <li><span class="mx-1">/</span></li>
-            <li><a [routerLink]="['/account/orders']" class="hover:text-gray-800">Orders</a></li>
-            <li><span class="mx-1">/</span></li>
+          <ol class="inline-flex items-center gap-x-1.5 text-xs text-gray-500">
+            <li>
+              <a [routerLink]="['/']" class="inline-flex items-center gap-x-1 hover:text-gray-800 transition-colors">
+                <app-icon icon="home-solid" classNames="h-3.5 w-3.5 text-gray-400"></app-icon>
+                Home
+              </a>
+            </li>
+            <li class="flex items-center">
+              <app-icon icon="chevron-right" classNames="h-3.5 w-3.5 text-gray-300"></app-icon>
+            </li>
+            <li><a [routerLink]="['/account/orders']" class="hover:text-gray-800 transition-colors">Orders</a></li>
+            <li class="flex items-center">
+              <app-icon icon="chevron-right" classNames="h-3.5 w-3.5 text-gray-300"></app-icon>
+            </li>
             <li class="font-semibold text-gray-800">#{{ orderId }}</li>
           </ol>
         </nav>
