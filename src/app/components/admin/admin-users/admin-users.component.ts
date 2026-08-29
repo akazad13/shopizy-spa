@@ -48,9 +48,7 @@ export class AdminUsersComponent implements OnInit {
         this.activeUsers = this.users.filter(
           (u) => u.isActive !== false
         ).length;
-        this.adminUsers = this.users.filter((u) =>
-          (u.roles || []).includes('Admin')
-        ).length;
+        this.adminUsers = this.users.filter((u) => u.role === 'Admin').length;
         this.loading = false;
       },
       error: () => {
@@ -61,11 +59,11 @@ export class AdminUsersComponent implements OnInit {
   }
 
   getUserRoleLabel(user: UserDetails): string {
-    return (user.roles || []).includes('Admin') ? 'Admin' : 'Customer';
+    return user.role === 'Admin' ? 'Admin' : 'Customer';
   }
 
   toggleRole(user: UserDetails): void {
-    const newRole = (user.roles || []).includes('Admin') ? 'User' : 'Admin';
+    const newRole = this.getUserRoleLabel(user) === 'Admin' ? 'Customer' : 'Admin';
     this.userToUpdate = user;
     this.targetNewRole = newRole;
     this.confirmModalTitle = 'Update User Role';

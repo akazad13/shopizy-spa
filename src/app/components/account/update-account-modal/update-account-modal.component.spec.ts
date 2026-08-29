@@ -27,7 +27,7 @@ describe('UpdateAccountModalComponent', () => {
     email: 'john@example.com',
     phone: '123',
     phoneNumber: '123',
-    roles: ['User'],
+    role: 'Customer',
     isActive: true,
     address: {
       street: 'Main Street',

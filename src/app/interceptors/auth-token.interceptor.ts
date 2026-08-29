@@ -28,6 +28,13 @@ export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
     req.url.includes('/auth/refresh-token');
 
 
+  // Attach Idempotency key on critical order mutations
+  if (req.method === 'POST' && req.url.includes('/orders/checkout') && !req.headers.has('X-Idempotency-Key')) {
+    req = req.clone({
+      headers: req.headers.set('X-Idempotency-Key', generateUUID())
+    });
+  }
+
   // Attach Bearer token if not auth endpoint
   if (isApiRequest && !isAuthEndpoint) {
     const token = tokenService.getToken();

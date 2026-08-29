@@ -18,7 +18,7 @@ export interface UserDetails {
   email: string;
   phone: string | null;
   phoneNumber?: string | null;
-  roles?: string[] | null;
+  role?: string | null;
   isActive?: boolean;
   address: Address | null;
   profileImageUrl: string | null;

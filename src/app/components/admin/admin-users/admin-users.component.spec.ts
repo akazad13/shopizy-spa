@@ -20,7 +20,7 @@ describe('AdminUsersComponent', () => {
     email: 'john@example.com',
     phone: null,
     phoneNumber: null,
-    roles: ['User'],
+    role: 'Customer',
     isActive: true,
     address: null,
     profileImageUrl: null,
@@ -66,9 +66,9 @@ describe('AdminUsersComponent', () => {
 
   it('should load users and compute active/admin counts', () => {
     const users: UserDetails[] = [
-      makeUser({ id: '1', roles: ['Admin'], isActive: true }),
-      makeUser({ id: '2', roles: ['User'], isActive: true }),
-      makeUser({ id: '3', roles: ['User'], isActive: false })
+      makeUser({ id: '1', role: 'Admin', isActive: true }),
+      makeUser({ id: '2', role: 'Customer', isActive: true }),
+      makeUser({ id: '3', role: 'Customer', isActive: false })
     ];
     userApiMock.getAllUsers.and.returnValue(of(users));
 
@@ -106,27 +106,27 @@ describe('AdminUsersComponent', () => {
   });
 
   it('getUserRoleLabel should return Admin when user has Admin role', () => {
-    const role = component.getUserRoleLabel(makeUser({ roles: ['Admin'] }));
+    const role = component.getUserRoleLabel(makeUser({ role: 'Admin' }));
     expect(role).toBe('Admin');
   });
 
   it('getUserRoleLabel should return Customer when user is not admin', () => {
-    const role = component.getUserRoleLabel(makeUser({ roles: ['User'] }));
+    const role = component.getUserRoleLabel(makeUser({ role: 'Customer' }));
     expect(role).toBe('Customer');
   });
 
   it('toggleRole should not call update api when confirmation is cancelled', () => {
-    component.toggleRole(makeUser({ id: '77', roles: ['User'] }));
+    component.toggleRole(makeUser({ id: '77', role: 'Customer' }));
     component.cancelUpdateRole();
 
     expect(userApiMock.updateUserRole).not.toHaveBeenCalled();
   });
 
-  it('toggleRole should switch User to Admin and reload on success', () => {
+  it('toggleRole should switch Customer to Admin and reload on success', () => {
     spyOn(component, 'loadUsers');
 
     component.toggleRole(
-      makeUser({ id: '77', firstName: 'Ava', roles: ['User'] })
+      makeUser({ id: '77', firstName: 'Ava', role: 'Customer' })
     );
     component.confirmUpdateRole();
 
@@ -137,13 +137,13 @@ describe('AdminUsersComponent', () => {
     expect(component.loadUsers).toHaveBeenCalled();
   });
 
-  it('toggleRole should switch Admin to User', () => {
+  it('toggleRole should switch Admin to Customer', () => {
     component.toggleRole(
-      makeUser({ id: '99', firstName: 'Max', roles: ['Admin'] })
+      makeUser({ id: '99', firstName: 'Max', role: 'Admin' })
     );
     component.confirmUpdateRole();
 
-    expect(userApiMock.updateUserRole).toHaveBeenCalledWith('99', 'User');
+    expect(userApiMock.updateUserRole).toHaveBeenCalledWith('99', 'Customer');
   });
 
   it('toggleRole should show error toast when update fails', () => {
@@ -152,7 +152,7 @@ describe('AdminUsersComponent', () => {
     );
 
     component.toggleRole(
-      makeUser({ id: '102', firstName: 'Mia', roles: ['User'] })
+      makeUser({ id: '102', firstName: 'Mia', role: 'Customer' })
     );
     component.confirmUpdateRole();
 
