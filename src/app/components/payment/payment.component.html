@@ -65,14 +65,14 @@
                 <dl class="flex items-center justify-between gap-4 py-3">
                   <dt class="text-base font-normal text-gray-500">Subtotal</dt>
                   <dd class="text-base font-medium text-gray-900">
-                    ${{ orderSummary.subtotal.amount }}
+                    ${{ orderSummary.subtotal.amount | number:'1.2-2' }}
                   </dd>
                 </dl>
 
-                <dl class="flex items-center justify-between gap-4 py-3">
+                <dl *ngIf="orderSummary.saving > 0" class="flex items-center justify-between gap-4 py-3">
                   <dt class="text-base font-normal text-gray-500">Savings</dt>
-                  <dd class="text-base font-medium text-green-500">
-                    -${{ orderSummary.saving }}
+                  <dd class="text-base font-medium text-emerald-600">
+                    -${{ orderSummary.saving | number:'1.2-2' }}
                   </dd>
                 </dl>
 
@@ -81,7 +81,7 @@
                     Delivery Charge
                   </dt>
                   <dd class="text-base font-medium text-gray-900">
-                    ${{ orderSummary.deliveryCharge.amount }}
+                    ${{ orderSummary.deliveryCharge.amount | number:'1.2-2' }}
                   </dd>
                 </dl>
 
@@ -93,15 +93,15 @@
                       Additional Fee for COD
                     </dt>
                     <dd class="text-base font-medium text-gray-900">
-                      ${{ paymentOptions[1].price.amount }}
+                      ${{ (paymentOptions[1]?.price?.amount ?? 15) | number:'1.2-2' }}
                     </dd>
                   </dl>
                 </ng-container>
 
                 <dl class="flex items-center justify-between gap-4 py-3">
                   <dt class="text-base font-bold text-gray-900">Total</dt>
-                  <dd class="text-base font-bold text-gray-900">
-                    ${{ orderSummary.totalPrice.amount }}
+                  <dd class="text-base font-bold text-indigo-600">
+                    ${{ orderSummary.totalPrice.amount | number:'1.2-2' }}
                   </dd>
                 </dl>
               </div>

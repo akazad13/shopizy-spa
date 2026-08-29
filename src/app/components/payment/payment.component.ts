@@ -8,7 +8,7 @@ import {
   StripeService
 } from 'ngx-stripe';
 import { IconComponent } from '../shared/icon/icon.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import {
   StripeCardElementOptions,
   StripeElementsOptions
@@ -28,6 +28,7 @@ import { CardInfo } from '../../interfaces/CardInfo';
   standalone: true,
   imports: [
     CommonModule,
+    DecimalPipe,
     StripeCardNumberComponent,
     StripeCardCvcComponent,
     StripeCardExpiryComponent,
@@ -216,30 +217,38 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
   }
   calculateOrderSummary(): void {
-    this.order.orderItems.forEach((item) => {
+    if (!this.order) return;
+
+    let subtotal = 0;
+    let saving = 0;
+
+    (this.order.orderItems || []).forEach((item) => {
       const discount = item.discount || 0;
-      this.orderSummary.subtotal.amount +=
-        item.unitPrice.amount * item.quantity;
-      this.orderSummary.saving +=
-        ((item.unitPrice.amount * discount) / 100) * item.quantity;
+      const unitPrice = item.unitPrice?.amount ?? Number(item.unitPrice) ?? 0;
+      const quantity = item.quantity || 1;
+      subtotal += unitPrice * quantity;
+      saving += ((unitPrice * discount) / 100) * quantity;
     });
 
-    this.orderSummary.totalPrice.amount =
-      this.orderSummary.subtotal.amount +
-      this.order.deliveryCharge.amount -
-      this.orderSummary.saving;
+    const deliveryCost = this.order.deliveryCharge?.amount ?? Number(this.order.deliveryCharge) ?? 0;
+    const fee = this.selectedPaymentOption === '2' ? (this.paymentOptions[1]?.price?.amount || 0) : 0;
 
-    this.orderSummary.totalPrice.currency = this.orderSummary.subtotal.currency;
-    this.orderSummary.deliveryCharge = this.order.deliveryCharge;
+    this.orderSummary.subtotal.amount = subtotal;
+    this.orderSummary.saving = saving;
+    this.orderSummary.deliveryCharge = {
+      amount: deliveryCost,
+      currency: this.order.deliveryCharge?.currency || 'usd'
+    };
+    this.orderSummary.fee = {
+      amount: fee,
+      currency: 'usd'
+    };
+    this.orderSummary.totalPrice.amount = Math.max(0, Math.round((subtotal + deliveryCost - saving + fee) * 100) / 100);
+    this.orderSummary.totalPrice.currency = this.order.deliveryCharge?.currency || 'usd';
   }
 
   paymentOptionChange(id: string) {
-    const options = this.paymentOptions.find((option) => option.id === id)!;
-    this.orderSummary.totalPrice.amount =
-      this.orderSummary.totalPrice.amount - this.orderSummary.fee.amount;
-
-    this.orderSummary.fee.amount = options.price.amount;
-    this.orderSummary.totalPrice.amount =
-      this.orderSummary.totalPrice.amount + this.orderSummary.fee.amount;
+    this.selectedPaymentOption = id;
+    this.calculateOrderSummary();
   }
 }
