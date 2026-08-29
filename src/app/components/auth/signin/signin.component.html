@@ -110,25 +110,6 @@
           </p>
         </div>
 
-        <!-- Social Sign In Buttons -->
-        <div class="grid grid-cols-1 gap-3 mb-6">
-          <button type="button"
-            class="flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white py-3 px-4 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 hover:shadow transition duration-150 active:scale-[0.99]">
-            <app-icon icon="google" classNames="h-5 w-5"></app-icon>
-            <span>Continue with Google</span>
-          </button>
-        </div>
-
-        <!-- Divider -->
-        <div class="relative mb-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-[11px] font-extrabold text-gray-400 uppercase tracking-widest">
-            <span class="bg-white px-4">Or sign in with email</span>
-          </div>
-        </div>
-
         <!-- Sign In Form -->
         <form (ngSubmit)="signin()" [formGroup]="signinForm" class="space-y-4">
           <!-- Server Error Alert -->

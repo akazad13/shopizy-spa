@@ -120,25 +120,6 @@
           </p>
         </div>
 
-        <!-- Social Sign Up -->
-        <div class="mb-5">
-          <button type="button"
-            class="flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white py-2.5 px-4 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 transition duration-150 active:scale-[0.99]">
-            <app-icon icon="google" classNames="h-5 w-5"></app-icon>
-            <span>Sign up with Google</span>
-          </button>
-        </div>
-
-        <!-- Divider -->
-        <div class="relative mb-5">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-[11px] font-extrabold text-gray-400 uppercase tracking-widest">
-            <span class="bg-white px-4">Or register with email</span>
-          </div>
-        </div>
-
         <!-- Main Form -->
         <form (ngSubmit)="signup()" [formGroup]="signupForm" class="space-y-3.5">
           <!-- Server Error Alert -->
