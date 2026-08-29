@@ -74,8 +74,8 @@ export class AuthApi {
 
   resetPassword(newPassword: string, resetToken: string): Observable<any> {
     return this.http.post<any>(`${this.url}/auth/reset-password`, {
-      newPassword,
-      resetToken
+      resetToken,
+      newPassword
     });
   }
 

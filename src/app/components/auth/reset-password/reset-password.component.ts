@@ -102,7 +102,10 @@ export class ResetPasswordComponent implements OnInit {
     try {
       await firstValueFrom(
         this.authApi
-          .resetPassword(this.resetForm.value.password!, this.resetToken)
+          .resetPassword(
+            this.resetForm.value.password!,
+            this.resetToken
+          )
           .pipe(finalize(() => (this.reqInProgress = false)))
       );
       this.toast.success('Password updated successfully! Please sign in.');

@@ -15,7 +15,7 @@ export class CartApi {
   constructor(
     private readonly http: HttpClient,
     private readonly tokenService: TokenService
-  ) {}
+  ) { }
 
   getCart(): Observable<Cart> {
     return this.http.get<Cart>(`${this.url}/users/${this.userId}/cart`);
@@ -28,7 +28,7 @@ export class CartApi {
     quantity: number = 1,
     variantId?: string
   ): Observable<Cart> {
-    return this.http.post<Cart>(`${this.url}/users/${this.userId}/cart/items`, {
+    return this.http.patch<Cart>(`${this.url}/users/${this.userId}/cart/items`, {
       productId,
       variantId,
       color,
@@ -38,7 +38,7 @@ export class CartApi {
   }
 
   updateItemQuantity(itemId: string, quantity: number): Observable<Cart> {
-    return this.http.put<Cart>(
+    return this.http.patch<Cart>(
       `${this.url}/users/${this.userId}/cart/items/${itemId}`,
       { quantity }
     );

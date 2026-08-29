@@ -44,6 +44,15 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  resetToken: string;
+  newPassword: string;
+}
+
 // --- Product & Faceted Search ---
 export interface ProductSearchResultItem {
   id: string;

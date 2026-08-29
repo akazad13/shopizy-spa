@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ProductApi } from '../../../api/product.api';
 import { Product } from '../../../interfaces/product';
 import { ProductQueryFilters } from '../../../models/QueryFilters';
@@ -44,13 +44,24 @@ export class AdminProductsComponent implements OnInit {
   constructor(
     private productApi: ProductApi,
     private categoryApi: CategoryApi,
-    private toast: ToastService
+    private toast: ToastService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.filters.pageSize = 10;
     this.loadCategories();
-    this.loadProducts();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['name']) {
+        this.searchName = params['name'];
+        this.filters.name = params['name'];
+      } else {
+        this.searchName = '';
+        this.filters.name = null;
+      }
+      this.loadProducts();
+    });
   }
 
   loadCategories(): void {
