@@ -12,39 +12,52 @@ Shopizy is a modern, reactive single-page application (SPA) built with **Angular
 graph TD
     Client[Angular Standalone SPA]
     
-    subgraph "Presentation Layer"
+    subgraph PresentationLayer["Presentation Layer"]
         Storefront[Customer Storefront]
         CustomerPortal[Customer Account Portal]
         AdminDashboard[Admin Management Portal]
     end
 
-    subgraph "Core & State Services"
-        CartService[CartService - LocalStorage Sync]
+    subgraph CoreServices["Core & State Services"]
+        CartService["CartService (LocalStorage Sync)"]
         WishlistService[WishlistService]
-        TokenService[TokenService - JWT & Refresh Tokens]
-        SignalRService[SignalRService - Real-time Hubs]
-        ToastService[ToastService - Notification System]
+        TokenService["TokenService (JWT & Refresh)"]
+        SignalRService["SignalRService (Real-time Hubs)"]
+        ToastService["ToastService (Notifications)"]
     end
 
-    subgraph "HTTP Interceptor Pipeline"
-        AuthTokenInt[AuthTokenInterceptor - Bearer + 401 Refresh]
-        ErrorInt[ErrorInterceptor - Global Error Handling]
+    subgraph Interceptors["HTTP Interceptor Pipeline"]
+        AuthTokenInt["AuthTokenInterceptor (Bearer + 401 Refresh)"]
+        ErrorInt["ErrorInterceptor (Global Error Handling)"]
     end
 
-    subgraph "Backend Services"
-        RestApi[REST API - /api/v1.0]
-        SignalRHubs[SignalR Hubs - /hubs/orders & /hubs/admin-dashboard]
+    subgraph Backend["Backend Services"]
+        RestApi["REST API (/api/v1.0)"]
+        SignalRHubs["SignalR Hubs (/hubs/*)"]
         StripeApi[Stripe Payment Gateway]
     end
 
-    Client --> Presentation Layer
-    Storefront --> Core & State Services
-    CustomerPortal --> Core & State Services
-    AdminDashboard --> Core & State Services
-    Core & State Services --> HTTP Interceptor Pipeline
-    HTTP Interceptor Pipeline --> RestApi
-    SignalRService --> SignalRHubs
+    Client --> Storefront
+    Client --> CustomerPortal
+    Client --> AdminDashboard
+
+    Storefront --> CartService
+    Storefront --> WishlistService
     Storefront --> StripeApi
+
+    CustomerPortal --> TokenService
+    CustomerPortal --> CartService
+
+    AdminDashboard --> SignalRService
+    AdminDashboard --> TokenService
+
+    CartService --> AuthTokenInt
+    WishlistService --> AuthTokenInt
+    TokenService --> AuthTokenInt
+    
+    AuthTokenInt --> ErrorInt
+    ErrorInt --> RestApi
+    SignalRService --> SignalRHubs
 ```
 
 ---
