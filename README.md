@@ -249,4 +249,4 @@ The output is generated in `dist/shopizy-app/browser/`.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+All right reserved!
