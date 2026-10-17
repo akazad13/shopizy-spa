@@ -1,152 +1,129 @@
-# 🛍️ Shopizy — Modern E-Commerce Platform
+<div align="center">
 
-[![Angular](https://img.shields.io/badge/Angular-19.0.0-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Playwright](https://img.shields.io/badge/Playwright-E2E_Testing-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev/)
-[![Stripe](https://img.shields.io/badge/Stripe-Payments-008CDD?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/)
-[![SignalR](https://img.shields.io/badge/SignalR-Real--Time-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/signalr)
-[![ESLint](https://img.shields.io/badge/ESLint-Code_Quality-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
+# 🛍️ Shopizy SPA
 
-**Shopizy** is a responsive, feature-rich e-commerce single-page application (SPA) built with **Angular (Standalone Architecture)**, **Tailwind CSS**, **Stripe Payment Gateway**, and **Microsoft SignalR** for real-time order tracking and administrative metrics.
+### Modern, responsive e-commerce Single Page Application (SPA) built with Angular Standalone, Tailwind CSS, Stripe, and SignalR
 
----
+[![Angular](https://img.shields.io/badge/Angular-19.0-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Playwright](https://img.shields.io/badge/Testing-Playwright%20E2E-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Stripe](https://img.shields.io/badge/Payments-Stripe-008CDD?style=flat-square&logo=stripe&logoColor=white)](https://stripe.com/)
+[![SignalR](https://img.shields.io/badge/WebSockets-SignalR-512BD4?style=flat-square&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
-## 📑 Table of Contents
+[Overview](#-overview) •
+[Features](#-key-features) •
+[Architecture](#-architecture) •
+[Tech Stack](#-tech-stack) •
+[Repository Layout](#-repository-layout) •
+[Quick Start](#-quick-start) •
+[Testing](#-testing) •
+[Documentation](#-documentation)
 
-- [Features](#-features)
-  - [Customer Storefront](#-customer-storefront)
-  - [Cart, Wishlist & Checkout](#-cart-wishlist--checkout)
-  - [Order Tracking & Real-Time Updates](#-order-tracking--real-time-updates)
-  - [Customer Account Portal](#-customer-account-portal)
-  - [Admin Management Suite](#-admin-management-suite)
-- [Architecture & Tech Stack](#-architecture--tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Environment Configuration](#environment-configuration)
-  - [Running the Dev Server](#running-the-dev-server)
-- [Available Scripts](#-available-scripts)
-- [Testing & Quality Assurance](#-testing--quality-assurance)
-  - [Unit Testing (Karma/Jasmine)](#unit-testing-karmajasmine)
-  - [End-to-End Testing (Playwright)](#end-to-end-testing-playwright)
-  - [Code Linting (ESLint)](#code-linting-eslint)
-- [Documentation Index](#-documentation-index)
-- [Deployment](#-deployment)
-- [License](#-license)
+</div>
 
 ---
 
-## ✨ Features
+## 📌 Overview
 
-### 🛒 Customer Storefront
-- **Modern Landing Page**: Promotional banners, featured products, top categories, and value propositions.
-- **Faceted Product Catalog**: Filter by category tree, brand, price range, and rating with instant reactive updates.
-- **Debounced Search**: Quick product discovery with keyword search and query string synchronization.
-- **Rich Product Details**: Image galleries, inventory/variant selectors, customer reviews, product ratings, and Q&A interactions.
+**Shopizy SPA** is a high-performance customer storefront and administrative management application powering the Shopizy e-commerce ecosystem. Built with Angular Standalone Architecture, Tailwind CSS, Stripe Elements, and Microsoft SignalR, it provides a seamless shopping experience with real-time order tracking, reactive cart management, and multi-persona authentication.
 
-### 🛍️ Cart, Wishlist & Checkout
-- **Reactive Cart**: Real-time quantity updates, cart drawer dropdown, and persistent browser storage.
-- **Discounts & Loyalty**: Promo code validation, gift card vouchers, and loyalty point redemptions.
-- **Streamlined Multi-Step Checkout**: Saved delivery addresses, dynamic shipping method selection, and order summary calculations.
-- **Secure Stripe Payments**: Integrated **ngx-stripe** Elements with client secret authorization and real-time validation.
-
-### 📦 Order Tracking & Real-Time Updates
-- **Order Confirmation & Timeline**: Visual status tracker (`Pending` ➔ `Confirmed` ➔ `Shipped` ➔ `Delivered`).
-- **Live SignalR WebSockets**: Instant updates pushed to customer order pages and admin dashboards when order statuses change.
-
-### 👤 Customer Account Portal
-- **Profile & Security**: Update profile details, change passwords, and manage preferences.
-- **Order History & Details**: View past orders, detailed line items, tracking IDs, and invoices.
-- **Wishlist Management**: Save items for later with one-click migration to cart.
-
-### ⚡ Admin Management Suite
-- **Interactive KPI Dashboard**: Real-time analytics, revenue metrics, recent orders, and inventory health via SignalR.
-- **Product Management**: Full CRUD capabilities, multi-category assignment, brand association, and image uploads.
-- **Order Processing**: Manage order fulfillment workflows, tracking numbers, and cancellation handling.
-- **Catalog Management**: Hierarchical category tree management and brand administration.
-- **User & Security Management**: User role assignments and system audit logs.
+### Key Highlights
+- 🛍️ **Reactive Shopping Experience**: Instant cart updates, faceted catalog filtering (category trees, brands, price ranges), debounced search, and wishlist integration.
+- 💳 **Stripe Elements Checkout**: Multi-step checkout with saved shipping addresses, dynamic carrier estimates, and client-secret authorized Stripe card validation.
+- 📡 **Real-Time Order Telemetry**: Live order tracking status updates (`Pending` -> `Confirmed` -> `Shipped` -> `Delivered`) and admin KPI metrics pushed via SignalR WebSockets.
+- ⚡ **Admin Management Suite**: Full product CRUD, category hierarchy editor, order fulfillment operations, and customer analytics.
+- 🎭 **Multi-Persona E2E Automation**: Playwright test suites validating Customer, Admin, and Guest journeys with cached auth states.
 
 ---
 
-## 🛠️ Architecture & Tech Stack
+## 🏛 Architecture
 
-| Technology | Purpose |
-|---|---|
-| **[Angular](https://angular.dev/)** | Standalone Component Architecture, Reactive Forms, Signals & Resolvers |
-| **[Tailwind CSS](https://tailwindcss.com/)** | Utility-first responsive styling and custom UI theming |
-| **[RxJS](https://rxjs.dev/)** | Reactive streams, asynchronous data pipelines, state coordination |
-| **[@microsoft/signalr](https://github.com/dotnet/aspnetcore/tree/main/src/SignalR)** | Bidirectional WebSocket hub communication |
-| **[ngx-stripe](https://richnologies.gitbook.io/ngx-stripe/)** | Stripe Elements payment processing |
-| **[@auth0/angular-jwt](https://github.com/auth0/angular2-jwt)** | JWT token decoding and expiration handling |
-| **[Playwright](https://playwright.dev/)** | End-to-end multi-persona browser automation |
-| **[Karma](https://karma-runner.github.io/) & [Jasmine](https://jasmine.github.io/)** | Component and API service unit testing |
-| **[ESLint](https://eslint.org/)** | Static code analysis, style rules, and template linting |
+```mermaid
+flowchart LR
+    subgraph SPA["Shopizy SPA (Angular Standalone)"]
+        Store["Customer Storefront"]
+        AdminPortal["Admin Dashboard"]
+        State["RxJS Services (Cart, Wishlist, Auth)"]
+    end
 
-For an in-depth dive into our architectural patterns, interceptors, and state flow, see [**docs/ARCHITECTURE.md**](file:///d:/Projects/akazad13/shopizy-app/docs/ARCHITECTURE.md).
+    subgraph Backend["Backend API (.NET 10)"]
+        API["Shopizy.Api REST Endpoints"]
+        Hub["SignalR WebSocket Hubs"]
+    end
+
+    subgraph External["External Gateways"]
+        StripePay["Stripe Elements / API"]
+    end
+
+    Store --> State
+    AdminPortal --> State
+    State -->|HTTP REST + Bearer Token| API
+    State <-->|WebSockets| Hub
+    Store -.->|Card Tokenization| StripePay
+```
+
+> [!NOTE]
+> HTTP interceptors manage silent JWT refresh on 401 responses, ensuring uninterrupted browsing and administrative sessions.
 
 ---
 
-## 📁 Project Structure
+## 🛠 Tech Stack
+
+| Domain | Technologies |
+| :--- | :--- |
+| **Framework** | Angular (Standalone Components, Signals, Reactive Forms, Route Resolvers) |
+| **Styling & UI** | Tailwind CSS, Custom SVG Sprite Sheet system |
+| **State Management** | RxJS reactive streams and behavior subjects |
+| **Real-time WebSockets** | `@microsoft/signalr` |
+| **Payment Gateway** | `ngx-stripe` (Stripe Elements) |
+| **Authentication** | `@auth0/angular-jwt` (JWT token decoding and expiration handling) |
+| **Testing** | Playwright (E2E), Karma & Jasmine (Unit tests) |
+
+---
+
+## 📂 Repository Layout
 
 ```text
-shopizy-app/
-├── e2e/                           # Playwright E2E test suites & auth setup
-│   ├── auth.setup.ts              # Customer persona authentication setup
-│   ├── admin.setup.ts             # Admin persona authentication setup
-│   ├── checkout.spec.ts           # Checkout & payment test flows
-│   ├── admin-journey.spec.ts      # Admin dashboard & management tests
-│   └── guest-journey.spec.ts      # Guest browsing & catalog test flows
+├── e2e/                           # Playwright E2E suites (customer, admin, guest personas)
 ├── docs/                          # In-depth architectural & testing documentation
-│   ├── ARCHITECTURE.md            # Technical design, data flow & interceptors
-│   └── E2E_TESTING_GUIDE.md       # Playwright configuration & best practices
-├── public/                        # Static assets
-│   └── icons.svg                  # SVG Sprite Sheet icon definitions
+│   ├── ARCHITECTURE.md            # Technical design, data flows, and interceptors
+│   └── E2E_TESTING_GUIDE.md       # Playwright configuration and multi-persona setup
+├── public/                        # Static assets and icons.svg sprite sheet
 ├── src/
 │   ├── app/
 │   │   ├── api/                   # Typed REST API service layer
-│   │   ├── components/            # Standalone UI components (Storefront, Admin, Auth, Shared)
-│   │   ├── directives/            # Custom Angular directives (click-outside, etc.)
+│   │   ├── components/            # Standalone UI components (Storefront, Admin, Auth)
 │   │   ├── guards/                # Route guards (AuthGuard with role verification)
-│   │   ├── interceptors/          # HTTP Interceptors (Bearer token, 401 Silent Refresh, Errors)
-│   │   ├── interfaces/            # TypeScript interfaces & DTOs
-│   │   ├── models/                # Domain models & entities
-│   │   ├── pipes/                 # Custom formatting & validation pipes
-│   │   ├── resolvers/             # Angular route data resolvers
-│   │   ├── services/              # State & business services (Cart, Wishlist, SignalR, Toast)
-│   │   └── testing/               # Jasmine/Karma shared test spies and helpers
+│   │   ├── interceptors/          # Interceptors (Bearer token, 401 Silent Refresh, Errors)
+│   │   ├── models/                # Domain models, entities, and TypeScript DTOs
+│   │   ├── resolvers/             # Route data pre-fetching resolvers
+│   │   └── services/              # State & business services (Cart, Wishlist, SignalR)
 │   ├── environments/              # Environment configurations
-│   └── styles.css                 # Tailwind CSS directives & global styling
-├── ICONS_GUIDE.md                 # Complete SVG Sprite Sheet reference & catalog
-├── playwright.config.ts           # Playwright multi-project test configuration
-├── tailwind.config.js             # Tailwind CSS configuration & plugins
-└── package.json                   # Dependencies and npm scripts
+│   └── styles.css                 # Tailwind CSS directives
+├── playwright.config.ts           # Playwright test configuration
+└── package.json                   # Dependencies and scripts
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js**: `v18.x` or `v20.x`+
-- **npm**: `v9.x`+
-- **Backend API**: Running REST API instance (default: `http://localhost:18080` / `http://localhost:5054`)
+- Node.js 20+
+- npm 9+
+- Running backend API (e.g. `http://localhost:18080`)
 
-### Installation
-
-Clone the repository and install dependencies:
-
+### 1. Clone & Install
 ```bash
-git clone https://github.com/akazad13/shopizy-app.git
-cd shopizy-app
+git clone https://github.com/akazad13/shopizy-spa.git
+cd shopizy-spa
 npm install
 ```
 
-### Environment Configuration
-
-Configure your environment endpoints in [`src/environments/environment.ts`](file:///d:/Projects/akazad13/shopizy-app/src/environments/environment.ts) or [`src/environments/environment.development.ts`](file:///d:/Projects/akazad13/shopizy-app/src/environments/environment.development.ts):
-
+### 2. Configure Environment
+Update API endpoint in `src/environments/environment.development.ts`:
 ```typescript
 export const environment = {
   apiUrl: 'http://localhost:18080',
@@ -154,99 +131,44 @@ export const environment = {
 };
 ```
 
-### Running the Dev Server
-
-Start the local development server:
-
+### 3. Start Development Server
 ```bash
 npm start
 ```
-
-Navigate to `http://localhost:4200/`. The application will automatically reload when source files change.
-
----
-
-## 📜 Available Scripts
-
-| Command | Description |
-|---|---|
-| `npm start` | Runs the Angular development server on `http://localhost:4200` |
-| `npm run build` | Compiles the production-ready build into the `dist/` directory |
-| `npm run watch` | Builds and watches files for changes in development mode |
-| `npm test` | Runs unit tests with Karma and Jasmine |
-| `npm run lint` | Executes ESLint against TypeScript and template files |
-| `npm run test:e2e` | Runs headless Playwright E2E tests across all personas |
-| `npm run test:e2e:ui` | Launches Playwright's interactive visual UI test runner |
+Navigate to `http://localhost:4200/`.
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## 🧪 Testing
 
-### Unit Testing (Karma/Jasmine)
-Unit tests focus on component logic, pipes, and API services:
-
-```bash
-npm test
-```
-- Test utilities and spies are centralized in [`src/app/testing/test-helpers.ts`](file:///d:/Projects/akazad13/shopizy-app/src/app/testing/test-helpers.ts).
-- Pre-configured with headless Chrome flags in [`karma.conf.js`](file:///d:/Projects/akazad13/shopizy-app/karma.conf.js) for CI stability.
-
-### End-to-End Testing (Playwright)
-Shopizy uses Playwright with cached authentication states across three personas:
-
-```bash
-# 1. Install browser binaries (first time only)
-npx playwright install
-
-# 2. Run all E2E tests
-npm run test:e2e
-
-# 3. Run individual persona suites
-npx playwright test --project=user-chrome
-npx playwright test --project=admin-chrome
-npx playwright test --project=guest-chrome
-```
-
-> [!NOTE]
-> Ensure the backend API is reachable and seeded before executing authentication setup fixtures. See [**docs/E2E_TESTING_GUIDE.md**](file:///d:/Projects/akazad13/shopizy-app/docs/E2E_TESTING_GUIDE.md) for full setup instructions.
-
-### Code Linting (ESLint)
-Enforce codebase consistency and Angular template standards:
-
-```bash
-npm run lint
-```
+| Test Suite | Scope | Command |
+| :--- | :--- | :--- |
+| **Unit Tests** | Component logic, pipes, and API services (Karma / Jasmine) | `npm test` |
+| **Code Linting** | ESLint static code analysis | `npm run lint` |
+| **All E2E Tests** | Headless Playwright tests across all personas | `npm run test:e2e` |
+| **Customer Journey** | Customer browsing and checkout flows | `npx playwright test --project=user-chrome` |
+| **Admin Journey** | Admin dashboard and catalog fulfillment | `npx playwright test --project=admin-chrome` |
 
 ---
 
-## 📖 Documentation Index
+## 📚 Documentation
 
-- 📘 [**Architecture & Design Guide**](file:///d:/Projects/akazad13/shopizy-app/docs/ARCHITECTURE.md) — Deep dive into standalone routing, JWT silent refresh interceptors, SignalR hubs, and state architecture.
-- 🧪 [**E2E Testing Guide**](file:///d:/Projects/akazad13/shopizy-app/docs/E2E_TESTING_GUIDE.md) — Complete guide to Playwright fixtures, multi-persona authentication, and test runner options.
-- 🎨 [**SVG Icon System Guide**](file:///d:/Projects/akazad13/shopizy-app/ICONS_GUIDE.md) — Comprehensive catalog of 45+ built-in SVG icons and `<app-icon>` usage guidelines.
+| Guide | Focus |
+| :--- | :--- |
+| 🏛️ [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Standalone routing, JWT silent refresh interceptors, and state architecture |
+| 🧪 [docs/E2E_TESTING_GUIDE.md](docs/E2E_TESTING_GUIDE.md) | Multi-persona Playwright test fixtures and auth setup |
+| 🎨 [ICONS_GUIDE.md](ICONS_GUIDE.md) | Built-in SVG sprite catalog and `<app-icon>` usage |
 
 ---
 
-## 🌐 Deployment
+## 👤 Author
 
-### Netlify
-Shopizy includes a [`netlify.toml`](file:///d:/Projects/akazad13/shopizy-app/netlify.toml) configured for single-page application routing redirects:
-
-```toml
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-```
-
-To build for production deployment:
-```bash
-npm run build
-```
-The output is generated in `dist/shopizy-app/browser/`.
+**Md. Abul Kalam**
+- GitHub: [@akazad13](https://github.com/akazad13)
+- LinkedIn: [Md. Abul Kalam](https://linkedin.com/in/akazad13)
 
 ---
 
 ## 📄 License
 
-All right reserved!
+This project is licensed under the [MIT License](LICENSE).
