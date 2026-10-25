@@ -161,6 +161,12 @@ Navigate to `http://localhost:4200/`.
 
 ---
 
+## 🤖 AI-Driven Development & Contributing
+
+Autonomous coding agents (Antigravity, Cursor, Claude Code, GitHub Copilot) operating in this repository must consult [AGENTS.md](AGENTS.md) for Angular standalone component patterns, zero-secret environment guidelines, and Playwright multi-persona E2E requirements.
+
+---
+
 ## 👤 Author
 
 **Md. Abul Kalam**
